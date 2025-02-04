@@ -1,0 +1,28 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  builds:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@V4
+        with:
+          distribution: 'oracle'
+          java-version: 23
+          cache: maven
+
+      - name: Compile with Maven
+        run: mvn -B compile --file pom.xml
+
+      - name: Run test with Maven
+        run: mvn -B test --file pom.xml
