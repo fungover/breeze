@@ -22,7 +22,7 @@ jobs:
           cache: maven
 
       - name: Compile with Maven
-        run: mvn -B compile --file pom.xml
+        run: mvn -B --no-transfer-progress compile --file pom.xml
 
       - name: Run test with Maven
-        run: mvn -B test --file pom.xml
+        run: mvn -B --no-transfer-progress test --file pom.xml
