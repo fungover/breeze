@@ -17,6 +17,22 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("Right should handle null values")
+  void rightShouldHandleNullValues() {
+    Either<String, Integer> right = Either.right(null);
+
+    assertThat(right.getRight()).isNull();
+  }
+
+  @Test
+  @DisplayName("Left should handle null values")
+  void leftShouldHandleNullValues() {
+    Either<String, Integer> left = Either.left(null);
+
+    assertThat(left.getLeft()).isNull();
+  }
+
+  @Test
   @DisplayName("Setting left to a value returns correct value")
   void settingLeftToAValueReturnsCorrectValue() {
     Either<String, Integer> left = Either.left("error");
@@ -53,11 +69,27 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("toString on Right with null value should be correct")
+  void toStringOnRightWithNullValueShouldBeCorrect() {
+    Either<String, Integer> right = Either.right(null);
+
+    assertThat(right.toString()).hasToString("Right { value = null }");
+  }
+
+  @Test
   @DisplayName("Calling toString on Left returns correct value")
   void callingToStringOnLeftReturnsCorrectValue() {
     Either<String, Integer> left = Either.left("error");
 
     assertThat(left.toString()).hasToString("Left { value = error }");
+  }
+
+  @Test
+  @DisplayName("toString on Left with null value should be correct")
+  void toStringOnLeftWithNullValueShouldBeCorrect() {
+    Either<String, Integer> left = Either.left(null);
+
+    assertThat(left.toString()).hasToString("Left { value = null }");
   }
 
   @Test
@@ -165,6 +197,19 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("Map should handle null returned from transformation safely")
+  void mapShouldHandleNullTransformationSafely() {
+    Either<String, Integer> right = Either.right(42);
+
+    Either<String, String> result = right.map(value -> null);
+
+    assertAll(
+            () -> assertThat(result.isRight()).isTrue(),
+            () -> assertThat(result.getRight()).isNull()
+    );
+  }
+
+  @Test
   @DisplayName("Swap converts Left to Right")
   void swapLeftToRight() {
     Either<String, Integer> left = Either.left("error");
@@ -180,6 +225,16 @@ class EitherTest {
     var result = right.swap();
 
     assertThat(result).isInstanceOf(Left.class);
+  }
+
+  @Test
+  @DisplayName("Calling swap on Left with null value should result in Right")
+  void swapWithNullLeftValue() {
+    Either<String, Integer> left = Either.left(null);
+
+    Either<Integer, String> result = left.swap();
+
+    assertThat(result.getRight()).isNull();
   }
 
   @Test
@@ -205,6 +260,19 @@ class EitherTest {
     assertAll(
             () -> assertThat(result.isLeft()).isTrue(),
             () -> assertThat(result.getLeft()).isEqualTo("Error")
+    );
+  }
+
+  @Test
+  @DisplayName("FlatMap should handle null returned from transformation safely")
+  void flatMapShouldHandleNullTransformationSafely() {
+    Either<String, Integer> right = Either.right(42);
+
+    Either<String, String> result = right.flatMap(value -> Either.right(null));
+
+    assertAll(
+            () -> assertThat(result.isRight()).isTrue(),
+            () -> assertThat(result.getRight()).isNull()
     );
   }
 
