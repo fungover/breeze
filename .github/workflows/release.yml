@@ -2,7 +2,7 @@ name: Release
 
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   build:
@@ -36,4 +36,4 @@ jobs:
       - name: Publish to GitHub Packages
         run: mvn --batch-mode  --no-transfer-progress deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
