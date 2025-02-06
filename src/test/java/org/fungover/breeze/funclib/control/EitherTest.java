@@ -44,6 +44,38 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("isLeft returns true for Left")
+  void isLeftReturnsTrueForLeft() {
+    Either<String, Integer> left = Either.left("error");
+
+    assertThat(left.isLeft()).isTrue();
+  }
+
+  @Test
+  @DisplayName("isLeft returns false for Right")
+  void isLeftReturnsFalseForRight() {
+    Either<String, Integer> right = Either.right(42);
+
+    assertThat(right.isLeft()).isFalse();
+  }
+
+  @Test
+  @DisplayName("isRight returns true for Right")
+  void isRightReturnsTrueForRight() {
+    Either<String, Integer> right = Either.right(42);
+
+    assertThat(right.isRight()).isTrue();
+  }
+
+  @Test
+  @DisplayName("isRight returns false for Left")
+  void isRightReturnsFalseForLeft() {
+    Either<String, Integer> left = Either.left("error");
+
+    assertThat(left.isRight()).isFalse();
+  }
+
+  @Test
   @DisplayName("Map updates right value")
   void mapUpdatesRightValue() {
     Either<String, Integer> right = Either.right(42);
