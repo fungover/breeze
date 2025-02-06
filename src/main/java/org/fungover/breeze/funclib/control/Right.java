@@ -101,6 +101,15 @@ public final class Right<L, R> extends Either<L, R> {
   }
 
   /**
+   * Swaps the value from {@code Right} to {@code Left}
+   *
+   * @return A new {@code Left} instance with the Right's value
+   */
+  @Override
+  public Either<R, L> swap() {
+    return new Left<>(value);
+  }
+  /**
    * Compares this instance with another for equality.
    *
    * @param o The object to compare with.
