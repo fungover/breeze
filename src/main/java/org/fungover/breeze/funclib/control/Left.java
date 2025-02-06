@@ -1,5 +1,6 @@
 package org.fungover.breeze.funclib.control;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public final class Left<L, R> extends Either<L, R> {
@@ -37,5 +38,16 @@ public final class Left<L, R> extends Either<L, R> {
   @Override
   public <U> Either<U, R> mapLeft(Function<L, U> mapper) {
     return new Left<>(mapper.apply(value));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Left<?, ?> left)) return false;
+    return Objects.equals(value, left.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(value);
   }
 }
