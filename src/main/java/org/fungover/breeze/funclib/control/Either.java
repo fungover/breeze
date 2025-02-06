@@ -2,7 +2,7 @@ package org.fungover.breeze.funclib.control;
 
 import java.util.function.Function;
 
-public abstract class Either<L, R> {
+public abstract sealed class Either<L, R> permits Left, Right {
   public abstract boolean isLeft();
 
   public abstract boolean isRight();
