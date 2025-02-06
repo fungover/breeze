@@ -164,8 +164,8 @@ public final class Left<L, R> extends Either<L, R> {
    */
   @Override
   public String toString() {
-    return "Left {" +
+    return "Left { " +
             "value = " + value +
-            '}';
+            " }";
   }
 }

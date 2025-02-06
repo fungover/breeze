@@ -6,7 +6,7 @@ import java.util.function.Function;
 /**
  * A concrete implementation of {@code Either} representing a right value.
  *
- * <p>By convention, a {@code Right} value represents an success case
+ * <p>By convention, a {@code Right} value represents a success case
  * in computations that may return one of two possible results.</p>
  *
  * <h2>Usage Example:</h2>
@@ -164,8 +164,8 @@ public final class Right<L, R> extends Either<L, R> {
    */
   @Override
   public String toString() {
-    return "Right {" +
+    return "Right { " +
             "value = " + value +
-            '}';
+            " }";
   }
 }
