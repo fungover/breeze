@@ -29,7 +29,7 @@ class EitherTest {
     Either<String, Integer> right = Either.right(42);
 
     assertThatThrownBy(right::getLeft)
-            .isInstanceOf(IllegalStateException.class)
+            .isInstanceOf(UnsupportedOperationException.class)
             .hasMessage("Can not get left value on Right");
   }
 
@@ -39,7 +39,7 @@ class EitherTest {
     Either<String, Integer> left = Either.left("error");
 
     assertThatThrownBy(left::getRight)
-            .isInstanceOf(IllegalStateException.class)
+            .isInstanceOf(UnsupportedOperationException.class)
             .hasMessage("Can not get right value on Left");
   }
 

@@ -73,7 +73,7 @@ public final class Left<L, R> extends Either<L, R> {
    */
   @Override
   public R getRight() {
-    throw new IllegalStateException("Can not get right value on Left");
+    throw new UnsupportedOperationException("Can not get right value on Left");
   }
 
   /**
