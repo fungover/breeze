@@ -42,4 +42,40 @@ class EitherTest {
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("Can not get right value on Left");
   }
+
+  @Test
+  @DisplayName("Map updates right value")
+  void mapUpdatesRightValue() {
+    Either<String, Integer> right = Either.right(42);
+    var result = right.map(x -> x * 2);
+
+    assertThat(result.getRight()).isEqualTo(84);
+  }
+
+  @Test
+  @DisplayName("MapLeft updates left value")
+  void mapLeftUpdatesLeftValue() {
+    Either<Integer, String> left = Either.left(10);
+    var result = left.mapLeft(x -> x * 2);
+
+    assertThat(result.getLeft()).isEqualTo(20);
+  }
+
+  @Test
+  @DisplayName("Calling mapLeft on Right returns the same instance")
+  void callingMapLeftOnRightReturnsSameInstance() {
+    Either<String, Integer> right = Either.right(42);
+    var result = right.mapLeft(x -> x);
+
+    assertThat(result).isEqualTo(right);
+  }
+
+  @Test
+  @DisplayName("Calling map on Left returns the same instance")
+  void callingMapOnLeftReturnsSameInstance() {
+    Either<String, Integer> left = Either.left("error");
+    var result = left.map(x -> x);
+
+    assertThat(result).isEqualTo(left);
+  }
 }
