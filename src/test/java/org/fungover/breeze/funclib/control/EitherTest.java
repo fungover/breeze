@@ -181,4 +181,29 @@ class EitherTest {
     assertThat(result).isInstanceOf(Left.class);
   }
 
+  @Test
+  @DisplayName("Calling fold on Left transforms the value")
+  void callingFoldOnLeftTransformsTheValue() {
+    Either<String, Integer> left = Either.left("Error");
+
+    String result = left.fold(
+            error -> "Left: " + error,
+            success -> "Right: " + success
+    );
+
+    assertThat(result).isEqualTo("Left: Error");
+  }
+
+  @Test
+  @DisplayName("Calling fold on Right transforms the value")
+  void callingFoldOnRightTransformsTheValue() {
+    Either<String, Integer> right = Either.right(42);
+
+    String result = right.fold(
+            error -> "Left: " + error,
+            success -> "Right: " + success
+    );
+
+    assertThat(result).isEqualTo("Right: 42");
+  }
 }
