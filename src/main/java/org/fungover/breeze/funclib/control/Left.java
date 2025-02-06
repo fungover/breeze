@@ -110,6 +110,20 @@ public final class Left<L, R> extends Either<L, R> {
     return new Right<>(value);
   }
 
+
+  /**
+   *
+   * @param leftMapper The function to apply to the left value
+   * @param rightMapper The function to apply to the right value
+   * @param <U> The new type of the left value
+   *
+   * @return A new {@code Either} instance with the transformed left value
+   */
+  @Override
+  public <U> U fold(Function<L, U> leftMapper, Function<R, U> rightMapper) {
+    return leftMapper.apply(value);
+  }
+
   /**
    * Compares this instance with another for equality.
    *

@@ -82,6 +82,17 @@ public abstract sealed class Either<L, R> permits Left, Right {
    * @return A new {@code Either} instance with the value swapped
    */
   public abstract Either<R, L> swap();
+
+  /** Transforms both the left and right values using the provided functions
+   *
+   * @param leftMapper The function to apply to the left value
+   * @param rightMapper The function to apply to the right value
+   * @param <U> The new type of the left and right values
+   *
+   * @return A new {@code Either} instance with the transformed value
+   */
+  public abstract <U> U fold(Function<L, U> leftMapper, Function<R, U> rightMapper);
+
   /**
    * Creates a new {@code Either} instance representing a left value.
    *
