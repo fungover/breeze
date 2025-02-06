@@ -211,7 +211,7 @@ class EitherTest {
   void mapShouldHandleNullTransformationSafely() {
     Either<String, Integer> right = Either.right(42);
 
-    Either<String, String> result = right.map(value -> null);
+    Either<String, String> result = right.map(_ -> null);
 
     assertAll(
             () -> assertThat(result.isRight()).isTrue(),
@@ -278,7 +278,7 @@ class EitherTest {
   void flatMapShouldHandleNullTransformationSafely() {
     Either<String, Integer> right = Either.right(42);
 
-    Either<String, String> result = right.flatMap(value -> Either.right(null));
+    Either<String, String> result = right.flatMap(_ -> Either.right(null));
 
     assertAll(
             () -> assertThat(result.isRight()).isTrue(),
