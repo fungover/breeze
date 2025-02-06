@@ -44,6 +44,22 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("Calling toString on Right returns correct value")
+  void callingToStringOnRightReturnsCorrectValue() {
+    Either<String, Integer> right = Either.right(42);
+
+    assertThat(right.toString()).hasToString("Right { value = 42 }");
+  }
+
+  @Test
+  @DisplayName("Calling toString on Left returns correct value")
+  void callingToStringOnLeftReturnsCorrectValue() {
+    Either<String, Integer> left = Either.left("error");
+
+    assertThat(left.toString()).hasToString("Left { value = error }");
+  }
+
+  @Test
   @DisplayName("isLeft returns true for Left")
   void isLeftReturnsTrueForLeft() {
     Either<String, Integer> left = Either.left("error");
