@@ -1,5 +1,7 @@
 package org.fungover.breeze.funclib.control;
 
+import java.util.function.Function;
+
 public final class Right<L, R> extends Either<L, R> {
   private final R value;
 
@@ -26,5 +28,15 @@ public final class Right<L, R> extends Either<L, R> {
   @Override
   public R getRight() {
     return value;
+  }
+
+  @Override
+  public <T> Either<L, T> map(Function<R, T> mapper) {
+    return new Right<>(mapper.apply(value));
+  }
+
+  @Override
+  public <T> Either<T, R> mapLeft(Function<L, T> mapper) {
+    return new Right<>(value);
   }
 }
