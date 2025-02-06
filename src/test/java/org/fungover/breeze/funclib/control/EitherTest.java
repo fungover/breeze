@@ -110,4 +110,23 @@ class EitherTest {
 
     assertThat(result).isEqualTo(left);
   }
+
+  @Test
+  @DisplayName("Swap converts Left to Right")
+  void swapLeftToRight() {
+    Either<String, Integer> left = Either.left("error");
+    var result = left.swap();
+
+    assertThat(result).isInstanceOf(Right.class);
+  }
+
+  @Test
+  @DisplayName("Swap converts Right to Left")
+  void swapRightToLeft() {
+    Either<String, Integer> right = Either.right(42);
+    var result = right.swap();
+
+    assertThat(result).isInstanceOf(Left.class);
+  }
+
 }
