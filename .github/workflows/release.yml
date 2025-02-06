@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 23
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: 23
+
+      - name: Set version from tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          mvn versions:set -DnewVersion=${TAG}
+
+      - name: Build with Maven
+        run: mvn --batch-mode  --no-transfer-progress clean package
+
+      #- name: Build sources and javadocs
+      # Not needed since we build the jars from pom.xml configuration
+      #  run: mvn --batch-mode  --no-transfer-progress source:jar javadoc:jar
+
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode  --no-transfer-progress deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN
