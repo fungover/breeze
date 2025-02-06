@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class EitherTest {
 
@@ -179,6 +180,32 @@ class EitherTest {
     var result = right.swap();
 
     assertThat(result).isInstanceOf(Left.class);
+  }
+
+  @Test
+  @DisplayName("Calling flatMap on Right transforms the value")
+  void callingFlatMapOnRightTransformsTheValue() {
+    Either<String, Integer> right = Either.right(42);
+
+    Either<String, String> result = right.flatMap(value -> Either.right("Processed " + value));
+
+    assertAll(
+            () -> assertThat(result.isRight()).isTrue(),
+            () -> assertThat(result.getRight()).isEqualTo("Processed 42")
+    );
+  }
+
+  @Test
+  @DisplayName("Calling flatMap on Left keeps the same value")
+  void callingFlatMapOnLeftKeepsTheSameValue() {
+    Either<String, Integer> right = Either.left("Error");
+
+    Either<String, String> result = right.flatMap(value -> Either.right("Processed " + value));
+
+    assertAll(
+            () -> assertThat(result.isLeft()).isTrue(),
+            () -> assertThat(result.getLeft()).isEqualTo("Error")
+    );
   }
 
   @Test
