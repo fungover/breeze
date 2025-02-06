@@ -188,7 +188,17 @@ class EitherTest {
   }
 
   @Test
-  @DisplayName("Calling map on Left returns the same instance")
+  @DisplayName("Right Identity law: map() on Right with identity function should not modify the Right value")
+  void rightIdentityLaw() {
+    Either<String, Integer> right = Either.right(42);
+
+    Either<String, Integer> result = right.map(x -> x);
+
+    assertThat(result).isEqualTo(right);
+  }
+
+  @Test
+  @DisplayName("Left Identity law: calling map on Left returns the same instance")
   void callingMapOnLeftReturnsSameInstance() {
     Either<String, Integer> left = Either.left("error");
     var result = left.map(x -> x);
@@ -300,5 +310,16 @@ class EitherTest {
     );
 
     assertThat(result).isEqualTo("Right: 42");
+  }
+
+  @Test
+  @DisplayName("Associativity law: chaining map() should result in the same value regardless of the order")
+  void associativityLaw() {
+    Either<String, Integer> right = Either.right(42);
+
+    Either<String, String> result1 = right.map(x -> "First " + x).map(x -> x + " Processed");
+    Either<String, String> result2 = right.map(x -> "First " + x + " Processed");
+
+    assertThat(result1).isEqualTo(result2);
   }
 }
