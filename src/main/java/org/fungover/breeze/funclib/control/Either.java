@@ -1,5 +1,6 @@
 package org.fungover.breeze.funclib.control;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
 /**
@@ -24,7 +25,7 @@ import java.util.function.Function;
  * @param <L> The type of the left value (typically an error type)
  * @param <R> The type of the right value (typically a success type)
  */
-public abstract sealed class Either<L, R> permits Left, Right {
+public abstract sealed class Either<L, R> implements Serializable permits Left, Right{
 
   /**
    * Checks if this instance represents a left value.
