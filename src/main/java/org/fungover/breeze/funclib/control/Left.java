@@ -110,6 +110,17 @@ public final class Left<L, R> extends Either<L, R> {
     return new Right<>(value);
   }
 
+  /**
+   *
+   * @param mapper The function to apply to the right value
+   * @param <U> The new type of the right value
+   *
+   * @return A new {@code Left} instance with unchanged value
+   */
+  @Override
+  public <U> Either<L, U> flatMap(Function<R, Either<L, U>> mapper) {
+    return new Left<>(value);
+  }
 
   /**
    *

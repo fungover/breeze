@@ -83,6 +83,16 @@ public abstract sealed class Either<L, R> permits Left, Right {
    */
   public abstract Either<R, L> swap();
 
+  /** Transforms and flattens the right value using the provided function if this is a ${@code Right}
+   * otherwise returns the unchanged {@code Left}
+   *
+   * @param mapper The function to apply to the right value
+   * @param <U> The new type of the right value
+   *
+   * @return A new {@code Either} instance with the transformed right value
+   */
+  public abstract <U> Either<L, U> flatMap(Function<R, Either<L, U>> mapper);
+
   /** Transforms both the left and right values using the provided functions
    *
    * @param leftMapper The function to apply to the left value
