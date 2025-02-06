@@ -68,6 +68,42 @@ class EitherTest {
   }
 
   @Test
+  @DisplayName("Calling hashCode on Right with same value should be equal")
+  void callingHashCodeOnRightWithSameValueShouldBeEqual() {
+    Either<String, Integer> right = Either.right(42);
+    Either<String, Integer> rightTwo = Either.right(42);
+
+    assertThat(right.hashCode()).hasSameHashCodeAs(rightTwo.hashCode());
+  }
+
+  @Test
+  @DisplayName("Calling hashCode on Left with same value should be equal")
+  void callingHashCodeOnLeftWithSameValueShouldBeEqual() {
+    Either<String, Integer> left = Either.left("error");
+    Either<String, Integer> leftTwo = Either.left("error");
+
+    assertThat(left.hashCode()).hasSameHashCodeAs(leftTwo.hashCode());
+  }
+
+  @Test
+  @DisplayName("Two different Right values should not have equal hashcode")
+  void twoDifferentRightValuesShouldNotHaveEqualHashCode() {
+    Either<String, Integer> right = Either.right(42);
+    Either<String, Integer> rightTwo = Either.right(84);
+
+    assertThat(right.hashCode()).isNotEqualTo(rightTwo.hashCode());
+  }
+
+  @Test
+  @DisplayName("Two different Left values should not have equal hashcode")
+  void twoDifferentLeftValuesShouldNotHaveEqualHashCode() {
+    Either<String, Integer> left = Either.left("error");
+    Either<String, Integer> leftTwo = Either.left("success");
+
+    assertThat(left.hashCode()).isNotEqualTo(leftTwo.hashCode());
+  }
+
+  @Test
   @DisplayName("isLeft returns false for Right")
   void isLeftReturnsFalseForRight() {
     Either<String, Integer> right = Either.right(42);
