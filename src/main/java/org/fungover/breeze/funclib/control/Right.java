@@ -6,8 +6,7 @@ import java.util.function.Function;
 public final class Right<L, R> extends Either<L, R> {
   private final R value;
 
-  public Right(R value)
-  {
+  public Right(R value) {
     this.value = value;
   }
 
@@ -50,5 +49,12 @@ public final class Right<L, R> extends Either<L, R> {
   @Override
   public int hashCode() {
     return Objects.hashCode(value);
+  }
+
+  @Override
+  public String toString() {
+    return "Right {" +
+            "value = " + value +
+            '}';
   }
 }

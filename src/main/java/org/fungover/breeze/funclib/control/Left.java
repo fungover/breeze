@@ -50,4 +50,11 @@ public final class Left<L, R> extends Either<L, R> {
   public int hashCode() {
     return Objects.hashCode(value);
   }
+
+  @Override
+  public String toString() {
+    return "Left {" +
+            "value = " + value +
+            '}';
+  }
 }
