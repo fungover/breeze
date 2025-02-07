@@ -26,28 +26,21 @@ import java.util.function.Function;
  * @param <L> The type of the left value (typically an error type)
  * @param <R> The type of the right value (typically a success type)
  */
-public abstract sealed class Either<L extends Serializable, R extends Serializable> implements Serializable permits Left, Right {
-
-  /**
-   * Protected constructor to prevent direct instantiation.
-   * Use {@link #left(Serializable)} or {@link #right(Serializable)} to create instances.
-   */
-  protected Either() {
-  }
+public sealed interface Either<L extends Serializable, R extends Serializable> extends Serializable permits Left, Right {
 
   /**
    * Checks if this instance represents a left value.
    *
    * @return {@code true} if this is a left value, {@code false} otherwise.
    */
-  public abstract boolean isLeft();
+  boolean isLeft();
 
   /**
    * Checks if this instance represents a right value.
    *
    * @return {@code true} if this is a right value, {@code false} otherwise.
    */
-  public abstract boolean isRight();
+  boolean isRight();
 
   /**
    * Retrieves the left value.
@@ -55,7 +48,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @return The left value.
    * @throws UnsupportedOperationException if this is a right value.
    */
-  public abstract L getLeft();
+  L getLeft();
 
   /**
    * Retrieves the right value.
@@ -63,7 +56,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @return The right value.
    * @throws UnsupportedOperationException if this is a left value.
    */
-  public abstract R getRight();
+  R getRight();
 
   /**
    * Transforms the right value using the provided function if this is a {@code Right},
@@ -73,7 +66,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <U>    The new type of the right value.
    * @return A new {@code Either} instance with the transformed right value.
    */
-  public abstract <U extends Serializable> Either<L, U> map(Function<R, U> mapper);
+  <U extends Serializable> Either<L, U> map(Function<R, U> mapper);
 
   /**
    * Transforms the left value using the provided function if this is a {@code Left},
@@ -83,14 +76,14 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <U>    The new type of the left value.
    * @return A new {@code Either} instance with the transformed left value.
    */
-  public abstract <U extends Serializable> Either<U, R> mapLeft(Function<L, U> mapper);
+  <U extends Serializable> Either<U, R> mapLeft(Function<L, U> mapper);
 
   /**
    * Swaps a {@code Right} to a {@code Left} and vice versa.
    *
    * @return A new {@code Either} instance with the value swapped
    */
-  public abstract Either<R, L> swap();
+  Either<R, L> swap();
 
   /**
    * Transforms and flattens the right value using the provided function if this is a ${@code Right}
@@ -100,7 +93,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <U>    The new type of the right value
    * @return A new {@code Either} instance with the transformed right value
    */
-  public abstract <U extends Serializable> Either<L, U> flatMap(Function<R, Either<L, U>> mapper);
+  <U extends Serializable> Either<L, U> flatMap(Function<R, Either<L, U>> mapper);
 
   /**
    * Transforms both the left and right values using the provided functions
@@ -110,7 +103,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <U>         The new type of the left and right values
    * @return The result of applying the corresponding mapper function
    */
-  public abstract <U> U fold(Function<L, U> leftMapper, Function<R, U> rightMapper);
+  <U> U fold(Function<L, U> leftMapper, Function<R, U> rightMapper);
 
   /**
    * Creates a new {@code Either} instance representing a left value.
@@ -120,7 +113,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <R>   The type of the right value.
    * @return An {@code Either} instance containing the left value.
    */
-  public static <L extends Serializable, R extends Serializable> Either<L, R> left(L value) {
+  static <L extends Serializable, R extends Serializable> Either<L, R> left(L value) {
     return new Left<>(value);
   }
 
@@ -132,7 +125,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
    * @param <R>   The type of the right value.
    * @return An {@code Either} instance containing the right value.
    */
-  public static <L extends Serializable, R extends Serializable> Either<L, R> right(R value) {
+  static <L extends Serializable, R extends Serializable> Either<L, R> right(R value) {
     return new Right<>(value);
   }
 }
@@ -157,7 +150,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
  * @param <L> The type of the left value (typically an error type)
  * @param <R> The type of the right value (unused in this case)
  */
-final class Left<L extends Serializable, R extends Serializable> extends Either<L, R> {
+final class Left<L extends Serializable, R extends Serializable> implements Either<L, R> {
   private final L value;
 
   /**
@@ -320,7 +313,7 @@ final class Left<L extends Serializable, R extends Serializable> extends Either<
  * @param <L> The type of the left value (unused in this case)
  * @param <R> The type of the right value (typically a success type)
  */
-final class Right<L extends Serializable, R extends Serializable> extends Either<L, R> {
+final class Right<L extends Serializable, R extends Serializable> implements Either<L, R> {
   private final R value;
 
   /**
