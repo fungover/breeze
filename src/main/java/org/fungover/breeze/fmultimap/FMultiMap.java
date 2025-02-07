@@ -23,4 +23,8 @@ public class FMultiMap<K, V> {
     public Set<V> get(K key) {
         return map.getOrDefault(key, new HashSet<>());
     }
+
+    public int getKeyCount() {
+        return map.size();
+    }
 }
