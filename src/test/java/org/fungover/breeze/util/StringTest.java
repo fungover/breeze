@@ -11,6 +11,7 @@ class StringTest {
         assertThat(Strings.capitalize("hello")).isEqualTo("Hello");
         assertThat(Strings.capitalize("java")).isEqualTo("Java");
         assertThat(Strings.capitalize("")).isEqualTo("");
+
         assertThat(Strings.capitalize(null)).isNull();
     }
 
@@ -54,9 +55,11 @@ class StringTest {
         assertThat(Strings.isPalindrome("racecar")).isTrue();
         assertThat(Strings.isPalindrome("a")).isTrue();
         assertThat(Strings.isPalindrome("")).isTrue();
-        assertThat(Strings.isPalindrome(null)).isFalse();
-        assertThat(Strings.isPalindrome("hello")).isFalse();
         assertThat(Strings.isPalindrome("Madam")).isTrue();
         assertThat(Strings.isPalindrome("RaceCar")).isTrue();
+
+        assertThat(Strings.isPalindrome(null)).isFalse();
+        assertThat(Strings.isPalindrome("hello")).isFalse();
+
     }
 }
