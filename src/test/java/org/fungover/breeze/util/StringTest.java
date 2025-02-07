@@ -15,7 +15,7 @@ class StringTest {
     }
 
     @Test
-    void countOccurences_shouldCountSubstringOccurences() {
+    void countOccurrences_shouldCountSubstringOccurrences() {
         assertThat(Strings.countOccurrences("banana", "a")).isEqualTo(3);
         assertThat(Strings.countOccurrences("hello world", "l")).isEqualTo(3);
         assertThat(Strings.countOccurrences("test", "z")).isEqualTo(0);
