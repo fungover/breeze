@@ -9,12 +9,12 @@
  *
  * <h2>Usage Example:</h2>
  * <pre>
- *   Either<String, Integer> result = Either.right(42);
+ *   {@code Either<String, Integer> result = Either.right(42);
  *   if (result.isRight()) {
  *       System.out.println("Success: " + result.getRight());
  *   } else {
  *       System.out.println("Error: " + result.getLeft());
- *   }
+ *   }}
  * </pre>
  *
  * <h2>Thread Safety:</h2>

@@ -12,12 +12,12 @@ import java.util.function.Function;
  *
  * <h2>Usage Example:</h2>
  * <pre>
- *   Either<String, Integer> result = Either.right(42)
+ *   {@code Either<String, Integer> result = Either.right(42)
  *   if (result.isRight()) {
  *     System.out.println("Success: " + result.getRight())
  *   } else {
  *     System.out.println("Error: " + result.getLeft())
- *   }
+ *   }}
  * </pre>
  *
  * <h2>Thread Safety:</h2>
@@ -27,6 +27,8 @@ import java.util.function.Function;
  * @param <R> The type of the right value (typically a success type)
  */
 public abstract sealed class Either<L extends Serializable, R extends Serializable> implements Serializable permits Left, Right{
+
+  protected Either() {}
 
   /**
    * Checks if this instance represents a left value.
@@ -138,10 +140,10 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
  *
  * <h2>Usage Example:</h2>
  * <pre>
- * Either<String, Integer> result = Either.left("Error: Invalid input");
+ * {@code Either<String, Integer> result = Either.left("Error: Invalid input");
  * if (result.isLeft()) {
  *     System.out.println("Failure: " + result.getLeft());
- * }
+ * }}
  * </pre>
  *
  * <h2>Thread Safety:</h2>
@@ -305,10 +307,10 @@ final class Left<L extends Serializable, R extends Serializable> extends Either<
  *
  * <h2>Usage Example:</h2>
  * <pre>
- * Either<String, Integer> result = Either.right(42);
+ * {@code Either<String, Integer> result = Either.right(42);
  * if (result.isRight()) {
  *     System.out.println("Success: " + result.getRight());
- * }
+ * }}
  * </pre>
  *
  * <h2>Thread Safety:</h2>
