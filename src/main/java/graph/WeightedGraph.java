@@ -8,12 +8,12 @@ public class WeightedGraph implements Graph {
     public List<Node<Integer>> listOfNodes = new ArrayList<>();
     public List<Edge<Integer>> listOfEdges = new ArrayList<>();
 
-    public WeightedGraph addNode (Node<Integer> node) {
+    public WeightedGraph<T> addNode (Node<T> node) {
         listOfNodes.add(node);
         return this;
     }
 
-    public WeightedGraph addEdge (Edge<Integer> edge) {
+    public WeightedGraph<T> addEdge (Edge<T> edge) {
         listOfEdges.add(edge);
         return this;
     }
