@@ -90,6 +90,11 @@ public class Vector3 {
         return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y -v1.y, 2) + Math.pow(v2.z -v1.z, 2));
     }
 
+    //Linear interpolation
+    public Vector3 linear(Vector3 v1, Vector3 v2, float t){
+        return new Vector3(v1.x + t *(v2.x -v1.x), v1.y + t * (v2.y -v1.y), v1.z + t * (v2.z -v1.z));
+    }
+
 
 
 }
