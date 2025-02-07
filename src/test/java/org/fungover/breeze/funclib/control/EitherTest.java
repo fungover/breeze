@@ -114,6 +114,24 @@ class EitherTest {
 
       assertThat(right.equals(rightTwo)).isTrue();
     }
+
+    @Test
+    @DisplayName("Left equals returns false for non equal values")
+    void leftEqualsReturnsFalseForNonEqualValues() {
+      Either<Integer, Integer> left = Either.left(42);
+      Either<Integer, Integer> leftTwo = Either.left(84);
+
+      assertThat(left.equals(leftTwo)).isFalse();
+    }
+
+    @Test
+    @DisplayName("Right equals returns false for non equal values")
+    void rightEqualsReturnsFalseForNonEqualValues() {
+      Either<Integer, Integer> right = Either.right(42);
+      Either<Integer, Integer> rightTwo = Either.right(84);
+
+      assertThat(right.equals(rightTwo)).isFalse();
+    }
   }
 
   @Nested
