@@ -33,6 +33,9 @@ class StringTest {
         assertThat(Strings.toSnakeCase("leading and trailing spaces")).isEqualTo("leading_and_trailing_spaces");
         assertThat(Strings.toSnakeCase("")).isEqualTo("");
         assertThat(Strings.toSnakeCase(null)).isNull();
+        assertThat(Strings.toSnakeCase("XMLHttpRequest")).isEqualTo("xml_http_request");
+        assertThat(Strings.toSnakeCase("Base64Encoder")).isEqualTo("base64_encoder");
+        assertThat(Strings.toSnakeCase("User123Name")).isEqualTo("user123_name");
     }
 
     @Test

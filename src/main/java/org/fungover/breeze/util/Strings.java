@@ -7,10 +7,10 @@ package org.fungover.breeze.util;
 public class Strings {
 
     /**
-     * Capitalizes the fist letter of the given string.
+     * Capitalizes the first letter of the given string.
      *
      * @param str the input string
-     * @return the string with the fist letter capitalized, or null if input is null
+     * @return the string with the first letter capitalized, or null if input is null
      */
     public static String capitalize(String str) {
         if (str == null || str.isEmpty()) {
@@ -20,7 +20,7 @@ public class Strings {
     }
 
     /**
-     * Counts the number of occurrences fo a substring within a string.
+     * Counts the number of occurrences to a substring within a string.
      *
      * @param str the main string
      * @param sub the substring to count
@@ -50,7 +50,10 @@ public class Strings {
         }
         str = str.replaceAll("\\s+", "_");
 
-        return str.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+        str = str.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
+
+        return str.replaceAll("([a-z\\d])([A-Z])", "$1_$2").toLowerCase();
+
     }
 
     /**
