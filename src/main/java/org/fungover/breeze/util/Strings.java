@@ -53,4 +53,14 @@ public class Strings {
         return str.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
+    /**
+     * Removes all whitespace charachter from a string.
+     *
+     * @param str the input string
+     * @return the string without whitespace, or null if input is null
+     */
+
+    public static String removeWhitespace(String str) {
+        return (str == null) ? null : str.replaceAll("\\s+", "");
+    }
 }

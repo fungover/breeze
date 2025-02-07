@@ -34,15 +34,15 @@ class StringTest {
         assertThat(Strings.toSnakeCase("")).isEqualTo("");
         assertThat(Strings.toSnakeCase(null)).isNull();
     }
-//
-//    @Test
-//    void removeWhitespace_shouldRemoveAllWhitespace() {
-//        assertThat(Strings.removeWhitespace(" a b c ")).isEqualTo("abc");
-//        assertThat(Strings.removeWhitespace("hello   world")).isEqualTo("helloworld");
-//        assertThat(Strings.removeWhitespace("\tspaces \n and newlines")).isEqualTo("spacesandnewlines");
-//        assertThat(Strings.removeWhitespace(null)).isNull();
-//        assertThat(Strings.removeWhitespace("")).isEqualTo("");
-//    }
+
+    @Test
+    void removeWhitespace_shouldRemoveAllWhitespace() {
+        assertThat(Strings.removeWhitespace(" a b c ")).isEqualTo("abc");
+        assertThat(Strings.removeWhitespace("hello   world")).isEqualTo("helloworld");
+        assertThat(Strings.removeWhitespace("\tspaces \n and newlines")).isEqualTo("spacesandnewlines");
+        assertThat(Strings.removeWhitespace(null)).isNull();
+        assertThat(Strings.removeWhitespace("")).isEqualTo("");
+    }
 //
 //    @Test
 //    void isPalindrome_shouldCheckForPalindrome() {
