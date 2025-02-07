@@ -11,29 +11,40 @@ public class Vector2 {
 
     //basic arithmetic
     public Vector2 add(Vector2 v) {
-        return new Vector2(x + v.x, y + v.y);
+        return new Vector2(this.x + v.x, this.y + v.y);
     }
 
     public Vector2 sub(Vector2 v) {
-        return new Vector2(x - v.x, y - v.y);
+        return new Vector2(this.x - v.x, this.y - v.y);
     }
 
     public Vector2 mul(float m) {
-        return new Vector2(x * m, y * m);
+        return new Vector2(this.x * m, this.y * m);
     }
 
     public Vector2 div(float d) {
-        return new Vector2(x / d, y / d);
+        return new Vector2(this.x / d, this.y / d);
     }
     //dot product
     public float dot(Vector2 v) {
-        return x * v.x + y * v.y;
-    }
-    //length/magnitude
-    public float length() {
-        return (float) Math.sqrt(x * x + y * y);
+        return this.x * v.x + this.y * v.y;
     }
 
+    //length/magnitude
+    public float length() {
+        return (float) Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    //Normalization
+    public Vector2 normalize() {
+        float length = length();
+        return new Vector2(this.x / length, this.y / length);
+    }
+
+    //Distance between vectors
+    public float distance(Vector2 v1,Vector2 v2) {
+        return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2 ) + Math.pow(v2.y - v1.y, 2));
+    }
 
 
 }
