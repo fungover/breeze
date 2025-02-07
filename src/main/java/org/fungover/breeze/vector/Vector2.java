@@ -26,20 +26,24 @@ public class Vector2 {
     }
 
     //basic arithmetic
-    public Vector2 add(Vector2 v) {
-        return new Vector2(this.x + v.x, this.y + v.y);
+    public void add(Vector2 v) {
+        this.x += v.x;
+        this.y += v.y;
     }
 
-    public Vector2 sub(Vector2 v) {
-        return new Vector2(this.x - v.x, this.y - v.y);
+    public void sub(Vector2 v){
+    this.x -= v.x;
+    this.y -= v.y;
     }
 
-    public Vector2 mul(float m) {
-        return new Vector2(this.x * m, this.y * m);
+    public void mul(float m) {
+        this.x *= m;
+        this.y *= m;
     }
 
-    public Vector2 div(float d) {
-        return new Vector2(this.x / d, this.y / d);
+    public void div(float d) {
+        this.x /= d;
+        this.y /= d;
     }
     //dot product
     public float dot(Vector2 v) {
