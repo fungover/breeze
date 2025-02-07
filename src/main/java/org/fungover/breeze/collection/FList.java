@@ -82,42 +82,46 @@ public abstract class FList<T> {
 
         /**
          * Throws UnsupportedOperationException as the list is empty.
+         * This method is not applicable for an empty list since there is no head element.
          * @return nothing
-         * @throws UnsupportedOperationException always
+         * @throws UnsupportedOperationException always, because an empty list has no head element
          */
         @Override
         public T head() {
-            return null;
+            throw new UnsupportedOperationException("Empty list has no head");
         }
 
         /**
          * Throws UnsupportedOperationException as the list is empty.
+         * This method is not applicable for an empty list since there is no tail element.
          * @return nothing
-         * @throws UnsupportedOperationException always
+         * @throws UnsupportedOperationException always, because an empty list has no tail element
          */
         @Override
         public FList<T> tail() {
-            return null;
+            throw new UnsupportedOperationException("Empty list has no tail");
         }
 
         /**
          * Returns a new list with the specified element added at the front.
+         * Since this list is empty, the new list will contain only the specified element.
          * @param element the element to add
          * @return a new list with the element added at the front
          */
         @Override
         public FList<T> prepend(T element) {
-            return null;
+            return new Cons<>(element, this);
         }
 
         /**
          * Returns a new list with the specified element added at the end.
+         * Since this list is empty, the new list will contain only the specified element.
          * @param element the element to add
          * @return a new list with the element added at the end
          */
         @Override
         public FList<T> append(T element) {
-            return null;
+            return new Cons<>(element, this);
         }
 
         /**
@@ -126,7 +130,7 @@ public abstract class FList<T> {
          */
         @Override
         public boolean isEmpty() {
-            return false;
+            return true;
         }
 
         /**
@@ -146,17 +150,18 @@ public abstract class FList<T> {
          */
         @Override
         public <R> FList<R> map(Function<T, R> f) {
-            return null;
+            return new Empty<>();
         }
 
         /**
-         * Returns a new empty list with only the elements that satisfy the predicate.
+         * Returns a new list with only the elements that satisfy the predicate.
+         * Since this list is empty, the resulting list is also empty.
          * @param p the predicate to test elements
-         * @return a new empty list
+         * @return this empty list, as there are no elements to filter
          */
         @Override
         public FList<T> filter(Predicate<T> p) {
-            return null;
+            return this;
         }
     }
 
