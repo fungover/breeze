@@ -55,5 +55,4 @@ class StringTest {
         assertThat(Strings.isPalindrome("Madam")).isTrue();
         assertThat(Strings.isPalindrome("RaceCar")).isTrue();
     }
-
 }
