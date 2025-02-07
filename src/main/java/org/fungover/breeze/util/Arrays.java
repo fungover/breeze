@@ -3,7 +3,7 @@ package org.fungover.breeze.util;
 import java.lang.reflect.Array;
 
 public class Arrays {
-    public static <T> T[][] transpose(T[][] array){
+    public static <T> T[][] transpose(T[][] array) {
         //Checks if the input array is null or if it has no rows or columns
         if (array == null || array.length == 0 || array[0].length == 0) {
             return array;

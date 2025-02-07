@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 public class ArraysTest {
     @Test
     @DisplayName("Square Arrays")
-    void squareArrays () {
+    void squareArrays() {
         Integer[][] input = {
                 {1, 2, 3},
                 {4, 5, 6},
@@ -28,7 +28,7 @@ public class ArraysTest {
 
     @Test
     @DisplayName("Rectangular Arrays")
-    void rectArrays () {
+    void rectArrays() {
         Integer[][] input = {
                 {1, 2, 3},
                 {4, 5, 6},
@@ -59,7 +59,7 @@ public class ArraysTest {
 
     @Test
     @DisplayName("Irregular Arrays")
-    void irregularArrays () {
+    void irregularArrays() {
         Integer[][] input = {
                 {1, 2, 3},
                 {4, 5, 6, 7}
@@ -72,13 +72,24 @@ public class ArraysTest {
 
     @Test
     @DisplayName("Large Arrays")
-    void largeArrays () {
+    void largeArrays() {
 
     }
 
     @Test
     @DisplayName("Arrays with null element")
-    void arraysWithNullElement () {
-    
+    void arraysWithNullElement() {
+
     }
+
+    @Test
+    @DisplayName("Empty Arrays")
+    void emtpyArrays() {
+        Integer[][] input = {}; // Tom array
+        Integer[][] expected = {}; // Förväntat resultat
+
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
 }
+
