@@ -38,4 +38,19 @@ public class Strings {
         return count;
     }
 
+    /**
+     * Converts camelCase, PascalCase or text with spaces to snake_case.
+     *
+     * @param str the input string
+     * @return the snake_case version of the string, or null if input is null
+     */
+    public static String toSnakeCase(String str) {
+        if (str == null) {
+            return null;
+        }
+        str = str.replaceAll("\\s+", "_");
+
+        return str.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+    }
+
 }

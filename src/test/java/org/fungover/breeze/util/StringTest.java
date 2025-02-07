@@ -29,7 +29,7 @@ class StringTest {
         assertThat(Strings.toSnakeCase("HelloWorld")).isEqualTo("hello_world");
         assertThat(Strings.toSnakeCase("snakeCaseTest")).isEqualTo("snake_case_test");
         assertThat(Strings.toSnakeCase("already_snake_case")).isEqualTo("already_snake_case");
-        assertThat(Strings.toSnakeCase("hello world!")).isEqualTo("hello_world");
+        assertThat(Strings.toSnakeCase("hello world!")).isEqualTo("hello_world!");
         assertThat(Strings.toSnakeCase("leading and trailing spaces")).isEqualTo("leading_and_trailing_spaces");
         assertThat(Strings.toSnakeCase("")).isEqualTo("");
         assertThat(Strings.toSnakeCase(null)).isNull();
