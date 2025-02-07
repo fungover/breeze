@@ -31,12 +31,13 @@ public class WeightedGraph implements Graph {
         return edges;
     }
 
-    public void mapDestinationAndWeight(Node<T> node) {
+    public void mapSourceNodeWithEdges(Node<T> node) {
+        List<Edge<T>> edges = new ArrayList<>();
         for (Edge<T> edge : listOfEdges) {
             if (edge.getSource().equals(node)) {
-                Node<T> destination = edge.getDestination();
-                Double edgeToDestination = edge.getWeight();
-                nodeWithEdge.put(destination, edgeToDestination);
+                Node<T> start = edge.getSource();
+                edges.add(edge);
+                startNodeWithEdges.put(start, edges);
             }
         }
     }
