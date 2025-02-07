@@ -47,9 +47,21 @@ public class Vector2 {
     }
 
     //Linear interpolation
-    public Vector2  linear(Vector2 v1, Vector2 v2, float t) {
+    public Vector2 linear(Vector2 v1, Vector2 v2, float t) {
         return new Vector2(v1.x + t *(v2.x - v1.x), v1.y + t *(v2.y - v1.y));
     }
+
+    //Component min/max
+    public Vector2 min(Vector2 v1, Vector2 v2) {
+        return new Vector2(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y));
+    }
+
+    public Vector2 max(Vector2 v1, Vector2 v2) {
+        return new Vector2(Math.max(v1.x, v2.x), Math.max(v1.y, v2.y));
+    }
+
+
+
 
 
 }
