@@ -348,7 +348,7 @@ class EitherTest {
       Either<String, Integer> left = Either.left("error");
       var result = left.swap();
 
-      assertThat(result).isInstanceOf(Right.class);
+      assertThat(result).isInstanceOf(Either.Right.class);
     }
 
     @Test
@@ -357,7 +357,7 @@ class EitherTest {
       Either<String, Integer> right = Either.right(42);
       var result = right.swap();
 
-      assertThat(result).isInstanceOf(Left.class);
+      assertThat(result).isInstanceOf(Either.Left.class);
     }
 
     @Test
