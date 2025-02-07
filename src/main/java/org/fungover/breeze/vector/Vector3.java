@@ -104,5 +104,13 @@ public class Vector3 {
         return new Vector3(Math.max(v1.x, v2.x ), Math.max(v1.y, v2.y), Math.max(v1.z, v2.z));
     }
 
+    //Convert to vector2 and vector4
+    public Vector2 toVector2() {
+        return new Vector2(this.x, this.y);
+    }
+    public Vector4 toVector4(float w) {
+        return new Vector4(this.x, this.y, this.z, w);
+    }
+
 
 }
