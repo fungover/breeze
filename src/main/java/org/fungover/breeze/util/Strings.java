@@ -19,4 +19,23 @@ public class Strings {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
+    /**
+     * Counts the number of occurrences fo a substring within a string.
+     *
+     * @param str the main string
+     * @param sub the substring to count
+     * @return the number of substring appears in the string, or 0 if str or sub is null/empty
+     */
+    public static int countOccurrences(String str, String sub) {
+        if (str == null || sub == null || sub.isEmpty()) {
+            return 0;
+        }
+        int count = 0, index = 0;
+        while ((index = str.indexOf(sub, index)) != -1) {
+            count++;
+            index += sub.length();
+        }
+        return count;
+    }
+
 }
