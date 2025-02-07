@@ -42,4 +42,15 @@ class StringTest {
         assertThat(Strings.removeWhitespace("")).isEqualTo("");
     }
 
+    @Test
+    void isPalindrome_shouldCheckForPalindrome() {
+        assertThat(Strings.isPalindrome("madam")).isTrue();
+        assertThat(Strings.isPalindrome("racecar")).isTrue();
+        assertThat(Strings.isPalindrome("a")).isTrue();
+        assertThat(Strings.isPalindrome("")).isTrue();
+        assertThat(Strings.isPalindrome(null)).isFalse();
+        assertThat(Strings.isPalindrome("hello")).isFalse();
+        assertThat(Strings.isPalindrome("Madam")).isFalse();
+    }
+
 }
