@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GraphDijkstra implements Graph {
+public class WeightedGraph implements Graph {
     public List<Node<Integer>> listOfNodes = new ArrayList<>();
     public List<Edge<Integer>> listOfEdges = new ArrayList<>();
 
-    public GraphDijkstra addNode (Node<Integer> node) {
+    public WeightedGraph addNode (Node<Integer> node) {
         listOfNodes.add(node);
         return this;
     }
 
-    public GraphDijkstra addEdge (Edge<Integer> edge) {
+    public WeightedGraph addEdge (Edge<Integer> edge) {
         listOfEdges.add(edge);
         return this;
     }
