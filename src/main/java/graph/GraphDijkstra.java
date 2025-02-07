@@ -24,7 +24,8 @@ public class GraphDijkstra implements Graph {
     }
 
     @Override
-    public Collection<Edge<Integer>> getEdges(Node node) {
+    public Collection<Edge<Integer>> getEdges(Node<Integer> node) {
+
         return List.of();
     }
 }
