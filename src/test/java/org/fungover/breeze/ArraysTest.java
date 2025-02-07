@@ -79,6 +79,16 @@ class ArraysTest {
     @Test
     @DisplayName("Arrays with null element")
     void arraysWithNullElement() {
+        Integer[][] input = {
+                {1, null, 3},
+                {4, 5, null},
+        };
+        Integer[][] expected = {
+                {1, 4},
+                {null, 5},
+                {3, null},
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
 
     }
 
