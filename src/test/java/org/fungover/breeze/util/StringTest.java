@@ -23,4 +23,13 @@ class StringTest {
         assertThat(Strings.countOccurrences("hello", null)).isEqualTo(0);
         assertThat(Strings.countOccurrences("hello", "")).isEqualTo(0);
     }
+
+    @Test
+    void toSnakeCase_shouldConvertToSnakeCase() {
+        assertThat(Strings.toSnakeCase("HelloWorld")).isEqualTo("hello_world");
+        assertThat(Strings.toSnakeCase("snakeCaseTest")).isEqualTo("snake_case_test");
+        assertThat(Strings.toSnakeCase("already_snake_case")).isEqualTo("already_snake_case");
+        assertThat(Strings.toSnakeCase("")).isEqualTo("");
+        assertThat(Strings.toSnakeCase(null)).isNull();
+    }
 }
