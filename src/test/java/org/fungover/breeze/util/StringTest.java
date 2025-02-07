@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StringTest {
 
     @Test
-    void capitalize_shouldCapitalizeFistLetter() {
+    void capitalize_shouldCapitalizeFirstLetter() {
         assertThat(Strings.capitalize("hello")).isEqualTo("Hello");
         assertThat(Strings.capitalize("java")).isEqualTo("Java");
         assertThat(Strings.capitalize("")).isEqualTo("");

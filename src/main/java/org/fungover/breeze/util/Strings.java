@@ -54,7 +54,7 @@ public class Strings {
     }
 
     /**
-     * Removes all whitespace charachter from a string.
+     * Removes all whitespace character from a string.
      *
      * @param str the input string
      * @return the string without whitespace, or null if input is null
