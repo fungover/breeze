@@ -1,17 +1,30 @@
 package graph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class GraphDijkstra implements Graph {
+    public List<Node<Integer>> listOfNodes = new ArrayList<>();
+    public List<Edge<Integer>> listOfEdges = new ArrayList<>();
 
-    @Override
-    public Collection<Node> getNodes() {
-        return List.of();
+    public GraphDijkstra addNode (Node<Integer> node) {
+        listOfNodes.add(node);
+        return this;
+    }
+
+    public GraphDijkstra addEdge (Edge<Integer> edge) {
+        listOfEdges.add(edge);
+        return this;
     }
 
     @Override
-    public Collection<Edge> getEdges(Node node) {
+    public Collection<Node<Integer>> getNodes() {
+        return listOfNodes;
+    }
+
+    @Override
+    public Collection<Edge<Integer>> getEdges(Node node) {
         return List.of();
     }
 }

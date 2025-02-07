@@ -9,5 +9,12 @@ public class Main {
 
         Edge<Integer> edge = new Edge<>(node0, node7, 8);
         Edge<Integer> edge1 = new Edge<>(node0, node1, 4);
+
+        GraphDijkstra graph = new GraphDijkstra();
+
+        graph.addNode(node0).addNode(node1).addNode(node7);
+        graph.addEdge(edge).addEdge(edge1);
+
+        graph.getNodes().forEach(System.out::println);
     }
 }

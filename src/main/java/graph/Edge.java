@@ -10,4 +10,6 @@ public class Edge<T> {
         this.destination = destination;
         this.weight = weight;
     }
+
+
 }
