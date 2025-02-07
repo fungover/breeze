@@ -36,6 +36,7 @@ public class Vector3 {
         this.z = z;
     }
 
+    //basic arithmetic
     public void add(Vector3 v){
         this.x += v.x;
         this.y += v.y;
@@ -48,18 +49,32 @@ public class Vector3 {
         this.z -= v.z;
     }
 
-    public void mul(Vector3 other){
-        this.x *= other.x;
-        this.y *= other.y;
-        this.z *= other.z;
+    public void mul(Vector3 v){
+        this.x *= v.x;
+        this.y *= v.y;
+        this.z *= v.z;
     }
 
-    public void div(Vector3 other){
-        this.x /= other.x;
-        this.y /= other.y;
+    public void div(Vector3 v){
+        this.x /= v.x;
+        this.y /= v.y;
     }
 
-    public float dot(Vector3 other){
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+    //Dot product
+    public float dot(Vector3 v){
+        return this.x * v.x + this.y * v.y + this.z * v.z;
     }
+
+    //Cross product
+    public Vector3 cross(Vector3 v){
+        return new Vector3(
+                this.y * v.z - this.z * v.y,
+                this.z * v.x - this.x * v.z,
+                this.x * v.y - this.y * v.x
+        );
+    }
+
+
+
+
 }
