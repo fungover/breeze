@@ -24,7 +24,7 @@ public class Strings {
      *
      * @param str the main string
      * @param sub the substring to count
-     * @return the number of substring appears in the string, or 0 if str or sub is null/empty
+     * @return the number of times the substring appears in the string, or 0 if str or sub is null/empty
      */
     public static int countOccurrences(String str, String sub) {
         if (str == null || sub == null || sub.isEmpty()) {
