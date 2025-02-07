@@ -79,6 +79,13 @@ public class Vector3 {
         return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    //Normalization
+    public Vector3 normalize(){
+        float length = length();
+        return new Vector3(this.x / length, this.y / length, this.z / length);
+    }
+
+
 
 
 }
