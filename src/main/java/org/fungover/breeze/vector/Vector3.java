@@ -85,6 +85,10 @@ public class Vector3 {
         return new Vector3(this.x / length, this.y / length, this.z / length);
     }
 
+    //Distance between vectors
+    public float distance(Vector3 v1, Vector3 v2){
+        return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y -v1.y, 2) + Math.pow(v2.z -v1.z, 2));
+    }
 
 
 
