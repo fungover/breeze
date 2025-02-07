@@ -72,7 +72,6 @@ public class Strings {
      */
     public static boolean isPalindrome(String str) {
         if (str == null) {
-            System.out.println("String is false");
             return false;
         }
         String lowerCasedStr = str.toLowerCase();
