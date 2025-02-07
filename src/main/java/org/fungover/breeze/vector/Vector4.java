@@ -45,7 +45,32 @@ public class Vector4 {
     public void setW(float w) {
         this.w = w;
     }
+    //basic arithmetic
+    public void add(float x, float y, float z, float w) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        this.w += w;
+    }
 
+    public void sub(float x, float y, float z, float w) {
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+        this.w -= w;
+    }
+    public void mul(float x, float y, float z, float w) {
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
+        this.w *= w;
+    }
+    public void div(float x, float y, float z, float w) {
+        this.x /= x;
+        this.y /= y;
+        this.z /= z;
+        this.w /= w;
+    }
 
 
 
