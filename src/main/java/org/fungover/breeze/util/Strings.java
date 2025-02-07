@@ -63,4 +63,20 @@ public class Strings {
     public static String removeWhitespace(String str) {
         return (str == null) ? null : str.replaceAll("\\s+", "");
     }
+
+    /**
+     * Checks if a string is palindrome
+     *
+     * @param str the input string
+     * @return true if the string is a palindrome, false otherwise (null returns false)
+     */
+    public static boolean isPalindrome(String str) {
+        if (str == null) {
+            System.out.println("String is false");
+            return false;
+        }
+        String lowerCasedStr = str.toLowerCase();
+        String reversedStr = new StringBuilder(lowerCasedStr).reverse().toString();
+        return lowerCasedStr.equals(reversedStr);
+    }
 }
