@@ -48,8 +48,9 @@ public class Strings {
         if (str == null) {
             return null;
         }
-        str = str.replaceAll("\\s+", "_");
+        str = str.trim().replaceAll("\\s+", "_");
 
+        str = str.replaceAll("([a-z\\d])([A-Z])", "$1_$2");
         str = str.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
 
         return str.replaceAll("([a-z\\d])([A-Z])", "$1_$2").toLowerCase();
