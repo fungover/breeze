@@ -1,10 +1,10 @@
 package org.fungover.breeze.vector;
 
 public class Vector4 {
-    public float x;
-    public float y;
-    public float z;
-    public float w;
+    private float x;
+    private float y;
+    private float z;
+    private float w;
 
 
     public Vector4(float x, float y, float z, float w) {
@@ -13,4 +13,40 @@ public class Vector4 {
         this.z = z;
         this.w = w;
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getZ() {
+        return z;
+    }
+
+    public void setZ(float z) {
+        this.z = z;
+    }
+
+    public float getW() {
+        return w;
+    }
+
+    public void setW(float w) {
+        this.w = w;
+    }
+
+
+
+
 }
