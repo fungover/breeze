@@ -73,7 +73,17 @@ class ArraysTest {
     @Test
     @DisplayName("Large Arrays")
     void largeArrays() {
+        int size = 1000;
+        Integer[][] input = new Integer[size][size];
+        Integer[][] expected = new Integer[size][size];
 
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                input[i][j] = i * size + j;
+                expected[i][j] = j * size + i;
+            }
+        }
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
 
     @Test
