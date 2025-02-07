@@ -61,6 +61,16 @@ public class Vector2 {
     }
 
 
+    //Convert to vector3 and vector4
+    public Vector3 toVector3(float z){
+        return new Vector3(this.x, this.y, z);
+    }
+
+    public Vector4 toVector4(float z, float w){
+        return new Vector4(this.x, this.y, z, w);
+    }
+
+
 
 
 
