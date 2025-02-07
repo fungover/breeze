@@ -72,6 +72,11 @@ public class Vector4 {
         this.w /= w;
     }
 
+    //Dot product
+    public float dot(Vector4 v) {
+        return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+    }
+
 
 
 }
