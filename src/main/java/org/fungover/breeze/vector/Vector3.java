@@ -36,19 +36,22 @@ public class Vector3 {
         this.z = z;
     }
 
-    public void add(Vector3 other){
-        this.x += other.x;
-        this.y += other.y;
+    public void add(Vector3 v){
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
     }
 
-    public void sub(Vector3 other){
-        this.x -= other.x;
-        this.y -= other.y;
+    public void sub(Vector3 v){
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
     }
 
     public void mul(Vector3 other){
         this.x *= other.x;
         this.y *= other.y;
+        this.z *= other.z;
     }
 
     public void div(Vector3 other){
