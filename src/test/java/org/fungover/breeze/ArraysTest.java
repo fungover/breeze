@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 public class ArraysTest {
     @Test
@@ -59,13 +60,20 @@ public class ArraysTest {
     @Test
     @DisplayName("Irregular Arrays")
     void irregularArrays () {
+        Integer[][] input = {
+                {1, 2, 3},
+                {4, 5, 6, 7}
+        };
 
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> Arrays.transpose(input))
+                .withMessage("Irregular array: all rows must have the same length");
     }
 
     @Test
     @DisplayName("Large Arrays")
     void largeArrays () {
-    
+
     }
 
     @Test
