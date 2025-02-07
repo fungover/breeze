@@ -37,36 +37,36 @@ public class Vector3 {
     }
 
     //basic arithmetic
-    public void add(Vector3 v){
+    public void add(Vector3 v) {
         this.x += v.x;
         this.y += v.y;
         this.z += v.z;
     }
 
-    public void sub(Vector3 v){
+    public void sub(Vector3 v) {
         this.x -= v.x;
         this.y -= v.y;
         this.z -= v.z;
     }
 
-    public void mul(Vector3 v){
+    public void mul(Vector3 v) {
         this.x *= v.x;
         this.y *= v.y;
         this.z *= v.z;
     }
 
-    public void div(Vector3 v){
+    public void div(Vector3 v) {
         this.x /= v.x;
         this.y /= v.y;
     }
 
     //Dot product
-    public float dot(Vector3 v){
+    public float dot(Vector3 v) {
         return this.x * v.x + this.y * v.y + this.z * v.z;
     }
 
     //Cross product
-    public Vector3 cross(Vector3 v){
+    public Vector3 cross(Vector3 v) {
         return new Vector3(
                 this.y * v.z - this.z * v.y,
                 this.z * v.x - this.x * v.z,
@@ -75,26 +75,34 @@ public class Vector3 {
     }
 
     //length/magnitude
-    public float length(){
+    public float length() {
         return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     //Normalization
-    public Vector3 normalize(){
+    public Vector3 normalize() {
         float length = length();
         return new Vector3(this.x / length, this.y / length, this.z / length);
     }
 
     //Distance between vectors
-    public float distance(Vector3 v1, Vector3 v2){
-        return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y -v1.y, 2) + Math.pow(v2.z -v1.z, 2));
+    public float distance(Vector3 v1, Vector3 v2) {
+        return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2) + Math.pow(v2.z - v1.z, 2));
     }
 
     //Linear interpolation
-    public Vector3 linear(Vector3 v1, Vector3 v2, float t){
-        return new Vector3(v1.x + t *(v2.x -v1.x), v1.y + t * (v2.y -v1.y), v1.z + t * (v2.z -v1.z));
+    public Vector3 linear(Vector3 v1, Vector3 v2, float t) {
+        return new Vector3(v1.x + t * (v2.x - v1.x), v1.y + t * (v2.y - v1.y), v1.z + t * (v2.z - v1.z));
     }
 
+    //Component min/max
+    public Vector3 min(Vector3 v1, Vector3 v2) {
+        return new Vector3(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.min(v1.z, v2.z));
+    }
+
+    public Vector3 max(Vector3 v1, Vector3 v2) {
+        return new Vector3(Math.max(v1.x, v2.x ), Math.max(v1.y, v2.y), Math.max(v1.z, v2.z));
+    }
 
 
 }
