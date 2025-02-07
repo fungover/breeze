@@ -30,8 +30,7 @@ public abstract sealed class Either<L extends Serializable, R extends Serializab
 
   /**
    * Protected constructor to prevent direct instantiation.
-   * Use {@link #left(L value)} or {@link #right(R value)} to create instances.
-   *
+   * Use {@link #left(Serializable)} or {@link #right(Serializable)} to create instances.
    */
   protected Either() {
   }
