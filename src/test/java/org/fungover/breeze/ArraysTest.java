@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
-public class ArraysTest {
+class ArraysTest {
     @Test
     @DisplayName("Square Arrays")
     void squareArrays() {
@@ -91,5 +91,18 @@ public class ArraysTest {
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
 
+    @Test
+    @DisplayName("Preserve Type Information")
+    void pereservedTypeInformation() {
+        String[][] input = {
+                {"a", "b" },
+                {"c", "d" },
+        };
+        String[][] expected = {
+                {"a", "c" },
+                {"b", "d" },
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
 }
 
