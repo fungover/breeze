@@ -46,5 +46,10 @@ public class Vector2 {
         return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2 ) + Math.pow(v2.y - v1.y, 2));
     }
 
+    //Linear interpolation
+    public Vector2  linear(Vector2 v1, Vector2 v2, float t) {
+        return new Vector2(v1.x + t *(v2.x - v1.x), v1.y + t *(v2.y - v1.y));
+    }
+
 
 }
