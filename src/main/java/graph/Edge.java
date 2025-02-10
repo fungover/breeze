@@ -2,8 +2,8 @@ package graph;
 
 public class Edge<T> {
     Node<T> source;
-    Node<T> destination;
     double weight;
+    Node<T> destination;
 
     public Edge (Node<T> source,Node<T> destination, double weight) {
         this.source = source;
@@ -21,5 +21,14 @@ public class Edge<T> {
 
     public double getWeight() {
         return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "source=" + source +
+                ", weight=" + weight +
+                ", destination=" + destination +
+                '}';
     }
 }
