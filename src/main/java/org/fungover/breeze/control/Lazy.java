@@ -6,9 +6,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class Lazy<T>{
-    private Supplier<? extends T> supplier;
+    private final Supplier<? extends T> supplier;
     private T value;
-    private boolean evaluated = false;
+    private boolean evaluated;
 
     ///Private constructor for lazy initialization
     private Lazy(Supplier<? extends T> supplier) {
@@ -29,7 +29,7 @@ public final class Lazy<T>{
         return lazy;
     }
 
-    ///Retrieves or computes the value
+    /// Retrieves or computes the value
     public T get() {
         if (!evaluated) {
             synchronized (this) {
@@ -65,12 +65,21 @@ public final class Lazy<T>{
         });
     }
 
-    /// Converts to Option
+    ///Converts to Option
     public Optional<T> toOption() {
         return isEvaluated() ? Optional.ofNullable(value) : Optional.empty();
     }
 
-    /// Performs action when evaluated
+    ///Converts to Try
+    public Try<T> toTry() {
+        try {
+            return Try.success(get());
+        } catch (Exception e) {
+            return Try.failure(e);
+        }
+    }
+
+    ///Performs action when evaluated
     public void forEach(Consumer<? super T> action) {
         if (isEvaluated()) {
             action.accept(value);
@@ -78,5 +87,7 @@ public final class Lazy<T>{
             action.accept(get());
         }
     }
+
+
 }
 
