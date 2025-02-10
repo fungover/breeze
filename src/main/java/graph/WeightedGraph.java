@@ -2,13 +2,19 @@ package graph;
 
 import java.util.*;
 
-public class WeightedGraph implements Graph {
-    public List<Node<Integer>> listOfNodes = new ArrayList<>();
-    public List<Edge<Integer>> listOfEdges = new ArrayList<>();
+public class WeightedGraph<T> implements Graph<T> {
+    public List<Node<T>> listOfNodes = new ArrayList<>();
+    public List<Edge<T>> listOfEdges = new ArrayList<>();
+    Map<Node<T>, List<Edge<T>>> startNodeWithEdges = new HashMap<>();
 
-    public WeightedGraph<T> addNode(Node<T> node) {
+    public WeightedGraph(List<Node<T>> nodes, List<Edge<T>> edges) {
+        this.listOfNodes.addAll(nodes);
+        this.listOfEdges.addAll(edges);
+    }
+
+
+    public void addNode(Node<T> node) {
         listOfNodes.add(node);
-        return this;
     }
 
     public WeightedGraph<T> addEdge(Edge<T> edge) {
