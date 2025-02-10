@@ -19,10 +19,8 @@ public class Main {
         graph.addEdge(edge).addEdge(edge1);
 
         //graph.getNodes().forEach(System.out::println);
-        graph.mapSourceNodeWithEdges(node0);
-        graph.mapSourceNodeWithEdges(node1);
-        graph.mapSourceNodeWithEdges(node7);
+        graph.mapSourceNodesWithEdges(graph.getNodes());
 
-        System.out.println(graph.startNodeWithEdges.get(node7));
+        System.out.println(graph.startNodeWithEdges.get(node0));
     }
 }

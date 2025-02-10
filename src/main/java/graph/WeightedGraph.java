@@ -41,14 +41,10 @@ public class WeightedGraph implements Graph {
             }
         }
     }
-    public void mapSourceNodesWithEdges(Node<T> node) {
-        List<Edge<T>> edges = new ArrayList<>();
-        for (Edge<T> edge : listOfEdges) {
-            if (edge.getSource().equals(node)) {
-                Node<T> start = edge.getSource();
-                edges.add(edge);
-                startNodeWithEdges.put(start, edges);
-            }
+
+    public void mapSourceNodesWithEdges(Collection<Node<T>> listOfNodes) {
+        for (Node<T> node : listOfNodes) {
+            sourceNodeWithEdges(node);
         }
     }
 }
