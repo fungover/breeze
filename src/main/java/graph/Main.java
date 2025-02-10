@@ -1,24 +1,38 @@
 package graph;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 
-        Node<Integer> node0 = new Node<>(0);
-        Node<Integer> node7 = new Node<>(7);
-        Node<Integer> node1 = new Node<>(1);
+        List<Node<Integer>> nodes = List.of(
+                new Node<>(0), new Node<>(1), new Node<>(2),
+                new Node<>(3), new Node<>(4), new Node<>(5),
+                new Node<>(6), new Node<>(7), new Node<>(8)
+        );
 
-        Edge<Integer> edge0to7 = new Edge<>(node0, node7, 8);
-        Edge<Integer> edge0to1 = new Edge<>(node0, node1, 4);
-        Edge<Integer> edge1to2 = new Edge<>(node1, node2, 8);
-        Edge<Integer> edge7to8 = new Edge<>(node7, node8, 7);
-        Edge<Integer> edge7to6 = new Edge<>(node7, node6, 1);
+        List<Edge<Integer>> edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(1), 4),  //0 to 1
+                new Edge<>(nodes.get(0), nodes.get(7), 8),  //0 to 7
+                new Edge<>(nodes.get(1), nodes.get(2), 8),  //1 to 2
+                new Edge<>(nodes.get(1), nodes.get(7), 11), //1 to 7
+                new Edge<>(nodes.get(7), nodes.get(1), 11), //7 to 1
+                new Edge<>(nodes.get(7), nodes.get(8), 7),  //7 to 8
+                new Edge<>(nodes.get(7), nodes.get(6), 1),  //7 to 6
+                new Edge<>(nodes.get(2), nodes.get(8), 2),  //2 to 8
+                new Edge<>(nodes.get(2), nodes.get(5), 4),  //2 to 5
+                new Edge<>(nodes.get(2), nodes.get(3), 7),  //2 to 3
+                new Edge<>(nodes.get(8), nodes.get(6), 6),  //8 to 6
+                new Edge<>(nodes.get(8), nodes.get(2), 2),  //8 to 2
+                new Edge<>(nodes.get(6), nodes.get(5), 2),  //6 to 5
+                new Edge<>(nodes.get(5), nodes.get(3), 14), //5 to 3
+                new Edge<>(nodes.get(5), nodes.get(4), 10), //5 to 4
+                new Edge<>(nodes.get(3), nodes.get(5), 14), //3 to 5
+                new Edge<>(nodes.get(3), nodes.get(4), 9)   //3 to 4
+        );
 
-        WeightedGraph<Integer> graph = new WeightedGraph<>();
+        WeightedGraph<Integer> graph = new WeightedGraph<>(nodes, edges);
 
-        graph.addNode(node0).addNode(node1).addNode(node7);
-        graph.addEdge(edge).addEdge(edge1);
-
-        //graph.getNodes().forEach(System.out::println);
         graph.mapSourceNodesWithEdges(graph.getNodes());
 
         System.out.println(graph.startNodeWithEdges.get(node0));
