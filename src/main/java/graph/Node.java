@@ -38,4 +38,11 @@ public class Node<T> {
     public void setDistance(double distance) {
         this.distance = distance;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "data=" + data +
+                '}';
+    }
 }

@@ -47,4 +47,5 @@ public class WeightedGraph implements Graph {
             sourceNodeWithEdges(node);
         }
     }
+
 }
