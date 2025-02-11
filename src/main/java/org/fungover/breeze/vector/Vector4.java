@@ -81,7 +81,11 @@ public class Vector4 {
     public float length() {
         return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
     }
-
+    //Normalization
+    public Vector4 normalize() {
+        float length = length();
+        return new Vector4(this.x / length, this.y / length, this.z / length, this.w / length);
+    }
 
 
 }
