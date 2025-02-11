@@ -20,7 +20,7 @@ class FListTest {
     @Test
     @DisplayName("Test Prepend")
     void testPrepend() {
-        FList<Object> list = FList.empty().prepend(1);
+        FList<Integer> list = FList.<Integer>empty().prepend(1);
         assertFalse(list.isEmpty());
         assertEquals(1, list.head());
         assertEquals(1, list.size());
@@ -29,7 +29,7 @@ class FListTest {
     @Test
     @DisplayName("Test Append")
     void testAppend() {
-        FList<Object> list = FList.empty().append(1);
+        FList<Integer> list = FList.<Integer>empty().append(1);
         assertFalse(list.isEmpty());
         assertEquals(1, list.head());
         assertEquals(1, list.size());
@@ -38,7 +38,7 @@ class FListTest {
     @Test
     @DisplayName("Test Prepend and Append")
     void testPrependAndAppend() {
-        FList<Object> list = FList.empty().prepend(1).append(2);
+        FList<Integer> list = FList.<Integer>empty().prepend(1).append(2);
         assertFalse(list.isEmpty());
         assertEquals(1, list.head());
         assertEquals(2, list.tail().head());
@@ -48,8 +48,8 @@ class FListTest {
     @Test
     @DisplayName("Test Tail")
     void testTail() {
-        FList<Object> list = FList.empty().prepend(1).prepend(2);
-        FList<Object> tail = list.tail();
+        FList<Integer> list = FList.<Integer>empty().prepend(1).prepend(2);
+        FList<Integer> tail = list.tail();
         assertEquals(1, tail.head());
         assertEquals(1, tail.size());
     }
@@ -57,11 +57,21 @@ class FListTest {
     @Test
     @DisplayName("Test Map")
     void testMap() {
-        FList<Object> list = FList.empty().prepend(1).prepend(2).prepend(3);
+        FList<Integer> list = FList.<Integer>empty().prepend(1).prepend(2).prepend(3);
         FList<String> mappedList = list.map(Object::toString);
         assertEquals("3", mappedList.head());
         assertEquals("2", mappedList.tail().head());
         assertEquals("1", mappedList.tail().tail().head());
+    }
+
+    @Test
+    @DisplayName("Test Filter")
+    void testFilter() {
+        FList<Integer> list = FList.<Integer>empty().prepend(1).prepend(2).prepend(3);
+        FList<Integer> filteredList = list.filter(x -> x % 2 == 1);
+        assertEquals(3, filteredList.head());
+        assertEquals(1, filteredList.tail().head());
+        assertTrue(filteredList.tail().tail().isEmpty());
     }
 
 }
