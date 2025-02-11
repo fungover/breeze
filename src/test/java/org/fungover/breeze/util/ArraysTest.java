@@ -101,5 +101,14 @@ public class ArraysTest {
 
         assertArrayEquals(new String[]{"a", "1", "b", "2", "3"}, result);
     }
+    @Test
+    void testWeaver_EmptyArrays() {
+        String[] empty1 = {};
+        String[] empty2 = {};
+        String[] result = new String[empty1.length + empty2.length];
+
+        Arrays.weaver(empty1, empty2, result);
+        assertArrayEquals(new String[]{}, result);
+    }
 
 }
