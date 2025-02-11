@@ -1,4 +1,4 @@
-package graph;
+package org.fungover.breeze.graph;
 
 import java.util.Map;
 

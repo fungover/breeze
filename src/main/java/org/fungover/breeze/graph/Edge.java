@@ -1,4 +1,4 @@
-package graph;
+package org.fungover.breeze.graph;
 
 public class Edge<T> {
     Node<T> source;
