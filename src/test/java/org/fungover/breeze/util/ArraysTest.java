@@ -71,4 +71,14 @@ public class ArraysTest {
 
         assertArrayEquals(new String[]{"1A", "2B", "3C"}, result);
     }
+    @Test
+    void testZipWith_DifferentLengths_ShouldThrowException() {
+        Integer[] first = {1, 2};
+        Integer[] second = {10, 20, 30};
+        Integer[] result = new Integer[first.length];
+
+        assertThrows(IllegalArgumentException.class, () ->
+                Arrays.zipWith(first, second, Integer::sum, result)
+        );
+    }
 }
