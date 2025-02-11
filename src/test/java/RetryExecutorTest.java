@@ -36,6 +36,26 @@ class RetryExecutorTest {
         });
     }
 
+    // Test exhaustion handler
+    @Test
+    void testExecute_OnExhaustion() throws InterruptedException {
+        RetryExecutor executor = RetryExecutor.builder()
+                .maxAttempts(3)
+                .exponentialBackoff(100, 1000)
+                .retryOn(IOException.class)
+                .onExhaustion(ex -> {
+                    System.out.println("Retry exhausted");
+                    return true;
+                })
+                .build();
 
-
+        assertThrows(RetryExecutor.RetryExhaustedException.class, () -> {
+            executor.execute(() -> {
+                throw new IOException("Failed");
+            });
+        });
+    }
 }
+
+
+
