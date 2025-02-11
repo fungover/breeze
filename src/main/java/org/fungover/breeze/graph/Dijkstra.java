@@ -1,4 +1,4 @@
-package graph;
+package org.fungover.breeze.graph;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class Dijkstra<T> {
         this.graph = graph;
     }
 
-    public <T> void updateDistance(Node<T> node, WeightedGraph<T> graph) {
+    public void updateDistance(Node<T> node, WeightedGraph<T> graph) {
         node.setDistance(0);
         Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
         for (Edge<T> edge : edges) {
