@@ -22,7 +22,6 @@ public class Arrays {
      * @param array The 2D array to transpose.
      * @param <T>   The type of elements in the array.
      * @return The transposed 2D array, where rows become columns.
-     *
      * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
      */
     public static <T> T[][] transpose(T[][] array) {
@@ -54,13 +53,20 @@ public class Arrays {
         @SuppressWarnings("unchecked")
         T[][] transposed = (T[][]) Array.newInstance(array.getClass().getComponentType().getComponentType(), cols, rows);
 
-        // Transpose the array by swapping rows and columns
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                transposed[j][i] = array[i][j];
+        // Process the array in blocks to improve cache utilization
+        final int BLOCK_SIZE = 32;
+        for (int i = 0; i < rows; i += BLOCK_SIZE) {
+            for (int j = 0; j < cols; j += BLOCK_SIZE) {
+                for (int ii = i; ii < Math.min(i + BLOCK_SIZE, rows); ii++) {
+                    for (int jj = j; jj < Math.min(j + BLOCK_SIZE, cols); jj++) {
+                        transposed[jj][ii] = array[ii][jj];
+                    }
+                }
             }
         }
 
+        // **THIS LINE WAS MISSING**
         return transposed;
     }
 }
+
