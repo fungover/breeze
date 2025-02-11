@@ -2,7 +2,12 @@ package org.fungover.breeze.util;
 
 import java.lang.reflect.Array;
 
+/**
+ * A class containing static Array utility functions.
+ */
 public class Arrays {
+
+    private Arrays() {}
 
     /**
      * Transposes a 2D array, converting rows into columns and vice versa.
