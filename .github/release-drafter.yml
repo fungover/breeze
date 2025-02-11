@@ -22,7 +22,7 @@ version-resolver:
   default: minor
 template: |
   ### **Breeze** 💨
-  **Release:** v.$RESOLVED_VERSION
+  **Release:** v$RESOLVED_VERSION
   
   A slight breeze passes by, taking with it the smell of change!
   
