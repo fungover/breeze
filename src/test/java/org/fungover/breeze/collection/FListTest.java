@@ -45,4 +45,13 @@ class FListTest {
         assertEquals(2, list.size());
     }
 
+    @Test
+    @DisplayName("Test Tail")
+    void testTail() {
+        FList<Object> list = FList.empty().prepend(1).prepend(2);
+        FList<Object> tail = list.tail();
+        assertEquals(1, tail.head());
+        assertEquals(1, tail.size());
+    }
+
 }
