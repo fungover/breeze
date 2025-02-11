@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 public final class Lazy<T> {
     private final Supplier<? extends T> supplier;
     private T value;
-    private boolean evaluated;
+    private volatile boolean evaluated;
 
     /// Private constructor for lazy initialization
     private Lazy(Supplier<? extends T> supplier) {

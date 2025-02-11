@@ -4,6 +4,7 @@ import org.fungover.breeze.control.Lazy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -27,6 +28,24 @@ class LazyTest {
         Integer value = 5;
         Lazy<Integer> lazy = Lazy.value(value);
         assertThat(lazy.get()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("value should not be computed more than one time")
+    void valueShouldNotBeComputedMoreThanOneTime(){
+        AtomicInteger countedTimes = new AtomicInteger(0);
+        Lazy<String> lazy = Lazy.of(() -> {
+            countedTimes.incrementAndGet();
+            return "computed value";
+        });
+
+        String value1 = lazy.get();
+        String value2 = lazy.get();
+
+        assertEquals(1, countedTimes.get());
+        assertNotEquals(2, countedTimes.get());
+        assertEquals("computed value", value1);
+        assertEquals("computed value", value2);
     }
 
     @Test
