@@ -1,4 +1,4 @@
-name: release-draft.yml
+name: Release Draft
 on:
   push:
     branches: [ "main" ]
