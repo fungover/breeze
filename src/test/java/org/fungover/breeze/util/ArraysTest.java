@@ -27,4 +27,13 @@ public class ArraysTest {
 
         assertThrows(IllegalArgumentException.class, () -> Arrays.zip(words, numbers));
     }
+    @Test
+    void testZip_EmptyArrays() {
+        String[] empty1 = {};
+        String[] empty2 = {};
+
+        Arrays.Pair<String, String>[] result = Arrays.zip(empty1, empty2);
+        assertEquals(0, result.length);
+    }
+
 }
