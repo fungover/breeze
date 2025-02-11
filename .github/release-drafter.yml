@@ -1,0 +1,31 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🐛 Bug Fixes'
+    collapse-after: 4
+    labels:
+      - 'bug'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-title-escapes: '\<*_&'
+exclude-labels:
+  - 'skip-changelog'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: minor
+template: |
+  ### **Breeze** 💨
+  **Release:** v.$RESOLVED_VERSION
+  
+  A slight breeze passes by, taking with it the smell of change!
+  
+  ## What's Changed
+
+  $CHANGES
