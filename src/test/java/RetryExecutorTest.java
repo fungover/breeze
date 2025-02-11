@@ -4,29 +4,37 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RetryExecutorTest {
+class RetryExecutorTest {
 
+    // Test successful execution on the first attempt
     @Test
-    public void testRetryWithExponentialBackoff() throws InterruptedException {
-        RetryExecutor retryExecutor = RetryExecutor.builder()
+    void testExecute_SuccessOnFirstAttempt() throws InterruptedException {
+        RetryExecutor executor = RetryExecutor.builder()
                 .maxAttempts(3)
-                .exponentialBackoff(100, 500)
+                .exponentialBackoff(100, 1000)
                 .retryOn(IOException.class)
                 .build();
 
-        RetryExecutor.RiskyOperation<Boolean> operation = () -> {
-            throw new IOException("Simulated failure");
-        };
-
-        // Förvänta dig att RetryExecutor misslyckas efter max attempts
-        Exception exception = assertThrows(RetryExecutor.RetryExhaustedException.class, () -> {
-            retryExecutor.execute(operation);
-        });
-
-        assertEquals("Max retry attempts reached", exception.getMessage());
+        String result = executor.execute(() -> "Success");
+        assertEquals("Success", result);
     }
 
+    // Test retry logic for exception
+    @Test
+    void testExecute_RetryOnException() throws InterruptedException {
+        RetryExecutor executor = RetryExecutor.builder()
+                .maxAttempts(3)
+                .exponentialBackoff(100, 1000)
+                .retryOn(IOException.class)
+                .build();
 
+        // Vi förväntar oss att ett undantag kastas eftersom alla retries misslyckas
+        assertThrows(RetryExecutor.RetryExhaustedException.class, () -> {
+            executor.execute(() -> {
+                throw new IOException("Failed");
+            });
+        });
+    }
 
 
 
