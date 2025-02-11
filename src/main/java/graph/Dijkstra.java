@@ -1,17 +1,28 @@
 package graph;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Dijkstra<T> {
 
     public List<Node<T>> unvisitedNodes = new ArrayList<>();
     public List<Node<T>> visitedNodes = new ArrayList<>();
+    public WeightedGraph<T> graph;
 
-    public Dijkstra(Graph<T> graph) {
+
+    public Dijkstra(WeightedGraph<T> graph) {
         unvisitedNodes.addAll(graph.getNodes());
+        this.graph = graph;
+    }
+
+    public <T> void updateDistance(Node<T> node, WeightedGraph<T> graph) {
+        node.setDistance(0);
+        Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
+        for (Edge<T> edge : edges) {
+            double sum = edge.getSource().getDistance() + edge.getWeight();
+            if (sum < edge.getDestination().getDistance()) {
+                edge.getDestination().setDistance(sum);
+            }
+        }
     }
 
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
