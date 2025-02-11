@@ -35,4 +35,14 @@ class FListTest {
         assertEquals(1, list.size());
     }
 
+    @Test
+    @DisplayName("Test Prepend and Append")
+    void testPrependAndAppend() {
+        FList<Object> list = FList.empty().prepend(1).append(2);
+        assertFalse(list.isEmpty());
+        assertEquals(1, list.head());
+        assertEquals(2, list.tail().head());
+        assertEquals(2, list.size());
+    }
+
 }
