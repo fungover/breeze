@@ -20,4 +20,15 @@ class LazyTest {
         assertNotNull(lazy);
     }
 
+    @Test
+    @DisplayName("Supports null values")
+    void supportsNullValue() {
+        Supplier<String> supplier = () -> null;
+        Lazy<String> lazy = Lazy.of(supplier);
+        String value = lazy.get();
+
+        assertTrue(lazy.isEvaluated());
+        assertNull(value);
+    }
+
 }
