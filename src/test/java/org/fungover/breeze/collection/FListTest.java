@@ -54,4 +54,14 @@ class FListTest {
         assertEquals(1, tail.size());
     }
 
+    @Test
+    @DisplayName("Test Map")
+    void testMap() {
+        FList<Object> list = FList.empty().prepend(1).prepend(2).prepend(3);
+        FList<String> mappedList = list.map(Object::toString);
+        assertEquals("3", mappedList.head());
+        assertEquals("2", mappedList.tail().head());
+        assertEquals("1", mappedList.tail().tail().head());
+    }
+
 }
