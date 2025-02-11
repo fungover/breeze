@@ -18,7 +18,10 @@ public class Arrays {
 
         //Validates that all rows in the array have the same length.
         for (T[] row : array) {
-            if (row.length != cols) {
+            if (row == null) {
+                throw new IllegalArgumentException("Irregular array: all rows must have the same length");
+            }
+            if (cols != row.length) {
                 throw new IllegalArgumentException("Irregular array: all rows must have the same length");
             }
         }
