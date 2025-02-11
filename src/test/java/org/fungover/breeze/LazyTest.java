@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LazyTest {
@@ -18,6 +19,14 @@ class LazyTest {
         Lazy<String> lazy = Lazy.of(supplier);
 
         assertNotNull(lazy);
+    }
+
+    @Test
+    @DisplayName("value should return pre initialized lazy instance")
+    void valueShouldReturnPreInitializedLazyInstance(){
+        Integer value = 5;
+        Lazy<Integer> lazy = Lazy.value(value);
+        assertThat(lazy.get()).isEqualTo(5);
     }
 
     @Test
