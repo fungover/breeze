@@ -1,5 +1,8 @@
 package org.fungover.breeze;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class StringUtils {
 
     public static boolean isNullOrEmpty(String str) {
@@ -38,4 +41,12 @@ public class StringUtils {
         if (str == null) return null;
         return new StringBuilder(str).reverse().toString();
     }
+
+    public static List<String> splitToList(String str, String delimiter) {
+        if (str == null) return List.of();
+        return Arrays.asList(str.split(delimiter));
+
+    }
+
+
 }
