@@ -140,5 +140,14 @@ public class ArraysTest {
         assertEquals(1, result[2]);
         assertEquals(100001, result[3]);
     }
+    @Test
+    void testWeaver_VerifyInterleavingOrder() {
+        String[] first = {"a", "b", "c"};
+        String[] second = {"1", "2", "3", "4"};
+        String[] result = new String[first.length + second.length];
 
+        Arrays.weaver(first, second, result);
+
+        assertArrayEquals(new String[]{"a", "1", "b", "2", "c", "3", "4"}, result);
+    }
 }
