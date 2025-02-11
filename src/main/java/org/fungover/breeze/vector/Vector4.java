@@ -77,6 +77,11 @@ public class Vector4 {
         return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
     }
 
+    //length/magnitude
+    public float length() {
+        return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    }
+
 
 
 }
