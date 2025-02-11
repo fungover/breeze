@@ -106,7 +106,7 @@ class ArraysTest {
     @DisplayName("Empty Arrays")
     void emtpyArrays() {
         Integer[][] input = {}; // Empty array
-        Integer[][] expected = {}; // Förväntat resultat
+        Integer[][] expected = {}; // Expected result
 
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
@@ -125,4 +125,3 @@ class ArraysTest {
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
 }
-
