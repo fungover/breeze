@@ -105,7 +105,7 @@ class ArraysTest {
     @Test
     @DisplayName("Empty Arrays")
     void emtpyArrays() {
-        Integer[][] input = {}; // Tom array
+        Integer[][] input = {}; // Empty array
         Integer[][] expected = {}; // Förväntat resultat
 
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
@@ -113,7 +113,7 @@ class ArraysTest {
 
     @Test
     @DisplayName("Preserve Type Information")
-    void pereservedTypeInformation() {
+    void preservedTypeInformation() {
         String[][] input = {
                 {"a", "b" },
                 {"c", "d" },

@@ -11,17 +11,14 @@ public class Arrays {
 
         //If the input array is valid, it initializes rows and cols to the dimensions of the array.
         int rows = array.length;
-        if (array[0].length != rows) {
-            return array;
-        }
         int cols = array[0].length;
 
         //Validates that all rows in the array have the same length.
         for (T[] row : array) {
             if (row == null) {
-                throw new IllegalArgumentException("Irregular array: all rows must have the same length");
+                throw new IllegalArgumentException("Irregular array: null rows are not allowed");
             }
-            if (cols != row.length) {
+            if (row.length != cols) {
                 throw new IllegalArgumentException("Irregular array: all rows must have the same length");
             }
         }
