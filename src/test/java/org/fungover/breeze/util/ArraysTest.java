@@ -91,5 +91,15 @@ public class ArraysTest {
 
         assertArrayEquals(new String[]{"x", "1", "y", "2", "z", "3"}, result);
     }
+    @Test
+    void testWeaver_DifferentLengths() {
+        String[] first = {"a", "b"};
+        String[] second = {"1", "2", "3"};
+        String[] result = new String[first.length + second.length];
+
+        Arrays.weaver(first, second, result);
+
+        assertArrayEquals(new String[]{"a", "1", "b", "2", "3"}, result);
+    }
 
 }
