@@ -10,6 +10,7 @@ public class WeightedGraph<T> implements Graph<T> {
     public WeightedGraph(List<Node<T>> nodes, List<Edge<T>> edges) {
         this.listOfNodes.addAll(nodes);
         this.listOfEdges.addAll(edges);
+        mapNodesWithEdges(getNodes());
     }
 
     public void addNode(Node<T> node) {
