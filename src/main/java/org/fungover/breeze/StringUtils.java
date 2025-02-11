@@ -24,4 +24,13 @@ public class StringUtils {
         String padding = String.valueOf(padChar).repeat(paddingSize);
         return str + padding;
     }
+
+    public static String padRight(String str, int maxLength, char padChar) {
+        if (str == null) return null;
+        if (str.length() <= maxLength) return str;
+
+        int paddingSize = maxLength - str.length();
+        String padding = String.valueOf(padChar).repeat(paddingSize);
+        return padding + str;
+    }
 }
