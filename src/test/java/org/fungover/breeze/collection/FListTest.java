@@ -74,4 +74,14 @@ class FListTest {
         assertTrue(filteredList.tail().tail().isEmpty());
     }
 
+    @Test
+    @DisplayName("Test Is Empty")
+    void testIsEmpty() {
+        FList<Integer> emptyList = FList.empty();
+        assertTrue(emptyList.isEmpty());
+
+        FList<Integer> nonEmptyList = emptyList.prepend(1);
+        assertFalse(nonEmptyList.isEmpty());
+    }
+
 }
