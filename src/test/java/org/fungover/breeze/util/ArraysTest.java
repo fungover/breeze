@@ -120,4 +120,25 @@ public class ArraysTest {
 
         assertArrayEquals(new String[]{null, "a", "b", null, "c"}, result);
     }
+    @Test
+    void testWeaver_LargeArrays_Performance() {
+        int size = 100000;
+        Integer[] first = new Integer[size];
+        Integer[] second = new Integer[size];
+        Integer[] result = new Integer[size * 2];
+
+        for (int i = 0; i < size; i++) {
+            first[i] = i;
+            second[i] = i + 100000;
+        }
+
+        Arrays.weaver(first, second, result);
+
+        assertEquals(200000, result.length);
+        assertEquals(0, result[0]);
+        assertEquals(100000, result[1]);
+        assertEquals(1, result[2]);
+        assertEquals(100001, result[3]);
+    }
+
 }
