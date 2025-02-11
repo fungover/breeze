@@ -77,13 +77,62 @@ class StringUtilsTest {
 
     @Test
     public void testContainsIgnoreCase_EmptyStrings() {
-        assertTrue(StringUtils.containsIgnoreCase("", ""));
-        assertFalse(StringUtils.containsIgnoreCase("Hello World", ""));
-        assertFalse(StringUtils.containsIgnoreCase("", "world"));
+        assertTrue(StringUtils.containsIgnoreCase("", "")); // Both strings are empty
+        assertFalse(StringUtils.containsIgnoreCase("Hello World", "")); // Non-empty string should not contain empty string
+        assertFalse(StringUtils.containsIgnoreCase("", "world")); // Empty string cannot contain non-empty string
     }
 
+    @Test
+    public void testSubstringBefore_Basic() {
+        assertEquals("Hello", StringUtils.substringBefore("Hello World", " "));
+        assertEquals("Hello", StringUtils.substringBefore("Hello,World", ","));
+        assertEquals("Hello", StringUtils.substringBefore("HelloXYZWorld", "XYZ"));
+    }
 
+    @Test
+    public void testSubstringBefore_DelimiterNotFound() {
+        assertEquals("Hello World", StringUtils.substringBefore("Hello World", "XYZ"));
+    }
 
+    @Test
+    public void testSubstringBefore_NullInput() {
+        assertNull(StringUtils.substringBefore(null, " "));
+        assertEquals("Hello World", StringUtils.substringBefore("Hello World", null));
+        assertNull(StringUtils.substringBefore(null, null));
+    }
 
+    @Test
+    public void testSubstringBefore_EmptyStrings() {
+        assertEquals("", StringUtils.substringBefore("", " "));
+        assertEquals("Hello World", StringUtils.substringBefore("Hello World", ""));
+    }
+
+    // Tests for substringAfter
+    @Test
+    public void testSubstringAfter_Basic() {
+        assertEquals("World", StringUtils.substringAfter("Hello World", " "));
+        assertEquals("World", StringUtils.substringAfter("Hello,World", ","));
+        assertEquals("World", StringUtils.substringAfter("HelloXYZWorld", "XYZ"));
+    }
+
+    @Test
+    public void testSubstringAfter_DelimiterNotFound() {
+        assertEquals("Hello World", StringUtils.substringAfter("Hello World", "XYZ"));
+    }
+
+    @Test
+    public void testSubstringAfter_NullInput() {
+        assertNull(StringUtils.substringAfter(null, " "));
+        assertEquals("Hello World", StringUtils.substringAfter("Hello World", null));
+        assertNull(StringUtils.substringAfter(null, null));
+    }
+
+    @Test
+    public void testSubstringAfter_EmptyStrings() {
+        assertEquals("", StringUtils.substringAfter("", " "));
+        assertEquals("Hello World", StringUtils.substringAfter("Hello World", ""));
+    }
 }
+
+
 

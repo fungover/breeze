@@ -54,18 +54,22 @@ public class StringUtils {
         }
 
         if (searchStr.isEmpty()) {
-            return true;
+            return str.isEmpty();
         }
         return str.toLowerCase().contains(searchStr.toLowerCase());
     }
 
 
 
-    public static String substringBefore(String str, String seperator) {
-        if (str == null || seperator == null) {
+    public static String substringBefore(String str, String separator) {
+        if (str == null || separator == null) {
             return str;
         }
-        int index = str.indexOf(seperator);
+
+        if (separator.isEmpty()) {
+            return str;
+        }
+        int index = str.indexOf(separator);
         if (index == -1) {
             return str;
         }
