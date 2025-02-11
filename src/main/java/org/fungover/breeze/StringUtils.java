@@ -6,7 +6,7 @@ import java.util.List;
 public class StringUtils {
 
     public static boolean isNullOrEmpty(String str) {
-       return str == null || str.isEmpty();
+        return str == null || str.isEmpty();
     }
 
     public static boolean isNullOrBlank(String str) {
@@ -52,9 +52,37 @@ public class StringUtils {
         if (str == null || searchStr == null) {
             return false;
         }
+
+        if (searchStr.isEmpty()) {
+            return true;
+        }
         return str.toLowerCase().contains(searchStr.toLowerCase());
     }
-    
+
+
+
+    public static String substringBefore(String str, String seperator) {
+        if (str == null || seperator == null) {
+            return str;
+        }
+        int index = str.indexOf(seperator);
+        if (index == -1) {
+            return str;
+        }
+        return str.substring(0, index);
+    }
+
+    public static String substringAfter(String str, String seperator) {
+        if (str == null || seperator == null) {
+            return str;
+        }
+        int index = str.indexOf(seperator);
+        if (index == -1) {
+            return str;
+        }
+        return str.substring(index + seperator.length());
+    }
+
 
 }
 
