@@ -1,11 +1,11 @@
 package org.fungover.breeze.funclib.control;
 
-import java.util.function.Function;
+import java.io.Serializable;
 
 /**
  * Represents a failed computation result.
  */
-final class Failure<T> extends Try<T> {
+final class Failure<T> extends Try<T>  implements Serializable {
     private final Throwable throwable;
 
     public Failure(Throwable throwable) {

@@ -76,6 +76,84 @@ class TryTest {
     }
 
     @Test
+    void testMapSuccess() {
+        Try<Integer> success = Try.success(10);
+        Try<Integer> mapped = success.map(x -> x * 2);
+        assertTrue(mapped.isSuccess());
+        assertDoesNotThrow(() -> assertEquals(20, mapped.get()));
+    }
+
+
+    @Test
+    void testMapFailure() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        Try<Integer> mapped = failure.map(x -> x * 2);
+        assertTrue(mapped.isFailure());
+        assertThrows(RuntimeException.class, mapped::get);
+    }
+
+    @Test
+    void testFlatMapSuccess() {
+        Try<Integer> success = Try.success(10);
+        Try<Integer> flatMapped = success.flatMap(x -> Try.success(x * 2));
+        assertTrue(flatMapped.isSuccess());
+        assertDoesNotThrow(() -> assertEquals(20, flatMapped.get()));
+    }
+
+
+    @Test
+    void testFlatMapFailure() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        Try<Integer> flatMapped = failure.flatMap(x -> Try.success(x * 2));
+        assertTrue(flatMapped.isFailure());
+        assertThrows(RuntimeException.class, flatMapped::get);
+    }
+
+    @Test
+    void testFilterSuccess() {
+        Try<Integer> success = Try.success(10);
+        Try<Integer> filter = success.filter(x -> x % 2 == 0);
+        assertTrue(filter.isSuccess());
+    }
+
+    @Test
+    void testFilterFailure() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        Try<Integer> filter = failure.filter(x -> x % 2 == 0);
+        assertTrue(filter.isFailure());
+    }
+
+    @Test
+    void testRecover() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        Try<Integer> recovered = failure.recover(ex -> 42);
+        assertTrue(recovered.isSuccess());
+        assertDoesNotThrow(() -> assertEquals(42, recovered.get()));
+    }
+
+    @Test
+    void testRecoverWith() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        Try<Integer> recovered = failure.recoverWith(ex -> Try.success(42));
+        assertTrue(recovered.isSuccess());
+        assertDoesNotThrow(() -> assertEquals(42, recovered.get()));
+    }
+
+    @Test
+    void testFoldSuccess() {
+        Try<Integer> success = Try.success(10);
+        int result = success.fold(Throwable::hashCode, x -> x * 2);
+        assertEquals(20, result);
+    }
+
+    @Test
+    void testFoldFailure() {
+        Try<Integer> failure = Try.failure(new RuntimeException("error"));
+        int result = failure.fold(ex -> -1, x -> x * 2);
+        assertEquals(-1, result);
+    }
+
+    @Test
     void testExceptionChaining() {
         Exception cause = new IllegalArgumentException("cause");
         Exception exception = new RuntimeException("error", cause);
