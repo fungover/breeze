@@ -23,9 +23,9 @@ version-resolver:
 template: |
   ### **Breeze** 💨
   **Release:** v$RESOLVED_VERSION
-  
+
   A slight breeze passes by, taking with it the smell of change!
-  
+
   ## What's Changed
 
   $CHANGES
