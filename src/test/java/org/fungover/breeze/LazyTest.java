@@ -24,7 +24,7 @@ class LazyTest {
 
     @Test
     @DisplayName("value should return pre initialized lazy instance")
-    void valueShouldReturnPreInitializedLazyInstance(){
+    void valueShouldReturnPreInitializedLazyInstance() {
         Integer value = 5;
         Lazy<Integer> lazy = Lazy.value(value);
         assertThat(lazy.get()).isEqualTo(5);
@@ -32,7 +32,7 @@ class LazyTest {
 
     @Test
     @DisplayName("value should not be computed more than one time")
-    void valueShouldNotBeComputedMoreThanOneTime(){
+    void valueShouldNotBeComputedMoreThanOneTime() {
         AtomicInteger countedTimes = new AtomicInteger(0);
         Lazy<String> lazy = Lazy.of(() -> {
             countedTimes.incrementAndGet();
@@ -46,6 +46,18 @@ class LazyTest {
         assertNotEquals(2, countedTimes.get());
         assertEquals("computed value", value1);
         assertEquals("computed value", value2);
+    }
+
+    @Test
+    @DisplayName("Integer should transform to String with map")
+    void integerShouldTransformToStringWithMap() {
+        Lazy<Integer> lazyInt = Lazy.of(() -> 29);
+
+        Lazy<String> lazyString = lazyInt.map(value -> "Value: " + value);
+
+        String result = lazyString.get();
+
+        assertEquals("Value: 29", result);
     }
 
     @Test
