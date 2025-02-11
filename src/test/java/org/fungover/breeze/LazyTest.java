@@ -4,6 +4,7 @@ import org.fungover.breeze.control.Lazy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -49,15 +50,32 @@ class LazyTest {
     }
 
     @Test
-    @DisplayName("Integer should transform to String with map")
-    void integerShouldTransformToStringWithMap() {
-        Lazy<Integer> lazyInt = Lazy.of(() -> 29);
+    @DisplayName("map should transform values")
+    void mapShouldTransformValues() {
+        Lazy<Integer> lazyInt = Lazy.of(() -> 100);
+        Lazy<String> lazyString = lazyInt.map(value -> "Number: " + value);
+        assertEquals("Number: 100", lazyString.get());
 
-        Lazy<String> lazyString = lazyInt.map(value -> "Value: " + value);
+        Lazy<Double> lazyDouble = Lazy.of(() -> 3.14);
+        Lazy<Integer> lazyIntFromDouble = lazyDouble.map(value -> (int) Math.round(value));
+        assertEquals(3, lazyIntFromDouble.get());
+    }
 
-        String result = lazyString.get();
+    @Test
+    @DisplayName("Lazy method should not compute before call")
+    void lazyMethodShouldNotComputeBeforeCall() {
+        AtomicBoolean evaluated = new AtomicBoolean(false);
 
-        assertEquals("Value: 29", result);
+        Lazy<Integer> lazyInt = Lazy.of(() -> {
+            evaluated.set(true);
+            return 42;
+        });
+
+        assertFalse(evaluated.get());
+
+        lazyInt.get();
+
+        assertTrue(evaluated.get());
     }
 
     @Test
@@ -70,5 +88,6 @@ class LazyTest {
         assertTrue(lazy.isEvaluated());
         assertNull(value);
     }
+
 
 }
