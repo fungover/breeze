@@ -98,5 +98,15 @@ public class Vector4 {
         return new Vector4(v1.x + t * (v2.x - v1.x), v1.y + t * (v2.y - v1.y), v1.z + t * (v2.z -v1.z), v1.w + t * (v2.w - v1.w));
     }
 
+    //Component min/max
+    public Vector4 min(Vector4 v1, Vector4 v2) {
+        return new Vector4(Math.min(v1.x ,v2.x) ,Math.min(v1.y ,v2.y), Math.min(v1.z ,v2.z),Math.min(v1.w ,v2.w) );
+    }
+
+    public Vector4 max(Vector4 v1, Vector4 v2) {
+        return new Vector4(Math.max(v1.x ,v2.x), Math.max(v1.y, v2.y), Math.max(v1.z ,v2.z),Math.max(v1.w ,v2.w) );
+    }
+
+
 
 }
