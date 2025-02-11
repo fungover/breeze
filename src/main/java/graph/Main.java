@@ -32,8 +32,6 @@ public class Main {
 
         WeightedGraph<String> graph = new WeightedGraph<>(nodes, edges);
 
-        graph.mapNodesWithEdges(graph.getNodes());
-
         System.out.println(graph.startNodeWithEdges.get(node0));
     }
 }
