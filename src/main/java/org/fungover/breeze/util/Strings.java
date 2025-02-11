@@ -6,6 +6,8 @@ package org.fungover.breeze.util;
 
 public class Strings {
 
+    private Strings() {}
+
     /**
      * Capitalizes the first letter of the given string.
      *
