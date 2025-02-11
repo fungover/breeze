@@ -3,6 +3,7 @@ package org.fungover.breeze.util;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ArraysTest {
 
@@ -17,5 +18,13 @@ public class ArraysTest {
         assertEquals(new Arrays.Pair<>("a1", "b1"), result[0]);
         assertEquals(new Arrays.Pair<>("a2", "b2"), result[1]);
         assertEquals(new Arrays.Pair<>("a3", "b3"), result[2]);
+    }
+
+    @Test
+    void testZip_DifferentLengths_ShouldThrowException() {
+        String[] words = {"a1", "a2"};
+        String[] numbers = {"b1", "b2", "b3"};
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zip(words, numbers));
     }
 }
