@@ -5,10 +5,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        List<Node<Integer>> nodes = List.of(
-                new Node<>(0), new Node<>(1), new Node<>(2),
-                new Node<>(3), new Node<>(4), new Node<>(5),
-                new Node<>(6), new Node<>(7), new Node<>(8)
+        List<Node<String>> nodes = List.of(
+                new Node<>("A"), new Node<>("B"), new Node<>("C"),
+                new Node<>("D"), new Node<>("E"), new Node<>("F")
         );
 
         List<Edge<Integer>> edges = List.of(
@@ -31,9 +30,9 @@ public class Main {
                 new Edge<>(nodes.get(3), nodes.get(4), 9)   //3 to 4
         );
 
-        WeightedGraph<Integer> graph = new WeightedGraph<>(nodes, edges);
+        WeightedGraph<String> graph = new WeightedGraph<>(nodes, edges);
 
-        graph.mapSourceNodesWithEdges(graph.getNodes());
+        graph.mapNodesWithEdges(graph.getNodes());
 
         System.out.println(graph.startNodeWithEdges.get(node0));
     }
