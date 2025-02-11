@@ -1,24 +1,26 @@
 package org.fungover.breeze.util;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
-// JavaDocs
 
 public class Arrays {
 
 
-    private Arrays() {
-        throw new IllegalStateException("Utility class");
-    }
 
-
+    @SuppressWarnings("unchecked")
     public static <T> T[][] chunk(T[] array, int size) {
 
-        if (size <= 0)
+        if (size <= 0) {
             throw new IllegalArgumentException("Size must be greater than 0");
+        }
 
+        if (array.length == 0) {
+            return (T[][]) Array.newInstance(array.getClass().getComponentType(), 0,0);
+        }
 
-       int numberOfChunks = (int) Math.ceil((double) array.length / size);
+        int numberOfChunks = (int) Math.ceil((double) array.length / size);
        T[][] chunks = (T[][]) Array.newInstance(array.getClass().getComponentType(),numberOfChunks, 0);
 
        for (int i = 0; i < numberOfChunks; i++) {
@@ -30,6 +32,18 @@ public class Arrays {
            chunks[i] = chunk;
        }
 
+        return chunks;
+    }
+
+
+    public static <T>List<List<T>> chunkList(List<T> list, int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Size must be greater than 0");
+        }
+        List<List<T>> chunks = new ArrayList<>();
+        for (int i = 0; i < list.size(); i+= size) {
+            chunks.add(new ArrayList<>(list.subList(i, Math.min(list.size(), i + size))));
+        }
         return chunks;
     }
 
