@@ -60,5 +60,15 @@ public class ArraysTest {
 
         assertArrayEquals(new Integer[]{11, 22, 33}, result);
     }
+    @Test
+    void testZipWith_DifferentTypes() {
+        Integer[] first = {1, 2, 3};
+        String[] second = {"A", "B", "C"};
+        String[] result = new String[first.length];
 
+        BiFunction<Integer, String, String> combine = (num, str) -> num + str;
+        Arrays.zipWith(first, second, combine, result);
+
+        assertArrayEquals(new String[]{"1A", "2B", "3C"}, result);
+    }
 }
