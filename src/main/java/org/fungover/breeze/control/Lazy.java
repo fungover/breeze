@@ -1,5 +1,7 @@
 package org.fungover.breeze.control;
 
+import org.fungover.breeze.funclib.control.Try;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
