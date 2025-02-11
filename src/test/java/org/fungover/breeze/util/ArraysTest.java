@@ -81,4 +81,15 @@ public class ArraysTest {
                 Arrays.zipWith(first, second, Integer::sum, result)
         );
     }
+    @Test
+    void testWeaver_EqualLengthArrays() {
+        String[] first = {"x", "y", "z"};
+        String[] second = {"1", "2", "3"};
+        String[] result = new String[first.length + second.length];
+
+        Arrays.weaver(first, second, result);
+
+        assertArrayEquals(new String[]{"x", "1", "y", "2", "z", "3"}, result);
+    }
+
 }
