@@ -2,8 +2,7 @@ package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ArraysTest {
 
@@ -34,6 +33,19 @@ public class ArraysTest {
 
         Arrays.Pair<String, String>[] result = Arrays.zip(empty1, empty2);
         assertEquals(0, result.length);
+    }
+    @Test
+    void testZip_NullElements() {
+        String[] first = {null, "b"};
+        String[] second = {"a", null};
+
+        Arrays.Pair<String, String>[] result = Arrays.zip(first, second);
+
+        assertEquals(2, result.length);
+        assertNull(result[0].first);
+        assertEquals("a", result[0].second);
+        assertEquals("b", result[1].first);
+        assertNull(result[1].second);
     }
 
 }
