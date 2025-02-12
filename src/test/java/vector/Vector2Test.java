@@ -96,18 +96,16 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("normalize vector X")
-    void normalizeVectorX() {
+    @DisplayName("Normalize vector")
+    void normalizeVector(){
         Vector2 vector = new Vector2(3, 4);
-        assertThat(vector.normalize()).returns(0.6f, Vector2::getX);
+        var v = vector.normalize();
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(0.6f),
+                () -> assertThat(v.getY()).isEqualTo(0.8f)
+        );
     }
 
-    @Test
-    @DisplayName("normalize vector Y")
-    void normalizeVectorY() {
-        Vector2 vector = new Vector2(3, 4);
-        assertThat(vector.normalize()).returns(0.8f, Vector2::getY);
-    }
 
     @Test
     @DisplayName("Distance between vectors")
@@ -116,8 +114,20 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(18));
     }
-    
 
+
+
+    @Test
+    @DisplayName("Linear interpolation find point between vectors")
+    void linearInterpolationFindPointBetweenVectors(){
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
+        var v = vector.linear(vector,vector2, 0.5f);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(4.5f),
+                () -> assertThat(v.getY()).isEqualTo(4.5f)
+        );
+    }
 
     @Test
     @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
@@ -129,7 +139,6 @@ class Vector2Test {
        });
        assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
     }
-
     @Test
     @DisplayName("Linear interpolation with lerp less than 0 throw exception")
     void linearInterpolationWithLerpLessThan0ThrowException(){
@@ -139,18 +148,6 @@ class Vector2Test {
             vector.linear(vector,vector2, -0.1f);
         });
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
-    }
-    @Test
-    @DisplayName("Linear interpolation find point between vectors")
-    void linearInterpolationFindPointBetweenVectors(){
-        Vector2 vector = new Vector2(3, 3);
-        Vector2 vector2 = new Vector2(6, 6);
-        var v = vector.linear(vector,vector2, 0.5f);
-        assertAll(
-                () -> assertThat(v.getX()).isEqualTo(4.5f),
-                () -> assertThat(v.getY()).isEqualTo(4.5f)
-        );
-
     }
 
 
