@@ -26,6 +26,10 @@ public class Dijkstra<T> {
         markNodeAsVisited(node);
     }
 
+    public void setPreviousNode(Node<T> node, Edge<T> edge) {
+        edge.getDestination().setPreviousNode(node);
+    }
+
     public void markNodeAsVisited (Node<T> currentNode) {
         visitedNodes.add(currentNode);
         unvisitedNodes.remove(currentNode);
