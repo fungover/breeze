@@ -130,7 +130,14 @@ class ArraysTest {
         assertThat(result).hasDimensions(1,booleanArray.length);
     }
 
+    @Test
+    @DisplayName("Chunk list handles input smaller than chunk size")
+    void chunkListHandlesInputSmallerThanChunkSize() {
+        List<Double> doubleList = List.of(1.1, 2.2, 3.3, 4.4, 5.5);
+        int size = 6;
 
-
+        List<List<Double>> result = Arrays.chunkList(doubleList, size);
+        assertThat(result).hasSize(1);
+    }
 
 }
