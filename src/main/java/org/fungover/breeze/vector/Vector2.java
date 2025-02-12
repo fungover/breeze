@@ -69,6 +69,9 @@ public class Vector2 {
 
     //Linear interpolation
     public Vector2 linear(Vector2 v1, Vector2 v2, float t) {
+        if(t > 1)
+            throw new IllegalArgumentException("lerp can not be larger than 1");
+
         return new Vector2(v1.x + t * (v2.x - v1.x), v1.y + t * (v2.y - v1.y));
     }
 
