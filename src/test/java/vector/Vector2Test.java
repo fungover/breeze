@@ -65,19 +65,14 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Div vector X")
-    void divVectorX() {
+    @DisplayName("Div vector")
+    void divVector(){
         Vector2 vector = new Vector2(6, 6);
         vector.div(2);
-        assertThat(vector).returns(3.0f, Vector2::getX);
-    }
-
-    @Test
-    @DisplayName("Div vector Y")
-    void divVectorY() {
-        Vector2 vector = new Vector2(6, 6);
-        vector.div(2);
-        assertThat(vector).returns(3.0f, Vector2::getY);
+        assertAll(
+                () -> assertThat(vector.getX()).isEqualTo(3.0f),
+                () -> assertThat(vector.getY()).isEqualTo(3.0f)
+        );
     }
 
     @Test
