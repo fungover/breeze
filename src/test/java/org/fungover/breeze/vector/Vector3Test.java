@@ -56,5 +56,12 @@ class Vector3Test {
                 () -> assertThat(vector.getZ()).isEqualTo(3.0f)
         );
     }
+    @Test
+    @DisplayName("Correct dot product")
+    void correctDotProduct() {
+        Vector3 vector = new Vector3(3, 3,3);
+        Vector3 vector3 = new Vector3(3, 3,3);
+        assertThat(vector.dot(vector3)).isEqualTo(27.0f);
+    }
 
 }
