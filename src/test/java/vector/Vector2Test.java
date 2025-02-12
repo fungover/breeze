@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -155,18 +156,30 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Find the min X value of two vectors")
-    void findTheMinXValueOfTwoVectors(){
+    @DisplayName("Find the min value of two vectors")
+    void findTheMinValueOfTwoVectors(){
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
-        assertThat(vector.min(vector, vector2)).returns(3.0f, Vector2::getX);
+        var v = vector.min(vector, vector2);
+
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(3.0f),
+                () -> assertThat(v.getY()).isEqualTo(5.0f)
+        );
     }
+
     @Test
-    @DisplayName("Find the min Y value of two vectors")
-    void findTheMinYValueOfTwoVectors(){
+    @DisplayName("Find the max value of two vectors")
+    void findTheMaxValueOfTwoVectors(){
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
-        assertThat(vector.min(vector, vector2)).returns(5.0f, Vector2::getY);
+        var v = vector.max(vector, vector2);
+
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(4.0f),
+                () -> assertThat(v.getY()).isEqualTo(6.0f)
+        );
     }
+
 
 }
