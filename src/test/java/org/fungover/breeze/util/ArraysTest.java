@@ -31,4 +31,13 @@ class ArraysTest {
         assertThat(exception.getMessage()).isEqualTo("Size must be greater than 0");
     }
 
+    @Test
+    @DisplayName("Chunk array throws exception for zero size")
+    void chunkArrayThrowsExceptionForZeroSize() {
+        Double[] doubleArray = {1.1, 2.2, 3.3};
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(doubleArray, 0));
+
+        assertThat(exception.getMessage()).isEqualTo("Size must be greater than 0");
+    }
+
 }
