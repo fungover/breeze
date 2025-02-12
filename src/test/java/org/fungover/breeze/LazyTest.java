@@ -4,6 +4,8 @@ import org.fungover.breeze.control.Lazy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -60,6 +62,26 @@ class LazyTest {
         Lazy<Integer> lazyIntFromDouble = lazyDouble.map(value -> (int) Math.round(value));
         assertEquals(3, lazyIntFromDouble.get());
     }
+
+    @Test
+    void flatMapShouldRetrieveElementFromLazyList() {
+        Lazy<List<String>> lazyList = Lazy.of(() -> Arrays.asList("a", "b", "c"));
+        Lazy<String> flatMapped = lazyList.flatMap(list -> Lazy.of(() -> list.get(2)));
+
+        String result = flatMapped.get();
+        assertEquals("c", result);
+    }
+
+    @Test
+    @DisplayName("Lazy flatmap should return chain of transformed values")
+    void lazyFlatmapShouldReturnChainOfTransformedValues(){
+        Lazy<Integer> lazyInt = Lazy.of(() -> 666);
+        Lazy<String> lazyString = lazyInt
+                .flatMap(i -> Lazy.of(() -> "The answer is " + i))
+                .flatMap(s -> Lazy.of(s::toUpperCase));
+        assertEquals("THE ANSWER IS 666", lazyString.get());
+    }
+
 
     @Test
     @DisplayName("Lazy method should not compute before call")
