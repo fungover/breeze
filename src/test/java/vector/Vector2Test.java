@@ -31,27 +31,21 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Sub from vector X")
-    void subFromVectorX() {
+    @DisplayName("Sub from vector")
+    void subFromVector() {
         Vector2 vector = new Vector2(6, 6);
         Vector2 vector2 = new Vector2(3, 3);
         vector.sub(vector2);
-        assertThat(vector).returns(3.0f, Vector2::getX);
-    }
-
-    @Test
-    @DisplayName("Sub from vector y")
-    void subFromVectorY() {
-        Vector2 vector = new Vector2(6, 6);
-        Vector2 vector2 = new Vector2(3, 3);
-        vector.sub(vector2);
-        assertThat(vector).returns(3.0f, Vector2::getY);
+        assertAll(
+                () -> assertThat(vector.getX()).isEqualTo(3.0f),
+                () -> assertThat(vector.getY()).isEqualTo(3.0f)
+        );
     }
 
 
     @Test
     @DisplayName("Mul vector")
-    void mulVector(){
+    void mulVector() {
         Vector2 vector = new Vector2(3, 3);
         vector.mul(2);
         assertAll(
@@ -62,7 +56,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Div vector")
-    void divVector(){
+    void divVector() {
         Vector2 vector = new Vector2(6, 6);
         vector.div(2);
         assertAll(
@@ -88,7 +82,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Normalize vector")
-    void normalizeVector(){
+    void normalizeVector() {
         Vector2 vector = new Vector2(3, 4);
         var v = vector.normalize();
         assertAll(
@@ -103,17 +97,16 @@ class Vector2Test {
     void distanceBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(18));
+        assertThat(vector.distance(vector2, vector)).isEqualTo((float) Math.sqrt(18));
     }
-
 
 
     @Test
     @DisplayName("Linear interpolation find point between vectors")
-    void linearInterpolationFindPointBetweenVectors(){
+    void linearInterpolationFindPointBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        var v = vector.linear(vector,vector2, 0.5f);
+        var v = vector.linear(vector, vector2, 0.5f);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.5f),
                 () -> assertThat(v.getY()).isEqualTo(4.5f)
@@ -122,21 +115,22 @@ class Vector2Test {
 
     @Test
     @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
-    void linearInterpolationWithLerpLargerThan1ThrowException(){
-       var exception = assertThrows(IllegalArgumentException.class, () -> {
-           Vector2 vector = new Vector2(3, 3);
-           Vector2 vector2 = new Vector2(6, 6);
-           vector.linear(vector,vector2, 1.1f);
-       });
-       assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
-    }
-    @Test
-    @DisplayName("Linear interpolation with lerp less than 0 throw exception")
-    void linearInterpolationWithLerpLessThan0ThrowException(){
+    void linearInterpolationWithLerpLargerThan1ThrowException() {
         var exception = assertThrows(IllegalArgumentException.class, () -> {
             Vector2 vector = new Vector2(3, 3);
             Vector2 vector2 = new Vector2(6, 6);
-            vector.linear(vector,vector2, -0.1f);
+            vector.linear(vector, vector2, 1.1f);
+        });
+        assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
+    }
+
+    @Test
+    @DisplayName("Linear interpolation with lerp less than 0 throw exception")
+    void linearInterpolationWithLerpLessThan0ThrowException() {
+        var exception = assertThrows(IllegalArgumentException.class, () -> {
+            Vector2 vector = new Vector2(3, 3);
+            Vector2 vector2 = new Vector2(6, 6);
+            vector.linear(vector, vector2, -0.1f);
         });
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
@@ -144,7 +138,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Find the min value of two vectors")
-    void findTheMinValueOfTwoVectors(){
+    void findTheMinValueOfTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.min(vector, vector2);
@@ -157,7 +151,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Find the max value of two vectors")
-    void findTheMaxValueOfTwoVectors(){
+    void findTheMaxValueOfTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.max(vector, vector2);
