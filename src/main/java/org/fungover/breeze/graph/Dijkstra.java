@@ -31,6 +31,21 @@ public class Dijkstra<T> {
         unvisitedNodes.remove(currentNode);
     }
 
+    public Node<T> findShortestUnvisitedDistance() {
+        double lowestDistance = Double.MAX_VALUE;
+        Node<T> nodeWithLowestDistance = null;
+        for (Node<T> node : unvisitedNodes) {
+            if (node.getDistance() < lowestDistance) {
+                lowestDistance = node.getDistance();
+                nodeWithLowestDistance = node;
+            }
+        }
+        if (nodeWithLowestDistance == null) {
+            throw new NullPointerException("Node can't be null");
+        }
+        return nodeWithLowestDistance;
+    }
+
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
         start.setDistance(0);
 
