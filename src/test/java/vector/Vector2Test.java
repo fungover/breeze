@@ -48,20 +48,16 @@ class Vector2Test {
         assertThat(vector).returns(3.0f, Vector2::getY);
     }
 
-    @Test
-    @DisplayName("Mul vector X")
-    void mulVectorX() {
-        Vector2 vector = new Vector2(3, 3);
-        vector.mul(2);
-        assertThat(vector).returns(6.0f, Vector2::getX);
-    }
 
     @Test
-    @DisplayName("Mul vector Y")
-    void mulVectorY() {
+    @DisplayName("Mul vector")
+    void mulVector(){
         Vector2 vector = new Vector2(3, 3);
         vector.mul(2);
-        assertThat(vector).returns(6.0f, Vector2::getY);
+        assertAll(
+                () -> assertThat(vector.getX()).isEqualTo(6.0f),
+                () -> assertThat(vector.getY()).isEqualTo(6.0f)
+        );
     }
 
     @Test
