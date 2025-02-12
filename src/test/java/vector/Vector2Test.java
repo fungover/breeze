@@ -92,6 +92,18 @@ class Vector2Test {
         assertThat(vector.length()).isEqualTo(5.0f);
     }
 
+    @Test
+    @DisplayName("normalize vector X")
+    void normalizeVectorX(){
+        Vector2 vector = new Vector2(3, 4);
+        assertThat(vector.normalize()).extracting(Vector2::getX).isEqualTo(0.6f);
+    }
+    @Test
+    @DisplayName("normalize vector Y")
+    void normalizeVectorY(){
+        Vector2 vector = new Vector2(3, 4);
+        assertThat(vector.normalize()).extracting(Vector2::getY).isEqualTo(0.8f);
+    }
 
 
 
