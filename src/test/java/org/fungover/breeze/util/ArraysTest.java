@@ -13,6 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArraysTest {
 
 
+    @Test
+    @DisplayName("Chunk throws exception when array is null")
+    void chunkThrowsExceptionWhenArrayIsNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(null,1));
+        assertThat(exception.getMessage()).isEqualTo("Input array must not be null");
+    }
+
 
     @Test
     @DisplayName("Chunk array throws exception for negative size")
