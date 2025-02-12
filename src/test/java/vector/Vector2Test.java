@@ -134,7 +134,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
-    void linearInterpolationWithLarpLargerThan1ThrowException(){
+    void linearInterpolationWithLerpLargerThan1ThrowException(){
        var exception = assertThrows(IllegalArgumentException.class, () -> {
            Vector2 vector = new Vector2(3, 3);
            Vector2 vector2 = new Vector2(6, 6);
@@ -145,7 +145,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Linear interpolation with lerp less than 0 throw exception")
-    void linearInterpolationWithLarplessThan0ThrowException(){
+    void linearInterpolationWithLerpLessThan0ThrowException(){
         var exception = assertThrows(IllegalArgumentException.class, () -> {
             Vector2 vector = new Vector2(3, 3);
             Vector2 vector2 = new Vector2(6, 6);
@@ -154,10 +154,19 @@ class Vector2Test {
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
-
-
-
-
-
+    @Test
+    @DisplayName("Find the min X value of two vectors")
+    void findTheMinXValueOfTwoVectors(){
+        Vector2 vector = new Vector2(3, 6);
+        Vector2 vector2 = new Vector2(4, 5);
+        assertThat(vector.min(vector, vector2)).returns(3.0f, Vector2::getX);
+    }
+    @Test
+    @DisplayName("Find the min Y value of two vectors")
+    void findTheMinYValueOfTwoVectors(){
+        Vector2 vector = new Vector2(3, 6);
+        Vector2 vector2 = new Vector2(4, 5);
+        assertThat(vector.min(vector, vector2)).returns(5.0f, Vector2::getY);
+    }
 
 }
