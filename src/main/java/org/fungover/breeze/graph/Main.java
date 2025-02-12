@@ -36,5 +36,7 @@ public class Main {
         System.out.println(nodes.get(0).getDistance());
         System.out.println(nodes.get(1).getDistance());
         System.out.println(nodes.get(2).getDistance());
+        System.out.println(dijkstra.getUnvisitedNodes());
+        System.out.println(dijkstra.getVisitedNodes());
     }
 }

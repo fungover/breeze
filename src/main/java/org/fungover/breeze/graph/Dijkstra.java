@@ -23,6 +23,12 @@ public class Dijkstra<T> {
                 edge.getDestination().setDistance(sum);
             }
         }
+        markNodeAsVisited(node);
+    }
+
+    public void markNodeAsVisited (Node<T> currentNode) {
+        visitedNodes.add(currentNode);
+        unvisitedNodes.remove(currentNode);
     }
 
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
@@ -40,6 +46,13 @@ public class Dijkstra<T> {
 //        }
     }
 
+    public List<Node<T>> getUnvisitedNodes() {
+        return unvisitedNodes;
+    }
+
+    public List<Node<T>> getVisitedNodes() {
+        return visitedNodes;
+    }
 
     public void getPath(Node<T> target) {
 

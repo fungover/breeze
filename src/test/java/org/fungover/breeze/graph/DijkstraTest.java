@@ -53,4 +53,25 @@ class DijkstraTest {
         );
     }
 
+    @Test
+    @DisplayName("MarkNodeAsVisited should add current node to visited")
+    void markNodeAsVisitedShouldAddCurrentNodeToVisited() {
+        Node<String> nodeA = nodes.get(0);
+
+        dijkstra.markNodeAsVisited(nodeA);
+        boolean visitedNodeContainsA = dijkstra.visitedNodes.contains(nodeA);
+
+        assertThat(visitedNodeContainsA).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("MarkNodeAsVisited should remove current node from unvisited")
+    void markNodeAsVisitedShouldRemoveCurrentNodeFromUnvisited() {
+        Node<String> nodeA = nodes.get(0);
+
+        dijkstra.markNodeAsVisited(nodeA);
+        boolean unvisitedNodeDoesNotContainA = dijkstra.unvisitedNodes.contains(nodeA);
+
+        assertThat(unvisitedNodeDoesNotContainA).isEqualTo(false);
+    }
 }
