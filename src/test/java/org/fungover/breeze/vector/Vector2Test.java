@@ -1,6 +1,5 @@
-package vector;
+package org.fungover.breeze.vector;
 
-import org.fungover.breeze.vector.Vector2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -144,6 +143,18 @@ class Vector2Test {
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.0f),
                 () -> assertThat(v.getY()).isEqualTo(6.0f)
+        );
+    }
+
+    @Test
+    @DisplayName("New vector3 object")
+    void newVector3Object(){
+        Vector2 vector = new Vector2(3, 3);
+        var v = vector.toVector3(3);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(3.0f),
+                () -> assertThat(v.getY()).isEqualTo(3.0f),
+                () -> assertThat(v.getZ()).isEqualTo(3.0f)
         );
     }
 
