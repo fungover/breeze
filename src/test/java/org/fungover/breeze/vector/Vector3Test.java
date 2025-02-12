@@ -76,6 +76,13 @@ class Vector3Test {
                 () -> assertThat(v.getZ()).isEqualTo(-3.0f)
         );
     }
+
+    @Test
+    @DisplayName("Correct length")
+    void correctLength(){
+        Vector3 vector = new Vector3(2, 4,4);
+        assertThat(vector.length()).isEqualTo(6.0f);
+    }
     
     
 
