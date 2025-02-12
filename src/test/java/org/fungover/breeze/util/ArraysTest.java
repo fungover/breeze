@@ -119,6 +119,18 @@ class ArraysTest {
         assertThat(result.getLast()).hasSize(lastChunkSize);
     }
 
+    @Test
+    @DisplayName("Chunk array handles input smaller than chunk size")
+    void chunkArrayHandlesInputSmallerThanChunkSize() {
+        Boolean[] booleanArray = {true, false, true, false, true};
+        int size = 6;
+
+        Boolean [][] result = Arrays.chunk(booleanArray, size);
+
+        assertThat(result).hasDimensions(1,booleanArray.length);
+    }
+
+
 
 
 }
