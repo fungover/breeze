@@ -63,5 +63,20 @@ class Vector3Test {
         Vector3 vector3 = new Vector3(3, 3,3);
         assertThat(vector.dot(vector3)).isEqualTo(27.0f);
     }
+    
+    @Test
+    @DisplayName("new vector from cross product")
+    void newVectorFromCrossProduct(){
+        Vector3 vector = new Vector3(1, 2,3);
+        Vector3 vector2 = new Vector3(4, 5,6);
+        var v = vector.cross(vector2);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(-3.0f),
+                () -> assertThat(v.getY()).isEqualTo(6.0f),
+                () -> assertThat(v.getZ()).isEqualTo(-3.0f)
+        );
+    }
+    
+    
 
 }
