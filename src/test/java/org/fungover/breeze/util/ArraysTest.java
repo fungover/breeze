@@ -70,7 +70,7 @@ class ArraysTest {
         String[] emptyArray = {};
         String [][] result = Arrays.chunk(emptyArray, 5);
 
-        assertThat(result).isEmpty();
+        assertThat(result).hasDimensions(0,0);
     }
 
     @Test
