@@ -111,6 +111,20 @@ class LazyTest {
         assertEquals(12, lazyOptional.get().get().intValue());
     }
 
+    @Test
+    @DisplayName("lazy to option should return present when present and empty when empty")
+    void lazyToOptionShouldReturnPresentWhenPresentAndEmptyWhenEmpty() {
+        Lazy<Integer> lazy = Lazy.of(() -> 10);
+        lazy.get();
+        Optional<Integer> option = lazy.toOption();
+
+        assertTrue(option.isPresent(), "Option should be present");
+        assertEquals(10, option.get(), "Option should contain value 10");
+
+        Lazy<Integer> lazy2 = Lazy.value(null);
+        assertFalse(lazy2.toOption().isPresent(), "Option should be empty");
+    }
+
 
     @Test
     @DisplayName("Lazy method should not compute before call")
