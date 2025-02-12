@@ -99,6 +99,7 @@ class ArraysTest {
 
         Double [][] result = Arrays.chunk(doubleArray, size);
 
+
         assertEquals(4, result.length);
         assertThat(result[0]).hasSize(size);
         assertThat(result[result.length - 1]).hasSize(lastChunkSize);
@@ -139,5 +140,16 @@ class ArraysTest {
         List<List<Double>> result = Arrays.chunkList(doubleList, size);
         assertThat(result).hasSize(1);
     }
+
+    @Test
+    @DisplayName("Chunk array creates one element chunks when size is one")
+    void chunkArrayCreatesOneElementChunksWhenSizeIsOne() {
+        Integer[] integerArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int size = 1;
+
+        Integer [][] result = Arrays.chunk(integerArray,size);
+        assertThat(result).hasDimensions(integerArray.length, 1);
+    }
+
 
 }
