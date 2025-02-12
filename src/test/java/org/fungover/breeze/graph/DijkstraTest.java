@@ -86,4 +86,14 @@ class DijkstraTest {
         assertThat(lowestNode.getDistance()).isEqualTo(nodeC);
     }
 
+    @Test
+    @DisplayName("SetPreviousNode updates destination with it´s former node")
+    void setPreviousNodeUpdatesDestinationWithItSFormerNode() {
+        Node<String> expectedFormerNode = nodes.get(0);
+
+        dijkstra.setPreviousNode(nodes.get(0), edges.get(0));
+
+        assertThat(nodes.get(2).getPreviousNode()).isEqualTo(expectedFormerNode);
+    }
+
 }
