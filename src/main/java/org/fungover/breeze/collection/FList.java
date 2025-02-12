@@ -151,7 +151,7 @@ public abstract class FList<T> {
          */
         @Override
         public <R> FList<R> map(Function<T, R> f) {
-            return new Empty<>();
+            return (FList<R>) SHARED_EMPTY;
         }
 
         /**
