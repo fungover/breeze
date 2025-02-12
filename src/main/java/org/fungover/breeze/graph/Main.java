@@ -40,6 +40,10 @@ public class Main {
         System.out.println(dijkstra.getVisitedNodes());
         Node<String> nodeC= dijkstra.findShortestUnvisitedDistance();
         System.out.println(nodeC);
+        dijkstra.updateDistance(nodes.get(0), graph);
+        dijkstra.updateDistance(nodes.get(2), graph);
+        dijkstra.updateDistance(nodes.get(1), graph);
+
 
     }
 }
