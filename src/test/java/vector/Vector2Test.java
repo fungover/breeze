@@ -77,9 +77,10 @@ class Vector2Test {
         vector.div(2);
         assertThat(vector).extracting(Vector2::getY).isEqualTo(3.0f);
     }
+
     @Test
     @DisplayName("Correct dot product")
-    void correctDotProduct(){
+    void correctDotProduct() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         assertThat(vector.dot(vector2)).isEqualTo(18.0f);
@@ -87,26 +88,33 @@ class Vector2Test {
 
     @Test
     @DisplayName("Correct length")
-    void correctLength(){
+    void correctLength() {
         Vector2 vector = new Vector2(3, 4);
         assertThat(vector.length()).isEqualTo(5.0f);
     }
 
     @Test
     @DisplayName("normalize vector X")
-    void normalizeVectorX(){
+    void normalizeVectorX() {
         Vector2 vector = new Vector2(3, 4);
         assertThat(vector.normalize()).extracting(Vector2::getX).isEqualTo(0.6f);
     }
+
     @Test
     @DisplayName("normalize vector Y")
-    void normalizeVectorY(){
+    void normalizeVectorY() {
         Vector2 vector = new Vector2(3, 4);
         assertThat(vector.normalize()).extracting(Vector2::getY).isEqualTo(0.8f);
     }
 
+    @Test
+    @DisplayName("Distance between vectors")
+    void distanceBetweenVectors() {
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
+        assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(18));
 
-
+    }
 
 
 
