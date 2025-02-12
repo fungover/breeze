@@ -29,7 +29,7 @@ class DijkstraTest {
                 new Edge<>(nodes.get(1), nodes.get(2), 4),  //B to C
                 new Edge<>(nodes.get(1), nodes.get(3), 2),  //B to D
                 new Edge<>(nodes.get(1), nodes.get(4), 5),  //B to E
-                new Edge<>(nodes.get(2), nodes.get(4), 2)   //C to E
+                new Edge<>(nodes.get(2), nodes.get(4), 1)   //C to E
         );
 
         graph = new  WeightedGraph<>(nodes, edges);
@@ -74,4 +74,16 @@ class DijkstraTest {
 
         assertThat(unvisitedNodeDoesNotContainA).isEqualTo(false);
     }
+
+    @Test
+    @DisplayName("FindShortestUnvisitedDistance returns node with lowest distance")
+    void findShortestUnvisitedDistanceReturnsNodeWithLowestDistance() {
+        double nodeC = 6;
+        dijkstra.updateDistance(nodes.get(0), graph);
+
+        Node<String> lowestNode = dijkstra.findShortestUnvisitedDistance();
+
+        assertThat(lowestNode.getDistance()).isEqualTo(nodeC);
+    }
+
 }
