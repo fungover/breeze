@@ -49,15 +49,15 @@ public class Vector3 {
         this.z -= v.z;
     }
 
-    public void mul(Vector3 v) {
-        this.x *= v.x;
-        this.y *= v.y;
-        this.z *= v.z;
+    public void mul(float m) {
+        this.x *= m;
+        this.y *= m;
+        this.z *= m;
     }
 
-    public void div(Vector3 v) {
-        this.x /= v.x;
-        this.y /= v.y;
+    public void div(float d) {
+        this.x /= d;
+        this.y /= d;
     }
 
     //Dot product
