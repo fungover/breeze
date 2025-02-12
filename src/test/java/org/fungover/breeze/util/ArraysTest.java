@@ -59,5 +59,15 @@ class ArraysTest {
     }
 
 
+    @Test
+    @DisplayName("Chunk list returns empty list when input is empty")
+    void chunkListReturnsEmptyListWhenInputIsEmpty() {
+        List<Integer> emptyList = List.of();
+        List<List<Integer>> result = Arrays.chunkList(emptyList, 5);
+
+        assertThat(result).isEmpty();
+    }
+
+
 
 }
