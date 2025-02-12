@@ -34,6 +34,32 @@ public abstract class Try <T> implements Serializable {
     public abstract T get() throws Throwable;
 
     /**
+     * Retrieves the value if present, otherwise returns the default value.
+     * @param defaultValue the value to return if the computation failed.
+     * @return the computed value or the default value.
+     */
+    public abstract T getOrElse(T defaultValue);
+
+    /**
+     * Retrieves the value if present, otherwise computes and returns a default value.
+     * @param supplier the supplier function to compute the default value.
+     * @return the computed value or the supplied default value.
+     */
+    public abstract T getOrElseGet(Supplier<? extends T> supplier);
+
+    /**
+     * Retrieves the value if present, otherwise throws a mapped exception.
+     * @param exceptionMapper function to map the Throwable to an exception of type X.
+     * @param <X> the exception type to be thrown.
+     * @return the computed value.
+     * @throws X if the computation failed.
+     */
+    public abstract <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X;
+
+
+
+
+    /**
      * Creates a successful Try instance.
      * @param value the value of the successful computation.
      * @return a Success instance containing the value.
@@ -44,11 +70,12 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Creates a failed Try instance.
-     * @param throwable the exception that caused the Failure.
-     * @return a Failure instance containing the throwable.
+     * @param exception the exception that caused the Failure.
+     * @return a Failure instance containing the exception.
      */
-    public static <T> Try<T> failure(Throwable throwable) {
-        return new Failure<>(throwable);
+    public static <T> Try<T> failure(Exception exception) {
+        Objects.requireNonNull(exception, "Throwable must not be null");
+        return new Failure<>(exception);
     }
 
     /**
@@ -60,7 +87,7 @@ public abstract class Try <T> implements Serializable {
         try {
             return success(supplier.get());
         } catch (Throwable t) {
-            return failure(t);
+            return failure(t instanceof Exception ? (Exception) t : new Exception(t));
         }
     }
 
@@ -74,7 +101,7 @@ public abstract class Try <T> implements Serializable {
         try {
             return success(callable.call());
         } catch (Throwable t) {
-            return failure(t);
+            return failure(t instanceof Exception ? (Exception) t : new Exception(t));
         }
     }
 
@@ -89,13 +116,14 @@ public abstract class Try <T> implements Serializable {
         if (isSuccess()) {
             try {
                 return success(mapper.apply(get()));
-            } catch (Throwable throwable) {
-                return failure(throwable);
+            } catch (Throwable t) {
+                return failure(new Exception(t));
             }
         } else {
-            return failure(((Failure<T>) this).throwable());
+            return failure(((Failure<T>) this).exception);
         }
     }
+
     /**
      * Applies a function that returns a Try instance if the computation was successful.
      * @param mapper the function to apply.
@@ -104,16 +132,18 @@ public abstract class Try <T> implements Serializable {
      */
     public <U> Try<U> flatMap(Function<? super T, Try<U>> mapper) {
         Objects.requireNonNull(mapper);
+
         if (isSuccess()) {
             try {
                 return mapper.apply(get());
-            } catch (Throwable throwable) {
-                return failure(throwable);
+            } catch (Throwable t) {
+                return failure(new Exception(t));
             }
         } else {
-            return failure(((Failure<T>) this).throwable());
+            return failure(((Failure<T>) this).exception);
         }
     }
+
 
     /**
      * Filters the value inside Try using the provided predicate.
@@ -126,10 +156,10 @@ public abstract class Try <T> implements Serializable {
         if (isSuccess()) {
             try {
                 T value = get();
-                if (!predicate.test(value))  return failure(new NoSuchElementException("The value does satisfy the predicate"));
+                if (!predicate.test(value))  return failure(new NoSuchElementException("The value does not satisfy the predicate"));
                 return this;
-            } catch (Throwable throwable) {
-                return failure(throwable);
+            } catch (Throwable t) {
+                return failure(new Exception(t));
             }
         } else {
             return this;
@@ -142,19 +172,27 @@ public abstract class Try <T> implements Serializable {
      * @param recoverFunction the function that handles the failure and returns a value.
      * @return a Try instance containing the recovered value or the same success.
      */
-    public Try<T> recover(Function<? super Throwable, ? extends T> recoverFunction) {
+    public Try<T> recover(Function<? super Exception, ? extends T> recoverFunction) {
         Objects.requireNonNull(recoverFunction);
+
         if (isSuccess()) {
             return this;
         } else {
             try {
-                T recoveredValue = recoverFunction.apply(((Failure<T>) this).throwable());
-                return success(recoveredValue);
-            } catch (Throwable t) {
-                return failure(t);
+                Exception cause = ((Failure<T>) this).exception;
+                if (cause != null) {
+                    T recoveredValue = recoverFunction.apply((cause));
+                    return success(recoveredValue);
+                } else {
+                    return failure(cause);
+                }
+            } catch (Exception e) {
+                return failure(e);
             }
         }
     }
+
+
 
     /**
      * Monadic failure handling: If the Try is a failure, this method applies a function
@@ -164,16 +202,23 @@ public abstract class Try <T> implements Serializable {
      */
     public Try<T> recoverWith(Function<? super Throwable, Try<T>> recoverWithFunction) {
         Objects.requireNonNull(recoverWithFunction);
+
         if (isSuccess()) {
             return this;
         } else {
             try {
-                return recoverWithFunction.apply(((Failure<T>) this).throwable());
+                Exception cause = ((Failure<T>) this).exception;
+                if (cause != null) {
+                    return recoverWithFunction.apply(cause);
+                } else {
+                    return failure(cause);
+                }
             } catch (Throwable t) {
-                return failure(t);
+                return failure(new Exception(t));
             }
         }
     }
+
 
     /**
      * Handles both the failure and success cases by applying different functions to each.
@@ -185,14 +230,106 @@ public abstract class Try <T> implements Serializable {
     public <U> U fold(Function<? super Throwable, ? extends U> failureFunction, Function<? super T, ? extends U> successFunction) {
         Objects.requireNonNull(failureFunction);
         Objects.requireNonNull(successFunction);
+
         if (isSuccess()) {
             try {
                 return successFunction.apply(get());
             } catch (Throwable t) {
-                return failureFunction.apply(t);
+                return failureFunction.apply(new Exception(t));
             }
         } else {
-            return failureFunction.apply(((Failure<T>) this).throwable());
+            try {
+                Exception cause = ((Failure<T>) this).exception;
+                return failureFunction.apply(cause);
+            } catch (Throwable t) {
+                return failureFunction.apply(new Exception(t));
+            }
         }
     }
+
+}
+
+
+/**
+ * Represents a failed computation result.
+ */
+ final class Failure<T> extends Try<T> implements Serializable {
+    final Exception exception;
+
+    public Failure(Exception exception) {
+        this.exception = exception;
+    }
+
+    @Override
+    public boolean isSuccess() {
+        return false;
+    }
+
+    @Override
+    public boolean isFailure() {
+        return true;
+    }
+
+    @Override
+    public T get() throws Exception {
+        throw exception;
+    }
+
+    @Override
+    public T getOrElse(T defaultValue) {
+        return defaultValue;
+    }
+
+    @Override
+    public T getOrElseGet(Supplier<? extends T> supplier) {
+        return supplier.get();
+    }
+
+    @Override
+    public <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X {
+        throw exceptionMapper.apply(exception);
+    }
+}
+
+/**
+ * Represents a successful computation result.
+ */
+final class Success<T> extends Try<T> implements Serializable {
+    private final T value;
+
+    public Success(T value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean isSuccess() {
+        return true;
+    }
+
+    @Override
+    public boolean isFailure() {
+        return false;
+    }
+
+    @Override
+    public T get() {
+        return this.value;
+    }
+
+    @Override
+    public T getOrElse(T defaultValue) {
+        return value;
+    }
+
+    @Override
+    public T getOrElseGet(Supplier<? extends T> supplier) {
+        return value;
+    }
+
+    @Override
+    public <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X {
+        return value;
+    }
+
+
 }

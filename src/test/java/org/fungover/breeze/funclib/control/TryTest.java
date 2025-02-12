@@ -35,9 +35,7 @@ class TryTest {
 
     @Test
     void testNullValueFailure() {
-        Try<String> failure = Try.failure(null);
-        assertTrue(failure.isFailure());
-        assertThrows(NullPointerException.class, failure::get);
+        assertThrows(NullPointerException.class, () -> Try.failure(null));
     }
 
     @Test
@@ -74,6 +72,51 @@ class TryTest {
         assertFalse(result.isSuccess());
         assertThrows(RuntimeException.class, result::get);
     }
+
+    @Test
+    void testGetOrElseSuccess() {
+        Try<String> success = Try.success("Hello");
+        String result = success.getOrElse("Default");
+        assertEquals("Hello", result);  // Should return the value inside Success
+    }
+
+    @Test
+    void testGetOrElseFailure() {
+        Try<String> failure = Try.failure(new Exception("Error"));
+        String result = failure.getOrElse("Default");
+        assertEquals("Default", result);  // Should return the default value on Failure
+    }
+
+    @Test
+    void testGetOrElseGetSuccess() {
+        Try<String> success = Try.success("Hello");
+        String result = success.getOrElseGet(() -> "Computed Default");
+        assertEquals("Hello", result);  // Should return the value inside Success
+    }
+
+    @Test
+    void testGetOrElseGetFailure() {
+        Try<String> failure = Try.failure(new Exception("Error"));
+        String result = failure.getOrElseGet(() -> "Computed Default");
+        assertEquals("Computed Default", result);  // Should call supplier and return computed value on Failure
+    }
+
+    @Test
+    void testGetOrElseThrowSuccess() {
+        Try<String> success = Try.success("Hello");
+        String result = success.getOrElseThrow(t -> new IllegalStateException("Error occurred"));
+        assertEquals("Hello", result);  // Should return the value inside Success
+    }
+
+    @Test
+    void testGetOrElseThrowFailure() {
+        Try<String> failure = Try.failure(new Exception("Error"));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            failure.getOrElseThrow(t -> new IllegalStateException("Error occurred"));
+        });
+        assertEquals("Error occurred", exception.getMessage());  // Should throw the mapped exception
+    }
+
 
     @Test
     void testMapSuccess() {
@@ -163,9 +206,8 @@ class TryTest {
         assertThrows(RuntimeException.class, failure::get);
 
         if (failure instanceof Failure) {
-            Throwable thrown = ((Failure<?>) failure).throwable();
+            Throwable thrown = ((Failure<?>) failure).exception;
             assertEquals(cause, thrown.getCause());
         }
     }
-
 }
