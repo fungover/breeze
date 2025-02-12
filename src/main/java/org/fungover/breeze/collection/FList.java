@@ -69,8 +69,9 @@ public abstract class FList<T> {
      * @param <T> the type of elements in the list
      * @return an empty list
      */
+    @SuppressWarnings("unchecked")
     public static <T> FList<T> empty() {
-        return new Empty<>();
+        return (FList<T>) Empty.SHARED_EMPTY;
     }
 
     /**
@@ -79,7 +80,7 @@ public abstract class FList<T> {
      */
 
     private static class Empty<T> extends FList<T> {
-
+        private static final FList<?> SHARED_EMPTY = new Empty<>();
         /**
          * Throws UnsupportedOperationException as the list is empty.
          * This method is not applicable for an empty list since there is no head element.
@@ -172,6 +173,7 @@ public abstract class FList<T> {
     private static class Cons<T> extends FList<T> {
         private final T head;
         private final FList<T> tail;
+        private final int cachedSize;
 
         /**
          * Constructs a new Cons with the specified head and tail.
@@ -181,6 +183,7 @@ public abstract class FList<T> {
         public Cons(T head, FList<T> tail) {
             this.head = head;
             this.tail = tail;
+            this.cachedSize = 1 + tail.size();
         }
 
         /**
@@ -236,7 +239,7 @@ public abstract class FList<T> {
          */
         @Override
         public int size() {
-            return 1 + tail.size();
+            return cachedSize;
         }
 
         /**
