@@ -49,5 +49,15 @@ class ArraysTest {
         assertThat(exception.getMessage()).isEqualTo("Size must be greater than 0");
     }
 
+    @Test
+    @DisplayName("Chunk array returns empty array when input is empty")
+    void chunkArrayReturnsEmptyArrayWhenInputIsEmpty() {
+        String[] emptyArray = {};
+        String [][] result = Arrays.chunk(emptyArray, 5);
+
+        assertThat(result).isEmpty();
+    }
+
+
 
 }
