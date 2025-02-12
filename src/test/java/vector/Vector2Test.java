@@ -11,23 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class Vector2Test {
 
-
     @Test
-    @DisplayName("Adds to vector X")
-    void addsToVectorX() {
+    @DisplayName("Adds to vector")
+    void addsToVector() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         vector.add(vector2);
-        assertThat(vector).returns(6.0f, Vector2::getX);
-    }
-
-    @Test
-    @DisplayName("Adds to vector Y")
-    void addsToVectorY() {
-        Vector2 vector = new Vector2(3, 3);
-        Vector2 vector2 = new Vector2(3, 3);
-        vector.add(vector2);
-        assertThat(vector).returns(6.0f, Vector2::getY);
+        assertAll(
+                () -> assertThat(vector.getX()).isEqualTo(6.0f),
+                () -> assertThat(vector.getY()).isEqualTo(6.0f)
+        );
     }
 
     @Test
@@ -41,7 +34,6 @@ class Vector2Test {
                 () -> assertThat(vector.getY()).isEqualTo(3.0f)
         );
     }
-
 
     @Test
     @DisplayName("Mul vector")
@@ -91,7 +83,6 @@ class Vector2Test {
         );
     }
 
-
     @Test
     @DisplayName("Distance between vectors")
     void distanceBetweenVectors() {
@@ -99,7 +90,6 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.distance(vector2, vector)).isEqualTo((float) Math.sqrt(18));
     }
-
 
     @Test
     @DisplayName("Linear interpolation find point between vectors")
@@ -135,14 +125,12 @@ class Vector2Test {
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
-
     @Test
     @DisplayName("Find the min value of two vectors")
     void findTheMinValueOfTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.min(vector, vector2);
-
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(3.0f),
                 () -> assertThat(v.getY()).isEqualTo(5.0f)
@@ -155,7 +143,6 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.max(vector, vector2);
-
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.0f),
                 () -> assertThat(v.getY()).isEqualTo(6.0f)
