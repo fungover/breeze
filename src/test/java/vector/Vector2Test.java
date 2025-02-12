@@ -106,9 +106,9 @@ class Vector2Test {
     @Test
     @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
     void linearInterpolationWithLerpLargerThan1ThrowException() {
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () -> {
-            Vector2 vector = new Vector2(3, 3);
-            Vector2 vector2 = new Vector2(6, 6);
             vector.linear(vector, vector2, 1.1f);
         });
         assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
@@ -117,9 +117,9 @@ class Vector2Test {
     @Test
     @DisplayName("Linear interpolation with lerp less than 0 throw exception")
     void linearInterpolationWithLerpLessThan0ThrowException() {
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () -> {
-            Vector2 vector = new Vector2(3, 3);
-            Vector2 vector2 = new Vector2(6, 6);
             vector.linear(vector, vector2, -0.1f);
         });
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
