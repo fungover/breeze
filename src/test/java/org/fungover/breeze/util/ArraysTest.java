@@ -58,7 +58,6 @@ class ArraysTest {
         assertThat(result).isEmpty();
     }
 
-
     @Test
     @DisplayName("Chunk list returns empty list when input is empty")
     void chunkListReturnsEmptyListWhenInputIsEmpty() {
@@ -67,6 +66,18 @@ class ArraysTest {
 
         assertThat(result).isEmpty();
     }
+
+    @Test
+    @DisplayName("Chunk array evenly into equal sized chunks")
+    void chunkArrayEvenlyIntoEqualSizedChunks() {
+        Integer [] evenIntegerArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int size = 3;
+
+        Integer [][] result = Arrays.chunk(evenIntegerArray, size);
+
+        assertThat(result).hasDimensions(3,size);
+    }
+
 
 
 
