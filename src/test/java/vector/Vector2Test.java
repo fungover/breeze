@@ -17,7 +17,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         vector.add(vector2);
-        assertThat(vector).extracting(Vector2::getX).isEqualTo(6.0f);
+        assertThat(vector).returns(6.0f, Vector2::getX);
     }
 
     @Test
@@ -26,7 +26,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         vector.add(vector2);
-        assertThat(vector).extracting(Vector2::getY).isEqualTo(6.0f);
+        assertThat(vector).returns(6.0f, Vector2::getY);
     }
 
     @Test
@@ -35,7 +35,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(6, 6);
         Vector2 vector2 = new Vector2(3, 3);
         vector.sub(vector2);
-        assertThat(vector).extracting(Vector2::getX).isEqualTo(3.0f);
+        assertThat(vector).returns(3.0f, Vector2::getX);
     }
 
     @Test
@@ -44,7 +44,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(6, 6);
         Vector2 vector2 = new Vector2(3, 3);
         vector.sub(vector2);
-        assertThat(vector).extracting(Vector2::getY).isEqualTo(3.0f);
+        assertThat(vector).returns(3.0f, Vector2::getY);
     }
 
     @Test
@@ -52,7 +52,7 @@ class Vector2Test {
     void mulVectorX() {
         Vector2 vector = new Vector2(3, 3);
         vector.mul(2);
-        assertThat(vector).extracting(Vector2::getX).isEqualTo(6.0f);
+        assertThat(vector).returns(6.0f, Vector2::getX);
     }
 
     @Test
@@ -60,7 +60,7 @@ class Vector2Test {
     void mulVectorY() {
         Vector2 vector = new Vector2(3, 3);
         vector.mul(2);
-        assertThat(vector).extracting(Vector2::getY).isEqualTo(6.0f);
+        assertThat(vector).returns(6.0f, Vector2::getY);
     }
 
     @Test
@@ -68,7 +68,7 @@ class Vector2Test {
     void divVectorX() {
         Vector2 vector = new Vector2(6, 6);
         vector.div(2);
-        assertThat(vector).extracting(Vector2::getX).isEqualTo(3.0f);
+        assertThat(vector).returns(3.0f, Vector2::getX);
     }
 
     @Test
@@ -76,7 +76,7 @@ class Vector2Test {
     void divVectorY() {
         Vector2 vector = new Vector2(6, 6);
         vector.div(2);
-        assertThat(vector).extracting(Vector2::getY).isEqualTo(3.0f);
+        assertThat(vector).returns(3.0f, Vector2::getY);
     }
 
     @Test
@@ -98,14 +98,14 @@ class Vector2Test {
     @DisplayName("normalize vector X")
     void normalizeVectorX() {
         Vector2 vector = new Vector2(3, 4);
-        assertThat(vector.normalize()).extracting(Vector2::getX).isEqualTo(0.6f);
+        assertThat(vector.normalize()).returns(0.6f, Vector2::getX);
     }
 
     @Test
     @DisplayName("normalize vector Y")
     void normalizeVectorY() {
         Vector2 vector = new Vector2(3, 4);
-        assertThat(vector.normalize()).extracting(Vector2::getY).isEqualTo(0.8f);
+        assertThat(vector.normalize()).returns(0.8f, Vector2::getY);
     }
 
     @Test
@@ -121,7 +121,7 @@ class Vector2Test {
     void linearInterpolationFindsPointBetweenVectors(){
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getX).isEqualTo(4.5f);
+        assertThat(vector.linear(vector,vector2, 0.5f)).returns(4.5f, Vector2::getX);
     }
 
     @Test
@@ -129,7 +129,7 @@ class Vector2Test {
     void linearInterpolationFindsXBetweenVectors(){
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getY).isEqualTo(4.5f);
+        assertThat(vector.linear(vector,vector2, 0.5f)).returns(4.5f, Vector2::getY);
     }
 
     @Test
