@@ -12,6 +12,10 @@ public class Arrays {
     @SuppressWarnings("unchecked")
     public static <T> T[][] chunk(T[] array, int size) {
 
+        if (array == null) {
+            throw new IllegalArgumentException("Input array must not be null");
+        }
+
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be greater than 0");
         }
@@ -37,9 +41,14 @@ public class Arrays {
 
 
     public static <T>List<List<T>> chunkList(List<T> list, int size) {
+        if(list == null) {
+            throw new IllegalArgumentException("Input list must not be null");
+        }
+
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be greater than 0");
         }
+
         List<List<T>> chunks = new ArrayList<>();
         for (int i = 0; i < list.size(); i+= size) {
             chunks.add(new ArrayList<>(list.subList(i, Math.min(list.size(), i + size))));
