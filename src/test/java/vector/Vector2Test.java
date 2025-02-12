@@ -113,8 +113,25 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(18));
+    }
+    
+    @Test
+    @DisplayName("Linear interpolation finds X between vectors")
+    void linearInterpolationFindsPointBetweeenVectors(){
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
+        assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getX).isEqualTo(4.5f);
+    }
+
+    @Test
+    @DisplayName("Linear interpolation finds X between vectors")
+    void linearInterpolationFindsXBetweenVectors(){
+        Vector2 vector = new Vector2(3, 3);
+        Vector2 vector2 = new Vector2(6, 6);
+        assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getY).isEqualTo(4.5f);
 
     }
+
 
 
 
