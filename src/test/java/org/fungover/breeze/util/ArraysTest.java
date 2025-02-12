@@ -41,12 +41,13 @@ class ArraysTest {
     }
 
     @Test
-    @DisplayName("Test chunk list with zero size throws exception")
-    void testChunkListWithZeroSizeThrowsException() {
+    @DisplayName("Chunk list throws exception for zero size")
+    void chunkListThrowsExceptionForZeroSize() {
         List<Boolean> booleanList = List.of(true, false, true);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunkList(booleanList, 0));
 
         assertThat(exception.getMessage()).isEqualTo("Size must be greater than 0");
     }
+
 
 }
