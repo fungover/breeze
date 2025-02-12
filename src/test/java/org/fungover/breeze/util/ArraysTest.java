@@ -105,6 +105,19 @@ class ArraysTest {
 
     }
 
+    @Test
+    @DisplayName("Chunk list handles uneven split with smaller last chunk")
+    void chunkListHandlesUnevenSplitWithSmallerLastChunk() {
+        List<Boolean> booleanList = List.of(true, false, true, false, true, false, true, false, true, false);
+        int size = 3;
+        int lastChunkSize = booleanList.size() % size;
+
+        List<List<Boolean>> result = Arrays.chunkList(booleanList, size);
+
+        assertEquals(4, result.size());
+        assertThat(result.getFirst()).hasSize(size);
+        assertThat(result.getLast()).hasSize(lastChunkSize);
+    }
 
 
 
