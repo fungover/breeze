@@ -18,12 +18,24 @@ public class Dijkstra<T> {
         node.setDistance(0);
         Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
         for (Edge<T> edge : edges) {
-            double sum = edge.getSource().getDistance() + edge.getWeight();
-            if (sum < edge.getDestination().getDistance()) {
-                edge.getDestination().setDistance(sum);
+            if (sourceNodeExistInUnvisitedNodes(edge)) {
+                double sum = edge.getSource().getDistance() + edge.getWeight();
+
+                if (sum < edge.getDestination().getDistance()) {
+                    edge.getDestination().setDistance(sum);
+                    setPreviousNode(node, edge);
+                    System.out.println(edge.getDestination() + " checked");
+                }
+            }
+            else {
+                System.out.println(edge.getSource() +  " does not exist in unvisitedNodes");
             }
         }
         markNodeAsVisited(node);
+    }
+
+    public boolean sourceNodeExistInUnvisitedNodes(Edge<T> edge) {
+        return unvisitedNodes.contains(edge.getSource());
     }
 
     public void setPreviousNode(Node<T> node, Edge<T> edge) {

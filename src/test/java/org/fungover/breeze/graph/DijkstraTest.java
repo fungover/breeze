@@ -96,4 +96,13 @@ class DijkstraTest {
         assertThat(nodes.get(2).getPreviousNode()).isEqualTo(expectedFormerNode);
     }
 
+    @Test
+    @DisplayName("SourceNodeExistInUnvisitedNodes return true if node exist")
+    void sourceNodeExistInUnvisitedNodesReturnTrueIfNodeExist() {
+
+        boolean nodeExists = dijkstra.sourceNodeExistInUnvisitedNodes(edges.get(0));
+
+        assertThat(nodeExists).isEqualTo(true);
+    }
+
 }
