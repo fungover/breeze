@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class Vector2Test {
@@ -117,7 +118,7 @@ class Vector2Test {
     
     @Test
     @DisplayName("Linear interpolation finds X between vectors")
-    void linearInterpolationFindsPointBetweeenVectors(){
+    void linearInterpolationFindsPointBetweenVectors(){
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getX).isEqualTo(4.5f);
@@ -129,8 +130,22 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.linear(vector,vector2, 0.5f)).extracting(Vector2::getY).isEqualTo(4.5f);
+    }
+
+    @Test
+    @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
+    void linearInterpolationWithLarpLargerThan1ThrowException(){
+       var exception = assertThrows(IllegalArgumentException.class, () -> {
+           Vector2 vector = new Vector2(3, 3);
+           Vector2 vector2 = new Vector2(6, 6);
+           vector.linear(vector,vector2, 1.1f);
+       });
+       assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
+
 
     }
+
+
 
 
 
