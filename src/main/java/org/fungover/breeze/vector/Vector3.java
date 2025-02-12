@@ -58,6 +58,7 @@ public class Vector3 {
     public void div(float d) {
         this.x /= d;
         this.y /= d;
+        this.z /= d;
     }
 
     //Dot product
