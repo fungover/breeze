@@ -6,9 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+
+
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,6 +67,7 @@ class LazyTest {
     }
 
     @Test
+    @DisplayName("flatMap should retriece element from lazy list")
     void flatMapShouldRetrieveElementFromLazyList() {
         Lazy<List<String>> lazyList = Lazy.of(() -> Arrays.asList("a", "b", "c"));
         Lazy<String> flatMapped = lazyList.flatMap(list -> Lazy.of(() -> list.get(2)));
@@ -82,6 +86,31 @@ class LazyTest {
         assertEquals("THE ANSWER IS 666", lazyString.get());
     }
 
+    @Test
+    @DisplayName("filer value calculates only once")
+    void filterValueCalculatesOnlyOnce() {
+        AtomicInteger counter = new AtomicInteger(0);
+        Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> {
+            counter.incrementAndGet();
+            return 89;
+        }).filter(i -> i > 88);
+
+        lazyOptional.get();
+        lazyOptional.get();
+        assertTrue(lazyOptional.get().isPresent());
+        assertEquals(1, counter.get());
+        assertEquals(89, lazyOptional.get().get().intValue());
+    }
+
+    @Test
+    @DisplayName("filter with predicate should return true")
+    void filterWithPredicateTrue() {
+        Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> 12)
+                .filter(i -> i < 13);
+        assertTrue(lazyOptional.get().isPresent());
+        assertEquals(12, lazyOptional.get().get().intValue());
+    }
+
 
     @Test
     @DisplayName("Lazy method should not compute before call")
@@ -94,9 +123,7 @@ class LazyTest {
         });
 
         assertFalse(evaluated.get());
-
         lazyInt.get();
-
         assertTrue(evaluated.get());
     }
 
@@ -110,6 +137,7 @@ class LazyTest {
         assertTrue(lazy.isEvaluated());
         assertNull(value);
     }
+
 
 
 }
