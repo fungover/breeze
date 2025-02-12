@@ -25,7 +25,7 @@ public class Arrays {
         }
 
         int numberOfChunks = (int) Math.ceil((double) array.length / size);
-       T[][] chunks = (T[][]) Array.newInstance(array.getClass().getComponentType(),numberOfChunks, 0);
+       T[][] chunks = (T[][]) Array.newInstance(array.getClass(),numberOfChunks);
 
        for (int i = 0; i < numberOfChunks; i++) {
            int start = i * size;
