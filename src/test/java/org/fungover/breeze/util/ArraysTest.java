@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArraysTest {
 
 
+
     @Test
     @DisplayName("Chunk array throws exception for negative size")
     void chunkArrayThrowsExceptionForNegativeSize() {
@@ -87,6 +88,21 @@ class ArraysTest {
         List<List<String>> result = Arrays.chunkList(evenStringList, size);
 
         assertThat(result).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("Chunk array handles uneven split with smaller last chunk ")
+    void chunkArrayHandlesUnevenSplitWithSmallerLastChunk() {
+        Double[] doubleArray = {1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.1};
+        int size = 3;
+        int lastChunkSize = doubleArray.length % size;
+
+        Double [][] result = Arrays.chunk(doubleArray, size);
+
+        assertEquals(4, result.length);
+        assertThat(result[0]).hasSize(size);
+        assertThat(result[result.length - 1]).hasSize(lastChunkSize);
+
     }
 
 
