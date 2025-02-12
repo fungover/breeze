@@ -78,6 +78,17 @@ class ArraysTest {
         assertThat(result).hasDimensions(3,size);
     }
 
+    @Test
+    @DisplayName("Chunk list evenly into equal sized chunks")
+    void chunkListEvenlyIntoEqualSizedChunks() {
+        List<String> evenStringList = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I");
+        int size = 3;
+
+        List<List<String>> result = Arrays.chunkList(evenStringList, size);
+
+        assertThat(result).hasSize(3);
+    }
+
 
 
 
