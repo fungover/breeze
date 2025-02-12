@@ -151,5 +151,15 @@ class ArraysTest {
         assertThat(result).hasDimensions(integerArray.length, 1);
     }
 
+    @Test
+    @DisplayName("Chunk list creates one element chunks when size is one")
+    void chunkListCreatesOneElementChunksWhenSizeIsOne() {
+        List<String> stringList = List.of("A", "B", "C", "D", "E", "F", "G", "I", "J" );
+        int size = 1;
+
+        List<List<String>> result = Arrays.chunkList(stringList, size);
+        assertThat(result).hasSize(stringList.size());
+    }
+
 
 }
