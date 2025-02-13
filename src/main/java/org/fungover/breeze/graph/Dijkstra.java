@@ -1,7 +1,6 @@
 package org.fungover.breeze.graph;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Dijkstra<T> {
 
@@ -15,11 +14,18 @@ public class Dijkstra<T> {
         this.graph = graph;
     }
 
+    /**
+     * Updates the distance for each unvisited destination node connected to the current node
+     * when sum of source node and weight is less than the destinations distance
+     * @param node the current node being processed
+     * @param graph the weighted graph containing the nodes and edges
+     */
     public void updateDistance(Node<T> node, WeightedGraph<T> graph) {
         node.setDistance(0);
         Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
         for (Edge<T> edge : edges) {
-            if (isSourceNodeUnvisited(edge)) {
+            if (isDestinationNodeUnvisited(edge)) {
+                System.out.println(edge.getSource());
                 double sum = edge.getSource().getDistance() + edge.getWeight();
 
                 if (sum < edge.getDestination().getDistance()) {
@@ -31,9 +37,10 @@ public class Dijkstra<T> {
         markNodeAsVisited(node);
     }
 
-    public boolean isSourceNodeUnvisited(Edge<T> edge) {
-        return unvisitedNodes.contains(edge.getSource());
+    public boolean isDestinationNodeUnvisited(Edge<T> edge) {
+        return unvisitedNodes.contains(edge.getDestination());
     }
+
 
     public void setPreviousNode(Node<T> node, Edge<T> edge) {
         edge.getDestination().setPreviousNode(node);
@@ -44,28 +51,28 @@ public class Dijkstra<T> {
         unvisitedNodes.remove(currentNode);
     }
 
-    public Node<T> findShortestUnvisitedDistance() {
-        double lowestDistance = Double.MAX_VALUE;
-        Node<T> nodeWithLowestDistance = null;
-        for (Node<T> node : unvisitedNodes) {
-            if (node.getDistance() < lowestDistance) {
-                lowestDistance = node.getDistance();
-                nodeWithLowestDistance = node;
-            }
-        }
-        if (nodeWithLowestDistance == null) {
-            throw new NullPointerException("Node can't be null");
-        }
-        return nodeWithLowestDistance;
+    /**
+     * Finds the unvisited node with the shortest distance
+     * @return an Optional containing the unvisited node with the shortest distance,
+     * or an empty Optional if no unvisited nodes remain
+     */
+    public Optional<Node<T>> findShortestUnvisitedDistance() {
+        return unvisitedNodes.stream()
+                .min(Comparator.comparingDouble(Node::getDistance));
     }
 
+    /**
+     * Finds the shortest path from the start node to the end node
+     * @param graph the weighted graph containing the nodes and edges
+     * @param start the starting node
+     * @param end the end node
+     */
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
         start.setDistance(0);
         Node<T> currentNode = start;
 
         while (!unvisitedNodes.isEmpty()) {
             updateDistance(currentNode, graph);
-
 
             if (currentNode.equals(end)) {
                 break;
@@ -79,6 +86,11 @@ public class Dijkstra<T> {
         }
     }
 
+    /**
+     * Finds the shortest paths from the start node to all other nodes
+     * @param graph the weighted graph containing the nodes and edges
+     * @param start the starting node
+     */
     public void findAllShortestPaths(WeightedGraph<T> graph, Node<T> start) {
         start.setDistance(0);
         Node<T> currentNode = start;
@@ -102,6 +114,10 @@ public class Dijkstra<T> {
         return visitedNodes;
     }
 
+    /**
+     * Prints the path from the start node to the target node
+     * @param target the end node
+     */
     public void getPath(Node<T> target) {
         List<Node<T>> path = new ArrayList<>();
         Node<T> currentNode = target;
@@ -115,6 +131,10 @@ public class Dijkstra<T> {
         System.out.println("Path = " + path);
     }
 
+    /**
+     * Prints the distance from the start node to the target node
+     * @param target the end node
+     */
     public void getDistance(Node<T> target) {
         System.out.println("Distance from start to end is " + target.getDistance());
     }
