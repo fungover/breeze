@@ -92,9 +92,14 @@ public abstract class Option<T> {
     public abstract T getOrElse(T other);
 
     /**
-     * Returns the value if present, otherwise computes and returns a default value.
-     * @param supplier the supplier function to generate a default value
-     * @return the contained value or a computed default
+     * Returns the contained value if present; otherwise, computes and returns a default value using the provided supplier.
+     *
+     * <p>This method ensures lazy evaluation: the supplier is only invoked if this is {@code None}.
+     * It is useful when computing a fallback value dynamically.
+     *
+     * @param supplier a {@link Supplier} providing a default value if this is {@code None}.
+     * @return the contained value if present, otherwise the computed default value.
+     * @throws NullPointerException if {@code supplier} is null.
      */
 
     public abstract T getOrElseGet(Supplier<? extends T> supplier);
