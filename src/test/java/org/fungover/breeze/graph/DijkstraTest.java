@@ -106,7 +106,7 @@ class DijkstraTest {
     @DisplayName("SourceNodeExistInUnvisitedNodes return true if node exist")
     void sourceNodeExistInUnvisitedNodesReturnTrueIfNodeExist() {
 
-        boolean nodeExists = dijkstra.sourceNodeExistInUnvisitedNodes(edges.get(0));
+        boolean nodeExists = dijkstra.isSourceNodeUnvisited(edges.get(0));
 
         assertThat(nodeExists).isEqualTo(true);
     }
