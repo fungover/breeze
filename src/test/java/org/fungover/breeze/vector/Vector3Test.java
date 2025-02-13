@@ -164,4 +164,28 @@ class Vector3Test {
                 () -> assertThat(v.getZ()).isEqualTo(9.0f)
         );
     }
+
+    @Test
+    @DisplayName("New vector2 object")
+    void newVector2Object(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var v = vector.toVector2();
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(3.0f),
+                () -> assertThat(v.getY()).isEqualTo(3.0f)
+        );
+    }
+
+    @Test
+    @DisplayName("New vector4 object")
+    void newVector4Object(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var v = vector.toVector4(3);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(3.0f),
+                () -> assertThat(v.getY()).isEqualTo(3.0f),
+                () -> assertThat(v.getZ()).isEqualTo(3.0f),
+                () -> assertThat(v.getW()).isEqualTo(3.0f)
+        );
+    }
 }
