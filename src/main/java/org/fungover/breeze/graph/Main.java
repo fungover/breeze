@@ -39,5 +39,6 @@ public class Main {
                 .forEach(node -> System.out.println(node + " → Previous " + node.getPreviousNode()));
 
         dijkstra.getPath(nodes.get(5));
+        dijkstra.getDistance(nodes.get(5));
     }
 }
