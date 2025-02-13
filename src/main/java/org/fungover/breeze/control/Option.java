@@ -181,13 +181,23 @@ public abstract class Option<T> {
     public abstract Option<T> peek(Consumer<? super T> action);
 
     /**
-     * Processes the Option by applying a function to its value if present,
-     * or returns a default value if the Option is None.
+     * Transforms this Option by applying a function to its value if present,
+     * or returns a default value if it is None.
+     *
+     * <p>This method enables functional-style exhaustive handling of Some and None cases.
+     * It is useful for pattern-matching scenarios, avoiding explicit null checks.
+     *
+     * <p>Behavior:
+     * <ul>
+     *   <li>If this is {@code Some}, applies {@code ifPresent} to the value and returns the result.</li>
+     *   <li>If this is {@code None}, returns the result of {@code ifNone.get()}.</li>
+     * </ul>
      *
      * @param <U> The return type.
-     * @param ifNone A Supplier providing a default value if this is None.
-     * @param ifPresent A Function applied to the value if this is Some.
-     * @return The computed value from either ifNone or ifPresent.
+     * @param ifNone A {@link Supplier} providing a default value if this is None.
+     * @param ifPresent A {@link Function} applied to the value if this is Some.
+     * @return The computed value from either {@code ifNone} or {@code ifPresent}.
+     * @throws NullPointerException if {@code ifNone} or {@code ifPresent} is null.
      */
 
     public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
