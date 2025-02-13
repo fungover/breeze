@@ -97,7 +97,7 @@ class Vector4Test {
     void distanceBetweenVectors(){
         Vector4 vector = new Vector4(3, 3, 3, 3);
         Vector4 vector2 = new Vector4(6, 6, 6, 6);
-        assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(36.0f));
+        assertThat(vector.distance(vector2)).isEqualTo((float)Math.sqrt(36.0f));
     }
 
     @Test
@@ -105,7 +105,7 @@ class Vector4Test {
     void linearInterpolationFindsPointBetweenVectors(){
         Vector4 vector = new Vector4(3, 3, 3, 3);
         Vector4 vector2 = new Vector4(6, 6, 6, 6);
-        var v = vector.linear(vector, vector2, 0.5f);
+        var v = vector.linear(vector2, 0.5f);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.5f),
                 () -> assertThat(v.getY()).isEqualTo(4.5f),
@@ -120,7 +120,7 @@ class Vector4Test {
         Vector4 vector = new Vector4(3, 3, 3, 3);
         Vector4 vector2 = new Vector4(6, 6, 6, 6);
         var exception = assertThrows(IllegalArgumentException.class, ()->
-        vector.linear(vector, vector2, 1.1f));
+        vector.linear(vector2, 1.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
     }
 
@@ -130,7 +130,7 @@ class Vector4Test {
         Vector4 vector = new Vector4(3, 3, 3, 3);
         Vector4 vector2 = new Vector4(6, 6, 6, 6);
         var exception = assertThrows(IllegalArgumentException.class, ()->
-                vector.linear(vector, vector2, -0.1f));
+                vector.linear(vector2, -0.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
@@ -139,7 +139,7 @@ class Vector4Test {
     void findTheMinValueOfTwoVectors(){
         Vector4 vector = new Vector4(1, 4, 5, 8);
         Vector4 vector2 = new Vector4(2, 3, 6, 7);
-        var v = vector.min(vector, vector2);
+        var v = vector.min(vector2);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(1.0f),
                 () -> assertThat(v.getY()).isEqualTo(3.0f),
@@ -153,7 +153,7 @@ class Vector4Test {
     void findTheMaxValueOfTwoVectors(){
         Vector4 vector = new Vector4(1, 4, 5, 8);
         Vector4 vector2 = new Vector4(2, 3, 6, 7);
-        var v = vector.max(vector, vector2);
+        var v = vector.max(vector2);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(2.0f),
                 () -> assertThat(v.getY()).isEqualTo(4.0f),
