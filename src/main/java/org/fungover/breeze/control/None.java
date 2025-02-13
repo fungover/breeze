@@ -1,5 +1,6 @@
 package org.fungover.breeze.control;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class None<T> extends Option<T> {
@@ -65,5 +66,49 @@ private None() {}
     @Override
     public T getOrNull() {
         return null;
+    }
+
+    /**
+     * Throws an exception provided by the supplier since None<T> has no value.
+     *
+     * @param <X>               the type of the exception to be thrown
+     * @param exceptionSupplier a supplier function that provides the exception to throw
+     * @return nothing, always throws an exception
+     * @throws X the provided exception
+     */
+
+    @Override
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        throw exceptionSupplier.get();
+    }
+
+    /**
+     * Returns None since there is no value to transform.
+     * <p>
+     * The function is ignored because None<T> represents an empty state.
+     *
+     * @param <U>    the type of the would-be transformed value
+     * @param mapper a function to apply (ignored)
+     * @return None<U>, since mapping an empty Option still results in None
+     */
+
+    @Override
+    public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
+        return None.getInstance();
+    }
+
+    /**
+     * Returns None since there is no value to transform.
+     * <p>
+     * The function is ignored because None<T> represents an empty state.
+     *
+     * @param <U>    the type of the would-be transformed Option
+     * @param mapper a function that takes the contained value and returns an Option<U> (ignored)
+     * @return None<U>, since flat-mapping an empty Option still results in None
+     */
+
+    @Override
+    public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+        return None.getInstance();
     }
 }
