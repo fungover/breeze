@@ -11,7 +11,6 @@ public final class Some<T> extends Option<T> {
         this.value = value;
     }
 
-
     /**
      * Returns true if this Option is empty (None), false otherwise.
      *
@@ -64,5 +63,50 @@ public final class Some<T> extends Option<T> {
     @Override
     public T getOrNull() {
         return value;
+    }
+
+    /**
+     * Returns the contained value since Some<T> is never empty.
+     *
+     * @param <X> the type of the exception to be thrown (ignored in Some)
+     * @param exceptionSupplier a supplier function that provides an exception (ignored in Some)
+     * @return the contained value
+     */
+
+    @Override
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        return value;
+    }
+
+    /**
+     * Transforms the contained value using the provided mapping function.
+     * <p>
+     * Since Some<T> contains a value, the function is applied to the value, and the result
+     * is wrapped in a new Some<U>.
+     *
+     * @param <U>    the type of the transformed value
+     * @param mapper a function to apply to the contained value
+     * @return a new Some<U> containing the transformed value
+     */
+
+    @Override
+    public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
+        return new Some<>(mapper.apply(value));
+    }
+
+    /**
+     * Transforms the contained value using a function that returns an Option.
+     * <p>
+     * This enables chaining multiple Option-based computations while preserving Some.
+     * If the function returns None, the result will be None.
+     *
+     * @param <U>    the type of the resulting Option
+     * @param mapper a function that takes the contained value and returns an Option<U>
+     * @return the mapped Option<U> resulting from applying the function
+     */
+
+    @Override
+    public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+        return mapper.apply(value);
     }
 }
