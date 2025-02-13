@@ -14,17 +14,17 @@ public class Node <T> {
     /**
      * Represents the left child of the node
      */
-    Node left;
+    Node<T> left;
 
     /**
      * Represents the right child of the node
      */
-    Node right;
+    Node<T> right;
 
     /**
      * Represents the parent node of current node
      */
-    Node parent;
+    Node<T> parent;
 
     /**
      * Represents the color red and black as boolean value: false (red), true (black)
