@@ -25,7 +25,6 @@ public class Dijkstra<T> {
                 if (sum < edge.getDestination().getDistance()) {
                     edge.getDestination().setDistance(sum);
                     setPreviousNode(node, edge);
-                    node.shortestPaths.putIfAbsent(edge.getDestination(), sum);
                 }
             }
         }
