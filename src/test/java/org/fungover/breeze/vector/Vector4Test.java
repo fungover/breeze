@@ -99,5 +99,20 @@ class Vector4Test {
         assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(36.0f));
     }
 
+    @Test
+    @DisplayName("Linear interpolation finds point between vectors")
+    void linearInterpolationFindsPointBetweenVectors(){
+        Vector4 vector = new Vector4(3, 3, 3, 3);
+        Vector4 vector2 = new Vector4(6, 6, 6, 6);
+        var v = vector.linear(vector, vector2, 0.5f);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(4.5f),
+                () -> assertThat(v.getY()).isEqualTo(4.5f),
+                () -> assertThat(v.getZ()).isEqualTo(4.5f),
+                () -> assertThat(v.getW()).isEqualTo(4.5f)
+        );
+
+    }
+
 
 }
