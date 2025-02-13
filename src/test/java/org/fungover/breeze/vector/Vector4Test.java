@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class Vector4Test {
@@ -111,8 +112,25 @@ class Vector4Test {
                 () -> assertThat(v.getZ()).isEqualTo(4.5f),
                 () -> assertThat(v.getW()).isEqualTo(4.5f)
         );
-
     }
 
+    @Test
+    @DisplayName("Linear interpolation with lerp larger than 1 throws exception")
+    void linearInterpolationWithLerpLargerThan1ThrowsException(){
+        Vector4 vector = new Vector4(3, 3, 3, 3);
+        Vector4 vector2 = new Vector4(6, 6, 6, 6);
+        var exception = assertThrows(IllegalArgumentException.class, ()->
+        vector.linear(vector, vector2, 1.1f));
+        assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
+    }
 
+    @Test
+    @DisplayName("Linear interpolation with lerp less than 0 throws exception")
+    void linearInterpolationWithLerpLessThan0ThrowsException(){
+        Vector4 vector = new Vector4(3, 3, 3, 3);
+        Vector4 vector2 = new Vector4(6, 6, 6, 6);
+        var exception = assertThrows(IllegalArgumentException.class, ()->
+                vector.linear(vector, vector2, -0.1f));
+        assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
+    }
 }
