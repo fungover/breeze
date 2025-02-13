@@ -139,6 +139,17 @@ class Vector3Test {
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
-
+    @Test
+    @DisplayName("Find the min value of two vectors")
+    void findTheMinValueOfTwoVectors() {
+        Vector3 vector = new Vector3(1, 6, 7);
+        Vector3 vector3 = new Vector3(2, 5, 9);
+        var v = vector.min(vector, vector3);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(1.0f),
+                () -> assertThat(v.getY()).isEqualTo(5.0f),
+                () -> assertThat(v.getZ()).isEqualTo(7.0f)
+        );
+    }
 
 }
