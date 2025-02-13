@@ -32,7 +32,8 @@ public class Main {
 //        dijkstra.updateDistance(nodes.get(4), graph);
 //        dijkstra.updateDistance(nodes.get(5), graph);
 
-        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
+//        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
+        dijkstra.findAllShortestPaths(graph, nodes.get(0));
 
         graph.getNodes().stream()
                 .filter(node -> node.getPreviousNode() != null)
@@ -40,5 +41,6 @@ public class Main {
 
         dijkstra.getPath(nodes.get(5));
         dijkstra.getDistance(nodes.get(5));
+        dijkstra.getUnvisitedNodes();
     }
 }

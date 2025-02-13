@@ -67,6 +67,26 @@ public class Dijkstra<T> {
         while (!unvisitedNodes.isEmpty()) {
             updateDistance(currentNode, graph);
 
+
+            if (currentNode.equals(end)) {
+                break;
+            }
+
+            Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
+            if (optionalNode.isEmpty()) {
+                break;
+            }
+            currentNode = optionalNode.get();
+        }
+    }
+
+    public void findAllShortestPaths(WeightedGraph<T> graph, Node<T> start) {
+        start.setDistance(0);
+        Node<T> currentNode = start;
+
+        while (!unvisitedNodes.isEmpty()) {
+            updateDistance(currentNode, graph);
+
             Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
             if (optionalNode.isEmpty()) {
                 break;
