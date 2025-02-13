@@ -46,30 +46,30 @@ public class Vector4 {
         this.w = w;
     }
     //basic arithmetic
-    public void add(float x, float y, float z, float w) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
-        this.w += w;
+    public void add(Vector4 v) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+        this.w += v.w;
     }
 
-    public void sub(float x, float y, float z, float w) {
-        this.x -= x;
-        this.y -= y;
-        this.z -= z;
-        this.w -= w;
+    public void sub(Vector4 v) {
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
+        this.w -= v.w;
     }
-    public void mul(float x, float y, float z, float w) {
-        this.x *= x;
-        this.y *= y;
-        this.z *= z;
-        this.w *= w;
+    public void mul(float m) {
+        this.x *= m;
+        this.y *= m;
+        this.z *= m;
+        this.w *= m;
     }
-    public void div(float x, float y, float z, float w) {
-        this.x /= x;
-        this.y /= y;
-        this.z /= z;
-        this.w /= w;
+    public void div(float d) {
+        this.x /= d;
+        this.y /= d;
+        this.z /= d;
+        this.w /= d;
     }
 
     //Dot product
