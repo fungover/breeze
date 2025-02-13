@@ -14,6 +14,7 @@ import java.util.Optional;
  *
  * @param <T> the type of the contained value
  */
+
 public abstract class Option<T> {
 
     /**
@@ -26,6 +27,7 @@ public abstract class Option<T> {
      * @param <T>   the type of the value
      * @return an {@code Option<T>} containing the value, or {@code None<T>} if the value is null
      */
+
     public static <T> Option<T> of(T value) {
         return value != null ? new Some<>(value) : None.getInstance();
     }
@@ -42,10 +44,63 @@ public abstract class Option<T> {
      * @return an instance of {@code Some<T>} containing the provided value
      * @throws NullPointerException if {@code value} is {@code null}
      */
+
     public static <T> Option<T> some(T value) {
         if (value == null) {
             throw new NullPointerException("Cannot create 'Some' with null");
         }
         return new Some<>(value);
     }
+
+    /**
+     * Returns true if this Option is empty (None), false otherwise.
+     * @return true if None, false otherwise
+     */
+
+    public abstract boolean isEmpty();
+
+    /**
+     * Returns true if this Option contains a value (Some), false otherwise.
+     * @return true if Some, false if None
+     */
+
+    public boolean isDefined(){
+        return !isEmpty();
+
+    }
+
+    /**
+     * Gets the contained value.
+     * @return the contained value
+     * @throws UnsupportedOperationException if called on None
+     */
+
+    public abstract T get();
+
+    /**
+     * Returns the value if present, otherwise returns the provided default value.
+     * @param other the default value
+     * @return the contained value or other
+     */
+
+    public abstract T getOrElse(T other);
+
+    /**
+     * Returns the value if present, otherwise computes and returns a default value.
+     * @param supplier the supplier function to generate a default value
+     * @return the contained value or a computed default
+     */
+
+    public abstract T getOrElseGet(Supplier<? extends T> supplier);
+
+    /**
+     * Returns the contained value or null if None.
+     * @return the contained value or null
+     */
+
+    public abstract T getOrNull();
+
+
+
+
 }
