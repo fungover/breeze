@@ -7,6 +7,9 @@ import java.lang.reflect.Array;
  */
 public class Arrays {
 
+    /**
+     * Don't let anyone instantiate this class
+     */
     private Arrays() {}
 
     /**

@@ -6,7 +6,6 @@ package org.fungover.breeze;
  * @deprecated As of release 0.2.0. Will be removed in a future release
  */
 @Deprecated(since="0.2.0", forRemoval = true)
-@SuppressWarnings("squid:S1133")
 public class Procrastinator {
 
     private Procrastinator() {}

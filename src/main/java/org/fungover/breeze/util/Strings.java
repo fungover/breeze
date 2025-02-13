@@ -6,6 +6,9 @@ package org.fungover.breeze.util;
 
 public class Strings {
 
+    /**
+     * Don't let anyone instantiate this class
+     */
     private Strings() {}
 
     /**
