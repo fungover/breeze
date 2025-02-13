@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
  * A class containing static Array utility functions.
  */
@@ -20,7 +19,12 @@ public class Arrays {
     }
 
     /**
-     * Helper class to represent a tuple (pair) of two elements.
+     * Don't let anyone instantiate this class
+     */
+    private Arrays() {}
+
+    /**
+     * Transposes a 2D array, converting rows into columns and vice versa.
      *
      * @param <T> Type of the first element.
      * @param <U> Type of the second element.
