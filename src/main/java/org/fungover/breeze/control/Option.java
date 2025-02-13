@@ -1,5 +1,6 @@
 package org.fungover.breeze.control;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -122,7 +123,6 @@ public abstract class Option<T> {
      * @return an Option containing the transformed value, or None if empty
      */
 
-
     public abstract <U> Option<U> map(Function<? super T, ? extends U> mapper);
 
     /**
@@ -137,6 +137,50 @@ public abstract class Option<T> {
      * @return the mapped Option<U> or None if empty
      */
 
-
     public abstract <U> Option<U> flatMap(Function<? super T, Option<U>> mapper);
+
+    /**
+     * Filters the Option based on the given predicate.
+     * If the Option contains a value and it matches the predicate, it is returned.
+     * Otherwise, None is returned.
+     *
+     * @param predicate The condition to test against the value.
+     * @return This Option if the predicate is satisfied, otherwise None.
+     */
+
+    public abstract Option<T> filter(Predicate<? super T> predicate);
+
+    /**
+     * Performs the given action if a value is present in this Option.
+     * If this is a Some, the action is executed with the contained value.
+     * If this is None, no action is performed.
+     *
+     * @param action The action to perform on the contained value.
+     */
+
+    public abstract void forEach(Consumer<? super T> action);
+
+    /**
+     * Applies the given action to the value if present, and returns the same Option.
+     * This method is useful for debugging or logging without modifying the Option itself.
+     *
+     * @param action The action to perform on the contained value.
+     * @return This Option instance, unchanged.
+     */
+
+    public abstract Option<T> peek(Consumer<? super T> action);
+
+    /**
+     * Processes the Option by applying a function to its value if present,
+     * or returns a default value if the Option is None.
+     *
+     * @param <U> The return type.
+     * @param ifNone A Supplier providing a default value if this is None.
+     * @param ifPresent A Function applied to the value if this is Some.
+     * @return The computed value from either ifNone or ifPresent.
+     */
+
+    public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
+
+
 }

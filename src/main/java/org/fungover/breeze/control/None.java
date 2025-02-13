@@ -1,6 +1,8 @@
 package org.fungover.breeze.control;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class None<T> extends Option<T> {
@@ -111,4 +113,55 @@ private None() {}
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
         return None.getInstance();
     }
+
+    /**
+     * Always returns None since there is no value to filter.
+     *
+     * @param predicate The condition to test.
+     * @return This None instance.
+     */
+
+    @Override
+    public Option<T> filter(Predicate<? super T> predicate) {
+        return this;
+    }
+
+    /**
+     * Does nothing since there is no value.
+     *
+     * @param action The action to perform.
+     */
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+
+    }
+
+    /**
+     * Does nothing and returns this None instance.
+     *
+     * @param action The action to perform.
+     * @return This None instance.
+     */
+
+    @Override
+    public Option<T> peek(Consumer<? super T> action) {
+        return this;
+    }
+
+    /**
+     * Folds the Option, returning a default value since None contains no value.
+     *
+     * @param <U> The return type.
+     * @param ifNone Supplier for the default value.
+     * @param ifPresent Function applied to the value if present.
+     * @return The default value from ifNone.
+     */
+
+    @Override
+    public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+        return ifNone.get();
+    }
+
+
 }
