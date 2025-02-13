@@ -1,4 +1,6 @@
 package org.fungover.breeze.control;
+import java.io.Serial;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -6,10 +8,30 @@ import java.util.function.Supplier;
 
 public final class Some<T> extends Option<T> {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final T value;
 
     public Some(final T value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Some<?> other)) return false;
+        return Objects.equals(value, other.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return "Some(value=" + value + ")";
     }
 
     /**
