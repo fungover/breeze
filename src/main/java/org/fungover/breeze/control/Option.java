@@ -8,27 +8,66 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.Optional;
 
-/**
- * A generic container type that represents an optional value.
- * <p>
- * This class follows the functional programming paradigm, providing a safer alternative
- * to {@code null} by representing an optional value. It can either contain a value
- * ({@code Some<T>}) or be empty ({@code None<T>}).
- *
- * @param <T> the type of the contained value
- */
+    /**
+     * A generic container type representing an optional value.
+     * <p>
+     * This abstract class serves as the base for {@code Some<T>} (which contains a value)
+     * and {@code None<T>} (which represents the absence of a value).
+     * It provides a functional alternative to {@code null}, ensuring safer handling
+     * of optional values.
+     *
+     * <p>This class is {@link Serializable}, allowing instances to be persisted or transmitted.
+     *
+     * @param <T> the type of the contained value
+     */
 
 public abstract class Option<T> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Checks whether this {@code Option} is equal to another object.
+     * <p>
+     * Two {@code Option} instances are considered equal if:
+     * <ul>
+     *   <li>Both are instances of {@code Some<T>} and contain equal values (based on {@code equals()}).</li>
+     *   <li>Both are instances of {@code None<T>} (as {@code None} is a singleton).</li>
+     * </ul>
+     *
+     * @param obj the object to compare for equality
+     * @return {@code true} if the given object is an equivalent {@code Option}, otherwise {@code false}
+     */
 
     @Override
     public abstract boolean equals(Object obj);
 
+    /**
+     * Computes the hash code for this {@code Option}.
+     * <p>
+     * The hash code follows these rules:
+     * <ul>
+     *   <li>For {@code Some<T>}, it is derived from the contained value's hash code.</li>
+     *   <li>For {@code None<T>}, it returns a constant hash code (as {@code None} is a singleton).</li>
+     * </ul>
+     *
+     * @return the hash code of this {@code Option}
+     */
+
     @Override
     public abstract int hashCode();
+
+        /**
+         * Returns a string representation of this {@code Option}.
+         * <p>
+         * The format follows these conventions:
+         * <ul>
+         *   <li>For {@code Some<T>}, it returns {@code "Some(value)"} where {@code value} is the string representation of the contained value.</li>
+         *   <li>For {@code None<T>}, it returns {@code "None"}.</li>
+         * </ul>
+         *
+         * @return a string representation of this {@code Option}
+         */
 
     @Override
     public abstract String toString();
