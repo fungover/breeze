@@ -100,18 +100,18 @@ class Vector3Test {
 
     @Test
     @DisplayName("Distance between vectors")
-    void distanceBetweenVectors(){
+    void distanceBetweenVectors() {
         Vector3 vector = new Vector3(3, 3, 3);
-        Vector3 vector2 = new Vector3(6, 6, 6);
-        assertThat(vector.distance(vector2,vector)).isEqualTo((float) Math.sqrt(27));
+        Vector3 vector3 = new Vector3(6, 6, 6);
+        assertThat(vector.distance(vector3)).isEqualTo((float) Math.sqrt(27));
     }
-    
+
     @Test
     @DisplayName("Linear interpolation finds point between vectors")
-    void linearInterpolationFindsPointBetweenVectors(){
+    void linearInterpolationFindsPointBetweenVectors() {
         Vector3 vector = new Vector3(3, 3, 3);
-        Vector3 vector2 = new Vector3(6, 6, 6);
-        var v = vector.linear(vector, vector2, 0.5f);
+        Vector3 vector3 = new Vector3(6, 6, 6);
+        var v = vector.linear(vector3, 0.5f);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.5f),
                 () -> assertThat(v.getY()).isEqualTo(4.5f),
@@ -120,22 +120,22 @@ class Vector3Test {
     }
 
     @Test
-    @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
+    @DisplayName("Linear interpolation with lerp larger than 1 throws exception")
     void linearInterpolationWithLerpLargerThan1ThrowException() {
-        Vector3 vector = new Vector3(3, 3,3);
-        Vector3 vector3 = new Vector3(6, 6,6);
+        Vector3 vector = new Vector3(3, 3, 3);
+        Vector3 vector3 = new Vector3(6, 6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () ->
-                vector.linear(vector, vector3, 1.1f));
+                vector.linear(vector3, 1.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
     }
 
     @Test
-    @DisplayName("Linear interpolation with lerp less than 0 throw exception")
+    @DisplayName("Linear interpolation with lerp less than 0 throws exception")
     void linearInterpolationWithLerpLessThan0ThrowException() {
-        Vector3 vector = new Vector3(3, 3,3);
-        Vector3 vector3 = new Vector3(6, 6,6);
+        Vector3 vector = new Vector3(3, 3, 3);
+        Vector3 vector3 = new Vector3(6, 6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () ->
-                vector.linear(vector, vector3, -0.1f));
+                vector.linear(vector3, -0.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
@@ -144,7 +144,7 @@ class Vector3Test {
     void findTheMinValueOfTwoVectors() {
         Vector3 vector = new Vector3(1, 6, 7);
         Vector3 vector3 = new Vector3(2, 5, 9);
-        var v = vector.min(vector, vector3);
+        var v = vector.min(vector3);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(1.0f),
                 () -> assertThat(v.getY()).isEqualTo(5.0f),
@@ -157,7 +157,7 @@ class Vector3Test {
     void findTheMaxValueOfTwoVectors() {
         Vector3 vector = new Vector3(1, 6, 7);
         Vector3 vector3 = new Vector3(2, 5, 9);
-        var v = vector.max(vector, vector3);
+        var v = vector.max(vector3);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(2.0f),
                 () -> assertThat(v.getY()).isEqualTo(6.0f),
@@ -167,7 +167,7 @@ class Vector3Test {
 
     @Test
     @DisplayName("New vector2 object")
-    void newVector2Object(){
+    void newVector2Object() {
         Vector3 vector = new Vector3(3, 3, 3);
         var v = vector.toVector2();
         assertAll(
@@ -178,7 +178,7 @@ class Vector3Test {
 
     @Test
     @DisplayName("New vector4 object")
-    void newVector4Object(){
+    void newVector4Object() {
         Vector3 vector = new Vector3(3, 3, 3);
         var v = vector.toVector4(3);
         assertAll(
