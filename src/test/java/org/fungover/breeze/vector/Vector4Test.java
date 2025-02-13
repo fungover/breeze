@@ -91,6 +91,13 @@ class Vector4Test {
         );
     }
 
+    @Test
+    @DisplayName("Distance between vectors")
+    void distanceBetweenVectors(){
+        Vector4 vector = new Vector4(3, 3, 3, 3);
+        Vector4 vector2 = new Vector4(6, 6, 6, 6);
+        assertThat(vector.distance(vector2,vector)).isEqualTo((float)Math.sqrt(36.0f));
+    }
 
 
 }
