@@ -1,5 +1,7 @@
 package org.fungover.breeze.control;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -16,7 +18,21 @@ import java.util.Optional;
  * @param <T> the type of the contained value
  */
 
-public abstract class Option<T> {
+public abstract class Option<T> implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
+
+    @Override
+    public abstract String toString();
+
 
     /**
      * Creates an {@code Option<T>} instance based on the provided value.
@@ -60,6 +76,7 @@ public abstract class Option<T> {
      */
 
     public abstract boolean isEmpty();
+
 
     /**
      * Checks if this Option contains a value (i.e., an instance of {@code Some}).

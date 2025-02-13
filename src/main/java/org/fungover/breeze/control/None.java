@@ -1,5 +1,6 @@
 package org.fungover.breeze.control;
 
+import java.io.Serial;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -7,10 +8,12 @@ import java.util.function.Supplier;
 
 public final class None<T> extends Option<T> {
 
-private static final None<?> INSTANCE = new None<>();
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-private None() {}
+    private static final None<?> INSTANCE = new None<>();
 
+    private None() {}
 
 
     @SuppressWarnings("unchecked")
@@ -18,6 +21,20 @@ private None() {}
     return (None<T>) INSTANCE;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof None;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "None";
+    }
 
     /**
      * Returns true if this Option is empty (None), false otherwise.
