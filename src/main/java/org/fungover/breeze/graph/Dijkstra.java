@@ -24,11 +24,8 @@ public class Dijkstra<T> {
                 if (sum < edge.getDestination().getDistance()) {
                     edge.getDestination().setDistance(sum);
                     setPreviousNode(node, edge);
-                    System.out.println(edge.getDestination() + " checked");
+                    node.shortestPaths.putIfAbsent(edge.getDestination(), sum);
                 }
-            }
-            else {
-                System.out.println(edge.getSource() +  " does not exist in unvisitedNodes");
             }
         }
         markNodeAsVisited(node);
@@ -64,17 +61,17 @@ public class Dijkstra<T> {
 
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
         start.setDistance(0);
+        Node<T> currentNode = start;
 
+        while (!unvisitedNodes.isEmpty()) {
+            updateDistance(currentNode, graph);
 
-//        while (!unvisitedNodes.isEmpty())
-//           if(unvisited.equals(end) break;
-
-        for (Edge<T> edge : graph.getEdges(start)) {
-            edge.getDestination().setDistance(edge.getWeight());
+            Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
+            if (optionalNode.isEmpty()) {
+                break;
+            }
+            currentNode = optionalNode.get();
         }
-
-
-//        }
     }
 
     public List<Node<T>> getUnvisitedNodes() {
@@ -82,15 +79,17 @@ public class Dijkstra<T> {
     }
 
     public List<Node<T>> getVisitedNodes() {
+
         return visitedNodes;
     }
 
     public void getPath(Node<T> target) {
 
+        // Reconstructs path from start to target
     }
 
     public void getDistance(Node<T> target) {
-
+        //Gets total path distance
     }
 
     public void findShortestPathFacit(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
