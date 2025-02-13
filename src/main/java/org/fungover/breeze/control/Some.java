@@ -1,4 +1,5 @@
 package org.fungover.breeze.control;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -60,6 +61,7 @@ public final class Some<T> extends Option<T> {
      *
      * @return the contained value or null
      */
+
     @Override
     public T getOrNull() {
         return value;
@@ -108,5 +110,58 @@ public final class Some<T> extends Option<T> {
     @Override
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
         return mapper.apply(value);
+    }
+
+    /**
+     * Filters the Option based on a predicate.
+     *
+     * @param predicate The condition to test.
+     * @return This Option if it satisfies the predicate, otherwise None.
+     */
+
+    @Override
+    public Option<T> filter(Predicate<? super T> predicate) {
+        return predicate.test(value) ? this : None.getInstance();
+    }
+
+    /**
+     * Performs an action if a value is present.
+     *
+     * @param action The action to perform.
+     */
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+
+        action.accept(value);
+
+    }
+
+    /**
+     * Peeks at the value without modifying the Option.
+     *
+     * @param action The action to perform.
+     * @return This Option.
+     */
+
+    @Override
+    public Option<T> peek(Consumer<? super T> action) {
+        action.accept(value);
+        return this;
+    }
+
+    /**
+     * Folds the Option by applying a function to the value if present,
+     * or returning a default computed by a Supplier.
+     *
+     * @param <U> The return type.
+     * @param ifNone Supplier for default value if Option is None.
+     * @param ifPresent Function applied to the value if present.
+     * @return The computed value.
+     */
+
+    @Override
+    public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+        return ifPresent.apply(value);
     }
 }
