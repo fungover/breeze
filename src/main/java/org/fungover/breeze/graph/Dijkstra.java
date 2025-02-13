@@ -80,7 +80,6 @@ public class Dijkstra<T> {
     }
 
     public List<Node<T>> getVisitedNodes() {
-
         return visitedNodes;
     }
 
@@ -98,7 +97,7 @@ public class Dijkstra<T> {
     }
 
     public void getDistance(Node<T> target) {
-        //Gets total path distance
+        System.out.println("Distance from start to end is " + target.getDistance());
     }
 
     public void findShortestPathFacit(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
