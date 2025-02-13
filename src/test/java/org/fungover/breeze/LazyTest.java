@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,7 +77,7 @@ class LazyTest {
 
     @Test
     @DisplayName("Lazy flatmap should return chain of transformed values")
-    void lazyFlatmapShouldReturnChainOfTransformedValues(){
+    void lazyFlatmapShouldReturnChainOfTransformedValues() {
         Lazy<Integer> lazyInt = Lazy.of(() -> 666);
         Lazy<String> lazyString = lazyInt
                 .flatMap(i -> Lazy.of(() -> "The answer is " + i))
@@ -120,11 +119,34 @@ class LazyTest {
 
         assertTrue(option.isPresent(), "Option should be present");
         assertEquals(10, option.get(), "Option should contain value 10");
-
+        assertNotEquals(11, option.get());
+        assertNotEquals(9, option.get());
         Lazy<Integer> lazy2 = Lazy.value(null);
         assertFalse(lazy2.toOption().isPresent(), "Option should be empty");
     }
 
+    @Test
+    @DisplayName("forEach processes lazy value correctly")
+    void forEachProcessesLazyValueCorrectly() {
+        Lazy<String> lazy = Lazy.value("Hello");
+        StringBuilder result = new StringBuilder();
+
+        lazy.forEach(result::append);
+
+        assertEquals("Hello", result.toString());
+    }
+
+    @Test
+    @DisplayName("forEach when not evaluated should return isEvaluated")
+    void forEachWhenNotEvaluated() {
+        Lazy<String> lazy = Lazy.of(() -> "Lazy Evaluation");
+        StringBuilder result = new StringBuilder();
+
+        lazy.forEach(result::append);
+
+        assertEquals("Lazy Evaluation", result.toString());
+        assertTrue(lazy.isEvaluated(), "Value should be evaluated after forEach is called");
+    }
 
     @Test
     @DisplayName("Lazy method should not compute before call")
@@ -151,7 +173,6 @@ class LazyTest {
         assertTrue(lazy.isEvaluated());
         assertNull(value);
     }
-
 
 
 }
