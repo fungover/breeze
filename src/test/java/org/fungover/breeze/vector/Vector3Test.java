@@ -152,4 +152,16 @@ class Vector3Test {
         );
     }
 
+    @Test
+    @DisplayName("Find the max value of two vectors")
+    void findTheMaxValueOfTwoVectors() {
+        Vector3 vector = new Vector3(1, 6, 7);
+        Vector3 vector3 = new Vector3(2, 5, 9);
+        var v = vector.max(vector, vector3);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(2.0f),
+                () -> assertThat(v.getY()).isEqualTo(6.0f),
+                () -> assertThat(v.getZ()).isEqualTo(9.0f)
+        );
+    }
 }
