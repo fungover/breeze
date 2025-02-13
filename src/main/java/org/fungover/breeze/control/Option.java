@@ -150,12 +150,26 @@ public abstract class Option<T> {
     public abstract <U> Option<U> flatMap(Function<? super T, Option<U>> mapper);
 
     /**
-     * Filters the Option based on the given predicate.
-     * If the Option contains a value and it matches the predicate, it is returned.
-     * Otherwise, None is returned.
+     * Returns this Option if the contained value satisfies the given predicate;
+     * otherwise, returns {@code None}.
+     *
+     * <p>If this is {@code None}, the predicate is not applied, and {@code None} is returned.
+     * If this is {@code Some}, the predicate is applied to the contained value:
+     * <ul>
+     *   <li>If the predicate returns {@code true}, this Option is returned unchanged.</li>
+     *   <li>If the predicate returns {@code false}, {@code None} is returned.</li>
+     * </ul>
+     *
+     * <p>Example usage:
+     * <pre>{@code
+     * Option<Integer> number = Option.some(42);
+     * Option<Integer> evenNumber = number.filter(n -> n % 2 == 0); // Retains Some(42)
+     * Option<Integer> oddNumber = number.filter(n -> n % 2 != 0);  // Becomes None
+     * }</pre>
      *
      * @param predicate The condition to test against the value.
-     * @return This Option if the predicate is satisfied, otherwise None.
+     * @return This Option if the predicate is satisfied, otherwise {@code None}.
+     * @throws NullPointerException if {@code predicate} is null.
      */
 
     public abstract Option<T> filter(Predicate<? super T> predicate);
