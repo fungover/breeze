@@ -93,7 +93,8 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
-        return new Some<>(mapper.apply(value));
+        U result = (mapper.apply(value));
+        return result != null ? new Some<>(result) : None.getInstance();
     }
 
     /**
@@ -109,7 +110,8 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
-        return mapper.apply(value);
+        Option<U> result = mapper.apply(value);
+        return result != null ? result : None.getInstance();
     }
 
     /**
