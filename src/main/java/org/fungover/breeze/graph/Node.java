@@ -4,23 +4,17 @@ import java.util.Map;
 
 public class Node<T> {
     T data;
-    Map<Node<T>, Double> shortestPaths;
     Node<T> previousNode;
     double distance;
 
     public Node(T data) {
         this.data = data;
-        this.shortestPaths = new HashMap<>();
         this.previousNode = null;
         this.distance = Double.MAX_VALUE;
     }
 
     public T getData() {
         return data;
-    }
-
-    public Map<Node<T>, Double> getShortestPaths() {
-        return shortestPaths;
     }
 
     public Node<T> getPreviousNode() {
