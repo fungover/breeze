@@ -24,26 +24,21 @@ public class Main {
 
         WeightedGraph<String> graph = new WeightedGraph<>(nodes, edges);
 
-//        for (Node<Integer> node : graph.getNodes()) {
-//            System.out.println(node +" : " + graph.startNodeWithEdges.get(node)+"\n");
-//        }
-
         Dijkstra<String> dijkstra = new Dijkstra<>(graph);
-//        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
-//        System.out.println(nodes.get(1).getDistance());
-//        System.out.println(nodes.get(3).getDistance());
-        dijkstra.updateDistance(nodes.get(0), graph);
-        System.out.println(nodes.get(0).getDistance());
-        System.out.println(nodes.get(1).getDistance());
-        System.out.println(nodes.get(2).getDistance());
-        System.out.println(dijkstra.getUnvisitedNodes());
-        System.out.println(dijkstra.getVisitedNodes());
-        Node<String> nodeC= dijkstra.findShortestUnvisitedDistance();
-        System.out.println(nodeC);
-        dijkstra.updateDistance(nodes.get(0), graph);
-        dijkstra.updateDistance(nodes.get(2), graph);
-        dijkstra.updateDistance(nodes.get(1), graph);
+//        dijkstra.updateDistance(nodes.get(0), graph);
+//        dijkstra.updateDistance(nodes.get(2), graph);
+//        dijkstra.updateDistance(nodes.get(1), graph);
+//        dijkstra.updateDistance(nodes.get(3), graph);
+//        dijkstra.updateDistance(nodes.get(4), graph);
+//        dijkstra.updateDistance(nodes.get(5), graph);
 
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
 
+        graph.getNodes().stream()
+                .filter(node -> node.getPreviousNode() != null)
+                .forEach(node -> System.out.println(node + " → Previous " + node.getPreviousNode()));
+
+        dijkstra.getUnvisitedNodes();
+        dijkstra.getVisitedNodes();
     }
 }

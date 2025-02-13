@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -24,24 +25,30 @@ class DijkstraTest {
         );
 
          edges = List.of(
-                new Edge<>(nodes.get(0), nodes.get(2), 6),  //A to C
-                new Edge<>(nodes.get(0), nodes.get(1), 8),  //A to B
-                new Edge<>(nodes.get(1), nodes.get(2), 4),  //B to C
-                new Edge<>(nodes.get(1), nodes.get(3), 2),  //B to D
-                new Edge<>(nodes.get(1), nodes.get(4), 5),  //B to E
-                new Edge<>(nodes.get(2), nodes.get(4), 1)   //C to E
+                 new Edge<>(nodes.get(0), nodes.get(2), 2),  //A to C
+                 new Edge<>(nodes.get(0), nodes.get(1), 5),  //A to B
+                 new Edge<>(nodes.get(1), nodes.get(2), 1),  //B to C
+                 new Edge<>(nodes.get(1), nodes.get(3), 4),  //B to D
+                 new Edge<>(nodes.get(1), nodes.get(4), 2),  //B to E
+                 new Edge<>(nodes.get(2), nodes.get(4), 7),  //C to E
+                 new Edge<>(nodes.get(3), nodes.get(4), 6),  //D to E
+                 new Edge<>(nodes.get(3), nodes.get(5), 3),  //D to F
+                 new Edge<>(nodes.get(4), nodes.get(5), 1)   //E to F
         );
 
         graph = new  WeightedGraph<>(nodes, edges);
         dijkstra = new Dijkstra<>(graph);
+
+        //Update start node to 0
+        nodes.get(0).setDistance(0);
     }
 
     @Test
     @DisplayName("UpdateDistance should update distance of destinations if sum of source and weight is less")
     void updateDistanceShouldUpdateDistanceOfDestinationsIfSumOfSourceAndWeightIsLess() {
         double expectedSourceDistance = 0;
-        double expectedDistanceB = 8;
-        double expectedDistanceC = 6;
+        double expectedDistanceB = 5;
+        double expectedDistanceC = 2;
 
         dijkstra.updateDistance(nodes.get(0), graph);
 
@@ -78,12 +85,11 @@ class DijkstraTest {
     @Test
     @DisplayName("FindShortestUnvisitedDistance returns node with lowest distance")
     void findShortestUnvisitedDistanceReturnsNodeWithLowestDistance() {
-        double nodeC = 6;
+        double nodeC = 2;
         dijkstra.updateDistance(nodes.get(0), graph);
 
-        Node<String> lowestNode = dijkstra.findShortestUnvisitedDistance();
-
-        assertThat(lowestNode.getDistance()).isEqualTo(nodeC);
+        Optional<Node<String>> lowestNode = dijkstra.findShortestUnvisitedDistance();
+        assertThat(lowestNode.get().getDistance()).isEqualTo(nodeC);
     }
 
     @Test
@@ -103,6 +109,32 @@ class DijkstraTest {
         boolean nodeExists = dijkstra.sourceNodeExistInUnvisitedNodes(edges.get(0));
 
         assertThat(nodeExists).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("findShortestPath should stop when reaching end node")
+    void findShortestPathShouldStopWhenReachingEndNode() {
+        Node<String> end = nodes.getLast();
+        Node<String> start = nodes.getFirst();
+
+        double expectedEndDistance = 8;
+
+        dijkstra.findShortestPath(graph, start, end);
+
+        assertThat(end.getDistance()).isEqualTo(expectedEndDistance);
+    }
+
+
+    @Test
+    @DisplayName("UnvisitedNodes should be empty after running findShortestPath")
+    void unvisitedNodesShouldBeEmptyAfterRunningFindShortestPath() {
+        Node<String> end = nodes.getLast();
+        Node<String> start = nodes.getFirst();
+        boolean emptyList = true;
+
+        dijkstra.findShortestPath(graph, start, end);
+
+        assertThat(dijkstra.getUnvisitedNodes().isEmpty()).isEqualTo(emptyList);
     }
 
 }
