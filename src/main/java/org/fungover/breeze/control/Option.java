@@ -100,7 +100,43 @@ public abstract class Option<T> {
 
     public abstract T getOrNull();
 
+    /**
+     * Returns the contained value if present, otherwise throws an exception provided by the supplier.
+     *
+     * @param <X>               the type of the exception to be thrown
+     * @param exceptionSupplier a supplier function that provides the exception to throw
+     * @return the contained value if present
+     * @throws X if the Option is None, the supplied exception is thrown
+     */
+
+    public abstract <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+
+    /**
+     * Transforms the contained value using the provided mapping function.
+     * <p>
+     * If the Option is Some, applies the function and wraps the result in a new Some.
+     * If the Option is None, returns None.
+     *
+     * @param <U>    the type of the transformed value
+     * @param mapper a function to apply to the contained value
+     * @return an Option containing the transformed value, or None if empty
+     */
 
 
+    public abstract <U> Option<U> map(Function<? super T, ? extends U> mapper);
 
+    /**
+     * Transforms the contained value using a function that returns an Option.
+     * <p>
+     * This allows chaining multiple computations while preserving None.
+     * If the Option is Some, applies the function and returns the result.
+     * If the Option is None, returns None.
+     *
+     * @param <U>    the type of the resulting Option
+     * @param mapper a function that takes the contained value and returns an Option<U>
+     * @return the mapped Option<U> or None if empty
+     */
+
+
+    public abstract <U> Option<U> flatMap(Function<? super T, Option<U>> mapper);
 }
