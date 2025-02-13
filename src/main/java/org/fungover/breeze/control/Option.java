@@ -54,15 +54,20 @@ public abstract class Option<T> {
     }
 
     /**
-     * Returns true if this Option is empty (None), false otherwise.
-     * @return true if None, false otherwise
+     * Checks if this Option is empty (i.e., an instance of {@code None}).
+     *
+     * @return {@code true} if this is None, otherwise {@code false}.
      */
 
     public abstract boolean isEmpty();
 
     /**
-     * Returns true if this Option contains a value (Some), false otherwise.
-     * @return true if Some, false if None
+     * Checks if this Option contains a value (i.e., an instance of {@code Some}).
+     *
+     * <p>This is a convenience method that returns the opposite of {@link #isEmpty()}.
+     * It improves readability in functional-style code.
+     *
+     * @return {@code true} if this is Some, otherwise {@code false}.
      */
 
     public boolean isDefined(){
