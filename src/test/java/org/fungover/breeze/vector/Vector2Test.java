@@ -87,7 +87,7 @@ class Vector2Test {
     void distanceBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        assertThat(vector.distance(vector2, vector)).isEqualTo((float) Math.sqrt(18));
+        assertThat(vector.distance(vector2)).isEqualTo((float) Math.sqrt(18));
     }
 
     @Test
@@ -95,7 +95,7 @@ class Vector2Test {
     void linearInterpolationFindPointBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        var v = vector.linear(vector, vector2, 0.5f);
+        var v = vector.linear(vector2, 0.5f);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.5f),
                 () -> assertThat(v.getY()).isEqualTo(4.5f)
@@ -108,7 +108,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () ->
-                vector.linear(vector, vector2, 1.1f));
+                vector.linear(vector2, 1.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
     }
 
@@ -118,7 +118,7 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         var exception = assertThrows(IllegalArgumentException.class, () ->
-                vector.linear(vector, vector2, -0.1f));
+                vector.linear(vector2, -0.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
 
@@ -127,7 +127,7 @@ class Vector2Test {
     void findTheMinValueOfTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
-        var v = vector.min(vector, vector2);
+        var v = vector.min(vector2);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(3.0f),
                 () -> assertThat(v.getY()).isEqualTo(5.0f)
@@ -139,7 +139,7 @@ class Vector2Test {
     void findTheMaxValueOfTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
-        var v = vector.max(vector, vector2);
+        var v = vector.max(vector2);
         assertAll(
                 () -> assertThat(v.getX()).isEqualTo(4.0f),
                 () -> assertThat(v.getY()).isEqualTo(6.0f)
@@ -158,7 +158,7 @@ class Vector2Test {
         );
     }
     @Test
-    @DisplayName("New vector3 object")
+    @DisplayName("New vector4 object")
     void newVector4Object(){
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector4(3,3);
