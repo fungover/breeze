@@ -93,6 +93,10 @@ public class Vector3 {
 
     //Linear interpolation
     public Vector3 linear(Vector3 v1, Vector3 v2, float t) {
+        if(t > 1)
+            throw new IllegalArgumentException("lerp can not be larger than 1");
+        if(t < 0)
+            throw new IllegalArgumentException("lerp can not be negative");
         return new Vector3(v1.x + t * (v2.x - v1.x), v1.y + t * (v2.y - v1.y), v1.z + t * (v2.z - v1.z));
     }
 

@@ -119,5 +119,26 @@ class Vector3Test {
         );
     }
 
+    @Test
+    @DisplayName("Linear interpolation with lerp larger than 1 throw exception")
+    void linearInterpolationWithLerpLargerThan1ThrowException() {
+        Vector3 vector = new Vector3(3, 3,3);
+        Vector3 vector3 = new Vector3(6, 6,6);
+        var exception = assertThrows(IllegalArgumentException.class, () ->
+                vector.linear(vector, vector3, 1.1f));
+        assertThat(exception.getMessage()).isEqualTo("lerp can not be larger than 1");
+    }
+
+    @Test
+    @DisplayName("Linear interpolation with lerp less than 0 throw exception")
+    void linearInterpolationWithLerpLessThan0ThrowException() {
+        Vector3 vector = new Vector3(3, 3,3);
+        Vector3 vector3 = new Vector3(6, 6,6);
+        var exception = assertThrows(IllegalArgumentException.class, () ->
+                vector.linear(vector, vector3, -0.1f));
+        assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
+    }
+
+
 
 }
