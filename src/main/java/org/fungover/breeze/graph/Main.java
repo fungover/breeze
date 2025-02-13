@@ -38,7 +38,6 @@ public class Main {
                 .filter(node -> node.getPreviousNode() != null)
                 .forEach(node -> System.out.println(node + " → Previous " + node.getPreviousNode()));
 
-        dijkstra.getUnvisitedNodes();
-        dijkstra.getVisitedNodes();
+        dijkstra.getPath(nodes.get(5));
     }
 }

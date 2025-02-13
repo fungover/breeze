@@ -1,6 +1,7 @@
 package org.fungover.breeze.graph;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Dijkstra<T> {
 
@@ -18,7 +19,7 @@ public class Dijkstra<T> {
         node.setDistance(0);
         Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
         for (Edge<T> edge : edges) {
-            if (sourceNodeExistInUnvisitedNodes(edge)) {
+            if (isSourceNodeUnvisited(edge)) {
                 double sum = edge.getSource().getDistance() + edge.getWeight();
 
                 if (sum < edge.getDestination().getDistance()) {
@@ -31,7 +32,7 @@ public class Dijkstra<T> {
         markNodeAsVisited(node);
     }
 
-    public boolean sourceNodeExistInUnvisitedNodes(Edge<T> edge) {
+    public boolean isSourceNodeUnvisited(Edge<T> edge) {
         return unvisitedNodes.contains(edge.getSource());
     }
 
@@ -84,8 +85,16 @@ public class Dijkstra<T> {
     }
 
     public void getPath(Node<T> target) {
+        List<Node<T>> path = new ArrayList<>();
+        Node<T> currentNode = target;
 
-        // Reconstructs path from start to target
+        while (currentNode != null) {
+            path.add(currentNode);
+            currentNode = currentNode.getPreviousNode();
+        }
+
+        Collections.reverse(path);
+        System.out.println("Path = " + path);
     }
 
     public void getDistance(Node<T> target) {
