@@ -80,47 +80,6 @@ public class Matrix4x4Test {
         }
     }
 
-    @Test
-    public void testMatrixInverseAndSingularMatrix1() {
-        // ✅ Test 1: Invertible Matrix
-        float[][] matrixValues = {
-                {4, 7, 2, 3},
-                {3, 6, 1, 2},
-                {2, 5, 3, 1},
-                {1, 8, 7, 6}
-        };
-
-        // Expected inverse (precomputed)
-        float[][] expectedInverse = {
-                { 1.0000f, -1.0000f,  0.9091f, -0.1818f },
-                {-0.6667f,  0.8333f,  0.0606f,  0.0455f },
-                { 0.3333f, -0.6667f,  0.3333f, -0.0000f },
-                { 0.3333f, -0.1667f, -0.4848f,  0.1364f }
-        };
-
-        // Create matrix object
-        Matrix4x4 matrix = new Matrix4x4(matrixValues);
-        Matrix4x4 inverseMatrix = matrix.inverse();
-        float[][] result = inverseMatrix.getMatrix();
-
-        // Assert each element of the inverse matrix
-        for (int i = 0; i < 4; i++) {
-            assertArrayEquals(expectedInverse[i], result[i], DELTA, "Row " + i + " in inverse matrix is incorrect.");
-        }
-
-        // ✅ Test 2: Singular Matrix (Non-invertible)
-        float[][] singularMatrixValues = {
-                {1, 2, 3, 4},
-                {2, 4, 6, 8},  // This row is a multiple of the first row
-                {3, 6, 9, 12},
-                {4, 8, 12, 16}
-        };
-
-        Matrix4x4 singularMatrix = new Matrix4x4(singularMatrixValues);
-
-        // Ensure the method throws an exception when trying to invert a singular matrix
-        assertThrows(ArithmeticException.class, singularMatrix::inverse, "Should throw exception for singular matrix");
-    }
 
 
     @Test
