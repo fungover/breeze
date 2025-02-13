@@ -133,4 +133,19 @@ class Vector4Test {
                 vector.linear(vector, vector2, -0.1f));
         assertThat(exception.getMessage()).isEqualTo("lerp can not be negative");
     }
+
+    @Test
+    @DisplayName("Find the min value of two vectors")
+    void findTheMinValueOfTwoVectors(){
+        Vector4 vector = new Vector4(1, 4, 5, 8);
+        Vector4 vector2 = new Vector4(2, 3, 6, 7);
+        var v = vector.min(vector, vector2);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(1.0f),
+                () -> assertThat(v.getY()).isEqualTo(3.0f),
+                () -> assertThat(v.getZ()).isEqualTo(5.0f),
+                () -> assertThat(v.getW()).isEqualTo(7.0f)
+        );
+    }
+
 }
