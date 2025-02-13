@@ -8,7 +8,6 @@ public final class FDeque<T> {
     private final List<T> front;
     private final List<T> back;
 
-
     private FDeque(List<T> front, List<T> back) {
         this.front = Collections.unmodifiableList(front);
         this.back = Collections.unmodifiableList(back);
