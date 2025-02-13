@@ -63,27 +63,27 @@ public class Vector2 {
     }
 
     //Distance between vectors
-    public float distance(Vector2 v1, Vector2 v2) {
-        return (float) Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
+    public float distance(Vector2 v2) {
+        return (float) Math.sqrt(Math.pow(v2.x - this.x, 2) + Math.pow(v2.y - this.y, 2));
     }
 
     //Linear interpolation
-    public Vector2 linear(Vector2 v1, Vector2 v2, float t) {
+    public Vector2 linear(Vector2 v2, float t) {
         if(t > 1)
             throw new IllegalArgumentException("lerp can not be larger than 1");
         if(t < 0)
             throw new IllegalArgumentException("lerp can not be negative");
 
-        return new Vector2(v1.x + t * (v2.x - v1.x), v1.y + t * (v2.y - v1.y));
+        return new Vector2(this.x + t * (v2.x - this.x), this.y + t * (v2.y - this.y));
     }
 
     //Component min/max
-    public Vector2 min(Vector2 v1, Vector2 v2) {
-        return new Vector2(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y));
+    public Vector2 min(Vector2 v2) {
+        return new Vector2(Math.min(this.x, v2.x), Math.min(this.y, v2.y));
     }
 
-    public Vector2 max(Vector2 v1, Vector2 v2) {
-        return new Vector2(Math.max(v1.x, v2.x), Math.max(v1.y, v2.y));
+    public Vector2 max(Vector2 v2) {
+        return new Vector2(Math.max(this.x, v2.x), Math.max(this.y, v2.y));
     }
 
     //Convert to vector3 and vector4
