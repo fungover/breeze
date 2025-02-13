@@ -101,4 +101,75 @@ class FMultiMapTest {
 
         assertFalse(updatedMap.containsKey("key1"));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "key2, value1",
+            "key1, nonExistentValue"
+    })
+    void shouldNotRemoveIfKeyOrValueDoesNotExist(String key, String value) {
+        FMultiMap<String, String> map = FMultiMap.empty();
+
+        map = map.put("key1", "value1");
+        map = map.put("key1", "value2");
+
+        FMultiMap<String, String> updatedMap = map.remove(key, value);
+
+        assertEquals(map, updatedMap);
+        assertTrue(updatedMap.containsEntry("key1", "value1"));
+        assertTrue(updatedMap.containsEntry("key1", "value2"));
+    }
+
+    @Test
+    void shouldReturnSizeOfSet() {
+        FSet<String> set = FSet.empty();
+
+        assertEquals(0, set.size(), "Size of empty set should be 0");
+
+        set = set.add("element1");
+        assertEquals(1, set.size(), "Size should be 1 after adding one element");
+
+        set = set.add("element2");
+        assertEquals(2, set.size(), "Size should be 2 after adding a second element");
+
+        set = set.remove("element1");
+        assertEquals(1, set.size(), "Size should be 1 after removing one element");
+    }
+
+    @Test
+    void shouldRemoveElementFromSet() {
+        FSet<String> set = FSet.empty();
+
+        set = set.add("element1");
+        set = set.add("element2");
+
+        FSet<String> updatedSet = set.remove("element1");
+
+        assertFalse(updatedSet.contains("element1"), "Set should not contain 'element1' after removal");
+        assertTrue(updatedSet.contains("element2"), "Set should still contain 'element2'");
+        assertEquals(1, updatedSet.size(), "Size should be 1 after removing one element");
+    }
+
+    @Test
+    void shouldNotChangeSetWhenRemovingNonExistentElement() {
+        FSet<String> set = FSet.empty();
+
+        set = set.add("element1");
+        set = set.add("element2");
+
+        FSet<String> updatedSet = set.remove("nonExistentElement");
+
+        assertEquals(set, updatedSet, "Set should not change when removing non-existent element");
+        assertEquals(2, updatedSet.size(), "Size should remain 2 after attempting to remove non-existent element");
+    }
+
+    @Test
+    void shouldNotFailWhenRemovingFromEmptySet() {
+        FSet<String> set = FSet.empty();
+
+        FSet<String> updatedSet = set.remove("element1");
+
+        assertEquals(set, updatedSet, "Removing from an empty set should return the same empty set");
+        assertEquals(0, updatedSet.size(), "Size should still be 0 after removing from an empty set");
+    }
 }
