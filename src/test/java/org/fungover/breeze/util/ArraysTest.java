@@ -1,6 +1,5 @@
-package org.fungover.breeze;
+package org.fungover.breeze.util;
 
-import org.fungover.breeze.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
