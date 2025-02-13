@@ -6,23 +6,45 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * A class that represents a lazily evaluated value of type `T`.
+ * The value is computed only when it is first accessed, and the result is cached for subsequent accesses.
+ *
+ * @param <T> the type of the value
+ */
 public final class Lazy<T> {
     private final Supplier<? extends T> supplier;
     private T value;
     private volatile boolean evaluated;
 
-    /// Private constructor for lazy initialization
+    /**
+     * Private constructor for lazy initialization.
+     *
+     * @param supplier the supplier function that computes the value
+     */
     private Lazy(Supplier<? extends T> supplier) {
         this.supplier = supplier;
         this.evaluated = false;
     }
 
-    /// Static factory method to create a new lazy instance
+    /**
+     * Static factory method to create a new lazy instance.
+     *
+     * @param <T> the type of the value
+     * @param supplier the supplier function that computes the value
+     * @return a new lazy instance
+     */
     public static <T> Lazy<T> of(Supplier<? extends T> supplier) {
         return new Lazy<>(supplier);
     }
 
-    /// Static factory method to create a pre-initialized lazy instance
+    /**
+     * Static factory method to create a pre-initialized lazy instance.
+     *
+     * @param <T> the type of the value
+     * @param value the value to be stored in the lazy instance
+     * @return a new lazy instance with the given value
+     */
     public static <T> Lazy<T> value(T value) {
         Lazy<T> lazy = new Lazy<>(() -> value);
         lazy.evaluated = true;
@@ -30,7 +52,11 @@ public final class Lazy<T> {
         return lazy;
     }
 
-    /// Retrieves or computes the value
+    /**
+     * Retrieves or computes the value.
+     *
+     * @return the value
+     */
     public T get() {
         if (!evaluated) {
             synchronized (this) {
@@ -43,22 +69,43 @@ public final class Lazy<T> {
         return value;
     }
 
-    /// Checks if the value has been evaluated
+    /**
+     * Checks if the value has been evaluated.
+     *
+     * @return true if the value has been evaluated, false otherwise
+     */
     public boolean isEvaluated() {
         return evaluated;
     }
 
-    /// Transforms value lazily
+    /**
+     * Transforms the value lazily using the given mapper function.
+     *
+     * @param <U> the type of the transformed value
+     * @param mapper the function to transform the value
+     * @return a new lazy instance with the transformed value
+     */
     public <U> Lazy<U> map(Function<? super T, ? extends U> mapper) {
         return Lazy.of(() -> mapper.apply(get()));
     }
 
-    /// Monadic bind operation
+    /**
+     * Performs a monadic bind operation on the lazy value.
+     *
+     * @param <U> the type of the transformed value
+     * @param mapper the function that maps the value to a new lazy instance
+     * @return a new lazy instance with the transformed value
+     */
     public <U> Lazy<U> flatMap(Function<? super T, Lazy<U>> mapper) {
         return Lazy.of(() -> mapper.apply(get()).get());
     }
 
-    /// Returns Option lazily
+    /**
+     * Returns an optional value lazily based on the given predicate.
+     *
+     * @param predicate the predicate to filter the value
+     * @return a new lazy instance with an optional value
+     */
     public Lazy<Optional<T>> filter(Predicate<? super T> predicate) {
         return Lazy.of(() -> {
             T val = get();
@@ -66,12 +113,20 @@ public final class Lazy<T> {
         });
     }
 
-    /// Converts to Option
+    /**
+     * Converts the lazy value to an optional value.
+     *
+     * @return an optional value
+     */
     public Optional<T> toOption() {
         return isEvaluated() ? Optional.ofNullable(value) : Optional.empty();
     }
 
-    /// Converts to Try
+    /**
+     * Converts the lazy value to a `Try` instance.
+     *
+     * @return a `Try` instance
+     */
     public Try<T> toTry() {
         try {
             return Try.success(get());
@@ -80,7 +135,11 @@ public final class Lazy<T> {
         }
     }
 
-    /// Performs action when evaluated
+    /**
+     * Performs the given action when the value is evaluated.
+     *
+     * @param action the action to perform
+     */
     public void forEach(Consumer<? super T> action) {
         if (isEvaluated()) {
             action.accept(value);
@@ -88,6 +147,4 @@ public final class Lazy<T> {
             action.accept(get());
         }
     }
-
 }
-
