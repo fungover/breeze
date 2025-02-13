@@ -1,12 +1,10 @@
 package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.function.BiFunction;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ArraysTest {
+class ArraysTest {
 
     @Test
     void testZip_EqualLengthArrays() {
@@ -105,7 +103,7 @@ public class ArraysTest {
     void testWeaver_EmptyArrays() {
         String[] empty1 = {};
         String[] empty2 = {};
-        String[] result = new String[empty1.length + empty2.length];
+        String[] result = new String[0];
 
         Arrays.weaver(empty1, empty2, result);
         assertArrayEquals(new String[]{}, result);
