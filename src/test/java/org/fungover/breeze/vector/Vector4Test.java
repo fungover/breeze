@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 class Vector4Test {
 
@@ -24,7 +24,7 @@ class Vector4Test {
     }
 
     @Test
-    @DisplayName("Sub from vectpr")
+    @DisplayName("Sub from vector")
     void subFromVector(){
         Vector4 vector = new Vector4(6,6,6,6);
         Vector4 vector2 = new Vector4(3,3,3,3);
@@ -61,6 +61,14 @@ class Vector4Test {
                 () -> assertThat(vector.getW()).isEqualTo(3.0f),
                 () -> assertThat(vector.getZ()).isEqualTo(3.0f)
         );
+    }
+
+    @Test
+    @DisplayName("Correct dot product")
+    void correctDotProduct(){
+        Vector4 vector = new Vector4(3,3,3,3);
+        Vector4 vector2 = new Vector4(3,3,3,3);
+        assertThat(vector.dot(vector2)).isEqualTo(36.0f);
     }
 
 
