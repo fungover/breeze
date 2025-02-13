@@ -71,5 +71,12 @@ class Vector4Test {
         assertThat(vector.dot(vector2)).isEqualTo(36.0f);
     }
 
+    @Test
+    @DisplayName("Correct length")
+    void correctLength(){
+        Vector4 vector = new Vector4(3,3,3,3);
+        assertThat(vector.length()).isEqualTo(6.0f);
+    }
+
 
 }
