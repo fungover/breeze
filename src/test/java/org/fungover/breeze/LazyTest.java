@@ -23,7 +23,6 @@ class LazyTest {
         Supplier<String> supplier = () -> "Hej";
 
         Lazy<String> lazy = Lazy.of(supplier);
-
         assertNotNull(lazy);
     }
 
@@ -111,7 +110,7 @@ class LazyTest {
     }
 
     @Test
-    @DisplayName("lazy to option should return present when present and empty when empty")
+    @DisplayName("lazy toOption should return present when present and empty when empty")
     void lazyToOptionShouldReturnPresentWhenPresentAndEmptyWhenEmpty() {
         Lazy<Integer> lazy = Lazy.of(() -> 10);
         lazy.get();
@@ -121,8 +120,17 @@ class LazyTest {
         assertEquals(10, option.get(), "Option should contain value 10");
         assertNotEquals(11, option.get());
         assertNotEquals(9, option.get());
-        Lazy<Integer> lazy2 = Lazy.value(null);
-        assertFalse(lazy2.toOption().isPresent(), "Option should be empty");
+
+    }
+
+    @Test
+    @DisplayName("toOption should return empty with null value")
+    void toOptionShouldReturnEmpty(){
+        Lazy<Integer> lazyWithNullValue = Lazy.of(() -> null);
+        Optional<Integer> option = lazyWithNullValue.toOption();
+
+        assertThat(option).isNotPresent();
+        assertTrue(option.isEmpty());
     }
 
     @Test
@@ -173,6 +181,5 @@ class LazyTest {
         assertTrue(lazy.isEvaluated());
         assertNull(value);
     }
-
 
 }
