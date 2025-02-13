@@ -106,7 +106,7 @@ class DijkstraTest {
     @DisplayName("SourceNodeExistInUnvisitedNodes return true if node exist")
     void sourceNodeExistInUnvisitedNodesReturnTrueIfNodeExist() {
 
-        boolean nodeExists = dijkstra.isSourceNodeUnvisited(edges.get(0));
+        boolean nodeExists = dijkstra.isDestinationNodeUnvisited(edges.get(0));
 
         assertThat(nodeExists).isEqualTo(true);
     }
@@ -126,13 +126,13 @@ class DijkstraTest {
 
 
     @Test
-    @DisplayName("UnvisitedNodes should be empty after running findShortestPath")
-    void unvisitedNodesShouldBeEmptyAfterRunningFindShortestPath() {
+    @DisplayName("UnvisitedNodes should be empty after running findAllShortestPaths")
+    void unvisitedNodesShouldBeEmptyAfterRunningFindAllShortestPaths() {
         Node<String> end = nodes.getLast();
         Node<String> start = nodes.getFirst();
         boolean emptyList = true;
 
-        dijkstra.findShortestPath(graph, start, end);
+        dijkstra.findAllShortestPaths(graph, start);
 
         assertThat(dijkstra.getUnvisitedNodes().isEmpty()).isEqualTo(emptyList);
     }
