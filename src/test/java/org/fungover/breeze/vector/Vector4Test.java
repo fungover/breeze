@@ -148,4 +148,18 @@ class Vector4Test {
         );
     }
 
+    @Test
+    @DisplayName("Find the max value of two vectors")
+    void findTheMaxValueOfTwoVectors(){
+        Vector4 vector = new Vector4(1, 4, 5, 8);
+        Vector4 vector2 = new Vector4(2, 3, 6, 7);
+        var v = vector.max(vector, vector2);
+        assertAll(
+                () -> assertThat(v.getX()).isEqualTo(2.0f),
+                () -> assertThat(v.getY()).isEqualTo(4.0f),
+                () -> assertThat(v.getZ()).isEqualTo(6.0f),
+                () -> assertThat(v.getW()).isEqualTo(8.0f)
+        );
+    }
+
 }
