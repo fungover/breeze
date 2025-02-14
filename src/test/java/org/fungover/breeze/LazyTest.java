@@ -157,14 +157,13 @@ class LazyTest {
     }
 
     @Nested
-    class testsForThreadSafety{
+    class testsForThreadSafety {
+        final int[] calculationCount = {0};
+        final long delayInNanos = 1_000_000_000;
 
         @Test
         @DisplayName("Thread safety when counting value in multiple threads")
-        void threadSafetyTest() throws InterruptedException, ExecutionException {
-
-            final int[] calculationCount = {0};
-            final long delayInNanos = 1_000_000_000;
+        void threadSafetyWhenCountingValueInMultipleThreads() throws InterruptedException, ExecutionException {
 
             Lazy<Integer> lazy = Lazy.of(() -> {
                 calculationCount[0]++;
@@ -195,10 +194,43 @@ class LazyTest {
             }
         }
 
+        @Test
+        @DisplayName("Memory consistency when multiple threads access Lazy value")
+        void memoryConsistencyWhenMultipleThreadsAccessLazyValue() throws InterruptedException, ExecutionException {
+
+            Lazy<Integer> lazy = Lazy.of(() -> {
+                calculationCount[0]++;
+                long start = System.nanoTime();
+
+                while (System.nanoTime() - start < delayInNanos) {
+                    LockSupport.parkNanos(1);
+                }
+
+                return 123;
+            });
+
+            try (ExecutorService executor = Executors.newFixedThreadPool(10)) {
+                List<Callable<Integer>> tasks = new ArrayList<>();
+                for (int i = 0; i < 10; i++) {
+                    tasks.add(lazy::get);
+                }
+
+                List<Future<Integer>> results = executor.invokeAll(tasks);
+
+                Integer expectedValue = 123;
+                for (Future<Integer> result : results) {
+                    assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
+                }
+
+                assertSame(lazy.get(), expectedValue, "All threads should see the same value");
+            }
+        }
+
+
     }
 
     @Nested
-    class testsNullValues{
+    class testsNullValues {
 
         @Test
         @DisplayName("Lazy method should not compute before call")
