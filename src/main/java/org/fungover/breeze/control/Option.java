@@ -230,13 +230,24 @@ public abstract class Option<T> implements Serializable {
 
     public abstract Option<T> filter(Predicate<? super T> predicate);
 
-    /**
-     * Performs the given action if a value is present in this Option.
-     * If this is a Some, the action is executed with the contained value.
-     * If this is None, no action is performed.
-     *
-     * @param action The action to perform on the contained value.
-     */
+        /**
+         * Performs the given action if a value is present in this Option.
+         * <p>
+         * If this is a {@code Some}, the action is executed with the contained value.
+         * If this is {@code None}, no action is performed.
+         *
+         * <p>Example usage:
+         * <pre>{@code
+         * Option<String> name = Option.some("Alice");
+         * name.forEach(System.out::println); // Prints "Alice"
+         *
+         * Option<String> empty = Option.of(null);
+         * empty.forEach(System.out::println); // Does nothing
+         * }</pre>
+         *
+         * @param action The action to perform on the contained value.
+         * @throws NullPointerException if {@code action} is null.
+         */
 
     public abstract void forEach(Consumer<? super T> action);
 
