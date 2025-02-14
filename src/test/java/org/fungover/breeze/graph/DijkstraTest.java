@@ -25,19 +25,19 @@ class DijkstraTest {
                 new Node<>("D"), new Node<>("E"), new Node<>("F")
         );
 
-         edges = List.of(
-                 new Edge<>(nodes.get(0), nodes.get(2), 2),  //A to C
-                 new Edge<>(nodes.get(0), nodes.get(1), 5),  //A to B
-                 new Edge<>(nodes.get(1), nodes.get(2), 1),  //B to C
-                 new Edge<>(nodes.get(1), nodes.get(3), 4),  //B to D
-                 new Edge<>(nodes.get(1), nodes.get(4), 2),  //B to E
-                 new Edge<>(nodes.get(2), nodes.get(4), 7),  //C to E
-                 new Edge<>(nodes.get(3), nodes.get(4), 6),  //D to E
-                 new Edge<>(nodes.get(3), nodes.get(5), 3),  //D to F
-                 new Edge<>(nodes.get(4), nodes.get(5), 1)   //E to F
+        edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(2), 2),  //A to C
+                new Edge<>(nodes.get(0), nodes.get(1), 5),  //A to B
+                new Edge<>(nodes.get(1), nodes.get(2), 1),  //B to C
+                new Edge<>(nodes.get(1), nodes.get(3), 4),  //B to D
+                new Edge<>(nodes.get(1), nodes.get(4), 2),  //B to E
+                new Edge<>(nodes.get(2), nodes.get(4), 7),  //C to E
+                new Edge<>(nodes.get(3), nodes.get(4), 6),  //D to E
+                new Edge<>(nodes.get(3), nodes.get(5), 3),  //D to F
+                new Edge<>(nodes.get(4), nodes.get(5), 1)   //E to F
         );
 
-        graph = new  WeightedGraph<>(nodes, edges);
+        graph = new WeightedGraph<>(nodes, edges);
         dijkstra = new Dijkstra<>(graph);
 
         //Update start node to 0
@@ -197,14 +197,14 @@ class DijkstraTest {
         Node<Integer> start = nodesInteger.getFirst();
         Node<Integer> end = nodesInteger.getLast();
 
-        dijkstraInteger.findShortestPath(graphInteger, start , end);
+        dijkstraInteger.findShortestPath(graphInteger, start, end);
 
         assertThat(dijkstraInteger.getPath(end)).isEqualTo(expectedNodes);
     }
 
     @Test
     @DisplayName("Instantiate edge with negative weight should throw exception")
-    void instantiateEdgeWithNegativeWeightShouldThrowException () {
+    void instantiateEdgeWithNegativeWeightShouldThrowException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             Edge<String> edgeWithNegativeWeight = new Edge<>(nodes.get(0), nodes.get(1), -0.1);
         });
@@ -215,28 +215,83 @@ class DijkstraTest {
     @Test
     @DisplayName("FindShortestPath should not update distance of self looping nodes")
     void findShortestPathShouldNotUpdateDistanceOfSelfLoopingNodes() {
-        Dijkstra<String> dijkstraSelfLoop;
         WeightedGraph<String> graphSelfLoop;
-        List<Node<String>> nodes;
-        List<Edge<String>> edges;
+        Dijkstra<String> dijkstraSelfLoop;
 
-            nodes = List.of(
-                    new Node<>("A"),
-                    new Node<>("B"));
+        nodes = List.of(
+                new Node<>("A"),
+                new Node<>("B"));
 
-            edges = List.of(
-                    new Edge<>(nodes.get(0), nodes.get(0), 10),
-                    new Edge<>(nodes.get(0), nodes.get(1), 4));
-
+        edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(0), 10),
+                new Edge<>(nodes.get(0), nodes.get(1), 4));
 
         graphSelfLoop = new WeightedGraph<>(nodes, edges);
         dijkstraSelfLoop = new Dijkstra<>(graphSelfLoop);
 
-        dijkstraSelfLoop.findShortestPath(graphSelfLoop, nodes.get(0), nodes.get(0));
+        dijkstraSelfLoop.findShortestPath(graphSelfLoop, nodes.get(0), nodes.get(1));
 
         assertAll(
                 () -> assertThat(nodes.get(0).getDistance()).isEqualTo(0),
                 () -> assertThat(nodes.get(1).getDistance()).isEqualTo(4)
+        );
+    }
+
+    @Test
+    @DisplayName("FindShortestPath should handle cyclic graphs")
+    void findShortestPathShouldHandleCyclicGraphs() {
+        WeightedGraph<String> graphCyclic;
+        Dijkstra<String> dijkstraCyclic;
+
+        nodes = List.of(
+                new Node<>("A"),
+                new Node<>("B"),
+                new Node<>("C")
+        );
+
+        edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(1), 1),
+                new Edge<>(nodes.get(1), nodes.get(2), 2),
+                new Edge<>(nodes.get(2), nodes.get(0), 3)
+        );
+
+        graphCyclic = new WeightedGraph<>(nodes, edges);
+        dijkstraCyclic = new Dijkstra<>(graphCyclic);
+
+        List<Node<String>> expectedPath = new ArrayList<>();
+        expectedPath.add(nodes.get(0));
+        expectedPath.add(nodes.get(1));
+        expectedPath.add(nodes.get(2));
+
+        dijkstra.findShortestPath(graphCyclic, nodes.get(0), nodes.get(2));
+
+        List<Node<String>> path = dijkstraCyclic.getPath(nodes.get(2));
+        assertThat(path).isEqualTo(expectedPath);
+    }
+
+    @Test
+    @DisplayName("Dijkstra should return infinity for disconnected nodes")
+    void dijkstraShouldHandleDisconnectedGraphs() {
+        List<Node<String>> nodes = List.of(
+                new Node<>("A"),
+                new Node<>("B"),
+                new Node<>("C"),
+                new Node<>("D")
+        );
+
+        List<Edge<String>> edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(1), 5),
+                new Edge<>(nodes.get(2), nodes.get(3), 3)
+        );
+
+        WeightedGraph<String> disconnectedGraph = new WeightedGraph<>(nodes, edges);
+        Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
+
+        dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
+
+        assertAll(
+                () -> assertThat(nodes.get(3).getDistance()).isEqualTo(Double.MAX_VALUE),
+                () -> assertThat(dijkstra.getPath(nodes.get(3)).isEmpty())
         );
     }
 
