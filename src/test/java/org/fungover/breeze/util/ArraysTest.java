@@ -54,7 +54,18 @@ class ArraysTest {
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(arrayWithNull, size));
         assertThat(exception.getMessage()).isEqualTo("Element must not be null");
+    }
 
+
+    @Test
+    @DisplayName("Chunking list with null element should throw exception")
+    void chunkingListWithNullElementShouldThrowException() {
+        List<Integer> listWithNull = new ArrayList<>(List.of(1, 2, 3));
+        listWithNull.add(null);
+        int size = 3;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunkList(listWithNull, size));
+        assertThat(exception.getMessage()).isEqualTo("Element must not be null");
     }
 
     @Test
