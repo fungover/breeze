@@ -113,7 +113,7 @@ class DijkstraTest {
     }
 
     @Test
-    @DisplayName("findShortestPath should stop when reaching end node")
+    @DisplayName("FindShortestPath should stop when reaching end node")
     void findShortestPathShouldStopWhenReachingEndNode() {
         Node<String> end = nodes.getLast();
         Node<String> start = nodes.getFirst();
@@ -163,7 +163,7 @@ class DijkstraTest {
     }
 
     @Test
-    @DisplayName("findShortestPath with Integer nodes")
+    @DisplayName("FindShortestPath with Integer nodes")
     void findShortestPathWithIntegerNodes() {
         List<Node<Integer>> nodesInteger;
         List<Edge<Integer>> edgesInteger;
@@ -210,6 +210,34 @@ class DijkstraTest {
         });
 
         assertThat(exception.getMessage()).isEqualTo("Weight can't be a negative number");
+    }
+
+    @Test
+    @DisplayName("FindShortestPath should not update distance of self looping nodes")
+    void findShortestPathShouldNotUpdateDistanceOfSelfLoopingNodes() {
+        Dijkstra<String> dijkstraSelfLoop;
+        WeightedGraph<String> graphSelfLoop;
+        List<Node<String>> nodes;
+        List<Edge<String>> edges;
+
+            nodes = List.of(
+                    new Node<>("A"),
+                    new Node<>("B"));
+
+            edges = List.of(
+                    new Edge<>(nodes.get(0), nodes.get(0), 10),
+                    new Edge<>(nodes.get(0), nodes.get(1), 4));
+
+
+        graphSelfLoop = new WeightedGraph<>(nodes, edges);
+        dijkstraSelfLoop = new Dijkstra<>(graphSelfLoop);
+
+        dijkstraSelfLoop.findShortestPath(graphSelfLoop, nodes.get(0), nodes.get(0));
+
+        assertAll(
+                () -> assertThat(nodes.get(0).getDistance()).isEqualTo(0),
+                () -> assertThat(nodes.get(1).getDistance()).isEqualTo(4)
+        );
     }
 
 }
