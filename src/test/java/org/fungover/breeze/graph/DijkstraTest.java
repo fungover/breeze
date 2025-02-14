@@ -4,11 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DijkstraTest {
 
@@ -135,6 +136,30 @@ class DijkstraTest {
         dijkstra.findAllShortestPaths(graph, start);
 
         assertThat(dijkstra.getUnvisitedNodes().isEmpty()).isEqualTo(emptyList);
+    }
+
+    @Test
+    @DisplayName("GetDistance return the target distance")
+    void getDistanceReturnTheTargetDistance() {
+        double expectedDistance = 8;
+
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
+
+        assertThat(dijkstra.getDistance(nodes.get(5))).isEqualTo(expectedDistance);
+    }
+
+    @Test
+    @DisplayName("GetPath returns the path from start node to end node")
+    void getPathReturnsThePathFromStartNodeToEndNode() {
+        List<Node<String>> expectedNodes = new ArrayList<>();
+        expectedNodes.add(nodes.get(0));
+        expectedNodes.add(nodes.get(1));
+        expectedNodes.add(nodes.get(4));
+        expectedNodes.add(nodes.get(5));
+
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(5));
+
+        assertThat(dijkstra.getPath(nodes.get(5))).isEqualTo(expectedNodes);
     }
 
 }

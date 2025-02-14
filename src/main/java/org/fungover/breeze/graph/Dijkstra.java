@@ -8,7 +8,6 @@ public class Dijkstra<T> {
     public List<Node<T>> visitedNodes = new ArrayList<>();
     public WeightedGraph<T> graph;
 
-
     public Dijkstra(WeightedGraph<T> graph) {
         unvisitedNodes.addAll(graph.getNodes());
         this.graph = graph;
@@ -21,11 +20,9 @@ public class Dijkstra<T> {
      * @param graph the weighted graph containing the nodes and edges
      */
     public void updateDistance(Node<T> node, WeightedGraph<T> graph) {
-        node.setDistance(0);
-        Collection<Edge<T>> edges = new ArrayList<>(graph.getEdges(node));
+        Collection<Edge<T>> edges = graph.getEdges(node);
         for (Edge<T> edge : edges) {
             if (isDestinationNodeUnvisited(edge)) {
-                System.out.println(edge.getSource());
                 double sum = edge.getSource().getDistance() + edge.getWeight();
 
                 if (sum < edge.getDestination().getDistance()) {
@@ -46,7 +43,7 @@ public class Dijkstra<T> {
         edge.getDestination().setPreviousNode(node);
     }
 
-    public void markNodeAsVisited (Node<T> currentNode) {
+    public void markNodeAsVisited(Node<T> currentNode) {
         visitedNodes.add(currentNode);
         unvisitedNodes.remove(currentNode);
     }
@@ -107,6 +104,7 @@ public class Dijkstra<T> {
     }
 
     public List<Node<T>> getUnvisitedNodes() {
+        unvisitedNodes.forEach(System.out::println);
         return unvisitedNodes;
     }
 
@@ -115,10 +113,13 @@ public class Dijkstra<T> {
     }
 
     /**
-     * Prints the path from the start node to the target node
-     * @param target the end node
+     * Returns the path from the start node to the target node.
+     * The path is represented as a list, starting from the start node to the target node
+     *
+     * @param target the end node for which the path is needed
+     * @return the list containing the nodes from the start node to the target node
      */
-    public void getPath(Node<T> target) {
+    public List<Node<T>> getPath(Node<T> target) {
         List<Node<T>> path = new ArrayList<>();
         Node<T> currentNode = target;
 
@@ -128,60 +129,16 @@ public class Dijkstra<T> {
         }
 
         Collections.reverse(path);
-        System.out.println("Path = " + path);
+        return path;
     }
 
     /**
-     * Prints the distance from the start node to the target node
+     * Return distance from the target node
+     *
      * @param target the end node
+     * @return the target nodes distance
      */
-    public void getDistance(Node<T> target) {
-        System.out.println("Distance from start to end is " + target.getDistance());
+    public double getDistance(Node<T> target) {
+        return target.getDistance();
     }
-
-    public void findShortestPathFacit(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
-        // Sätt startnodens avstånd till 0, eftersom avståndet från startnoden till sig själv är 0
-        start.setDistance(0);
-
-        // Skapa en prioritetskö som prioriterar noder baserat på deras nuvarande avstånd
-        PriorityQueue<Node<T>> priorityQueue = new PriorityQueue<>(Comparator.comparing(Node::getDistance));
-
-        // Lägg till startnoden i prioritetskön
-        priorityQueue.add(start);
-
-        // Kör en loop så länge prioritetskön inte är tom
-        while (!priorityQueue.isEmpty()) {
-            // Ta bort och returnera noden med det minsta avståndet från kön
-            Node<T> currentNode = priorityQueue.poll();
-
-            // Om den aktuella noden är slutnoden, avsluta loopen
-            if (currentNode.equals(end)) break;
-
-            // Iterera genom alla kanter som är anslutna till den aktuella noden
-            for (Edge<T> edge : graph.getEdges(currentNode)) {
-                // Hämta målnoden som är ansluten genom kanten
-                Node<T> adjacentNode = edge.getDestination();
-
-                // Beräkna det nya möjliga avståndet till den angränsande noden
-                double newDist = currentNode.getDistance() + edge.getWeight();
-
-                // Om det nya beräknade avståndet är kortare än det nuvarande lagrade avståndet för den angränsande noden
-                if (newDist < adjacentNode.getDistance()) {
-                    // Uppdatera den angränsande nodens avstånd med det nya kortare avståndet
-                    adjacentNode.setDistance(newDist);
-
-                    // Sätt den aktuella noden som föregående nod för den angränsande noden
-                    adjacentNode.setPreviousNode(currentNode);
-
-                    // Lägg till den angränsande noden i prioritetskön så att den kan behandlas senare
-                    priorityQueue.add(adjacentNode);
-
-//
-//                    public void findAllShortestPaths (WeightedGraph < T > graph, Node < T > start){
-
-                    }
-
-                }
-            }
-        }
-    }
+}

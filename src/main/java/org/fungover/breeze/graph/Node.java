@@ -1,5 +1,6 @@
 package org.fungover.breeze.graph;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Node<T> {
