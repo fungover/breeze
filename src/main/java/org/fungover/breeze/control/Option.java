@@ -296,4 +296,10 @@ public abstract class Option<T> implements Serializable {
 
     public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
+
+        public static <T> Option<T> ofNullable(T value) {
+            return value != null ? new Some<>(value) : None.getInstance();
+        }
+
+
 }
