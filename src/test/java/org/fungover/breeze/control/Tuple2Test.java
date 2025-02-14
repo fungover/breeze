@@ -23,7 +23,7 @@ class Tuple2Test {
         @DisplayName("Call to .of() method with any null argument should throw NullPointerException")
         void callToOfGivenAnyNullArgumentShouldThrowNullPointerException() {
 
-            assertAll (
+            assertAll(
                     () -> assertThatThrownBy(() -> Tuple2.of(null, 1))
                             .isInstanceOf(NullPointerException.class)
                             .hasMessage("Argument cannot be null"),
@@ -40,7 +40,7 @@ class Tuple2Test {
 
             assertAll(
                     () -> assertThat(Tuple2.of(o1, o2).first()).isEqualTo(o1),
-                    () -> assertThat(Tuple2.of(o1,o2).second()).isEqualTo(o2)
+                    () -> assertThat(Tuple2.of(o1, o2).second()).isEqualTo(o2)
             );
         }
     }
@@ -165,7 +165,7 @@ class Tuple2Test {
 
         @Test
         @DisplayName("Call to map1 with string function should change first element")
-        void callToMap1WithStringFunctionShouldChangeFirstElement(){
+        void callToMap1WithStringFunctionShouldChangeFirstElement() {
 
             var tuple2 = Tuple2.of("A", "A");
             var map1 = tuple2.map1(e -> e.concat("BC"));
@@ -225,7 +225,7 @@ class Tuple2Test {
                 "A, A, B, A"
         })
         @DisplayName("Call to compareTo should return negative integer for a Tuple2 object that is lesser than passed compare to object.")
-        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void  callToCompareToShouldReturnNegativeIntegerForLesser(T1 m1, T2 m2, T1 l1, T2 l2) {
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callToCompareToShouldReturnNegativeIntegerForLesser(T1 m1, T2 m2, T1 l1, T2 l2) {
 
             var tuple1 = Tuple2.of(m1, m2);
             var tuple2 = Tuple2.of(l1, l2);
@@ -241,7 +241,7 @@ class Tuple2Test {
                 "B, A, A, A"
         })
         @DisplayName("Call to compareTo should return positive integer for a Tuple2 object that is greater than passed compare to object.")
-        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void  callToCompareToShouldReturnPositiveIntegerForGreater(T1 m1, T2 m2, T1 l1, T2 l2) {
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callToCompareToShouldReturnPositiveIntegerForGreater(T1 m1, T2 m2, T1 l1, T2 l2) {
 
             var tuple1 = Tuple2.of(m1, m2);
             var tuple2 = Tuple2.of(l1, l2);
@@ -251,16 +251,16 @@ class Tuple2Test {
 
         @Test
         @DisplayName("Call to equals should return false for null argument")
-        void callToEqualsShouldReturnFalseForNullArgument(){
+        void callToEqualsShouldReturnFalseForNullArgument() {
 
-            var tuple2 = Tuple2.of(1,2);
+            var tuple2 = Tuple2.of(1, 2);
 
             assertThat(tuple2.equals(null)).isEqualTo(false);
         }
 
         @Test
         @DisplayName("Call to hashCode with equal Tuple2 objects should return equal hashcodes")
-        void callToHashCodeWithEqualTuple2ObjectsShouldReturnEqualHashCode(){
+        void callToHashCodeWithEqualTuple2ObjectsShouldReturnEqualHashCode() {
 
             var firstTuple2 = Tuple2.of("A", 1);
             var secondTuple2 = Tuple2.of("A", 1);
@@ -270,7 +270,7 @@ class Tuple2Test {
 
         @Test
         @DisplayName("Call to hashCode with unequal Tuple2 objects should return unequal hashcodes")
-        void callToHashCodeWithUnequalTuple2ObjectsShouldReturnEqualHashCode(){
+        void callToHashCodeWithUnequalTuple2ObjectsShouldReturnEqualHashCode() {
 
             var firstTuple2 = Tuple2.of("A", 1);
             var secondTuple2 = Tuple2.of("B", 2);
@@ -280,7 +280,7 @@ class Tuple2Test {
 
         @Test
         @DisplayName("Call to toString should return specified string with elements")
-        void callToToStringShouldReturnSpecifiedStringWithElements(){
+        void callToToStringShouldReturnSpecifiedStringWithElements() {
 
             var intTuple2 = Tuple2.of(1, 2).toString();
             var stringTuple2 = Tuple2.of("A", "B").toString();
@@ -308,8 +308,9 @@ class Tuple2Test {
         }
 
         class MySubClass extends MyClass {
-            @Override public int compareTo(MyClass o) {
-                if(o instanceof MySubClass) {
+            @Override
+            public int compareTo(MyClass o) {
+                if (o instanceof MySubClass) {
                     return 0;
                 }
                 return 1;
