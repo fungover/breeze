@@ -68,6 +68,7 @@ public class Dijkstra<T> {
      * @param end the end node
      */
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
+        handleCyclicGraphs(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
 
@@ -84,6 +85,24 @@ public class Dijkstra<T> {
             }
             currentNode = optionalNode.get();
         }
+    }
+
+    /**
+     * Handles cyclic graphs by resetting the distance and previous node information for all nodes
+     * in the graph. This method ensures that Dijkstra's algorithm can be run multiple times without
+     * interference from previous calculations. It clears the list of unvisited nodes and repopulates
+     * it with all nodes in the graph.
+     *
+     * @param graph the weighted graph containing the nodes and edges
+     */
+    private void handleCyclicGraphs(WeightedGraph<T> graph) {
+        for (Node<T> node : graph.getNodes()) {
+            node.setDistance(Double.MAX_VALUE);
+            node.setPreviousNode(null);
+        }
+
+        unvisitedNodes.clear();
+        unvisitedNodes.addAll(graph.getNodes());
     }
 
     /**
