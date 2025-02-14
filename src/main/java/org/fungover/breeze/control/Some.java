@@ -14,7 +14,7 @@ public final class Some<T> extends Option<T> {
     private final T value;
 
     public Some(final T value) {
-        this.value = Objects.requireNonNull(value, "Some cannot contain a null value");
+        this.value = Objects.requireNonNull(value, "Cannot create Some with null value. Use None instead.");
     }
 
     @Override
@@ -133,9 +133,11 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+        Objects.requireNonNull(mapper, "Mapper function must not be null");
         Option<U> result = mapper.apply(value);
-        return Objects.requireNonNullElse(result, None.getInstance());
+        return result != null ? result : None.getInstance();
     }
+
 
     /**
      * Filters the Option based on a predicate.
