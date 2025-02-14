@@ -8,18 +8,18 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.Optional;
 
-    /**
-     * A generic container type representing an optional value.
-     * <p>
-     * This abstract class serves as the base for {@code Some<T>} (which contains a value)
-     * and {@code None<T>} (which represents the absence of a value).
-     * It provides a functional alternative to {@code null}, ensuring safer handling
-     * of optional values.
-     *
-     * <p>This class is {@link Serializable}, allowing instances to be persisted or transmitted.
-     *
-     * @param <T> the type of the contained value
-     */
+/**
+ * A generic container type representing an optional value.
+ * <p>
+ * This abstract class serves as the base for {@code Some<T>} (which contains a value)
+ * and {@code None<T>} (which represents the absence of a value).
+ * It provides a functional alternative to {@code null}, ensuring safer handling
+ * of optional values.
+ *
+ * <p>This class is {@link Serializable}, allowing instances to be persisted or transmitted.
+ *
+ * @param <T> the type of the contained value
+ */
 
 public abstract class Option<T> implements Serializable {
 
@@ -57,17 +57,17 @@ public abstract class Option<T> implements Serializable {
     @Override
     public abstract int hashCode();
 
-        /**
-         * Returns a string representation of this {@code Option}.
-         * <p>
-         * The format follows these conventions:
-         * <ul>
-         *   <li>For {@code Some<T>}, it returns {@code "Some(value)"} where {@code value} is the string representation of the contained value.</li>
-         *   <li>For {@code None<T>}, it returns {@code "None"}.</li>
-         * </ul>
-         *
-         * @return a string representation of this {@code Option}
-         */
+    /**
+     * Returns a string representation of this {@code Option}.
+     * <p>
+     * The format follows these conventions:
+     * <ul>
+     *   <li>For {@code Some<T>}, it returns {@code "Some(value)"} where {@code value} is the string representation of the contained value.</li>
+     *   <li>For {@code None<T>}, it returns {@code "None"}.</li>
+     * </ul>
+     *
+     * @return a string representation of this {@code Option}
+     */
 
     @Override
     public abstract String toString();
@@ -77,7 +77,7 @@ public abstract class Option<T> implements Serializable {
      * Creates an {@code Option<T>} instance based on the provided value.
      * <p>
      * If the value is non-null, it returns a {@code Some<T>} instance wrapping the value.
-     * Otherwise, it returns a singleton instance of {@code None<T>}.
+     * Otherwise, it returns the singleton instance of {@code None<T>}.
      *
      * @param value the value to wrap in an {@code Option}
      * @param <T>   the type of the value
@@ -132,32 +132,30 @@ public abstract class Option<T> implements Serializable {
     }
 
     /**
-     * Gets the contained value.
+     * Retrieves the contained value.
+     *
      * @return the contained value
-     * @throws UnsupportedOperationException if called on None
+     * @throws UnsupportedOperationException if this is {@code None}
      */
-
     public abstract T get();
 
     /**
-     * Returns the value if present, otherwise returns the provided default value.
+     * Returns the contained value if present, otherwise returns the provided default value.
+     *
      * @param other the default value
-     * @return the contained value or other
+     * @return the contained value or {@code other} if this is {@code None}
      */
-
     public abstract T getOrElse(T other);
 
     /**
      * Returns the contained value if present; otherwise, computes and returns a default value using the provided supplier.
      *
      * <p>This method ensures lazy evaluation: the supplier is only invoked if this is {@code None}.
-     * It is useful when computing a fallback value dynamically.
      *
-     * @param supplier a {@link Supplier} providing a default value if this is {@code None}.
-     * @return the contained value if present, otherwise the computed default value.
-     * @throws NullPointerException if {@code supplier} is null.
+     * @param supplier a {@link Supplier} providing a default value if this is {@code None}
+     * @return the contained value if present, otherwise the computed default value
+     * @throws NullPointerException if {@code supplier} is null
      */
-
     public abstract T getOrElseGet(Supplier<? extends T> supplier);
 
     /**
@@ -278,9 +276,6 @@ public abstract class Option<T> implements Serializable {
      * Transforms this Option by applying a function to its value if present,
      * or returns a default value if it is None.
      *
-     * <p>This method enables functional-style exhaustive handling of Some and None cases.
-     * It is useful for pattern-matching scenarios, avoiding explicit null checks.
-     *
      * <p>Behavior:
      * <ul>
      *   <li>If this is {@code Some}, applies {@code ifPresent} to the value and returns the result.</li>
@@ -293,7 +288,6 @@ public abstract class Option<T> implements Serializable {
      * @return The computed value from either {@code ifNone} or {@code ifPresent}.
      * @throws NullPointerException if {@code ifNone} or {@code ifPresent} is null.
      */
-
     public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
 
