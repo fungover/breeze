@@ -45,7 +45,7 @@ public final class None<T> extends Option<T> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof None;
+        return this == obj;
     }
 
     @Override
