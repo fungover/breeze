@@ -4,7 +4,7 @@ package org.fungover.breeze.collection;
  * Node class that represent a datapoint for tree like data structure.
  * @param <T> represents any valid data type.
  */
-public class Node <T> {
+class Node <T > {
 
     /**
      * value stored in node with any data type
@@ -33,6 +33,7 @@ public class Node <T> {
 
     /**
      * Constructor to create instance of node
+     *
      * @param value stored in node
      */
     public Node(T value) {
@@ -50,10 +51,27 @@ public class Node <T> {
 
     /**
      * Getter method for value field of Node.
+     *
      * @return the stored value in Node.
      */
     public T getValue() {
         return value;
     }
 
+
+//    public class HashCodeWrapper<T> implements Comparable<HashCodeWrapper<T>> {
+//        private final T value;
+//        private final int hashCode;
+//
+//        public HashCodeWrapper(T value) {
+//            this.value = value;
+//            this.hashCode = value.hashCode();
+//        }
+//
+//        public T getValue() {
+//            return
+//
+//        }
+    // implement comparable hash and equals.
+//
 }
