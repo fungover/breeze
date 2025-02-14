@@ -63,6 +63,11 @@ public class Arrays {
             return second;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+
         /**
          * Checks whether this pair is equal to another object.
          * Two pairs are considered equal if they have the same class and their elements are equal.
@@ -72,10 +77,10 @@ public class Arrays {
          */
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) return true; // If they are the same object in memory
-            if (obj == null || getClass() != obj.getClass()) return false; // Null or different class
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
 
-            Pair<?, ?> pair = (Pair<?, ?>) obj; // Type-safe casting
+            Pair<?, ?> pair = (Pair<?, ?>) obj;
             return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
         }
 
@@ -86,16 +91,17 @@ public class Arrays {
          * @return the hash code of this pair
          */
 
-    /**
-     * Pairs corresponding elements of two arrays into an array of Pairs.
-     *
-     * @param <T>    The type of the first array.
-     * @param <U>    The type of the second array.
-     * @param first  The first input array.
-     * @param second The second input array.
-     * @return An array of Pairs where each element contains one element from each input array.
-     * @throws IllegalArgumentException If the input arrays are null or have different lengths.
-     */
+        /**
+         * Pairs corresponding elements of two arrays into an array of Pairs.
+         *
+         * @param <T>    The type of the first array.
+         * @param <U>    The type of the second array.
+         * @param first  The first input array.
+         * @param second The second input array.
+         * @return An array of Pairs where each element contains one element from each input array.
+         * @throws IllegalArgumentException If the input arrays are null or have different lengths.
+         */
+    }
 
     public static <T, U> Pair<T, U>[] zip(T[] first, U[] second) {
         if (first == null || second == null) {

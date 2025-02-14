@@ -41,10 +41,10 @@ class ArraysTest {
         Arrays.Pair<String, String>[] result = Arrays.zip(first, second);
 
         assertEquals(2, result.length);
-        assertNull(result[0].first);
-        assertEquals("a", result[0].second);
-        assertEquals("b", result[1].first);
-        assertNull(result[1].second);
+        assertNull(result[0].getFirst());
+        assertEquals("a", result[0].getSecond());
+        assertEquals("b", result[1].getFirst());
+        assertNull(result[1].getSecond());
     }
     @Test
     void testZipWith_IntegerArrays() {
