@@ -8,6 +8,10 @@ import java.util.List;
 
 public class Arrays {
 
+   private Arrays() {
+       throw new IllegalStateException("Utility class");
+   }
+
 
     public static <T> T[][] chunk(T[] array, int size) {
 
