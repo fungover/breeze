@@ -251,13 +251,26 @@ public abstract class Option<T> implements Serializable {
 
     public abstract void forEach(Consumer<? super T> action);
 
-    /**
-     * Applies the given action to the value if present, and returns the same Option.
-     * This method is useful for debugging or logging without modifying the Option itself.
-     *
-     * @param action The action to perform on the contained value.
-     * @return This Option instance, unchanged.
-     */
+        /**
+         * Applies the given action to the value if present, and returns the same Option.
+         * <p>
+         * This method is useful for debugging or logging without modifying the Option itself.
+         * If this is {@code None}, the action is not executed, and the Option remains unchanged.
+         *
+         * <p>Example usage:
+         * <pre>{@code
+         * Option<String> name = Option.some("Alice");
+         * name.peek(value -> System.out.println("Debug: " + value));
+         * // Output: Debug: Alice
+         *
+         * Option<String> empty = Option.none();
+         * empty.peek(value -> System.out.println("This won't be printed"));
+         * }</pre>
+         *
+         * @param action The action to perform on the contained value.
+         * @return This Option instance, unchanged.
+         * @throws NullPointerException if {@code action} is null.
+         */
 
     public abstract Option<T> peek(Consumer<? super T> action);
 
