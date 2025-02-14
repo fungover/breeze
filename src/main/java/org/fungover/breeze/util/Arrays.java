@@ -15,7 +15,6 @@ public class Arrays {
         throw new IllegalStateException("Utility class");
     }
 
-
     /**
      * Helper class to represent a tuple (pair) of two elements.
      *
