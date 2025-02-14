@@ -22,6 +22,9 @@ public class Dijkstra<T> {
     public void updateDistance(Node<T> node, WeightedGraph<T> graph) {
         Collection<Edge<T>> edges = graph.getEdges(node);
         for (Edge<T> edge : edges) {
+            if (edge.getSource().equals(edge.getDestination())) {
+                continue;
+            }
             if (isDestinationNodeUnvisited(edge)) {
                 double sum = edge.getSource().getDistance() + edge.getWeight();
 
