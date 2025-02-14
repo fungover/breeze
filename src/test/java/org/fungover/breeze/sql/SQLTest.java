@@ -21,7 +21,7 @@ class SQLTest {
   void canSelectWhereClause() {
     String selectColumnsEqualTo = SQL.select().columns("id", "car").from("orders").where().column("id").equalTo(1).build();
 
-    assertThat(selectColumnsEqualTo).isEqualTo("SELECT id,car FROM orders WHERE id = 1");
+    assertThat(selectColumnsEqualTo).isEqualTo("SELECT id, car FROM orders WHERE id = 1");
   }
 
   @Test
@@ -61,5 +61,13 @@ class SQLTest {
     String emptyWhere = SQL.select().allColumns().from("my_table").where().column("").equalTo("user").build();
 
     assertThat(emptyWhere).isEqualTo("SELECT * FROM my_table");
+  }
+
+  @Test
+  @DisplayName("Group by clause can be added after from clause")
+  void groupByClauseCanBeAddedAfterFromClause() {
+    String groupBy = SQL.select().columns("first_name", "last_name").from("users").groupBy("first_name").build();
+
+    assertThat(groupBy).isEqualTo("SELECT first_name, last_name FROM users GROUP BY first_name");
   }
 }
