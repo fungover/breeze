@@ -3,12 +3,16 @@ package org.fungover.breeze;
 import org.fungover.breeze.control.Lazy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Nested;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Supplier;
 
 
@@ -17,144 +21,179 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LazyTest {
 
-    @Test
-    @DisplayName("Of method should return new Lazy supplier")
-    void ofMethodShouldReturnNewLazySupplier() {
-        Supplier<String> supplier = () -> "Hej";
 
-        Lazy<String> lazy = Lazy.of(supplier);
-        assertNotNull(lazy);
+    @Nested
+    class testsForPublicMethods {
+        @Test
+        @DisplayName("Of method should return new Lazy supplier")
+        void ofMethodShouldReturnNewLazySupplier() {
+            Supplier<String> supplier = () -> "Hej";
+
+            Lazy<String> lazy = Lazy.of(supplier);
+            assertNotNull(lazy);
+        }
+
+        @Test
+        @DisplayName("value should not be computed more than one time")
+        void valueShouldNotBeComputedMoreThanOneTime() {
+            AtomicInteger countedTimes = new AtomicInteger(0);
+            Lazy<String> lazy = Lazy.of(() -> {
+                countedTimes.incrementAndGet();
+                return "computed value";
+            });
+
+            String value1 = lazy.get();
+            String value2 = lazy.get();
+
+            assertEquals(1, countedTimes.get());
+            assertNotEquals(2, countedTimes.get());
+            assertEquals("computed value", value1);
+            assertEquals("computed value", value2);
+        }
+
+        @Test
+        @DisplayName("map should transform values")
+        void mapShouldTransformValues() {
+            Lazy<Integer> lazyInt = Lazy.of(() -> 100);
+            Lazy<String> lazyString = lazyInt.map(value -> "Number: " + value);
+            assertEquals("Number: 100", lazyString.get());
+
+            Lazy<Double> lazyDouble = Lazy.of(() -> 3.14);
+            Lazy<Integer> lazyIntFromDouble = lazyDouble.map(value -> (int) Math.round(value));
+            assertEquals(3, lazyIntFromDouble.get());
+        }
+
+        @Test
+        @DisplayName("flatMap should retriece element from lazy list")
+        void flatMapShouldRetrieveElementFromLazyList() {
+            Lazy<List<String>> lazyList = Lazy.of(() -> Arrays.asList("a", "b", "c"));
+            Lazy<String> flatMapped = lazyList.flatMap(list -> Lazy.of(() -> list.get(2)));
+
+            String result = flatMapped.get();
+            assertEquals("c", result);
+        }
+
+        @Test
+        @DisplayName("Lazy flatmap should return chain of transformed values")
+        void lazyFlatmapShouldReturnChainOfTransformedValues() {
+            Lazy<Integer> lazyInt = Lazy.of(() -> 666);
+            Lazy<String> lazyString = lazyInt
+                    .flatMap(i -> Lazy.of(() -> "The answer is " + i))
+                    .flatMap(s -> Lazy.of(s::toUpperCase));
+            assertEquals("THE ANSWER IS 666", lazyString.get());
+        }
+
+        @Test
+        @DisplayName("filter value calculates only once")
+        void filterValueCalculatesOnlyOnce() {
+            AtomicInteger counter = new AtomicInteger(0);
+            Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> {
+                counter.incrementAndGet();
+                return 89;
+            }).filter(i -> i > 88);
+
+            lazyOptional.get();
+            lazyOptional.get();
+            assertTrue(lazyOptional.get().isPresent());
+            assertEquals(1, counter.get());
+            assertEquals(89, lazyOptional.get().get().intValue());
+        }
+
+        @Test
+        @DisplayName("filter with predicate should return true")
+        void filterWithPredicateTrue() {
+            Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> 12)
+                    .filter(i -> i < 13);
+            assertTrue(lazyOptional.get().isPresent());
+            assertEquals(12, lazyOptional.get().get().intValue());
+        }
+
+        @Test
+        @DisplayName("lazy toOption should return present when present and empty when empty")
+        void lazyToOptionShouldReturnPresentWhenPresentAndEmptyWhenEmpty() {
+            Lazy<Integer> lazy = Lazy.of(() -> 10);
+            lazy.get();
+            Optional<Integer> option = lazy.toOption();
+
+            assertTrue(option.isPresent(), "Option should be present");
+            assertEquals(10, option.get(), "Option should contain value 10");
+            assertNotEquals(11, option.get());
+            assertNotEquals(9, option.get());
+
+        }
+
+        @Test
+        @DisplayName("toOption should return empty with null value")
+        void toOptionShouldReturnEmpty() {
+            Lazy<Integer> lazyWithNullValue = Lazy.of(() -> null);
+            Optional<Integer> option = lazyWithNullValue.toOption();
+
+            assertThat(option).isNotPresent();
+            assertTrue(option.isEmpty());
+        }
+
+        @Test
+        @DisplayName("forEach processes lazy value correctly")
+        void forEachProcessesLazyValueCorrectly() {
+            Lazy<String> lazy = Lazy.value("Hello");
+            StringBuilder result = new StringBuilder();
+
+            lazy.forEach(result::append);
+            assertEquals("Hello", result.toString());
+        }
+
+        @Test
+        @DisplayName("forEach when not evaluated should return isEvaluated")
+        void forEachWhenNotEvaluated() {
+            Lazy<String> lazy = Lazy.of(() -> "Lazy Evaluation");
+            StringBuilder result = new StringBuilder();
+
+            lazy.forEach(result::append);
+
+            assertEquals("Lazy Evaluation", result.toString());
+            assertTrue(lazy.isEvaluated(), "Value should be evaluated after forEach is called");
+        }
+
     }
 
     @Test
-    @DisplayName("value should return pre initialized lazy instance")
-    void valueShouldReturnPreInitializedLazyInstance() {
-        Integer value = 5;
-        Lazy<Integer> lazy = Lazy.value(value);
-        assertThat(lazy.get()).isEqualTo(5);
-    }
+    @DisplayName("Thread safety when counting value in multiple threads")
+    void threadSafetyTest() throws InterruptedException, ExecutionException {
 
-    @Test
-    @DisplayName("value should not be computed more than one time")
-    void valueShouldNotBeComputedMoreThanOneTime() {
-        AtomicInteger countedTimes = new AtomicInteger(0);
-        Lazy<String> lazy = Lazy.of(() -> {
-            countedTimes.incrementAndGet();
-            return "computed value";
+        final int[] calculationCount = {0};
+        final long delayInNanos = 1_000_000_000;
+
+        Lazy<Integer> lazy = Lazy.of(() -> {
+            calculationCount[0]++;
+            long start = System.nanoTime();
+            
+            //Simulates a calculation
+            while (System.nanoTime() - start < delayInNanos) {
+                LockSupport.parkNanos(1);
+            }
+            return 123;
         });
 
-        String value1 = lazy.get();
-        String value2 = lazy.get();
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        List<Callable<Integer>> tasks = new ArrayList<>();
 
-        assertEquals(1, countedTimes.get());
-        assertNotEquals(2, countedTimes.get());
-        assertEquals("computed value", value1);
-        assertEquals("computed value", value2);
-    }
+        for (int i = 0; i < 10; i++) {
+            tasks.add(lazy::get);
+        }
 
-    @Test
-    @DisplayName("map should transform values")
-    void mapShouldTransformValues() {
-        Lazy<Integer> lazyInt = Lazy.of(() -> 100);
-        Lazy<String> lazyString = lazyInt.map(value -> "Number: " + value);
-        assertEquals("Number: 100", lazyString.get());
+        // Threads runs parallel and should return the same value
+        List<Future<Integer>> results = executor.invokeAll(tasks);
 
-        Lazy<Double> lazyDouble = Lazy.of(() -> 3.14);
-        Lazy<Integer> lazyIntFromDouble = lazyDouble.map(value -> (int) Math.round(value));
-        assertEquals(3, lazyIntFromDouble.get());
-    }
+        Integer expectedValue = 123;
+        for (Future<Integer> result : results) {
+            assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
+        }
 
-    @Test
-    @DisplayName("flatMap should retriece element from lazy list")
-    void flatMapShouldRetrieveElementFromLazyList() {
-        Lazy<List<String>> lazyList = Lazy.of(() -> Arrays.asList("a", "b", "c"));
-        Lazy<String> flatMapped = lazyList.flatMap(list -> Lazy.of(() -> list.get(2)));
-
-        String result = flatMapped.get();
-        assertEquals("c", result);
-    }
-
-    @Test
-    @DisplayName("Lazy flatmap should return chain of transformed values")
-    void lazyFlatmapShouldReturnChainOfTransformedValues() {
-        Lazy<Integer> lazyInt = Lazy.of(() -> 666);
-        Lazy<String> lazyString = lazyInt
-                .flatMap(i -> Lazy.of(() -> "The answer is " + i))
-                .flatMap(s -> Lazy.of(s::toUpperCase));
-        assertEquals("THE ANSWER IS 666", lazyString.get());
-    }
-
-    @Test
-    @DisplayName("filer value calculates only once")
-    void filterValueCalculatesOnlyOnce() {
-        AtomicInteger counter = new AtomicInteger(0);
-        Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> {
-            counter.incrementAndGet();
-            return 89;
-        }).filter(i -> i > 88);
-
-        lazyOptional.get();
-        lazyOptional.get();
-        assertTrue(lazyOptional.get().isPresent());
-        assertEquals(1, counter.get());
-        assertEquals(89, lazyOptional.get().get().intValue());
-    }
-
-    @Test
-    @DisplayName("filter with predicate should return true")
-    void filterWithPredicateTrue() {
-        Lazy<Optional<Integer>> lazyOptional = Lazy.of(() -> 12)
-                .filter(i -> i < 13);
-        assertTrue(lazyOptional.get().isPresent());
-        assertEquals(12, lazyOptional.get().get().intValue());
-    }
-
-    @Test
-    @DisplayName("lazy toOption should return present when present and empty when empty")
-    void lazyToOptionShouldReturnPresentWhenPresentAndEmptyWhenEmpty() {
-        Lazy<Integer> lazy = Lazy.of(() -> 10);
-        lazy.get();
-        Optional<Integer> option = lazy.toOption();
-
-        assertTrue(option.isPresent(), "Option should be present");
-        assertEquals(10, option.get(), "Option should contain value 10");
-        assertNotEquals(11, option.get());
-        assertNotEquals(9, option.get());
+        assertEquals(1, calculationCount[0], "Value should only be calculated once");
+        executor.shutdown();
 
     }
 
-    @Test
-    @DisplayName("toOption should return empty with null value")
-    void toOptionShouldReturnEmpty(){
-        Lazy<Integer> lazyWithNullValue = Lazy.of(() -> null);
-        Optional<Integer> option = lazyWithNullValue.toOption();
-
-        assertThat(option).isNotPresent();
-        assertTrue(option.isEmpty());
-    }
-
-    @Test
-    @DisplayName("forEach processes lazy value correctly")
-    void forEachProcessesLazyValueCorrectly() {
-        Lazy<String> lazy = Lazy.value("Hello");
-        StringBuilder result = new StringBuilder();
-
-        lazy.forEach(result::append);
-
-        assertEquals("Hello", result.toString());
-    }
-
-    @Test
-    @DisplayName("forEach when not evaluated should return isEvaluated")
-    void forEachWhenNotEvaluated() {
-        Lazy<String> lazy = Lazy.of(() -> "Lazy Evaluation");
-        StringBuilder result = new StringBuilder();
-
-        lazy.forEach(result::append);
-
-        assertEquals("Lazy Evaluation", result.toString());
-        assertTrue(lazy.isEvaluated(), "Value should be evaluated after forEach is called");
-    }
 
     @Test
     @DisplayName("Lazy method should not compute before call")
@@ -170,6 +209,7 @@ class LazyTest {
         lazyInt.get();
         assertTrue(evaluated.get());
     }
+
 
     @Test
     @DisplayName("Supports null values")
