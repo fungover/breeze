@@ -31,7 +31,7 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public String toString() {
-        return "Some(value=" + value + ")";
+        return "Some(value=" + value + ", type= "+ value.getClass().getSimpleName() + ")";
     }
 
     /**
