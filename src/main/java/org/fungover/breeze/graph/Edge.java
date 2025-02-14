@@ -1,0 +1,36 @@
+package org.fungover.breeze.graph;
+
+public class Edge<T> {
+    Node<T> source;
+    double weight;
+    Node<T> destination;
+
+    public Edge(Node<T> source, Node<T> destination, double weight) {
+        if (weight < 0.0) {
+            throw new IllegalArgumentException("Weight can't be a negative number");
+        }
+
+        this.source = source;
+        this.destination = destination;
+        this.weight = weight;
+    }
+
+    public Node<T> getSource() {
+        return source;
+    }
+
+    public Node<T> getDestination() {
+        return destination;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Start = " + source +
+                " --> " + weight +
+                " --> Stop = " + destination + " |";
+    }
+}
