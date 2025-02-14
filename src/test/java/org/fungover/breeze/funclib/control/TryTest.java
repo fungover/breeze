@@ -1,8 +1,11 @@
 package org.fungover.breeze.funclib.control;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
 import java.util.concurrent.Callable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class TryTest {
@@ -48,7 +51,9 @@ class TryTest {
 
     @Test
     void testOfFailure() {
-        Try<Integer> result = Try.of(() -> { throw new RuntimeException("Test Exception"); });
+        Try<Integer> result = Try.of(() -> {
+            throw new RuntimeException("Test Exception");
+        });
         assertTrue(result.isFailure());
         assertFalse(result.isSuccess());
         assertThrows(RuntimeException.class, result::get);
@@ -66,7 +71,9 @@ class TryTest {
 
     @Test
     void testOfCallableFailure() {
-        Callable<Integer> callable = () -> { throw new RuntimeException("Callable Exception"); };
+        Callable<Integer> callable = () -> {
+            throw new RuntimeException("Callable Exception");
+        };
         Try<Integer> result = Try.ofCallable(callable);
         assertTrue(result.isFailure());
         assertFalse(result.isSuccess());
@@ -209,5 +216,72 @@ class TryTest {
             Throwable thrown = ((Failure<?>) failure).exception;
             assertEquals(cause, thrown.getCause());
         }
+    }
+
+    @Test
+    void testToEitherWithSuccess() {
+        Try<String> successTry = Try.success("Success value");
+        Either<Throwable, String> result = successTry.toEither();
+        assertTrue(result.isRight());
+        assertEquals("Success value", result.getRight());
+    }
+
+    @Test
+    void testToEitherWithFailure() {
+        Exception exception = new Exception("Failure message");
+        Try<String> failureTry = Try.failure(exception);
+        Either<Throwable, String> result = failureTry.toEither();
+        assertTrue(result.isLeft());
+        assertEquals(exception, result.getLeft());
+    }
+
+    @Test
+    void testToEitherWithGenericType() {
+        Try<Integer> successTry = Try.success(42);
+        Either<Throwable, Integer> result = successTry.toEither();
+
+        assertTrue(result.isRight());
+        assertEquals(42, result.getRight());
+    }
+
+    @Test
+    void testToEitherWithThrowableInLeft() {
+        Exception exception = new Exception("Test failure");
+        Try<String> failureTry = Try.failure(exception);
+        Either<Throwable, String> result = failureTry.toEither();
+
+        assertTrue(result.isLeft());
+        assertEquals(exception, result.getLeft());
+    }
+
+    @Test
+    void testToOptionalWithSuccess() {
+        Try<String> successTry = Try.success("Success value");
+        Optional<String> result = successTry.toOptional();
+        assertTrue(result.isPresent());
+        assertEquals("Success value", result.get());
+    }
+
+    @Test
+    void testToOptionalWithSuccessNullValue() {
+        Try<String> successTry = Try.success(null);
+        Optional<String> result = successTry.toOptional();
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void testToOptionalWithFailure() {
+        Exception exception = new Exception("Failure message");
+        Try<String> failureTry = Try.failure(exception);
+        Optional<String> result = failureTry.toOptional();
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void testToOptionalWithGenericType() {
+        Try<Integer> successTry = Try.success(42);
+        Optional<Integer> result = successTry.toOptional();
+        assertTrue(result.isPresent());
+        assertEquals(42, result.get());
     }
 }

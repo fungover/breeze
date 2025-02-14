@@ -4,10 +4,12 @@ package org.fungover.breeze.funclib.control;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
 /*
 *
 * Represents a computation that may either result in a success or a Failure
@@ -190,9 +192,9 @@ public abstract class Try <T> implements Serializable {
                 return failure(e);
             }
         }
+
+
     }
-
-
 
     /**
      * Monadic failure handling: If the Try is a failure, this method applies a function
@@ -247,6 +249,52 @@ public abstract class Try <T> implements Serializable {
         }
     }
 
+    /**
+     * Converts this Try into an Either, where Success is mapped to Right and Failure is mapped to Left.
+     * @return an Either instance representing success as Right and failure as Left.
+     */
+    @SuppressWarnings("unchecked")
+    public <L extends Serializable, R extends Serializable> Either<L, R> toEither() {
+        if (this instanceof Success<T> success) {
+            return Either.right((R) success.getValue());
+        } else if (this instanceof Failure<T> failure) {
+            return Either.left((L) failure.exception);
+        }
+        throw new IllegalStateException("Unknown Try state");
+    }
+
+
+
+    /**
+     * Converts this Try into an Optional, where Success contains a value and Failure results in an empty Optional.
+     * @return an Optional containing the success value or empty if it's a failure.
+     */
+    public Optional<T> toOptional() {
+        if (isSuccess()) {
+            try {
+                return Optional.ofNullable(get());
+            } catch (Throwable t) {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
 
 
@@ -332,4 +380,7 @@ final class Success<T> extends Try<T> implements Serializable {
     }
 
 
+    public T getValue() {
+        return value;
+    }
 }
