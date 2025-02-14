@@ -55,7 +55,7 @@ public final class None<T> extends Option<T> {
 
     @Override
     public String toString() {
-        return "None";
+        return "None()";
     }
 
     /**
