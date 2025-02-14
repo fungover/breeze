@@ -2,6 +2,7 @@ package org.fungover.breeze.util;
 
 import java.lang.reflect.Array;
 import java.util.function.BiFunction;
+import java.util.Objects;
 
 /**
  * A class containing static Array utility functions.
@@ -22,27 +23,69 @@ public class Arrays {
      * @param <U> Type of the second element.
      */
 
-    public static class Pair<T, U> {
-        public final T first;
-        public final U second;
+    /**
+     * A generic immutable pair class that holds two values of different types.
+     *
+     * @param <T> the type of the first element
+     * @param <U> the type of the second element
+     */
+
+    public class Pair<T, U> {
+        private final T first;
+        private final U second;
 
         /**
-         * Constructs a Pair object with given elements.
+         * Constructs a new pair with the given values.
          *
-         * @param first  The first element of the pair.
-         * @param second The second element of the pair.
+         * @param first  the first value of the pair
+         * @param second the second value of the pair
          */
-
         public Pair(T first, U second) {
             this.first = first;
             this.second = second;
         }
 
-        @Override
-        public String toString() {
-            return "(" + first + ", " + second + ")";
+        /**
+         * Returns the first element of the pair.
+         *
+         * @return the first value of the pair
+         */
+        public T getFirst() {
+            return first;
         }
-    }
+
+        /**
+         * Returns the second element of the pair.
+         *
+         * @return the second value of the pair
+         */
+        public U getSecond() {
+            return second;
+        }
+
+        /**
+         * Checks whether this pair is equal to another object.
+         * Two pairs are considered equal if they have the same class and their elements are equal.
+         *
+         * @param obj the object to compare with this pair
+         * @return true if the objects are equal, false otherwise
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true; // If they are the same object in memory
+            if (obj == null || getClass() != obj.getClass()) return false; // Null or different class
+
+            Pair<?, ?> pair = (Pair<?, ?>) obj; // Type-safe casting
+            return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
+        }
+
+        /**
+         * Computes a hash code for this pair.
+         * The hash code is computed based on the hash codes of the two elements.
+         *
+         * @return the hash code of this pair
+         */
+
     /**
      * Pairs corresponding elements of two arrays into an array of Pairs.
      *
