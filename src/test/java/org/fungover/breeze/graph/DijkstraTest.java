@@ -202,4 +202,14 @@ class DijkstraTest {
         assertThat(dijkstraInteger.getPath(end)).isEqualTo(expectedNodes);
     }
 
+    @Test
+    @DisplayName("Instantiate edge with negative weight should throw exception")
+    void instantiateEdgeWithNegativeWeightShouldThrowException () {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            Edge<String> edgeWithNegativeWeight = new Edge<>(nodes.get(0), nodes.get(1), -0.1);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("Weight can't be a negative number");
+    }
+
 }

@@ -6,6 +6,10 @@ public class Edge<T> {
     Node<T> destination;
 
     public Edge(Node<T> source, Node<T> destination, double weight) {
+        if (weight < 0.0) {
+            throw new IllegalArgumentException("Weight can't be a negative number");
+        }
+
         this.source = source;
         this.destination = destination;
         this.weight = weight;
