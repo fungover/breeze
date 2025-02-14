@@ -14,7 +14,7 @@ public final class Some<T> extends Option<T> {
     private final T value;
 
     public Some(final T value) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value, "Some cannot contain a null value");
     }
 
     @Override
