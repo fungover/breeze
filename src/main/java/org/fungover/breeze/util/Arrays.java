@@ -19,6 +19,12 @@ public class Arrays {
             throw new IllegalArgumentException("Input array must not be null");
         }
 
+        for(T element : array) {
+            if (element == null) {
+                throw new IllegalArgumentException("Element must not be null");
+            }
+        }
+
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be greater than 0");
         }
@@ -47,6 +53,12 @@ public class Arrays {
     public static <T>List<List<T>> chunkList(List<T> list, int size) {
         if(list == null)
             throw new IllegalArgumentException("Input list must not be null");
+
+        for(T element : list) {
+            if (element == null) {
+                throw new IllegalArgumentException("Element must not be null");
+            }
+        }
 
         if (size <= 0)
             throw new IllegalArgumentException("Size must be greater than 0");
