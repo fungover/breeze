@@ -11,17 +11,7 @@ import java.util.function.Function;
  * Final class that defines a comparable Tuple with an element size of 2.
  * A tuple is useful for storing objects of equal or different class types.
  * <p>
- * Initialize:
- * Tuple2<Integer, String> tuple2 = Tuple2.of(1,"A");
- * Use:
- * Integer firstElement = tuple2.first();       // alt. tuple2._1()
- * String secondElement = tuple2.second();      // alt. tuple2._2()
- * Tuple2<String, Integer> swapped = tuple2.swap();
- * Tuple2<Integer, String> map1 = tuple2.map1(firstElement -> firstElement + 10);
- * Tuple2<Integer, String> map2 = tuple2.map2(secondElement -> secondElement.concat("BC");
- * Tuple2<Integer, String> mapAll = tuple2.mapAll( (firstElement -> firstElement + 10), (secondElement -> secondElement.concat("BC")) );
- * Object[] toArray = tuple2.toArray();
- * List<Object> toList = tuple2.toList();
+ * Initialize: Tuple2.of(1,"A");
  * <p>
  * All fields are set as private and final.
  * Factory method of() to initialize new instance.
@@ -72,28 +62,32 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
     }
 
     /**
-     * @return the first element in this tuple
+     * Returns the first element of this tuple
+     * @return first
      */
     public T1 _1() {
         return first;
     }
 
     /**
-     * @return the second element in this tuple
+     * Returns the second element of this tuple
+     * @return second
      */
     public T2 _2() {
         return second;
     }
 
     /**
-     * @return the first element in this tuple
+     * Returns the first element of this tuple
+     * @return first
      */
     public T1 first() {
         return first;
     }
 
     /**
-     * @return the second element in this tuple
+     * Returns the second element of this tuple
+     * @return second
      */
     public T2 second() {
         return second;
@@ -101,7 +95,6 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Swaps the elements of this tuple.
-     *
      * @return a new Tuple2
      */
     public Tuple2<T2, T1> swap() {
