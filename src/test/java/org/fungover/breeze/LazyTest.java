@@ -27,7 +27,7 @@ class LazyTest {
         @Test
         @DisplayName("Of method should return new Lazy supplier")
         void ofMethodShouldReturnNewLazySupplier() {
-            Supplier<String> supplier = () -> "Hej";
+            Supplier<String> supplier = () -> "Hello";
 
             Lazy<String> lazy = Lazy.of(supplier);
             assertNotNull(lazy);
@@ -156,70 +156,78 @@ class LazyTest {
 
     }
 
-    @Test
-    @DisplayName("Thread safety when counting value in multiple threads")
-    void threadSafetyTest() throws InterruptedException, ExecutionException {
+    @Nested
+    class testsForThreadSafety{
 
-        final int[] calculationCount = {0};
-        final long delayInNanos = 1_000_000_000;
+        @Test
+        @DisplayName("Thread safety when counting value in multiple threads")
+        void threadSafetyTest() throws InterruptedException, ExecutionException {
 
-        Lazy<Integer> lazy = Lazy.of(() -> {
-            calculationCount[0]++;
-            long start = System.nanoTime();
-            
-            //Simulates a calculation
-            while (System.nanoTime() - start < delayInNanos) {
-                LockSupport.parkNanos(1);
+            final int[] calculationCount = {0};
+            final long delayInNanos = 1_000_000_000;
+
+            Lazy<Integer> lazy = Lazy.of(() -> {
+                calculationCount[0]++;
+                long start = System.nanoTime();
+
+                //Simulates a heavy calculation
+                while (System.nanoTime() - start < delayInNanos) {
+                    LockSupport.parkNanos(1);
+                }
+                return 123;
+            });
+
+            ExecutorService executor = Executors.newFixedThreadPool(10);
+            List<Callable<Integer>> tasks = new ArrayList<>();
+
+            for (int i = 0; i < 10; i++) {
+                tasks.add(lazy::get);
             }
-            return 123;
-        });
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        List<Callable<Integer>> tasks = new ArrayList<>();
+            // Threads runs parallel and should return the same value
+            List<Future<Integer>> results = executor.invokeAll(tasks);
 
-        for (int i = 0; i < 10; i++) {
-            tasks.add(lazy::get);
+            Integer expectedValue = 123;
+            for (Future<Integer> result : results) {
+                assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
+            }
+
+            assertEquals(1, calculationCount[0], "Value should only be calculated once");
+            executor.shutdown();
+
         }
-
-        // Threads runs parallel and should return the same value
-        List<Future<Integer>> results = executor.invokeAll(tasks);
-
-        Integer expectedValue = 123;
-        for (Future<Integer> result : results) {
-            assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
-        }
-
-        assertEquals(1, calculationCount[0], "Value should only be calculated once");
-        executor.shutdown();
 
     }
 
+    @Nested
+    class testsNullValues{
 
-    @Test
-    @DisplayName("Lazy method should not compute before call")
-    void lazyMethodShouldNotComputeBeforeCall() {
-        AtomicBoolean evaluated = new AtomicBoolean(false);
+        @Test
+        @DisplayName("Lazy method should not compute before call")
+        void lazyMethodShouldNotComputeBeforeCall() {
+            AtomicBoolean evaluated = new AtomicBoolean(false);
 
-        Lazy<Integer> lazyInt = Lazy.of(() -> {
-            evaluated.set(true);
-            return 42;
-        });
+            Lazy<Integer> lazyInt = Lazy.of(() -> {
+                evaluated.set(true);
+                return 42;
+            });
 
-        assertFalse(evaluated.get());
-        lazyInt.get();
-        assertTrue(evaluated.get());
-    }
+            assertFalse(evaluated.get());
+            lazyInt.get();
+            assertTrue(evaluated.get());
+        }
 
+        @Test
+        @DisplayName("Supports null values")
+        void supportsNullValue() {
+            Supplier<String> supplier = () -> null;
+            Lazy<String> lazy = Lazy.of(supplier);
+            String value = lazy.get();
 
-    @Test
-    @DisplayName("Supports null values")
-    void supportsNullValue() {
-        Supplier<String> supplier = () -> null;
-        Lazy<String> lazy = Lazy.of(supplier);
-        String value = lazy.get();
+            assertTrue(lazy.isEvaluated());
+            assertNull(value);
+        }
 
-        assertTrue(lazy.isEvaluated());
-        assertNull(value);
     }
 
 }
