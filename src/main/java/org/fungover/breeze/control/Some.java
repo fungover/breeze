@@ -134,7 +134,7 @@ public final class Some<T> extends Option<T> {
     @Override
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
         Option<U> result = mapper.apply(value);
-        return result != null ? result : None.getInstance();
+        return Objects.requireNonNullElse(result, None.getInstance());
     }
 
     /**
