@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -192,7 +191,21 @@ class ArraysTest {
         assertThat(result).hasSize(stringList.size());
     }
 
+    @Test
+    @DisplayName("Chunking large list should return the correct number of chunks")
+    void chunkingLargeListShouldReturnTheCorrectNumberOfChunks() {
+        Integer[] bigIntegerArray = new Integer[10_000_000];
+        for (int i = 0; i < bigIntegerArray.length; i++) {
+            bigIntegerArray[i] = i + 1;
+        }
 
+        int size = 10000;
+
+        Integer [][] result = Arrays.chunk(bigIntegerArray, size);
+
+        assertThat(result[0]).hasSize(size);
+        assertThat(result[result.length - 1]).hasSize(size);
+    }
 
 
 
