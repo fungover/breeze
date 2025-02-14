@@ -162,4 +162,44 @@ class DijkstraTest {
         assertThat(dijkstra.getPath(nodes.get(5))).isEqualTo(expectedNodes);
     }
 
+    @Test
+    @DisplayName("findShortestPath with Integer nodes")
+    void findShortestPathWithIntegerNodes() {
+        List<Node<Integer>> nodesInteger;
+        List<Edge<Integer>> edgesInteger;
+
+        nodesInteger = List.of(
+                new Node<>(1), new Node<>(2), new Node<>(3),
+                new Node<>(4), new Node<>(5), new Node<>(6)
+        );
+
+        edgesInteger = List.of(
+                new Edge<>(nodesInteger.get(0), nodesInteger.get(2), 2),
+                new Edge<>(nodesInteger.get(0), nodesInteger.get(1), 5),
+                new Edge<>(nodesInteger.get(1), nodesInteger.get(2), 1),
+                new Edge<>(nodesInteger.get(1), nodesInteger.get(3), 4),
+                new Edge<>(nodesInteger.get(1), nodesInteger.get(4), 2),
+                new Edge<>(nodesInteger.get(2), nodesInteger.get(4), 7),
+                new Edge<>(nodesInteger.get(3), nodesInteger.get(4), 6),
+                new Edge<>(nodesInteger.get(3), nodesInteger.get(5), 3),
+                new Edge<>(nodesInteger.get(4), nodesInteger.get(5), 1)
+        );
+
+        WeightedGraph<Integer> graphInteger = new WeightedGraph<>(nodesInteger, edgesInteger);
+        Dijkstra<Integer> dijkstraInteger = new Dijkstra<>(graphInteger);
+
+        List<Node<Integer>> expectedNodes = new ArrayList<>();
+        expectedNodes.add(nodesInteger.get(0));
+        expectedNodes.add(nodesInteger.get(1));
+        expectedNodes.add(nodesInteger.get(4));
+        expectedNodes.add(nodesInteger.get(5));
+
+        Node<Integer> start = nodesInteger.getFirst();
+        Node<Integer> end = nodesInteger.getLast();
+
+        dijkstraInteger.findShortestPath(graphInteger, start , end);
+
+        assertThat(dijkstraInteger.getPath(end)).isEqualTo(expectedNodes);
+    }
+
 }
