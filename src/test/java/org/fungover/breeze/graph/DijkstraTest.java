@@ -294,5 +294,4 @@ class DijkstraTest {
                 () -> assertThat(dijkstra.getPath(nodes.get(3)).isEmpty())
         );
     }
-
 }
