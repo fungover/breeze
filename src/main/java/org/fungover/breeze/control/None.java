@@ -75,6 +75,7 @@ public final class None<T> extends Option<T> {
      */
     @Override
     public T getOrElseGet(Supplier<? extends T> supplier) {
+        Objects.requireNonNull(supplier, "Supplier must not be null");
         return supplier.get();
     }
 
@@ -85,6 +86,7 @@ public final class None<T> extends Option<T> {
      */
     @Override
     public T getOrNull() {
+
         return null;
     }
 
