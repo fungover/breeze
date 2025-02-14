@@ -298,8 +298,9 @@ class Tuple2Test {
         class MyClass implements Comparable<MyClass>, Serializable {
 
             /**
+             * Only for test.
              * @param o the object to be compared.
-             * @return
+             * @return 0 as all objects should be considered equal
              */
             @Override
             public int compareTo(MyClass o) {
@@ -308,6 +309,11 @@ class Tuple2Test {
         }
 
         class MySubClass extends MyClass {
+            /**
+             * Only for test.
+             * @param o the object to be compared.
+             * @return 0 if instance of MySubClass, else 1.
+             */
             @Override
             public int compareTo(MyClass o) {
                 if (o instanceof MySubClass) {
