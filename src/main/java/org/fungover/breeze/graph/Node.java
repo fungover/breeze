@@ -1,8 +1,5 @@
 package org.fungover.breeze.graph;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Node<T> {
     T data;
     Node<T> previousNode;
@@ -34,9 +31,4 @@ public class Node<T> {
         this.distance = distance;
     }
 
-    @Override
-    public String toString() {
-        return "Node{" + data +
-                '}';
-    }
 }
