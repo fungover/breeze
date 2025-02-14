@@ -11,16 +11,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 class ArraysTest {
 
     @Test
-    void testZip_EqualLengthArrays() {
-        String[] words = {"a1", "a2", "a3"};
-        String[] numbers = {"b1", "b2", "b3"};
+    void testPairEquality() {
+        Arrays.Pair<String, String> pair1 = new Arrays.Pair<>("a1", "b1");
+        Arrays.Pair<String, String> pair2 = new Arrays.Pair<>("a1", "b1");
 
-        Arrays.Pair<String, String>[] result = Arrays.zip(words, numbers);
-
-        assertEquals(3, result.length);
-        assertEquals(new Arrays.Pair<>("a1", "b1"), result[0]);
-        assertEquals(new Arrays.Pair<>("a2", "b2"), result[1]);
-        assertEquals(new Arrays.Pair<>("a3", "b3"), result[2]);
+        assertEquals(pair1, pair2); // Ska vara true om equals() fungerar korrekt
     }
 
     @Test

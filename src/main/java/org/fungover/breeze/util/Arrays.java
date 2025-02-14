@@ -30,7 +30,7 @@ public class Arrays {
      * @param <U> the type of the second element
      */
 
-    public class Pair<T, U> {
+    public static class Pair<T, U> {
         private final T first;
         private final U second;
 
