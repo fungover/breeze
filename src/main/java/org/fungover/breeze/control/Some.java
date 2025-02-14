@@ -63,7 +63,6 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public T getOrElse(T other) {
-        Objects.requireNonNull(other);
         return value;
     }
 
@@ -76,6 +75,7 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public T getOrElseGet(Supplier<? extends T> supplier) {
+        Objects.requireNonNull(supplier, "Supplier must not be null");
         return value;
     }
 
