@@ -237,7 +237,7 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      */
     private static <R> R checkForNullFunctionResult(R functionResult) {
         if (functionResult == null) {
-            throw new NullPointerException("Function result is null");
+            throw new NullPointerException("Function result cannot be null. Functions must return non-null values.");
         }
         return functionResult;
     }

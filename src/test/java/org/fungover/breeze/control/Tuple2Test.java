@@ -65,14 +65,14 @@ class Tuple2Test {
         @ParameterizedTest
         @MethodSource("org.fungover.breeze.control.Tuple2Test#validArgumentsForCreationOfTuple2")
         @DisplayName("Call to second should return value of second.")
-        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callToSecondShouldReturnFirstElement(T1 o1, T2 o2) {
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callToSecondShouldReturnSecondElement(T1 o1, T2 o2) {
             assertThat(Tuple2.of(o1, o2).second()).isEqualTo(o2);
         }
 
         @ParameterizedTest
         @MethodSource("org.fungover.breeze.control.Tuple2Test#validArgumentsForCreationOfTuple2")
         @DisplayName("Call to _2 should return value of second.")
-        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callTo_2ShouldReturnFirstElement(T1 o1, T2 o2) {
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callTo_2ShouldReturnSecondElement(T1 o1, T2 o2) {
             assertThat(Tuple2.of(o1, o2)._2()).isEqualTo(o2);
         }
     }
@@ -153,13 +153,13 @@ class Tuple2Test {
             assertAll(
                     () -> assertThatThrownBy(() -> tuple2.mapAll(e1 -> null, e2 -> null))
                             .isInstanceOf(NullPointerException.class)
-                            .hasMessage("Function result is null"),
+                            .hasMessage("Function result cannot be null. Functions must return non-null values."),
                     () -> assertThatThrownBy(() -> tuple2.map1(e -> null))
                             .isInstanceOf(NullPointerException.class)
-                            .hasMessage("Function result is null"),
+                            .hasMessage("Function result cannot be null. Functions must return non-null values."),
                     () -> assertThatThrownBy(() -> tuple2.map2(e -> null))
                             .isInstanceOf(NullPointerException.class)
-                            .hasMessage("Function result is null")
+                            .hasMessage("Function result cannot be null. Functions must return non-null values.")
             );
         }
 
@@ -269,8 +269,8 @@ class Tuple2Test {
         }
 
         @Test
-        @DisplayName("Call to hashCode with unequal Tuple2 objects should return unequal hashcodes")
-        void callToHashCodeWithUnequalTuple2ObjectsShouldReturnEqualHashCode() {
+        @DisplayName("Call to hashCode with unequal Tuple2 objects should return not equal hashcodes")
+        void callToHashCodeWithUnequalTuple2ObjectsShouldReturnNotEqualHashCode() {
 
             var firstTuple2 = Tuple2.of("A", 1);
             var secondTuple2 = Tuple2.of("B", 2);
