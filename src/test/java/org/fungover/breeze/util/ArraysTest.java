@@ -3,6 +3,9 @@ package org.fungover.breeze.util;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -12,6 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ArraysTest {
 
+
+    @Test
+    @DisplayName("Utility class instantiation should throw an exception")
+    void utilityClassInstantiationShouldThrowAnException() throws Exception {
+        Constructor <Arrays> constructor = Arrays.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        Exception exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
+
+        Throwable cause = exception.getCause();
+        assertNotNull(cause);
+
+        assertEquals(IllegalStateException.class, exception.getCause().getClass());
+        assertEquals("Utility class", exception.getCause().getMessage());
+    }
 
     @Test
     @DisplayName("Chunk throws exception when array is null")
@@ -173,6 +191,9 @@ class ArraysTest {
         List<List<String>> result = Arrays.chunkList(stringList, size);
         assertThat(result).hasSize(stringList.size());
     }
+
+
+
 
 
 }
