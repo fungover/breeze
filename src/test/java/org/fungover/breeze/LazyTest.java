@@ -177,24 +177,22 @@ class LazyTest {
                 return 123;
             });
 
-            ExecutorService executor = Executors.newFixedThreadPool(10);
-            List<Callable<Integer>> tasks = new ArrayList<>();
+            try (ExecutorService executor = Executors.newFixedThreadPool(10)) {
+                List<Callable<Integer>> tasks = new ArrayList<>();
+                for (int i = 0; i < 10; i++) {
+                    tasks.add(lazy::get);
+                }
 
-            for (int i = 0; i < 10; i++) {
-                tasks.add(lazy::get);
+                // Threads runs parallel and should return the same value
+                List<Future<Integer>> results = executor.invokeAll(tasks);
+
+                Integer expectedValue = 123;
+                for (Future<Integer> result : results) {
+                    assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
+                }
+
+                assertEquals(1, calculationCount[0], "Value should only be calculated once");
             }
-
-            // Threads runs parallel and should return the same value
-            List<Future<Integer>> results = executor.invokeAll(tasks);
-
-            Integer expectedValue = 123;
-            for (Future<Integer> result : results) {
-                assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
-            }
-
-            assertEquals(1, calculationCount[0], "Value should only be calculated once");
-            executor.shutdown();
-
         }
 
     }
