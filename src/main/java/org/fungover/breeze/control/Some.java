@@ -186,6 +186,8 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+        Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
+        Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
         return ifPresent.apply(value);
     }
 }

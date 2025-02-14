@@ -1,6 +1,7 @@
 package org.fungover.breeze.control;
 
 import java.io.Serial;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -177,6 +178,10 @@ public final class None<T> extends Option<T> {
 
     @Override
     public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+
+        Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
+        Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
+
         return ifNone.get();
     }
 
