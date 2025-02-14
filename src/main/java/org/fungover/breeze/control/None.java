@@ -50,7 +50,7 @@ public final class None<T> extends Option<T> {
 
     @Override
     public int hashCode() {
-        return 0;
+        return 0; // All instances of None have the same hash code since they are the same instance.
     }
 
     @Override
