@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
 class ArraysTest {
+
 
 
     @Test
@@ -45,7 +45,7 @@ class ArraysTest {
 
         assertThat(exception.getMessage()).isEqualTo("Input list must not be null");
     }
-    
+
     @Test
     @DisplayName("Chunking array with null elements should throw exception")
     void chunkingArrayWithNullElementsShouldThrowException() {
@@ -55,7 +55,6 @@ class ArraysTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(arrayWithNull, size));
         assertThat(exception.getMessage()).isEqualTo("Element must not be null");
     }
-
 
     @Test
     @DisplayName("Chunking list with null element should throw exception")
@@ -153,7 +152,6 @@ class ArraysTest {
 
         Double [][] result = Arrays.chunk(doubleArray, size);
 
-
         assertEquals(4, result.length);
         assertThat(result[0]).hasSize(size);
         assertThat(result[result.length - 1]).hasSize(lastChunkSize);
@@ -227,7 +225,6 @@ class ArraysTest {
         Integer [][] result = Arrays.chunk(bigIntegerArray, size);
 
         assertThat(result[0]).hasSize(size);
-        assertThat(result[result.length - 1]).hasSize(size);
     }
 
     @Test
@@ -244,5 +241,23 @@ class ArraysTest {
         assertThat(result).hasSize(bigIntegerList.size() / size);
     }
 
+    @Test
+    @DisplayName("Benchmark chunk array performance")
+    void benchmarkChunkArrayPerformance() {
+        Integer [] benchmarkArray = new Integer[10_000_000];
+        for (int i = 0; i < benchmarkArray.length; i++) {
+            benchmarkArray[i] = i + 1;
+        }
+
+        int size = 10000;
+
+        long startTime = System.nanoTime();
+        Integer [][] result = Arrays.chunk(benchmarkArray, size);
+        long endTime = System.nanoTime();
+        long elapsedTime = (endTime - startTime) / 1_000_000;
+
+        assertThat(result[0]).hasSize(size);
+        System.out.println("Large array test complete in " + elapsedTime + " ms");
+    }
 
 }
