@@ -6,7 +6,6 @@ public class Vector4 {
     private float z;
     private float w;
 
-
     public Vector4(float x, float y, float z, float w) {
         this.x = x;
         this.y = y;
@@ -18,32 +17,16 @@ public class Vector4 {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
     }
 
     public float getZ() {
         return z;
     }
 
-    public void setZ(float z) {
-        this.z = z;
-    }
-
     public float getW() {
         return w;
-    }
-
-    public void setW(float w) {
-        this.w = w;
     }
 
     //basic arithmetic
@@ -123,6 +106,4 @@ public class Vector4 {
     public Vector3 toVector3() {
         return new Vector3(this.x, this.y, this.z);
     }
-
-
 }
