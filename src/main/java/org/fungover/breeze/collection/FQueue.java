@@ -3,6 +3,7 @@ package org.fungover.breeze.collection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class FQueue<T> {
     private final List<T> front;
@@ -36,6 +37,16 @@ public class FQueue<T> {
 
         }
         return new FQueue<>(front.subList(1, front.size()), back);
+    }
+
+    public Optional<T> peek(){
+        if (front.isEmpty()) {
+            return Optional.of(front.get(0));
+        }
+        if (!back.isEmpty()) {
+            return Optional.of(back.get(back.size() - 1));
+        }
+        return Optional.empty();
     }
 
 
