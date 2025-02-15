@@ -30,6 +30,7 @@ public class Arrays {
      * @param <T> The type of the array elements.
      * @return A new empty 2D array of the specific type and size
      */
+    @SuppressWarnings("unchecked")
    private static <T> T[][] create2DArray(Class<?> componentType, int row, int col) {
        return (T[][]) Array.newInstance(componentType, row, col);
    }
@@ -42,6 +43,7 @@ public class Arrays {
      * @param <T> The type of the array elements.
      * @return A new empty 1D array of the specific type and size.
      */
+    @SuppressWarnings("unchecked")
    private static <T> T[] create1DArray(Class<?> componentType, int length) {
        return (T[]) Array.newInstance(componentType, length);
    }
@@ -49,7 +51,6 @@ public class Arrays {
     /**
      * Splits an array into smaller array-chunks of specific size.
      * The last chunk may be smaller if the array length is not evenly divisible.
-     *
      * @param array The input array to be chunked.
      * @param size The size of each chunk.
      * @param <T> The type of elements in the array.
@@ -95,9 +96,8 @@ public class Arrays {
     }
 
     /**
-     * Splits an array into smaller array-chunks of specific size.
-     * The last chunk may be smaller if the array length is not evenly divisible.
-     *
+     * Splits a list into smaller list-chunks of specific size.
+     * The last chunk may be smaller if the list length is not evenly divisible.
      * @param list The input list to be chunked.
      * @param size The size of each chunk.
      * @param <T> The type of elements in the list.
