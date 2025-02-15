@@ -260,4 +260,23 @@ class ArraysTest {
         System.out.println("Large array test complete in " + elapsedTime + " ms");
     }
 
+    @Test
+    @DisplayName("Benchmark chunk list performance")
+    void benchmarkChunkListPerformance() {
+        List<Integer> benchmarkList = new ArrayList<>();
+        for (int i = 1; i <= 10_000_000; i++) {
+            benchmarkList.add(i);
+        }
+
+        int size = 10000;
+
+        long startTime = System.nanoTime();
+        List<List<Integer>> result = Arrays.chunkList(benchmarkList, size);
+        long endTime = System.nanoTime();
+        long elapsedTime = (endTime - startTime) / 1_000_000;
+
+        assertThat(result).hasSize(benchmarkList.size() / size);
+        System.out.println("Large list test complete in " + elapsedTime + " ms");
+    }
+
 }
