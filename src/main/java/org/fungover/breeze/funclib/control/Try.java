@@ -11,25 +11,28 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /*
-*
-* Represents a computation that may either result in a success or a Failure
-*
-*/
-public abstract class Try <T> implements Serializable {
+ *
+ * Represents a computation that may either result in a success or a Failure
+ *
+ */
+public abstract class Try<T> implements Serializable {
     /**
      * Checks if the computation was successful.
+     *
      * @return true if successful, false otherwise.
      */
     public abstract boolean isSuccess();
 
     /**
      * Checks if the computation failed.
+     *
      * @return true if failed, false otherwise.
      */
     public abstract boolean isFailure();
 
     /**
      * Retrieves the computed value or throws the exception if failed.
+     *
      * @return the computed value.
      * @throws Throwable if the computation failed.
      */
@@ -37,6 +40,7 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Retrieves the value if present, otherwise returns the default value.
+     *
      * @param defaultValue the value to return if the computation failed.
      * @return the computed value or the default value.
      */
@@ -44,6 +48,7 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Retrieves the value if present, otherwise computes and returns a default value.
+     *
      * @param supplier the supplier function to compute the default value.
      * @return the computed value or the supplied default value.
      */
@@ -51,18 +56,17 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Retrieves the value if present, otherwise throws a mapped exception.
+     *
      * @param exceptionMapper function to map the Throwable to an exception of type X.
-     * @param <X> the exception type to be thrown.
+     * @param <X>             the exception type to be thrown.
      * @return the computed value.
      * @throws X if the computation failed.
      */
     public abstract <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X;
 
-
-
-
     /**
      * Creates a successful Try instance.
+     *
      * @param value the value of the successful computation.
      * @return a Success instance containing the value.
      */
@@ -72,6 +76,7 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Creates a failed Try instance.
+     *
      * @param exception the exception that caused the Failure.
      * @return a Failure instance containing the exception.
      */
@@ -82,10 +87,11 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Executes a supplier function and returns a Try instance capturing success or Failure.
+     *
      * @param supplier the function to execute.
      * @return a Success instance if the function executes successfully, otherwise a Failure instance.
      */
-    public static  <T>Try <T> of(Supplier<T> supplier) {
+    public static <T> Try<T> of(Supplier<T> supplier) {
         try {
             return success(supplier.get());
         } catch (Throwable t) {
@@ -96,10 +102,11 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Executes a Callable function and returns a Try instance capturing success or Failure.
+     *
      * @param callable the function to execute.
      * @return a Success instance if the function executes successfully, otherwise a Failure instance.
      */
-    public static <T> Try <T> ofCallable(Callable<T> callable) {
+    public static <T> Try<T> ofCallable(Callable<T> callable) {
         try {
             return success(callable.call());
         } catch (Throwable t) {
@@ -109,8 +116,9 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Transforms the value inside Try using the provided function if it is a success.
+     *
      * @param mapper the function to apply.
-     * @param <U> the new type of the transformed value.
+     * @param <U>    the new type of the transformed value.
      * @return a new Try instance containing the transformed value or the original Failure.
      */
     public <U> Try<U> map(Function<? super T, ? extends U> mapper) {
@@ -128,8 +136,9 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Applies a function that returns a Try instance if the computation was successful.
+     *
      * @param mapper the function to apply.
-     * @param <U> the new type of the transformed value.
+     * @param <U>    the new type of the transformed value.
      * @return the Try instance returned by the function or the original failure.
      */
     public <U> Try<U> flatMap(Function<? super T, Try<U>> mapper) {
@@ -146,10 +155,10 @@ public abstract class Try <T> implements Serializable {
         }
     }
 
-
     /**
      * Filters the value inside Try using the provided predicate.
      * If the value does not satisfy the predicate, it returns a Failure.
+     *
      * @param predicate the condition to check.
      * @return the same Try instance if the value satisfies the predicate, otherwise a Failure.
      */
@@ -158,7 +167,8 @@ public abstract class Try <T> implements Serializable {
         if (isSuccess()) {
             try {
                 T value = get();
-                if (!predicate.test(value))  return failure(new NoSuchElementException("The value does not satisfy the predicate"));
+                if (!predicate.test(value))
+                    return failure(new NoSuchElementException("The value does not satisfy the predicate"));
                 return this;
             } catch (Throwable t) {
                 return failure(new Exception(t));
@@ -171,6 +181,7 @@ public abstract class Try <T> implements Serializable {
     /**
      * Handles the failure case by recovering from the Throwable and returning a successful Try.
      * If the Try is a success, it returns the same instance.
+     *
      * @param recoverFunction the function that handles the failure and returns a value.
      * @return a Try instance containing the recovered value or the same success.
      */
@@ -192,13 +203,12 @@ public abstract class Try <T> implements Serializable {
                 return failure(e);
             }
         }
-
-
     }
 
     /**
      * Monadic failure handling: If the Try is a failure, this method applies a function
      * that returns another Try. If it is a success, it returns the same instance.
+     *
      * @param recoverWithFunction the function that handles the failure and returns a new Try.
      * @return a new Try instance containing the recovered value or the same success.
      */
@@ -224,9 +234,10 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Handles both the failure and success cases by applying different functions to each.
+     *
      * @param failureFunction the function to apply to the Throwable in case of failure.
      * @param successFunction the function to apply to the value in case of success.
-     * @param <U> the result type after folding.
+     * @param <U>             the result type after folding.
      * @return the result of applying the corresponding function based on the Try instance.
      */
     public <U> U fold(Function<? super Throwable, ? extends U> failureFunction, Function<? super T, ? extends U> successFunction) {
@@ -251,6 +262,7 @@ public abstract class Try <T> implements Serializable {
 
     /**
      * Converts this Try into an Either, where Success is mapped to Right and Failure is mapped to Left.
+     *
      * @return an Either instance representing success as Right and failure as Left.
      */
     @SuppressWarnings("unchecked")
@@ -263,10 +275,9 @@ public abstract class Try <T> implements Serializable {
         throw new IllegalStateException("Unknown Try state");
     }
 
-
-
     /**
      * Converts this Try into an Optional, where Success contains a value and Failure results in an empty Optional.
+     *
      * @return an Optional containing the success value or empty if it's a failure.
      */
     public Optional<T> toOptional() {
@@ -280,28 +291,71 @@ public abstract class Try <T> implements Serializable {
         return Optional.empty();
     }
 
+    /**
+     * Applies one of the provided functions based on whether this {@code Try} represents a success or a failure.
+     * <p>
+     * If this instance is a {@code Success}, the {@code successCase} function is applied to the value inside it.
+     * If this instance is a {@code Failure}, the {@code failureCase} function is applied to the contained exception.
+     * </p>
+     *
+     * @param <R>         the result type of the function application
+     * @param successCase a function to apply if this is a {@code Success}
+     * @param failureCase a function to apply if this is a {@code Failure}
+     * @return the result of applying the corresponding function based on the type of {@code Try}
+     * @throws NullPointerException  if either {@code successCase} or {@code failureCase} is {@code null}
+     * @throws IllegalStateException if the {@code Try} instance is in an unexpected state (should never occur due to sealed class enforcement)
+     */
+    public <R> R match(Function<? super T, ? extends R> successCase, Function<? super Exception, ? extends R> failureCase) {
+        Objects.requireNonNull(successCase);
+        Objects.requireNonNull(failureCase);
+
+        if (this instanceof Success<T> success) {
+            return successCase.apply(success.get());
+        } else if (this instanceof Failure<T> failure) {
+            return failureCase.apply(failure.exception);
+        }
+        throw new IllegalStateException("Unexpected Try state");
+    }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this instanceof Success<?>) {
+            Success<?> other = (Success<?>) obj;
+            return Objects.equals(((Success<T>) this).getValue(), other.getValue());
+        } else if (this instanceof Failure<?>) {
+            Failure<?> other = (Failure<?>) obj;
+            return Objects.equals(((Failure<T>) this).exception, other.exception);
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
+        if (this instanceof Success<?>) {
+            return Objects.hash(((Success<T>) this).getValue());
+        } else if (this instanceof Failure<?>) {
+            return Objects.hash(((Failure<T>) this).exception);
+        }
         return super.hashCode();
     }
 
     @Override
     public String toString() {
+        if (this instanceof Success<?>) {
+            return "Success[" + ((Success<T>) this).getValue() + "]";
+        } else if (this instanceof Failure<?>) {
+            return "Failure[exception=" + ((Failure<T>) this).exception + "]";
+        }
         return super.toString();
     }
 }
 
-
 /**
  * Represents a failed computation result.
  */
- final class Failure<T> extends Try<T> implements Serializable {
+final class Failure<T> extends Try<T> implements Serializable {
     final Exception exception;
 
     public Failure(Exception exception) {
@@ -378,7 +432,6 @@ final class Success<T> extends Try<T> implements Serializable {
     public <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X {
         return value;
     }
-
 
     public T getValue() {
         return value;
