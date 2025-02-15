@@ -16,24 +16,12 @@ public class Vector3 {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
-
     public float getZ() {
         return z;
-    }
-
-    public void setZ(float z) {
-        this.z = z;
     }
 
     //basic arithmetic
@@ -93,9 +81,9 @@ public class Vector3 {
 
     //Linear interpolation
     public Vector3 linear(Vector3 v2, float t) {
-        if(t > 1)
+        if (t > 1)
             throw new IllegalArgumentException("lerp can not be larger than 1");
-        if(t < 0)
+        if (t < 0)
             throw new IllegalArgumentException("lerp can not be negative");
         return new Vector3(this.x + t * (v2.x - this.x), this.y + t * (v2.y - this.y), this.z + t * (v2.z - this.z));
     }
@@ -106,16 +94,15 @@ public class Vector3 {
     }
 
     public Vector3 max(Vector3 v2) {
-        return new Vector3(Math.max(this.x, v2.x ), Math.max(this.y, v2.y), Math.max(this.z, v2.z));
+        return new Vector3(Math.max(this.x, v2.x), Math.max(this.y, v2.y), Math.max(this.z, v2.z));
     }
 
     //Convert to vector2 and vector4
     public Vector2 toVector2() {
         return new Vector2(this.x, this.y);
     }
+
     public Vector4 toVector4(float w) {
         return new Vector4(this.x, this.y, this.z, w);
     }
-
-
 }
