@@ -1,5 +1,6 @@
 package org.fungover.breeze.collection;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,5 +18,9 @@ public class FQueue<T> {
 
     }
 
-
+    public FQueue<T> enqueue(T value) {
+        List<T> newBack = new ArrayList<>(back);
+        newBack.add(value);
+        return new FQueue<>(front, newBack);
+    }
 }
