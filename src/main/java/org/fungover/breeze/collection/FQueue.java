@@ -23,4 +23,20 @@ public class FQueue<T> {
         newBack.add(value);
         return new FQueue<>(front, newBack);
     }
+
+    public FQueue<T> dequeue() {
+        if (front.isEmpty() && back.isEmpty()) {
+            return this;
+        }
+
+        if (front.isEmpty()) {
+            List<T> newFront = new ArrayList<>(back);
+            Collections.reverse(newFront);
+            return new FQueue<>(newFront.subList(1, newFront.size()), Collections.emptyList());
+
+        }
+        return new FQueue<>(front.subList(1, front.size()), back);
+    }
+
+
 }
