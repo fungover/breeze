@@ -1,6 +1,7 @@
 package org.fungover.breeze;
 
 import org.fungover.breeze.control.Lazy;
+import org.fungover.breeze.funclib.control.Try;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
@@ -154,6 +155,27 @@ class LazyTest {
             assertTrue(lazy.isEvaluated(), "Value should be evaluated after forEach is called");
         }
 
+        @Test
+        @DisplayName("toTry should return success when success")
+        void toTryShouldReturnSuccessWhenSuccess() throws Throwable {
+            Lazy<Integer> lazy = Lazy.of(() -> 96);
+            Try<Integer> result = lazy.toTry();
+            assertTrue(result.isSuccess());
+            assertEquals(96, result.get());
+        }
+
+        @Test
+        @DisplayName("toTry should return failure when failure")
+        void toTryShouldReturnFailureWhenFailure() {
+            Lazy<Integer> lazy = Lazy.of(() -> {
+                throw new RuntimeException("Computation failed");
+            });
+
+            Try<Integer> result = lazy.toTry();
+
+            assertTrue(result.isFailure());
+            assertThrows(RuntimeException.class, result::get);
+        }
     }
 
     @Nested
