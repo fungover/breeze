@@ -8,10 +8,18 @@ import java.util.List;
 
 public class Arrays {
 
+
    private Arrays() {
        throw new IllegalStateException("Utility class");
    }
 
+   private static <T> T[][] create2DArray(Class<?> componentType, int row, int col) {
+       return (T[][]) Array.newInstance(componentType, row, col);
+   }
+
+   private static <T> T[] create1DArray(Class<?> componentType, int row) {
+       return (T[]) Array.newInstance(componentType, row);
+   }
 
     public static <T> T[][] chunk(T[] array, int size) {
 
@@ -30,23 +38,29 @@ public class Arrays {
         }
 
         if (array.length == 0) {
-            return (T[][]) Array.newInstance(array.getClass().getComponentType(), 0,0);
+            return create2DArray(array.getClass().getComponentType(), 0,0);
+            //return (T[][]) Array.newInstance(array.getClass().getComponentType(), 0,0);
         }
 
         int numberOfChunks = (int) Math.ceil((double) array.length / size);
-       Object[][] chunks = (Object[][]) Array.newInstance(array.getClass().getComponentType(), numberOfChunks,0);
+        Class<?> componentType = array.getClass().getComponentType();
+
+        T[][] chunks = create2DArray(componentType, numberOfChunks, size);
+
+       // Object[][] chunks = (Object[][]) Array.newInstance(array.getClass().getComponentType(), numberOfChunks,0);
 
        for (int i = 0; i < numberOfChunks; i++) {
            int start = i * size;
            int length = Math.min(array.length - start, size);
 
-           Object[] chunk = (Object[]) Array.newInstance(array.getClass().getComponentType(), length);
+           T[] chunk = create1DArray(componentType, length);
+           //Object[] chunk = (Object[]) Array.newInstance(array.getClass().getComponentType(), length);
 
            System.arraycopy(array, start, chunk, 0, length);
            chunks[i] = chunk;
        }
 
-        return (T[][]) chunks;
+        return chunks;
 
     }
 
