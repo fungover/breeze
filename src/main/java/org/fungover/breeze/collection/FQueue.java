@@ -49,5 +49,13 @@ public class FQueue<T> {
         return Optional.empty();
     }
 
+    public boolean isEmpty(){
+        return front.isEmpty() && back.isEmpty();
+    }
+
+    public int size(){
+        return front.size() + back.size();
+    }
+
 
 }
