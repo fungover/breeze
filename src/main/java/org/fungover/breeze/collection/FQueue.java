@@ -40,13 +40,13 @@ public class FQueue<T> {
     }
 
     public Optional<T> peek(){
-        if (front.isEmpty()) {
+        if (front.isEmpty() && back.isEmpty()) {
+            return Optional.empty();
+        }
+        if (!front.isEmpty()) {
             return Optional.of(front.get(0));
         }
-        if (!back.isEmpty()) {
-            return Optional.of(back.get(back.size() - 1));
-        }
-        return Optional.empty();
+        return Optional.of(back.get(0));
     }
 
     public boolean isEmpty(){
