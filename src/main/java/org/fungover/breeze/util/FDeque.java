@@ -2,7 +2,6 @@ package org.fungover.breeze.util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public final class FDeque<T> {
 
@@ -85,26 +84,26 @@ public final class FDeque<T> {
      * Check which element is in front
      * @return The element in front
      */
-    public Optional<T> peekFront() {
+    public T peekFront() {
         if (!front.isEmpty()) {
-            return Optional.of(front.getFirst());
+            return front.getFirst();
         } else if (!back.isEmpty()) {
-            return Optional.of(back.getFirst());
+            return back.getFirst();
         }
-        return Optional.empty();
+        return null;
     }
 
     /**
      * Check which element is in the back
      * @return The element in the back
      */
-    public Optional<T> peekBack() {
+    public T peekBack() {
         if (!back.isEmpty()) {
-            return Optional.of(back.getLast());
+            return back.getLast();
         } else if (!front.isEmpty()) {
-            return Optional.of(front.getLast());
+            return front.getLast();
         }
-        return Optional.empty();
+        return null;
     }
 
     /**
