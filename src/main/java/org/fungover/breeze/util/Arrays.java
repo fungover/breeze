@@ -108,7 +108,7 @@ public class Arrays {
      * @param size The size of each chunk.
      * @param <T> The type of elements in the array.
      * @return A 2D array where each inner array is a chunk of the original array.
-     * @throws IllegalArgumentException if the array is null, contains null elements or size is <=0.
+     * @throws IllegalArgumentException if the array is null, contains null elements or size is negative or zero.
      */
 
     public static <T> T[][] chunk(T[] array, int size) {
@@ -155,7 +155,7 @@ public class Arrays {
      * @param size The size of each chunk.
      * @param <T> The type of elements in the list.
      * @return A list of list where each inner list is a chunk of the original list.
-     * @throws IllegalArgumentException if the list is null, contains null elements or size is <=0.
+     * @throws IllegalArgumentException if the list is null, contains null elements or size is negative or zero.
      */
     public static <T>List<List<T>> chunkList(List<T> list, int size) {
         if(list == null) {
