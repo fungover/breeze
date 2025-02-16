@@ -125,7 +125,9 @@ public class Arrays {
 
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be greater than 0");
-        } else if (array.length == 0) {
+        }
+
+        if (array.length == 0) {
             return create2DArray(array.getClass().getComponentType(), 0,0);
         }
 
