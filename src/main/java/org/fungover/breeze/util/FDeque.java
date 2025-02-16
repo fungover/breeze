@@ -1,7 +1,8 @@
-import java.util.ArrayList;
+package org.fungover.breeze.util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public final class FDeque<T> {
 
@@ -9,12 +10,15 @@ public final class FDeque<T> {
     private final List<T> back;
 
     private FDeque(List<T> front, List<T> back) {
+        if (front == null || back == null) {
+            throw new IllegalArgumentException("Lists cannot be null");
+        }
         this.front = Collections.unmodifiableList(front);
         this.back = Collections.unmodifiableList(back);
     }
 
     public static <T> FDeque<T> create() {
-        return new FDeque<T>(new LinkedList<>(), new LinkedList<>());
+        return new FDeque<>(new LinkedList<>(), new LinkedList<>());
     }
 
     /**
@@ -45,13 +49,13 @@ public final class FDeque<T> {
      */
     public FDeque<T> dequeFront() {
         if (front.isEmpty() && back.isEmpty()) {
-                return create(); }
-             else if (front.isEmpty()) {
+            return create();
+        } else if (front.isEmpty()) {
             List<T> newBack = new LinkedList<>(back);
             newBack.removeFirst();
             return new FDeque<>(Collections.emptyList(), newBack);
-        }
-             else {
+
+        } else {
             List<T> newFront = new LinkedList<>(front);
             newFront.removeFirst();
             return new FDeque<>(newFront, back);
@@ -69,8 +73,8 @@ public final class FDeque<T> {
                 List<T> newFront = new LinkedList<>(front);
                 newFront.removeLast();
                 return new FDeque<>(Collections.emptyList(), newFront);
-            }
-            else {
+
+            } else {
             List<T> newBack = new LinkedList<>(back);
             newBack.removeLast();
             return new FDeque<>(front, newBack);
@@ -81,26 +85,26 @@ public final class FDeque<T> {
      * Check which element is in front
      * @return The element in front
      */
-    public T peekFront() {
+    public Optional<T> peekFront() {
         if (!front.isEmpty()) {
-            return front.getFirst();
+            return Optional.of(front.getFirst());
         } else if (!back.isEmpty()) {
-            return back.getFirst();
+            return Optional.of(back.getFirst());
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
      * Check which element is in the back
      * @return The element in the back
      */
-    public T peekBack() {
+    public Optional<T> peekBack() {
         if (!back.isEmpty()) {
-            return back.getLast();
+            return Optional.of(back.getLast());
         } else if (!front.isEmpty()) {
-            return front.getLast();
+            return Optional.of(front.getLast());
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
