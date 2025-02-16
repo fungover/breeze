@@ -7,23 +7,77 @@ import java.util.List;
 
 
 /**
- * Utility class that provides methods for chunking arrays and list into smaller part.
- * This class can not be instantiated.
+ * A class containing static Array utility functions.
  */
 public class Arrays {
 
     /**
-     * Private constructor to prevent instantiation of utility class.
-     *
-     * @throws IllegalStateException if an attempt is made to instantiate this class.
+     * Don't let anyone instantiate this class
      */
-   private Arrays() {
-       throw new IllegalStateException("Utility class");
-   }
+    private Arrays() {}
+
+    /**
+     * Transposes a 2D array, converting rows into columns and vice versa.
+     *
+     * <p>For example:
+     * <pre>
+     * Input:
+     * [[1, 2, 3],
+     *  [4, 5, 6]]
+     *
+     * Output:
+     * [[1, 4],
+     *  [2, 5],
+     *  [3, 6]]
+     * </pre>
+     *
+     * @param array The 2D array to transpose.
+     * @param <T>   The type of elements in the array.
+     * @return The transposed 2D array, where rows become columns.
+     *
+     * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
+     */
+    public static <T> T[][] transpose(T[][] array) {
+        // Check if the input array is null or empty
+        if (array == null || array.length == 0) {
+            return array;
+        }
+
+        // Check if the first row exists and has elements
+        if (array[0].length == 0) {
+            return array;
+        }
+
+        // Determine dimensions of the array
+        int rows = array.length;
+        int cols = array[0].length;
+
+        // Validate that all rows have the same length
+        for (T[] row : array) {
+            if (row == null) {
+                throw new IllegalArgumentException("Irregular array: null rows are not allowed");
+            }
+            if (row.length != cols) {
+                throw new IllegalArgumentException("Irregular array: all rows must have the same length");
+            }
+        }
+
+        // Create a new 2D array with transposed dimensions (cols x rows)
+        @SuppressWarnings("unchecked")
+        T[][] transposed = (T[][]) Array.newInstance(array.getClass().getComponentType().getComponentType(), cols, rows);
+
+        // Transpose the array by swapping rows and columns
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                transposed[j][i] = array[i][j];
+            }
+        }
+
+        return transposed;
+    }
 
     /**
      * Creates a new 2D array with the specific number of rows and columns.
-     *
      * @param componentType The type of element in the array.
      * @param row Number of row in the array.
      * @param col Number of column in the array.
@@ -31,22 +85,21 @@ public class Arrays {
      * @return A new empty 2D array of the specific type and size
      */
     @SuppressWarnings("unchecked")
-   private static <T> T[][] create2DArray(Class<?> componentType, int row, int col) {
-       return (T[][]) Array.newInstance(componentType, row, col);
-   }
+    private static <T> T[][] create2DArray(Class<?> componentType, int row, int col) {
+        return (T[][]) Array.newInstance(componentType, row, col);
+    }
 
     /**
      * Creates a new 1D array with the specific number of rows.
-     *
      * @param componentType The type of element in the array.
      * @param length The length of the array.
      * @param <T> The type of the array elements.
      * @return A new empty 1D array of the specific type and size.
      */
     @SuppressWarnings("unchecked")
-   private static <T> T[] create1DArray(Class<?> componentType, int length) {
-       return (T[]) Array.newInstance(componentType, length);
-   }
+    private static <T> T[] create1DArray(Class<?> componentType, int length) {
+        return (T[]) Array.newInstance(componentType, length);
+    }
 
     /**
      * Splits an array into smaller array-chunks of specific size.
@@ -81,15 +134,15 @@ public class Arrays {
 
         T[][] chunks = create2DArray(componentType, numberOfChunks, size);
 
-       for (int i = 0; i < numberOfChunks; i++) {
-           int start = i * size;
-           int length = Math.min(array.length - start, size);
+        for (int i = 0; i < numberOfChunks; i++) {
+            int start = i * size;
+            int length = Math.min(array.length - start, size);
 
-           T[] chunk = create1DArray(componentType, length);
+            T[] chunk = create1DArray(componentType, length);
 
-           System.arraycopy(array, start, chunk, 0, length);
-           chunks[i] = chunk;
-       }
+            System.arraycopy(array, start, chunk, 0, length);
+            chunks[i] = chunk;
+        }
 
         return chunks;
 
