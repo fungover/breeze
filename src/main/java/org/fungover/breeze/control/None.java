@@ -206,21 +206,47 @@ public final class None<T extends Serializable> extends Option<T> {
         return ifNone.get();
     }
 
+    /**
+     * Converts this {@code None} to an empty {@link List}.
+     *
+     * @return an empty list, as {@code None} contains no value.
+     */
     @Override
     public List<T> toList() {
         return List.of();
     }
 
+    /**
+     * Converts this {@code None} to an empty {@link Stream}.
+     *
+     * @return an empty stream, as {@code None} contains no value.
+     */
     @Override
     public Stream<T> toStream() {
         return Stream.empty();
     }
 
+    /**
+     * Converts this {@code None} to an empty {@link Optional}.
+     *
+     * @return {@code Optional.empty()}, as {@code None} represents the absence of a value.
+     */
     @Override
     public Optional<T> toOptional() {
         return Optional.empty();
     }
 
+    /**
+     * Converts this {@code None} into a left-biased {@link Either}.
+     * <p>
+     * Since {@code None} has no value, it calls the provided supplier to generate a left value.
+     * </p>
+     *
+     * @param leftSupplier a supplier providing the left value if this is {@code None}.
+     * @param <L>          the type of the left value, extending {@link Serializable}.
+     * @return an {@code Either.Left} containing the supplied value.
+     * @throws NullPointerException if {@code leftSupplier} is null or if it returns null.
+     */
     @Override
     public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
         if (leftSupplier == null) {
