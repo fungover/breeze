@@ -2,6 +2,8 @@ package org.fungover.breeze.control;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
+
+import java.io.Serializable;
 import java.util.Optional;
 
 public class OptionTest {
@@ -30,6 +32,33 @@ public class OptionTest {
 
     }
 
+    @Test
+    void ofShouldCreateSomeIfValueIsNotNull() {
+
+        Option<Serializable> option = Option.of(42);
+
+        assertThat(option).isInstanceOf(Some.class);
+        assertThat(option.isDefined()).isTrue();
+    }
+
+    @Test
+    void ofShouldReturnNoneIfValueIsNull() {
+        Option<Integer> option = Option.of(null);
+        assertThat(option).isInstanceOf(None.class);
+        assertThat(option.isEmpty()).isTrue();
+    }
+
+    @Test
+    void ofNullableShouldBehaveLikeOf() {
+
+        Option<String> someOption = Option.ofNullable("avalue");
+        Option<Integer> noneOption = Option.ofNullable(null);
+
+        assertThat(someOption).isInstanceOf(Some.class);
+        assertThat(noneOption).isInstanceOf(None.class);
+
+
+    }
 
 
 }
