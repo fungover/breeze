@@ -2,7 +2,7 @@ package org.fungover.breeze.collection;
 
 import java.util.function.Function;
 
-public interface FTree<T> {
+public interface FTree<T extends Comparable<T>> {
 
     T value();
 
@@ -14,23 +14,18 @@ public interface FTree<T> {
 
     boolean contains(T value);
 
-    <R> FTree<R> map(Function<T, R> f);
+    <R extends Comparable<R>> FTree<R> map(Function<T, R> f);
 
-    static <T> FTree<T> empty() {
+    static <T extends Comparable<T>> FTree<T> empty() {
         return new EmptyTree<>();
-
     }
-
 }
 
-class EmptyTree<T> implements FTree<T> {
+class EmptyTree<T extends Comparable<T>> implements FTree<T> {
 
     @Override
-
     public T value() {
-
         throw new UnsupportedOperationException("Empty tree has no value");
-
     }
 
     @Override
@@ -54,12 +49,12 @@ class EmptyTree<T> implements FTree<T> {
     }
 
     @Override
-    public <R> FTree<R> map(Function<T, R> f) {
+    public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
         return new EmptyTree<>();
     }
 }
 
-class NonEmptyTree<T> implements FTree<T> {
+class NonEmptyTree<T extends Comparable<T>> implements FTree<T> {
 
     private final T value;
     private final FTree<T> left;
@@ -89,8 +84,12 @@ class NonEmptyTree<T> implements FTree<T> {
     }
 
     @Override
-    public FTree<T> insert(T value) {
-        return null;
+    public FTree<T> insert(T newValue) {
+        if (newValue.compareTo(value) < 0) {
+            return new NonEmptyTree<>(value, left.insert(newValue), right);
+        } else {
+            return new NonEmptyTree<>(value, left, right.insert(newValue));
+        }
     }
 
     @Override
@@ -99,8 +98,12 @@ class NonEmptyTree<T> implements FTree<T> {
     }
 
     @Override
-    public <R> FTree<R> map(Function<T, R> f) {
-        return null;
+    public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
+        return new NonEmptyTree<>(
+                f.apply(value),
+                left.map(f),
+                right.map(f)
+        );
     }
 }
 
