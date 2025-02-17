@@ -1,11 +1,17 @@
 package org.fungover.breeze.control;
 
+import org.fungover.breeze.funclib.control.Either;
+
 import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 
 /**
@@ -17,7 +23,7 @@ import java.util.function.Supplier;
  *
  * @param <T> The type of the non-existent value.
  */
-public final class None<T> extends Option<T> {
+public final class None<T extends Serializable> extends Option<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -39,7 +45,7 @@ public final class None<T> extends Option<T> {
      * @return The singleton instance of {@code None}.
      */
     @SuppressWarnings("unchecked")
-    public static <T> None<T> getInstance() {
+    public static <T extends Serializable> None<T> getInstance() {
     return (None<T>) INSTANCE;
     }
 
@@ -135,7 +141,7 @@ public final class None<T> extends Option<T> {
      * @return {@code None<U>}.
      */
     @Override
-    public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
+    public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
         return None.getInstance();
     }
 
@@ -147,7 +153,7 @@ public final class None<T> extends Option<T> {
      * @return {@code None<U>}.
      */
     @Override
-    public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+    public <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
         return None.getInstance();
     }
 
@@ -198,6 +204,26 @@ public final class None<T> extends Option<T> {
         Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
 
         return ifNone.get();
+    }
+
+    @Override
+    public List<T> toList() {
+        return List.of();
+    }
+
+    @Override
+    public Stream<T> toStream() {
+        return Stream.empty();
+    }
+
+    @Override
+    public Optional<T> toOptional() {
+        return Optional.empty();
+    }
+
+    @Override
+    public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
+        return null;
     }
 
 
