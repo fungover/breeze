@@ -103,7 +103,7 @@ public interface FTree<T extends Comparable<T>> {
      */
     static <T extends Comparable<T>, R extends Comparable<R>> void inOrderTraversal(
             FTree<T> tree, Function<T, R> f, List<R> list) {
-        if (tree instanceof EmptyTree<?> empty) {
+        if (tree instanceof EmptyTree<?>) {
             return;
         }
         inOrderTraversal(tree.left(), f, list);
