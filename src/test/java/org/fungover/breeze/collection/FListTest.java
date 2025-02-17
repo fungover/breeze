@@ -107,4 +107,17 @@ class FListTest {
         assertEquals(3, reversedList.tail().tail().head());
     }
 
+    @Test
+    @DisplayName("Test Cached FList")
+    public void testCachedFList() {
+        FList<Integer> list = FList.empty();
+        list = list.prepend(1).prepend(2).prepend(3);
+        FList<Integer> cachedList = new FList.CachedFList<>(list);
+        assertEquals(3, cachedList.head());
+        assertEquals(2, cachedList.tail().head());
+        assertEquals(1, cachedList.tail().tail().head());
+        assertEquals(3, cachedList.size());
+        assertEquals(1, cachedList.reverse().head());
+    }
+
 }

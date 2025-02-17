@@ -370,7 +370,7 @@ public abstract class FList<T> {
      *
      * @param <T> the type of elements in this list
      */
-    public class CachedFList<T> extends FList<T> {
+    public static class CachedFList<T> extends FList<T> {
         private final FList<T> original;
         private FList<T> cachedReversed;
 
