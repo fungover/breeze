@@ -24,7 +24,7 @@ class LazyTest {
 
 
     @Nested
-    class testsForPublicMethods {
+    class TestsForPublicMethods {
         @Test
         @DisplayName("Of method should return new Lazy supplier")
         void ofMethodShouldReturnNewLazySupplier() {
@@ -65,7 +65,7 @@ class LazyTest {
         }
 
         @Test
-        @DisplayName("flatMap should retriece element from lazy list")
+        @DisplayName("flatMap should retrieve element from lazy list")
         void flatMapShouldRetrieveElementFromLazyList() {
             Lazy<List<String>> lazyList = Lazy.of(() -> Arrays.asList("a", "b", "c"));
             Lazy<String> flatMapped = lazyList.flatMap(list -> Lazy.of(() -> list.get(2)));
@@ -179,9 +179,9 @@ class LazyTest {
     }
 
     @Nested
-    class testsForThreadSafety {
+    class TestsForThreadSafety {
         final int[] calculationCount = {0};
-        final long delayInNanos = 1_000_000_000;
+        private static final long HEAVY_COMPUTATION_DELAY_NANOS = 1_000_000_000L;
 
         @Test
         @DisplayName("Thread safety when counting value in multiple threads")
@@ -192,7 +192,7 @@ class LazyTest {
                 long start = System.nanoTime();
 
                 //Simulates a heavy calculation
-                while (System.nanoTime() - start < delayInNanos) {
+                while (System.nanoTime() - start < HEAVY_COMPUTATION_DELAY_NANOS) {
                     LockSupport.parkNanos(1);
                 }
                 return 123;
@@ -224,7 +224,7 @@ class LazyTest {
                 calculationCount[0]++;
                 long start = System.nanoTime();
 
-                while (System.nanoTime() - start < delayInNanos) {
+                while (System.nanoTime() - start < HEAVY_COMPUTATION_DELAY_NANOS) {
                     LockSupport.parkNanos(1);
                 }
 
@@ -252,7 +252,7 @@ class LazyTest {
     }
 
     @Nested
-    class testsNullValues {
+    class TestsNullValues {
 
         @Test
         @DisplayName("Lazy method should not compute before call")

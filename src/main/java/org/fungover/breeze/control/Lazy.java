@@ -26,13 +26,14 @@ public final class Lazy<T> {
      */
     private Lazy(Supplier<? extends T> supplier) {
         this.supplier = supplier;
+        this.value = null;
         this.evaluated = false;
     }
 
     /**
      * Static factory method to create a new lazy instance.
      *
-     * @param <T> the type of the value
+     * @param <T>      the type of the value
      * @param supplier the supplier function that computes the value
      * @return a new lazy instance
      */
@@ -43,7 +44,7 @@ public final class Lazy<T> {
     /**
      * Static factory method to create a pre-initialized lazy instance.
      *
-     * @param <T> the type of the value
+     * @param <T>   the type of the value
      * @param value the value to be stored in the lazy instance
      * @return a new lazy instance with the given value
      */
@@ -83,7 +84,7 @@ public final class Lazy<T> {
     /**
      * Transforms the value lazily using the given mapper function.
      *
-     * @param <U> the type of the transformed value
+     * @param <U>    the type of the transformed value
      * @param mapper the function to transform the value
      * @return a new lazy instance with the transformed value
      */
@@ -94,7 +95,7 @@ public final class Lazy<T> {
     /**
      * Performs a monadic bind operation on the lazy value.
      *
-     * @param <U> the type of the transformed value
+     * @param <U>    the type of the transformed value
      * @param mapper the function that maps the value to a new lazy instance
      * @return a new lazy instance with the transformed value
      */
@@ -143,10 +144,6 @@ public final class Lazy<T> {
      * @param action the action to perform
      */
     public void forEach(Consumer<? super T> action) {
-        if (isEvaluated()) {
-            action.accept(value);
-        } else {
-            action.accept(get());
-        }
+        action.accept(get());
     }
 }
