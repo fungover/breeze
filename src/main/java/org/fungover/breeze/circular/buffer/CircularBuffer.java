@@ -2,8 +2,6 @@ package org.fungover.breeze.circular.buffer;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class CircularBuffer<T> implements Iterable<T> {
     private final OverflowStrategy overflowStrategy;
@@ -21,6 +19,7 @@ public class CircularBuffer<T> implements Iterable<T> {
         this.overflowStrategy = OverflowStrategy.OVERWRITE;
         this.threadSafe = false;
     }
+
     public CircularBuffer(int capacity, OverflowStrategy overflowStrategy, boolean threadSafe) {
         this.capacity = capacity;
         this.overflowStrategy = overflowStrategy;
@@ -35,8 +34,8 @@ public class CircularBuffer<T> implements Iterable<T> {
      * Adds an element to the buffer, depending on the overflow strategy:
      * <br>OVERWRITE: overwrites oldest element inside buffer if full
      * <br>REJECT: cancels write and throws exception if buffer is full
-     * @param element
-     * New element to be added to the buffer.
+     *
+     * @param element New element to be added to the buffer.
      */
     public void add(T element) {
         if (threadSafe) {
@@ -87,7 +86,8 @@ public class CircularBuffer<T> implements Iterable<T> {
             synchronized (this) {
                 removeInternal();
             }
-        } return removeInternal();
+        }
+        return removeInternal();
     }
 
     private T removeInternal() {
@@ -139,7 +139,16 @@ public class CircularBuffer<T> implements Iterable<T> {
             synchronized (this) {
                 return capacity;
             }
-        } return capacity;
+        }
+        return capacity;
+    }
+
+    protected T getAt(int index) {
+        if (threadSafe) {
+            synchronized (this) {
+                return buffer[index];
+            }
+        } return buffer[index];
     }
 
     /**
@@ -156,20 +165,30 @@ public class CircularBuffer<T> implements Iterable<T> {
         return count == 0;
     }
 
-
-    //Todo: Iterable
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new CustomIterator<T>(this);
+    }
+}
+
+class CustomIterator<T> implements Iterator<T> {
+    private CircularBuffer<T> buffer;
+    private int index;
+
+    public CustomIterator(CircularBuffer<T> buffer) {
+        this.buffer = buffer;
+        this.index = 0;
     }
 
     @Override
-    public void forEach(Consumer<? super T> action) {
-        Iterable.super.forEach(action);
+    public boolean hasNext() {
+        return index < buffer.count();
     }
 
     @Override
-    public Spliterator<T> spliterator() {
-        return Iterable.super.spliterator();
+    public T next() {
+        T t = buffer.getAt(index);
+        index++;
+        return t;
     }
 }
