@@ -96,4 +96,15 @@ class FListTest {
         assertEquals(3, list.size());
     }
 
+    @Test
+    @DisplayName("Test Reverse")
+    public void testReverse() {
+        FList<Integer> list = FList.empty();
+        list = list.prepend(1).prepend(2).prepend(3);
+        FList<Integer> reversedList = list.reverse();
+        assertEquals(1, reversedList.head());
+        assertEquals(2, reversedList.tail().head());
+        assertEquals(3, reversedList.tail().tail().head());
+    }
+
 }
