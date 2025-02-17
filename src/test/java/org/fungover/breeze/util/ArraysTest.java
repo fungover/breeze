@@ -78,6 +78,16 @@ class ArraysTest {
                 Arrays.zipWith(first, second, Integer::sum, result)
         );
     }
+
+    @Test
+    void testZipWith_ShortResultArray_ShouldThrowException() {
+        Integer[] first = {1, 2, 3};
+        Integer[] second = {10, 20, 30};
+        Integer[] result = new Integer[2]; // För kort!
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zipWith(first, second, Integer::sum, result));
+    }
+
     @Test
     void testWeaver_EqualLengthArrays() {
         String[] first = {"x", "y", "z"};
@@ -88,6 +98,7 @@ class ArraysTest {
 
         assertArrayEquals(new String[]{"x", "1", "y", "2", "z", "3"}, result);
     }
+
     @Test
     void testWeaver_DifferentLengths() {
         String[] first = {"a", "b"};
@@ -153,7 +164,7 @@ class ArraysTest {
     void testWeaver_ShortResultArray_ShouldThrowException() {
         String[] first = {"a", "b"};
         String[] second = {"1", "2", "3"};
-        String[] result = new String[4]; // För kort!
+        String[] result = new String[4];
 
         assertThrows(IllegalArgumentException.class, () -> Arrays.weaver(first, second, result));
     }
