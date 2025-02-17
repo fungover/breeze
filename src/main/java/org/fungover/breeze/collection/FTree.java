@@ -59,4 +59,50 @@ class EmptyTree<T> implements FTree<T> {
     }
 }
 
+class NonEmptyTree<T> implements FTree<T> {
+
+    private final T value;
+    private final FTree<T> left;
+    private final FTree<T> right;
+
+
+    public NonEmptyTree(T value, FTree<T> left, FTree<T> right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+
+
+    @Override
+    public T value() {
+        return value;
+    }
+
+    @Override
+    public FTree<T> left() {
+        return left;
+    }
+
+    @Override
+    public FTree<T> right() {
+        return right;
+    }
+
+    @Override
+    public FTree<T> insert(T value) {
+        return null;
+    }
+
+    @Override
+    public boolean contains(T value) {
+        return false;
+    }
+
+    @Override
+    public <R> FTree<R> map(Function<T, R> f) {
+        return null;
+    }
+}
+
+
 
