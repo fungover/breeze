@@ -1,12 +1,18 @@
 package org.fungover.breeze.control;
+import org.fungover.breeze.funclib.control.Either;
+
 import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-public final class Some<T> extends Option<T> {
+public final class Some<T extends Serializable> extends Option<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -116,7 +122,7 @@ public final class Some<T> extends Option<T> {
      */
 
     @Override
-    public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
+    public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
         return Option.ofNullable(mapper.apply(value));
     }
 
@@ -132,7 +138,7 @@ public final class Some<T> extends Option<T> {
      */
 
     @Override
-    public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+    public <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
         return Objects.requireNonNullElse(mapper.apply(value), None.getInstance());
     }
 
@@ -192,5 +198,25 @@ public final class Some<T> extends Option<T> {
         Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
         Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
         return ifPresent.apply(value);
+    }
+
+    @Override
+    public List<T> toList() {
+        return List.of();
+    }
+
+    @Override
+    public Stream<T> toStream() {
+        return Stream.empty();
+    }
+
+    @Override
+    public Optional<T> toOptional() {
+        return Optional.empty();
+    }
+
+    @Override
+    public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
+        return null;
     }
 }

@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * @param <T> the type of the contained value
  */
 
-public abstract class Option<T> implements Serializable {
+public abstract class Option<T extends Serializable> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public abstract class Option<T> implements Serializable {
      * @return an {@code Option<T>} containing the value, or {@code None<T>} if the value is null
      */
 
-    public static <T> Option<T> of(T value) {
+    public static <T extends Serializable> Option<T> of(T value) {
         return value != null ? new Some<>(value) : None.getInstance();
     }
 
@@ -105,7 +105,7 @@ public abstract class Option<T> implements Serializable {
      * @throws NullPointerException if {@code value} is {@code null}
      */
 
-    public static <T> Option<T> some(T value) {
+    public static <T extends Serializable> Option<T> some(T value) {
         if (value == null) {
             throw new NullPointerException("Cannot create 'Some' with null");
         }
@@ -191,7 +191,7 @@ public abstract class Option<T> implements Serializable {
      * @return an Option containing the transformed value, or None if empty
      */
 
-    public abstract <U> Option<U> map(Function<? super T, ? extends U> mapper);
+    public abstract <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper);
 
     /**
      * Transforms the contained value using a function that returns an Option.
@@ -205,7 +205,7 @@ public abstract class Option<T> implements Serializable {
      * @return the mapped Option<U> or None if empty
      */
 
-    public abstract <U> Option<U> flatMap(Function<? super T, Option<U>> mapper);
+    public abstract <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper);
 
     /**
      * Returns this Option if the contained value satisfies the given predicate;
@@ -295,7 +295,7 @@ public abstract class Option<T> implements Serializable {
     public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
 
-        public static <T> Option<T> ofNullable(T value) {
+        public static <T extends Serializable> Option<T> ofNullable(T value) {
             return value != null ? new Some<>(value) : None.getInstance();
         }
 
@@ -308,6 +308,6 @@ public abstract class Option<T> implements Serializable {
 
         public abstract Optional<T> toOptional();
 
-
+        public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
 }
