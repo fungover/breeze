@@ -113,6 +113,26 @@ public abstract class Option<T extends Serializable> implements Serializable {
     }
 
     /**
+     * Returns the singleton instance of {@code None<T>}, representing the absence of a value.
+     * <p>
+     * This method provides a type-safe way to obtain an empty {@code Option<T>}. Since {@code None}
+     * is a singleton, all calls to this method return the same instance.
+     * </p>
+     *
+     * <p>Example usage:</p>
+     * <pre>{@code
+     * Option<String> emptyOption = Option.none();
+     * System.out.println(emptyOption.isEmpty()); // true
+     * }</pre>
+     *
+     * @param <T> the type of the (non-existent) value, restricted to {@link Serializable}
+     * @return the singleton {@code None<T>} instance
+     */
+    public static<T extends Serializable> Option<T> none() {
+        return None.getInstance();
+    }
+
+    /**
      * Checks if this Option is empty (i.e., an instance of {@code None}).
      *
      * @return {@code true} if this is None, otherwise {@code false}.
