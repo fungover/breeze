@@ -200,21 +200,43 @@ public final class Some<T extends Serializable> extends Option<T> {
         return ifPresent.apply(value);
     }
 
+    /**
+     * Converts this {@code Some} to a {@link List} containing the value.
+     *
+     * @return a singleton list with the contained value.
+     */
     @Override
     public List<T> toList() {
         return List.of(value);
     }
 
+    /**
+     * Converts this {@code Some} to a {@link Stream} containing the value.
+     *
+     * @return a single-element stream containing the value.
+     */
     @Override
     public Stream<T> toStream() {
         return Stream.of(value);
     }
 
+    /**
+     * Converts this {@code Some} to a non-empty {@link Optional}.
+     *
+     * @return an {@code Optional} containing the value.
+     */
     @Override
     public Optional<T> toOptional() {
         return Optional.of(value);
     }
 
+    /**
+     * Converts this {@code Some} to a right-biased {@link Either}, as it contains a valid value.
+     *
+     * @param leftSupplier ignored in this implementation, as {@code Some} always maps to {@code Either.right}.
+     * @param <L>          the type of the left value, extending {@link Serializable}.
+     * @return an {@code Either.Right} containing the value.
+     */
     @Override
     public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
         return Either.right(value);
