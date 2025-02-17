@@ -102,7 +102,7 @@ public interface FTree<T extends Comparable<T>> {
      */
     static <T extends Comparable<T>, R extends Comparable<R>> void inOrderTraversal(
             FTree<T> tree, Function<T, R> f, List<R> list) {
-        if (tree instanceof EmptyTree) {
+        if (tree instanceof EmptyTree<?>) {
             return;
         }
         inOrderTraversal(tree.left(), f, list);
@@ -207,8 +207,11 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     @Override
     public boolean contains(T searchValue) {
         int cmp = searchValue.compareTo(value);
-        if (cmp == 0) return true;
-        return (cmp < 0) ? left.contains(searchValue) : right.contains(searchValue);
+        if (cmp == 0) {
+            return true;
+        }
+        FTree<T> nextSubtree = (cmp < 0) ? left : right;
+        return nextSubtree.contains(searchValue);
     }
 
     /**
