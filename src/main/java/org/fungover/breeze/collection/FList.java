@@ -428,7 +428,7 @@ public abstract class FList<T> {
                 cachedReversed = original.reverse();
             }
             cachedReversed = cachedReversed.prepend(element);
-            return new CachedFList<>(original);
+            return new CachedFList<>(cachedReversed.reverse());
         }
 
         /**

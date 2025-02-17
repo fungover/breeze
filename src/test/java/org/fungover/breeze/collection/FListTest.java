@@ -17,22 +17,25 @@ class FListTest {
         assertThrows(UnsupportedOperationException.class, list::tail);
     }
 
+
     @Test
     @DisplayName("Test Prepend")
-    void testPrepend() {
-        FList<Integer> list = FList.<Integer>empty().prepend(1);
+    public void testPrepend() {
+        FList<Integer> list = FList.empty();
+        list = list.prepend(1);
         assertFalse(list.isEmpty());
         assertEquals(1, list.head());
-        assertEquals(1, list.size());
+        assertTrue(list.tail().isEmpty());
     }
 
     @Test
     @DisplayName("Test Append")
-    void testAppend() {
-        FList<Integer> list = FList.<Integer>empty().append(1);
+    public void testAppend() {
+        FList<Integer> list = FList.empty();
+        list = list.append(1);
         assertFalse(list.isEmpty());
         assertEquals(1, list.head());
-        assertEquals(1, list.size());
+        assertTrue(list.tail().isEmpty());
     }
 
     @Test
@@ -53,6 +56,7 @@ class FListTest {
         assertEquals(1, tail.head());
         assertEquals(1, tail.size());
     }
+
 
     @Test
     @DisplayName("Test Map")
@@ -82,6 +86,14 @@ class FListTest {
 
         FList<Integer> nonEmptyList = emptyList.prepend(1);
         assertFalse(nonEmptyList.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Test Size")
+    public void testSize() {
+        FList<Integer> list = FList.empty();
+        list = list.prepend(1).prepend(2).prepend(3);
+        assertEquals(3, list.size());
     }
 
 }
