@@ -20,6 +20,12 @@ public class OptionTest {
     void noneShouldReturnNone() {
 
         Option<String> option1 = Option.none();
+        Option<Integer> option2 = Option.none();
+
+        assertThat(option1).isSameAs(option2);
+        assertThat(option1).isInstanceOf(None.class);
+        assertThat(option1.isDefined()).isFalse();
+        assertThat(option2.isEmpty()).isTrue();
 
 
     }
