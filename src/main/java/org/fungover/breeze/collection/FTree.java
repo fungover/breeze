@@ -93,8 +93,10 @@ class NonEmptyTree<T extends Comparable<T>> implements FTree<T> {
     }
 
     @Override
-    public boolean contains(T value) {
-        return false;
+    public boolean contains(T searchValue) {
+        int cmp = searchValue.compareTo(value);
+        if (cmp == 0) return true;
+        return (cmp < 0) ? left.contains(searchValue) : right.contains(searchValue);
     }
 
     @Override
