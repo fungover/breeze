@@ -299,15 +299,50 @@ public abstract class Option<T extends Serializable> implements Serializable {
             return value != null ? new Some<>(value) : None.getInstance();
         }
 
-
+    /**
+     * Converts this {@code Option<T>} into a {@code List<T>}.
+     * <ul>
+     *   <li>If this is {@code Some<T>}, returns a singleton list containing the value.</li>
+     *   <li>If this is {@code None}, returns an empty list.</li>
+     * </ul>
+     *
+     * @return a list containing the value if present, otherwise an empty list
+     */
         public abstract List<T> toList();
 
-
+    /**
+     * Converts this {@code Option<T>} into a {@code Stream<T>}.
+     * <ul>
+     *   <li>If this is {@code Some<T>}, returns a stream containing the value.</li>
+     *   <li>If this is {@code None}, returns an empty stream.</li>
+     * </ul>
+     *
+     * @return a stream containing the value if present, otherwise an empty stream
+     */
         public abstract Stream<T> toStream();
 
-
+    /**
+     * Converts this {@code Option<T>} into a {@code java.util.Optional<T>}.
+     * <ul>
+     *   <li>If this is {@code Some<T>}, returns an {@code Optional} containing the value.</li>
+     *   <li>If this is {@code None}, returns {@code Optional.empty()}.</li>
+     * </ul>
+     *
+     * @return an {@code Optional} containing the value if present, otherwise an empty {@code Optional}
+     */
         public abstract Optional<T> toOptional();
-
+    /**
+     * Converts this {@code Option<T>} into an {@code Either<L, T>}.
+     * <ul>
+     *   <li>If this is {@code Some<T>}, returns a {@code Right<T>} containing the value.</li>
+     *   <li>If this is {@code None}, invokes the given {@code leftSupplier} and returns a {@code Left<L>}.</li>
+     * </ul>
+     *
+     * @param leftSupplier a supplier function that provides a {@code Left<L>} value when this is {@code None}
+     * @param <L> the type of the left value, which must be serializable
+     * @return an {@code Either<L, T>} with {@code Right<T>} if value is present, otherwise {@code Left<L>}
+     * @throws NullPointerException if {@code leftSupplier} is null or returns null
+     */
         public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
 }
