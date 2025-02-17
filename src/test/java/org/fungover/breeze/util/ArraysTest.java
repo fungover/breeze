@@ -46,6 +46,16 @@ class ArraysTest {
         assertEquals("b", result[1].getFirst());
         assertNull(result[1].getSecond());
     }
+
+    @Test
+    void testZipWith_NullCombiner_ShouldThrowException() {
+        Integer[] first = {1, 2, 3};
+        Integer[] second = {10, 20, 30};
+        Integer[] result = new Integer[first.length];
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zipWith(first, second, null, result));
+    }
+
     @Test
     void testZipWith_IntegerArrays() {
         Integer[] first = {1, 2, 3};
