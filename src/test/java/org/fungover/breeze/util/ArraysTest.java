@@ -148,6 +148,16 @@ class ArraysTest {
         assertEquals(1, result[2]);
         assertEquals(100001, result[3]);
     }
+
+    @Test
+    void testWeaver_ShortResultArray_ShouldThrowException() {
+        String[] first = {"a", "b"};
+        String[] second = {"1", "2", "3"};
+        String[] result = new String[4]; // För kort!
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.weaver(first, second, result));
+    }
+
     @Test
     void testWeaver_VerifyInterleavingOrder() {
         String[] first = {"a", "b", "c"};
