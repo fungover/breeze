@@ -1,12 +1,16 @@
 package org.fungover.breeze.control;
 
+import org.fungover.breeze.funclib.control.Either;
+
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * A generic container type representing an optional value.
@@ -294,6 +298,16 @@ public abstract class Option<T> implements Serializable {
         public static <T> Option<T> ofNullable(T value) {
             return value != null ? new Some<>(value) : None.getInstance();
         }
+
+
+        public abstract List<T> toList();
+
+
+        public abstract Stream<T> toStream();
+
+
+        public abstract Optional<T> toOptional();
+
 
 
 }
