@@ -48,6 +48,16 @@ class ArraysTest {
     }
 
     @Test
+    void testZipWith_NullInput_ShouldThrowException() {
+        Integer[] first = {1, 2, 3};
+        Integer[] second = {10, 20, 30};
+        Integer[] result = new Integer[first.length];
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zipWith(null, second, Integer::sum, result));
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zipWith(first, null, Integer::sum, result));
+    }
+
+    @Test
     void testZipWith_NullCombiner_ShouldThrowException() {
         Integer[] first = {1, 2, 3};
         Integer[] second = {10, 20, 30};
