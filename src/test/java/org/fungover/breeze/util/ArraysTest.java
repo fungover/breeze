@@ -48,6 +48,13 @@ class ArraysTest {
     }
 
     @Test
+    void testZip_NullArray_ShouldThrowException() {
+        String[] words = {"a", "b", "c"};
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zip(null, words));
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zip(words, null));
+    }
+
+    @Test
     void testZipWith_NullInput_ShouldThrowException() {
         Integer[] first = {1, 2, 3};
         Integer[] second = {10, 20, 30};
