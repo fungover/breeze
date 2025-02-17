@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code FTree} interface represents a functional, immutable binary tree.
- * It provides operations to work with the tree structure in a persistent way.
+ * The {@code FTree} interface represents a functional, immutable binary search tree (BST).
+ * It supports insertion, searching, and transformation of elements in a persistent manner.
  *
  * @param <T> the type of elements stored in the tree, which must implement {@link Comparable}.
  */
@@ -35,8 +35,8 @@ public interface FTree<T extends Comparable<T>> {
     FTree<T> right();
 
     /**
-     * Inserts a new value into the tree, returning a new tree with the value inserted.
-     * The tree remains immutable.
+     * Inserts a new value into the tree while maintaining the BST ordering.
+     * This operation does not modify the existing tree but returns a new one.
      *
      * @param value the value to insert.
      * @return a new tree with the value inserted.
@@ -44,7 +44,7 @@ public interface FTree<T extends Comparable<T>> {
     FTree<T> insert(T value);
 
     /**
-     * Checks if the tree contains the specified value.
+     * Checks whether the tree contains the specified value.
      *
      * @param value the value to search for.
      * @return {@code true} if the tree contains the value, {@code false} otherwise.
@@ -53,28 +53,28 @@ public interface FTree<T extends Comparable<T>> {
 
     /**
      * Applies the given function to each value in the tree and returns a new tree
-     * with the results of applying the function. The original tree structure is preserved.
+     * with the transformed values. The structure of the tree is preserved.
      *
-     * @param f   the function to apply to each value in the tree.
+     * @param f   the function to apply to each value.
      * @param <R> the type of the values in the new tree.
-     * @return a new tree with the function applied to all values.
+     * @return a new tree with the function applied to each value.
      */
     <R extends Comparable<R>> FTree<R> map(Function<T, R> f);
 
     /**
-     * Returns an empty tree.
+     * Returns a singleton instance of an empty tree.
      *
      * @param <T> the type of elements in the tree.
-     * @return an empty tree.
+     * @return a singleton instance of an empty tree.
      */
     static <T extends Comparable<T>> FTree<T> empty() {
-        return new EmptyTree<T>();
+        return EmptyTree.getInstance();
     }
 
     /**
      * Applies the given function to each value in the tree and rebuilds a new tree
      * using the natural ordering of the mapped values. This ensures that the BST invariant
-     * holds even if the mapping function is not order preserving.
+     * holds even if the mapping function is not order-preserving.
      *
      * @param f   the function to apply to each value.
      * @param <R> the type of the mapped values.
@@ -112,89 +112,75 @@ public interface FTree<T extends Comparable<T>> {
 }
 
 /**
- * {@code EmptyTree} is an implementation of the {@code FTree} interface representing
- * an empty binary tree. It provides default behavior for an empty tree.
+ * Singleton implementation of {@code FTree} representing an empty binary tree.
  *
  * @param <T> the type of elements stored in the tree.
  */
 class EmptyTree<T extends Comparable<T>> implements FTree<T> {
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws UnsupportedOperationException always thrown since the tree is empty.
+     * Singleton instance of EmptyTree.
      */
+    private static final EmptyTree<?> INSTANCE = new EmptyTree<>();
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private EmptyTree() {
+    }
+
+    /**
+     * Returns the singleton instance of {@code EmptyTree}.
+     *
+     * @param <T> the type of elements in the tree.
+     * @return the singleton instance of {@code EmptyTree}.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Comparable<T>> EmptyTree<T> getInstance() {
+        return (EmptyTree<T>) INSTANCE;
+    }
+
     @Override
     public T value() {
         throw new UnsupportedOperationException("Empty tree has no value");
     }
 
-    /**
-     * Returns the left subtree, which is the empty tree itself.
-     *
-     * @return this empty tree.
-     */
     @Override
     public FTree<T> left() {
         return this;
     }
 
-    /**
-     * Returns the right subtree, which is the empty tree itself.
-     *
-     * @return this empty tree.
-     */
     @Override
     public FTree<T> right() {
         return this;
     }
 
-    /**
-     * Inserts a new value into the empty tree, resulting in a new non-empty tree.
-     *
-     * @param value the value to insert.
-     * @return a new {@link NonEmptyTree} with the given value.
-     */
     @Override
     public FTree<T> insert(T value) {
         return new NonEmptyTree<>(value, this, this);
     }
 
-    /**
-     * Always returns {@code false} since an empty tree does not contain any values.
-     *
-     * @param value the value to search for.
-     * @return {@code false}.
-     */
     @Override
     public boolean contains(T value) {
         return false;
     }
 
-    /**
-     * Applies the mapping function to an empty tree, resulting in another empty tree.
-     *
-     * @param f   the function to apply to each value.
-     * @param <R> the type of the values in the new tree.
-     * @return an empty tree.
-     */
     @Override
     public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
-        return new EmptyTree<>();
+        return getInstance();
     }
 }
 
 /**
- * {@code NonEmptyTree} is an implementation of the {@code FTree} interface representing
- * a non-empty binary tree. It contains a value, a left subtree, and a right subtree.
+ * Immutable implementation of {@code FTree} representing a non-empty binary tree node.
  *
  * @param <T> the type of elements stored in the tree, which must implement {@link Comparable}.
  */
 record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> right) implements FTree<T> {
 
     /**
-     * Inserts a new value into the tree. The new value is placed in the left subtree if it is
-     * less than the current node's value; otherwise, it is placed in the right subtree.
+     * Inserts a new value into the tree while maintaining the BST ordering.
+     * This operation does not modify the existing tree but returns a new one.
      *
      * @param newValue the value to insert.
      * @return a new tree with the value inserted.
@@ -231,10 +217,6 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
      */
     @Override
     public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
-        return new NonEmptyTree<>(
-                f.apply(value),
-                left.map(f),
-                right.map(f)
-        );
+        return new NonEmptyTree<>(f.apply(value), left.map(f), right.map(f));
     }
 }
