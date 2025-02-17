@@ -202,21 +202,21 @@ public final class Some<T extends Serializable> extends Option<T> {
 
     @Override
     public List<T> toList() {
-        return List.of();
+        return List.of(value);
     }
 
     @Override
     public Stream<T> toStream() {
-        return Stream.empty();
+        return Stream.of(value);
     }
 
     @Override
     public Optional<T> toOptional() {
-        return Optional.empty();
+        return Optional.of(value);
     }
 
     @Override
     public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
-        return null;
+        return Either.right(value);
     }
 }

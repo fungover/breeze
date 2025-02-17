@@ -223,7 +223,15 @@ public final class None<T extends Serializable> extends Option<T> {
 
     @Override
     public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
-        return null;
+        if (leftSupplier == null) {
+            throw new NullPointerException("Left supplier must not be null");
+        }
+        L leftValue = leftSupplier.get();
+        if (leftValue == null) {
+            throw new NullPointerException("Left value must not be null");
+        }
+
+        return Either.left(leftValue);
     }
 
 
