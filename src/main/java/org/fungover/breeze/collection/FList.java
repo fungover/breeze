@@ -74,6 +74,17 @@ public abstract class FList<T> {
     public abstract FList<T> filter(Predicate<T> p);
 
     /**
+     * Reverses the current list.
+     *
+     * This method should be implemented by subclasses to return a new list
+     * with the elements in reverse order.
+     *
+     * @return a new FList with the elements in reverse order
+     */
+    public abstract FList<T> reverse();
+
+
+    /**
      * Returns an empty list.
      *
      * @param <T> the type of elements in the list
@@ -184,7 +195,21 @@ public abstract class FList<T> {
         public FList<T> filter(Predicate<T> p) {
             return this;
         }
+
+        /**
+         * Reverses the current list.
+         *
+         * Since this is an empty list, reversing it has no effect.
+         * This method simply returns the current instance of the empty list.
+         *
+         * @return the current instance of the empty list
+         */
+        @Override
+        public FList<T> reverse() {
+            return this;
+        }
     }
+
 
     /**
      * Private static class representing a non-empty list.
@@ -242,19 +267,34 @@ public abstract class FList<T> {
         /**
          * Appends the specified element to the end of the list.
          *
+         * This method iterates through the current list, prepending each element to a new list.
+         * After all elements are copied, the new element is prepended to the new list.
+         * Finally, the new list is reversed to maintain the correct order.
+         *
+         * Time complexity: O(n), where n is the number of elements in the list.
+         *
          * @param element the element to be appended to the list
-         * @return a new list with the specified element appended
+         * @return a new FList with the specified element appended
          */
         @Override
         public FList<T> append(T element) {
-            // Check if the current list is empty
-            if (this == Empty.SHARED_EMPTY)
-                // If the list is empty, create a new list with the element as the only item
-                return new Cons<T>(element, this);
-            else
-                // If the list is not empty, recursively append the element to the tail
-                return new Cons<>(head, tail.append(element));
+            // Create a new list to hold the result
+            FList<T> result = new Empty<>();
+            FList<T> current = this;
+
+            // Iterate through the list and copy elements to the new list
+            while (!current.isEmpty()) {
+                result = result.prepend(current.head());
+                current = current.tail();
+            }
+
+            // Add the new element
+            result = result.prepend(element);
+
+            // Reverse the list to get the correct order
+            return result.reverse();
         }
+
 
         /**
          * Checks if the list is empty.
@@ -301,6 +341,151 @@ public abstract class FList<T> {
             } else {
                 return tail.filter(p);
             }
+        }
+
+        /**
+         * Reverses the current list.
+         *
+         * This method iterates through the list, prepending each element to a new list,
+         * effectively reversing the order of the elements.
+         *
+         * @return a new FList with the elements in reverse order
+         */
+        @Override
+        public FList<T> reverse() {
+            FList<T> reversed = new Empty<>();
+            FList<T> current = this;
+            while (!current.isEmpty()) {
+                reversed = reversed.prepend(current.head());
+                current = current.tail();
+            }
+            return reversed;
+        }
+    }
+
+    /**
+     * CachedFList is a wrapper around FList that caches the reversed version of the list.
+     * This improves the performance of append operations by allowing elements to be prepended
+     * to the reversed list.
+     *
+     * @param <T> the type of elements in this list
+     */
+    public class CachedFList<T> extends FList<T> {
+        private final FList<T> original;
+        private FList<T> cachedReversed;
+
+        /**
+         * Constructs a CachedFList with the given original list.
+         *
+         * @param original the original list to be wrapped
+         */
+        public CachedFList(FList<T> original) {
+            this.original = original;
+            this.cachedReversed = null;
+        }
+
+        /**
+         * Returns the head of the original list.
+         *
+         * @return the head element of the original list
+         */
+        @Override
+        public T head() {
+            return original.head();
+        }
+
+        /**
+         * Returns the tail of the original list.
+         *
+         * @return the tail of the original list
+         */
+        @Override
+        public FList<T> tail() {
+            return original.tail();
+        }
+
+        /**
+         * Prepends the specified element to the original list.
+         *
+         * @param element the element to be prepended
+         * @return a new CachedFList with the element prepended
+         */
+        @Override
+        public FList<T> prepend(T element) {
+            return new CachedFList<>(original.prepend(element));
+        }
+
+        /**
+         * Appends the specified element to the end of the list.
+         * Uses the cached reversed list to improve performance.
+         *
+         * @param element the element to be appended
+         * @return a new CachedFList with the element appended
+         */
+        @Override
+        public FList<T> append(T element) {
+            if (cachedReversed == null) {
+                cachedReversed = original.reverse();
+            }
+            cachedReversed = cachedReversed.prepend(element);
+            return new CachedFList<>(original);
+        }
+
+        /**
+         * Checks if the original list is empty.
+         *
+         * @return true if the original list is empty, false otherwise
+         */
+        @Override
+        public boolean isEmpty() {
+            return original.isEmpty();
+        }
+
+        /**
+         * Returns the size of the original list.
+         *
+         * @return the number of elements in the original list
+         */
+        @Override
+        public int size() {
+            return original.size();
+        }
+
+        /**
+         * Applies the given function to each element in the original list and returns a new list.
+         *
+         * @param <R> the type of elements in the new list
+         * @param f the function to apply to each element
+         * @return a new CachedFList with the mapped elements
+         */
+        @Override
+        public <R> FList<R> map(Function<T, R> f) {
+            return new CachedFList<>(original.map(f));
+        }
+
+        /**
+         * Filters the elements of the original list based on the given predicate.
+         *
+         * @param p the predicate to apply to each element
+         * @return a new CachedFList with the filtered elements
+         */
+        @Override
+        public FList<T> filter(Predicate<T> p) {
+            return new CachedFList<>(original.filter(p));
+        }
+
+        /**
+         * Returns the reversed version of the original list.
+         * Uses a cached version if available to improve performance.
+         *
+         * @return the reversed list
+         */
+        @Override
+        public FList<T> reverse() {
+            if (cachedReversed == null) {
+                cachedReversed = original.reverse();
+            }
+            return cachedReversed;
         }
     }
 }
