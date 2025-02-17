@@ -54,34 +54,7 @@ class EmptyTree<T extends Comparable<T>> implements FTree<T> {
     }
 }
 
-class NonEmptyTree<T extends Comparable<T>> implements FTree<T> {
-
-    private final T value;
-    private final FTree<T> left;
-    private final FTree<T> right;
-
-
-    public NonEmptyTree(T value, FTree<T> left, FTree<T> right) {
-        this.value = value;
-        this.left = left;
-        this.right = right;
-    }
-
-
-    @Override
-    public T value() {
-        return value;
-    }
-
-    @Override
-    public FTree<T> left() {
-        return left;
-    }
-
-    @Override
-    public FTree<T> right() {
-        return right;
-    }
+record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> right) implements FTree<T> {
 
     @Override
     public FTree<T> insert(T newValue) {
