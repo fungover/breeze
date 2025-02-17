@@ -100,6 +100,7 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        Objects.requireNonNull(exceptionSupplier, "Exception supplier must not be null");
         return value;
     }
 
@@ -145,7 +146,7 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public Option<T> filter(Predicate<? super T> predicate) {
-        return predicate.test(value) ? this : None.getInstance();
+        return Option.ofNullable(predicate.test(value) ? value : null);
     }
 
     /**
@@ -170,7 +171,9 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public Option<T> peek(Consumer<? super T> action) {
+        Objects.requireNonNull(action, "Action must not be null");
         action.accept(value);
+
         return this;
     }
 
