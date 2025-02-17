@@ -235,7 +235,6 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     }
 
     @Override
-    @Override
     public int size() {
         return 1 + left.size() + right.size();
     }
