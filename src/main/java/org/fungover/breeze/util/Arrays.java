@@ -3,6 +3,7 @@ package org.fungover.breeze.util;
 import java.lang.reflect.Array;
 import java.util.function.BiFunction;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * A class containing static Array utility functions.
@@ -175,6 +176,8 @@ public class Arrays {
             throw new IllegalArgumentException("Result array must be large enough to hold all elements.");
         }
 
+
+
         int i = 0, j = 0, k = 0;
         while (i < first.length || j < second.length) {
             if (i < first.length) resultArray[k++] = first[i++];
@@ -204,6 +207,7 @@ public class Arrays {
      *
      * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
      */
+
     public static <T> T[][] transpose(T[][] array) {
         // Check if the input array is null or empty
         if (array == null || array.length == 0) {
@@ -215,7 +219,6 @@ public class Arrays {
             return array;
         }
 
-        // Determine dimensions of the array
         int rows = array.length;
         int cols = array[0].length;
 

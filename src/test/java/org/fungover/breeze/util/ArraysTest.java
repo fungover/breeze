@@ -117,6 +117,17 @@ class ArraysTest {
 
         assertArrayEquals(new String[]{null, "a", "b", null, "c"}, result);
     }
+
+    @Test
+    void testWeaver_NullArray_ShouldThrowException() {
+        String[] words = {"a", "b", "c"};
+        String[] result = new String[6];
+
+        assertThrows(IllegalArgumentException.class, () -> Arrays.weaver(null, words, result));
+        assertThrows(IllegalArgumentException.class, () -> Arrays.weaver(words, null, result));
+        assertThrows(IllegalArgumentException.class, () -> Arrays.weaver(words, words, null));
+    }
+
     @Test
     void testWeaver_LargeArrays_Performance() {
         int size = 100000;
