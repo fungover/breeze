@@ -28,4 +28,39 @@ public class FTreeTest {
         assertSame(tree.right(), tree);
     }
 
+    @Test
+    void shouldContainInsertedValue() {
+        FTree<Integer> tree = FTree.empty();
+
+        tree = tree.insert(10);
+
+        assertTrue(tree.contains(10));
+    }
+
+    @Test
+    void shouldContainAllInsertedValues() {
+        FTree<Integer> tree = FTree.empty();
+
+        tree = tree.insert(10);
+        tree = tree.insert(5);
+        tree = tree.insert(20);
+
+        assertTrue(tree.contains(10));
+        assertTrue(tree.contains(5));
+        assertTrue(tree.contains(20));
+    }
+
+    @Test
+    void shouldInsertValuesCorrectlyAndMaintainTreeStructure() {
+        FTree<Integer> tree = FTree.empty();
+
+        tree = tree.insert(10);
+        tree = tree.insert(5);
+        tree = tree.insert(20);
+
+        assertTrue(tree.contains(10));
+        assertTrue(tree.contains(5));
+        assertTrue(tree.contains(20));
+    }
+
 }
