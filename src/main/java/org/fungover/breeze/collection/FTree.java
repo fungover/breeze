@@ -189,7 +189,11 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     public FTree<T> insert(T newValue) {
         if (newValue.compareTo(value) < 0) {
             return new NonEmptyTree<>(value, left.insert(newValue), right);
+        } else if (newValue.compareTo(value) > 0) {
+            return new NonEmptyTree<>(value, left, right.insert(newValue));
         } else {
+            // Choose left or right based on tree balance, or
+            // document that duplicates go to right subtree
             return new NonEmptyTree<>(value, left, right.insert(newValue));
         }
     }
