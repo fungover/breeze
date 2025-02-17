@@ -116,7 +116,6 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> Option<U> map(Function<? super T, ? extends U> mapper) {
-        Objects.requireNonNull(mapper, "Mapper function must not be null");
         return Option.ofNullable(mapper.apply(value));
     }
 
@@ -133,9 +132,7 @@ public final class Some<T> extends Option<T> {
 
     @Override
     public <U> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
-        Objects.requireNonNull(mapper, "Mapper function must not be null");
-        Option<U> result = mapper.apply(value);
-        return result != null ? result : None.getInstance();
+        return Objects.requireNonNullElse(mapper.apply(value), None.getInstance());
     }
 
 
