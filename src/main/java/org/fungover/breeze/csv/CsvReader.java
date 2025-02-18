@@ -2,7 +2,10 @@ package org.fungover.breeze.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +27,7 @@ public class CsvReader {
         private char delimiter = ','; // Default value
 
         private Builder() {
-           // private constructor
+            // private constructor
         }
 
         public Builder withDelimiter(char delimiter) {
@@ -42,16 +45,19 @@ public class CsvReader {
         return this;
     }
 
+    public CsvReader withSource(InputStream csvSource, String charsetName) {
+        bufferedReader = new BufferedReader(new InputStreamReader(csvSource, Charset.forName(charsetName)));
+        return this;
+    }
+
     public List<String[]> readAll() throws IOException {
-
-
         List<String[]> rows = new ArrayList<>();
 
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
-           List<String> parsed = parseLine(line);
-           rows.add(parsed.toArray(new String[parsed.size()]));
+            List<String> parsed = parseLine(line);
+            rows.add(parsed.toArray(new String[parsed.size()]));
         }
         return rows;
     }
