@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class Vector2Test {
 
     @Test
-    @DisplayName("Adds to vector")
-    void addsToVector() {
+    @DisplayName("Add method adds new values to old values")
+    void addMethodAddsNewValuesToOldValues() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         vector.add(vector2);
@@ -23,8 +23,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Sub from vector")
-    void subFromVector() {
+    @DisplayName("Sub method subtracts new values from old values")
+    void subMethodSubtractsNewValuesFromOldValues() {
         Vector2 vector = new Vector2(6, 6);
         Vector2 vector2 = new Vector2(3, 3);
         vector.sub(vector2);
@@ -35,8 +35,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Mul vector")
-    void mulVector() {
+    @DisplayName("Mul multiplies vector values with input")
+    void mulMultipliesVectorValuesWithInput() {
         Vector2 vector = new Vector2(3, 3);
         vector.mul(2);
         assertAll(
@@ -46,8 +46,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Div vector")
-    void divVector() {
+    @DisplayName("Div divides vector values with input")
+    void divDividesVectorValuesWithInput() {
         Vector2 vector = new Vector2(6, 6);
         vector.div(2);
         assertAll(
@@ -57,23 +57,23 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Correct dot product")
-    void correctDotProduct() {
+    @DisplayName("Dot returns the dot product of vector 1 and 2")
+    void dotReturnsTheDotProductOfVector1And2() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
         assertThat(vector.dot(vector2)).isEqualTo(18.0f);
     }
 
     @Test
-    @DisplayName("Correct length")
-    void correctLength() {
+    @DisplayName("Length returns the length of the vector")
+    void lengthReturnsTheLengthOfTheVector() {
         Vector2 vector = new Vector2(3, 4);
         assertThat(vector.length()).isEqualTo(5.0f);
     }
 
     @Test
-    @DisplayName("Normalize vector")
-    void normalizeVector() {
+    @DisplayName("Normalize returns a new normalized vector")
+    void normalizeReturnsANewNormalizedVector() {
         Vector2 vector = new Vector2(3, 4);
         var v = vector.normalize();
         assertAll(
@@ -83,16 +83,16 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Distance between vectors")
-    void distanceBetweenVectors() {
+    @DisplayName("Distance calculates the distance between vectors")
+    void distanceCalculatesTheDistanceBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         assertThat(vector.distance(vector2)).isEqualTo((float) Math.sqrt(18));
     }
 
     @Test
-    @DisplayName("Linear interpolation find point between vectors")
-    void linearInterpolationFindPointBetweenVectors() {
+    @DisplayName("Linear interpolation find the middle between vectors")
+    void linearInterpolationFindTheMiddleBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
         var v = vector.linear(vector2, 0.5f);
@@ -123,8 +123,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Find the min value of two vectors")
-    void findTheMinValueOfTwoVectors() {
+    @DisplayName("Min returns new Vector2 with the smallest x and y values from two vectors")
+    void minReturnsNewVector2WithTheSmallestXAndYValuesFromTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.min(vector2);
@@ -135,8 +135,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("Find the max value of two vectors")
-    void findTheMaxValueOfTwoVectors() {
+    @DisplayName("Max returns new Vector2 with the largest x and y values from two vectors")
+    void maxReturnsNewVector2WithTheLargestXAndYValuesFromTwoVectors() {
         Vector2 vector = new Vector2(3, 6);
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.max(vector2);
@@ -147,8 +147,8 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("New vector3 object")
-    void newVector3Object(){
+    @DisplayName("toVector3 returns Vector3 object with the Vector2 values plus input")
+    void toVector3ReturnsVector3ObjectWithTheVector2ValuesPlusInput(){
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector3(3);
         assertAll(
@@ -158,8 +158,8 @@ class Vector2Test {
         );
     }
     @Test
-    @DisplayName("New vector4 object")
-    void newVector4Object(){
+    @DisplayName("toVector4 returns Vector4 object with the Vector2 values plus input")
+    void toVector4ReturnsVector4ObjectWithTheVector2ValuesPlusInput(){
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector4(3,3);
         assertAll(
