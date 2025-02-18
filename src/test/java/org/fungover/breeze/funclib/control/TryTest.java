@@ -37,8 +37,8 @@ class TryTest {
     @Test
     void of_shouldReturnSuccessWhenSupplierSucceeds() {
         Try<Integer> result = Try.of(() -> 42);
-        assertInstanceOf(Success.class, result);
-        assertEquals(42, ((Success<Integer>) result).getValue());
+        assertInstanceOf(Try.Success.class, result);
+        assertEquals(42, ((Try.Success<Integer>) result).getValue());
     }
 
     @Test
@@ -48,8 +48,8 @@ class TryTest {
             throw exception;
         });
 
-        assertInstanceOf(Failure.class, result);
-        assertEquals(exception, ((Failure<Integer>) result).exception);
+        assertInstanceOf(Try.Failure.class, result);
+        assertEquals(exception, ((Try.Failure<Integer>) result).exception);
     }
 
     @Test
@@ -60,9 +60,9 @@ class TryTest {
             throw new RuntimeException(exception);
         });
 
-        assertInstanceOf(Failure.class, result);
-        assertInstanceOf(RuntimeException.class, ((Failure<Integer>) result).exception);
-        assertSame(exception, ((Failure<Integer>) result).exception.getCause()); // Ensure it’s wrapped
+        assertInstanceOf(Try.Failure.class, result);
+        assertInstanceOf(RuntimeException.class, ((Try.Failure<Integer>) result).exception);
+        assertSame(exception, ((Try.Failure<Integer>) result).exception.getCause()); // Ensure it’s wrapped
     }
 
 
@@ -73,16 +73,16 @@ class TryTest {
             throw error;
         });
 
-        assertInstanceOf(Failure.class, result);
-        assertInstanceOf(Exception.class, ((Failure<Integer>) result).exception);
-        assertEquals(error, ((Failure<Integer>) result).exception.getCause());
+        assertInstanceOf(Try.Failure.class, result);
+        assertInstanceOf(Exception.class, ((Try.Failure<Integer>) result).exception);
+        assertEquals(error, ((Try.Failure<Integer>) result).exception.getCause());
     }
 
     @Test
     void of_shouldReturnSuccessWithNullWhenSupplierReturnsNull() {
         Try<Integer> result = Try.of(() -> null);
-        assertInstanceOf(Success.class, result);
-        assertNull(((Success<Integer>) result).getValue());
+        assertInstanceOf(Try.Success.class, result);
+        assertNull(((Try.Success<Integer>) result).getValue());
     }
 
     @Test
@@ -148,7 +148,7 @@ class TryTest {
         Try<Integer> mapped = failure.map(value -> value * 2);
 
         assertTrue(mapped.isFailure());
-        assertEquals(originalException, ((Failure<Integer>) mapped).exception);
+        assertEquals(originalException, ((Try.Failure<Integer>) mapped).exception);
     }
 
 
@@ -172,7 +172,7 @@ class TryTest {
         Try<Integer> flatMapped = failure.flatMap(value -> Try.success(value * 2));
 
         assertTrue(flatMapped.isFailure());
-        assertEquals(originalException, ((Failure<Integer>) flatMapped).exception);
+        assertEquals(originalException, ((Try.Failure<Integer>) flatMapped).exception);
     }
 
     @Test
@@ -182,7 +182,49 @@ class TryTest {
         Try<Integer> recovered = success.recoverWith(recoveryFunction);
 
         assertTrue(recovered.isSuccess());
-        assertEquals(42, ((Success<Integer>) recovered).getValue());
+        assertEquals(42, ((Try.Success<Integer>) recovered).getValue());
+    }
+
+    @Test
+    void recoverWith_shouldReturnRecoveredTryForFailure() {
+        Try<Integer> failure = Try.failure(new Exception("Test"));
+        Try<Integer> recovered = failure.recoverWith(e -> Try.success(5));
+        assertTrue(recovered.isSuccess());
+        assertEquals(5, recovered.getOrElse(0));
+    }
+
+    @Test
+    void recoverWith_shouldHandleExceptionInRecoveryFunction() {
+        Try<Integer> failureTry = Try.failure(new RuntimeException("Initial failure"));
+
+        Function<Throwable, Try<Integer>> faultyRecoveryFunction = throwable -> {
+            throw new IllegalStateException("Error in recovery function");
+        };
+
+        Try<Integer> recoveredTry;
+        try {
+            recoveredTry = failureTry.recoverWith(faultyRecoveryFunction);
+        } catch (Exception e) {
+            recoveredTry = Try.failure(e);
+        }
+
+        assertTrue(recoveredTry.isFailure());
+        assertEquals("Error in recovery function", ((Try.Failure<Integer>) recoveredTry).exception.getMessage());
+    }
+
+
+    @Test
+    void Recover_ReturnsSameInstanceWhenSuccess() {
+        // Arrange
+        Try<Integer> successTry = Try.success(10);  // Assuming you have Success class
+        Function<Exception, Integer> recoverFunction = e -> 5;  // Example recovery function
+
+        // Act
+        Try<Integer> result = successTry.recover(recoverFunction);
+
+        // Assert
+        // Ensure the result is the same instance
+        assertSame(successTry, result, "The recover method should return the same instance if Try is a success.");
     }
 
     @Test
@@ -222,15 +264,7 @@ class TryTest {
         });
 
         assertTrue(recovered.isFailure());
-        assertEquals("Recovery failed", ((Failure<Integer>) recovered).exception.getMessage());
-    }
-
-    @Test
-    void recoverWith_shouldReturnRecoveredTryForFailure() {
-        Try<Integer> failure = Try.failure(new Exception("Test"));
-        Try<Integer> recovered = failure.recoverWith(e -> Try.success(5));
-        assertTrue(recovered.isSuccess());
-        assertEquals(5, recovered.getOrElse(0));
+        assertEquals("Recovery failed", ((Try.Failure<Integer>) recovered).exception.getMessage());
     }
 
     @Test
@@ -260,7 +294,7 @@ class TryTest {
         Try<Integer> filtered = failure.filter(predicate);
 
         assertTrue(filtered.isFailure());
-        assertEquals(originalException, ((Failure<Integer>) filtered).exception);
+        assertEquals(originalException, ((Try.Failure<Integer>) filtered).exception);
     }
 
     @Test
