@@ -61,6 +61,7 @@ public class Redacted implements CharSequence {
     }
 
     // CharSequence Implementation
+
     @Override
     public int length() {
         return 0;
