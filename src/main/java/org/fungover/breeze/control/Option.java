@@ -355,6 +355,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * Converts this {@code Option<T>} into an {@code Either<L, T>}.
      * <ul>
      *   <li>If this is {@code Some<T>}, returns a {@code Right<T>} containing the value.</li>
+     *
      *   <li>If this is {@code None}, invokes the given {@code leftSupplier} and returns a {@code Left<L>}.</li>
      * </ul>
      *
@@ -364,5 +365,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @throws NullPointerException if {@code leftSupplier} is null or returns null
      */
         public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
+
+
 
 }
