@@ -1,7 +1,7 @@
 package org.fungover.breeze.math;
 
 public class Quaternion {
-    public float x, y, z, w;
+    public final float x, y, z, w;
 
     public Quaternion(float x, float y, float z, float w) {
         this.x = x;
@@ -9,6 +9,11 @@ public class Quaternion {
         this.z = z;
         this.w = w;
     }
+
+    public float getX() { return x; }
+    public float getY() { return y; }
+    public float getZ() { return z; }
+    public float getW() { return w; }
 
     public Quaternion multiply(Quaternion q) {
         return new Quaternion(

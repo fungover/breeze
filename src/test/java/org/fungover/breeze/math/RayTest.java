@@ -47,11 +47,10 @@ public class RayTest {
 
         Ray ray = new Ray(origin, direction);
 
-        // Ensure it defaults to (1,0,0) instead of crashing
-        assertEquals(1, ray.direction.x, 1e-6);
+        // Ensure it defaults to (0,0,0) instead of crashing
+        assertEquals(0, ray.direction.x, 1e-6);
         assertEquals(0, ray.direction.y, 1e-6);
         assertEquals(0, ray.direction.z, 1e-6);
     }
-
 
 }

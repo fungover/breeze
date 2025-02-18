@@ -1,7 +1,7 @@
 package org.fungover.breeze.math;
 
 public class Vector3 {
-    public float x, y, z;
+    public final float x, y, z;
 
     public Vector3(float x, float y, float z) {
         this.x = x;
@@ -33,9 +33,17 @@ public class Vector3 {
         );
     }
 
-    // Normalize (returns a new unit vector)
+    public float lengthSquared() {
+        return  x * x + y * y + z * z;
+    }
+
+    public float length() {
+        return (float) Math.sqrt(lengthSquared());
+    }
+
+
     public Vector3 normalize() {
-        float length = (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        float length = length();
         if (length == 0) return new Vector3(0, 0, 0); // Prevent division by zero
         return new Vector3(this.x / length, this.y / length, this.z / length);
     }

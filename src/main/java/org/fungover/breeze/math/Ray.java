@@ -1,12 +1,21 @@
 package org.fungover.breeze.math;
 
 public class Ray {
-    public Vector3 origin;
-    public Vector3 direction;
+    public final Vector3 origin;
+    public final Vector3 direction;
+    public Vector3 getOrigin() {
+    return origin;
+    }
+
+    public Vector3 getDirection() {
+    return direction;
+    }
 
     public Ray(Vector3 origin, Vector3 direction) {
+        if (origin == null || direction == null) {
+            throw new IllegalArgumentException("Origin and direction cannot be null");
+            }
         this.origin = origin;
-        float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
-        this.direction = (length > 0) ? direction.normalize() : new Vector3(1, 0, 0); // Default to (1,0,0)
+        this.direction = direction.normalize();
     }
 }

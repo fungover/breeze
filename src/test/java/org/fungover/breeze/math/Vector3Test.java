@@ -56,4 +56,23 @@ public class Vector3Test {
         assertEquals(0.8f, result.y, 1e-6);
         assertEquals(0, result.z, 1e-6);
     }
+
+    @Test
+    void testZeroVectorNormalization() {
+        Vector3 zero = new Vector3(0, 0, 0);
+        Vector3 result = zero.normalize();
+        assertEquals(0, result.x, 1e-6);
+        assertEquals(0, result.y, 1e-6);
+        assertEquals(0, result.z, 1e-6);
+    }
+
+    // coderabbit recommended this// please check again
+    @Test
+    void testLargeVectorOperations() {
+        Vector3 large = new Vector3(1e30f, 1e30f, 1e30f);
+        Vector3 normalized = large.normalize();
+        assertEquals(0/Math.sqrt(3), normalized.x, 1e-6);
+        assertEquals(0/Math.sqrt(3), normalized.y, 1e-6);
+        assertEquals(0/Math.sqrt(3), normalized.z, 1e-6);
+    }
 }

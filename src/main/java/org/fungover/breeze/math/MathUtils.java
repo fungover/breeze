@@ -1,9 +1,13 @@
 package org.fungover.breeze.math;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class MathUtils {
-    private static final Random RANDOM = new Random();
+//    private static final Random RANDOM = new Random();
+static SecureRandom random = new SecureRandom();
+    byte bytes[] = new byte[20];
+//random.nextBytes(bytes);
 
 //    Ensures values stay within a valid range, which is crucial for color calculations, physics simulations, and normalization of values.
     public static float clamp(float value, float min, float max) {
@@ -29,7 +33,7 @@ public class MathUtils {
 
 //    Generates a random floating-point number in the range
     public static float randomFloat(float min, float max) {
-        return min + RANDOM.nextFloat() * (max - min);
+        return min + random.nextFloat() * (max - min);
     }
 
 
