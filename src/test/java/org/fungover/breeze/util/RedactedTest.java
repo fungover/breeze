@@ -31,6 +31,19 @@ class RedactedTest {
     }
 
     @Test
+    void make_should_handle_special_characters() {
+        Redacted special = Redacted.make("!@#$%^&*()");
+        assertEquals("!@#$%^&*()", special.getValue());
+    }
+
+    @Test
+    void make_should_handle_very_long_input() {
+        String longInput = "x".repeat(10000);
+        Redacted valueToBeSaved = Redacted.make(longInput);
+        assertEquals(longInput, valueToBeSaved.getValue());
+    }
+
+    @Test
     void wipe_should_prevent_further_access(){
         Redacted valueToBeSaved = Redacted.make("Secret");
         valueToBeSaved.wipe();
