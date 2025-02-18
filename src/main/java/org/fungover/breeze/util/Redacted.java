@@ -36,6 +36,10 @@ public class Redacted implements CharSequence {
         return this.value;
     }
 
+    public void wipe (){
+        this.isWiped = true;
+    }
+
     @Override
     public int length() {
         return 0;

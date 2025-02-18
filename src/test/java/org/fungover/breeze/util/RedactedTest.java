@@ -24,4 +24,11 @@ class RedactedTest {
         assertThrows(IllegalArgumentException.class, () -> Redacted.make(null));
     }
 
+    @Test
+    void wipe_should_prevent_further_access(){
+        Redacted valeToBeSaved = Redacted.make("Secret");
+        valeToBeSaved.wipe();
+
+    }
+
 }
