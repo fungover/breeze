@@ -1,61 +1,23 @@
 package org.fungover.breeze.vector;
 
-public class Vector4 {
-    private float x;
-    private float y;
-    private float z;
-    private float w;
+public record Vector4 (float x, float y, float z, float w){
 
-    public Vector4(float x, float y, float z, float w) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.w = w;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
-
-    public float getW() {
-        return w;
-    }
 
     //basic arithmetic
-    public void add(Vector4 v) {
-        this.x += v.x;
-        this.y += v.y;
-        this.z += v.z;
-        this.w += v.w;
+    public Vector4 add(Vector4 v) {
+        return new Vector4(this.x + v.x, this.y + v.y, this.z + v.z, this.w + v.w);
     }
 
-    public void sub(Vector4 v) {
-        this.x -= v.x;
-        this.y -= v.y;
-        this.z -= v.z;
-        this.w -= v.w;
+    public Vector4 sub(Vector4 v) {
+        return new Vector4(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
     }
 
-    public void mul(float m) {
-        this.x *= m;
-        this.y *= m;
-        this.z *= m;
-        this.w *= m;
+    public Vector4 mul(float m) {
+        return new Vector4(this.x * m, this.y * m, this.z * m, this.w * m);
     }
 
-    public void div(float d) {
-        this.x /= d;
-        this.y /= d;
-        this.z /= d;
-        this.w /= d;
+    public Vector4 div(float d) {
+        return new Vector4(this.x / d, this.y / d, this.z / d, this.w / d);
     }
 
     //Dot product

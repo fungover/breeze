@@ -15,10 +15,10 @@ class Vector2Test {
     void addMethodAddsNewValuesToOldValues() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
-        vector.add(vector2);
+        var v = vector.add(vector2);
         assertAll(
-                () -> assertThat(vector.getX()).isEqualTo(6.0f),
-                () -> assertThat(vector.getY()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isEqualTo(6.0f),
+                () -> assertThat(v.y()).isEqualTo(6.0f)
         );
     }
 
@@ -27,10 +27,10 @@ class Vector2Test {
     void subMethodSubtractsNewValuesFromOldValues() {
         Vector2 vector = new Vector2(6, 6);
         Vector2 vector2 = new Vector2(3, 3);
-        vector.sub(vector2);
+        var v = vector.sub(vector2);
         assertAll(
-                () -> assertThat(vector.getX()).isEqualTo(3.0f),
-                () -> assertThat(vector.getY()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isEqualTo(3.0f),
+                () -> assertThat(v.y()).isEqualTo(3.0f)
         );
     }
 
@@ -38,10 +38,10 @@ class Vector2Test {
     @DisplayName("Mul multiplies vector values with input")
     void mulMultipliesVectorValuesWithInput() {
         Vector2 vector = new Vector2(3, 3);
-        vector.mul(2);
+        var v = vector.mul(2);
         assertAll(
-                () -> assertThat(vector.getX()).isEqualTo(6.0f),
-                () -> assertThat(vector.getY()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isEqualTo(6.0f),
+                () -> assertThat(v.y()).isEqualTo(6.0f)
         );
     }
 
@@ -49,10 +49,10 @@ class Vector2Test {
     @DisplayName("Div divides vector values with input")
     void divDividesVectorValuesWithInput() {
         Vector2 vector = new Vector2(6, 6);
-        vector.div(2);
+        var v = vector.div(2);
         assertAll(
-                () -> assertThat(vector.getX()).isEqualTo(3.0f),
-                () -> assertThat(vector.getY()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isEqualTo(3.0f),
+                () -> assertThat(v.y()).isEqualTo(3.0f)
         );
     }
 
@@ -77,8 +77,8 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 4);
         var v = vector.normalize();
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(0.6f),
-                () -> assertThat(v.getY()).isEqualTo(0.8f)
+                () -> assertThat(v.x()).isEqualTo(0.6f),
+                () -> assertThat(v.y()).isEqualTo(0.8f)
         );
     }
 
@@ -97,8 +97,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(6, 6);
         var v = vector.linear(vector2, 0.5f);
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(4.5f),
-                () -> assertThat(v.getY()).isEqualTo(4.5f)
+                () -> assertThat(v.x()).isEqualTo(4.5f),
+                () -> assertThat(v.y()).isEqualTo(4.5f)
         );
     }
 
@@ -129,8 +129,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.min(vector2);
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(3.0f),
-                () -> assertThat(v.getY()).isEqualTo(5.0f)
+                () -> assertThat(v.x()).isEqualTo(3.0f),
+                () -> assertThat(v.y()).isEqualTo(5.0f)
         );
     }
 
@@ -141,8 +141,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.max(vector2);
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(4.0f),
-                () -> assertThat(v.getY()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isEqualTo(4.0f),
+                () -> assertThat(v.y()).isEqualTo(6.0f)
         );
     }
 
@@ -152,9 +152,9 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector3(3);
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(3.0f),
-                () -> assertThat(v.getY()).isEqualTo(3.0f),
-                () -> assertThat(v.getZ()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isEqualTo(3.0f),
+                () -> assertThat(v.y()).isEqualTo(3.0f),
+                () -> assertThat(v.z()).isEqualTo(3.0f)
         );
     }
     @Test
@@ -163,10 +163,10 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector4(3,3);
         assertAll(
-                () -> assertThat(v.getX()).isEqualTo(3.0f),
-                () -> assertThat(v.getY()).isEqualTo(3.0f),
-                () -> assertThat(v.getZ()).isEqualTo(3.0f),
-                () -> assertThat(v.getW()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isEqualTo(3.0f),
+                () -> assertThat(v.y()).isEqualTo(3.0f),
+                () -> assertThat(v.z()).isEqualTo(3.0f),
+                () -> assertThat(v.w()).isEqualTo(3.0f)
         );
     }
 

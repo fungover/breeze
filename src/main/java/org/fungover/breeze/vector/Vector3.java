@@ -1,52 +1,22 @@
 package org.fungover.breeze.vector;
 
-public class Vector3 {
-
-    private float x;
-    private float y;
-    private float z;
-
-    public Vector3(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
+public record Vector3(float x, float y, float z) {
 
     //basic arithmetic
-    public void add(Vector3 v) {
-        this.x += v.x;
-        this.y += v.y;
-        this.z += v.z;
+    public Vector3 add(Vector3 v) {
+        return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
     }
 
-    public void sub(Vector3 v) {
-        this.x -= v.x;
-        this.y -= v.y;
-        this.z -= v.z;
+    public Vector3 sub(Vector3 v) {
+        return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
     }
 
-    public void mul(float m) {
-        this.x *= m;
-        this.y *= m;
-        this.z *= m;
+    public Vector3 mul(float m) {
+        return new Vector3(this.x * m, this.y * m, this.z * m);
     }
 
-    public void div(float d) {
-        this.x /= d;
-        this.y /= d;
-        this.z /= d;
+    public Vector3 div(float d) {
+        return new Vector3(this.x / d, this.y / d, this.z / d);
     }
 
     //Dot product

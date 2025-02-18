@@ -1,41 +1,22 @@
 package org.fungover.breeze.vector;
 
-public class Vector2 {
-    private float x;
-    private float y;
-
-    public Vector2(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
+public record Vector2 (float x,float y){
 
     //basic arithmetic
-    public void add(Vector2 v) {
-        this.x += v.x;
-        this.y += v.y;
+    public Vector2 add(Vector2 v) {
+        return new Vector2(this.x + v.x, this.y + v.y);
     }
 
-    public void sub(Vector2 v){
-        this.x -= v.x;
-        this.y -= v.y;
+    public Vector2 sub(Vector2 v){
+        return new Vector2(this.x - v.x, this.y - v.y);
     }
 
-    public void mul(float m) {
-        this.x *= m;
-        this.y *= m;
+    public Vector2 mul(float m) {
+        return new Vector2(this.x * m, this.y * m);
     }
 
-    public void div(float d) {
-        this.x /= d;
-        this.y /= d;
+    public Vector2 div(float d) {
+        return new Vector2(this.x / d, this.y / d);
     }
 
     //dot product
