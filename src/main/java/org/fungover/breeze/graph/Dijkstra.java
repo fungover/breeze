@@ -74,16 +74,19 @@ public class Dijkstra<T> {
         while (!unvisitedNodes.isEmpty()) {
             updateDistance(currentNode, graph);
 
-            if (currentNode.equals(end)) {
+            if (breakWhenReachingEnd(end, currentNode)) break;
+
+            Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
+            if (optionalNode.isEmpty() || optionalNode.get().getDistance() == Double.MAX_VALUE) {
                 break;
             }
 
-            Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
-            if (optionalNode.isEmpty()) {
-                break;
-            }
             currentNode = optionalNode.get();
         }
+    }
+
+    private static <T> boolean breakWhenReachingEnd(Node<T> end, Node<T> currentNode) {
+        return currentNode.equals(end);
     }
 
     /**
