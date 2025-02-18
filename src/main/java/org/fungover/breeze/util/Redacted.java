@@ -1,5 +1,7 @@
 package org.fungover.breeze.util;
 
+import java.util.Objects;
+
 public class Redacted implements CharSequence {
     private final CharSequence value;
     boolean isWiped;
@@ -29,9 +31,10 @@ public class Redacted implements CharSequence {
     }
 
     /**
-     * Method for returning the saved value in {@code Redacted}
+     * Method for retrieving the original value.
      *
-     * @return Saved {@code CharSequence}
+     * @return Saved {@code CharSequence}.
+     * @throws IllegalStateException if value has been wiped.
      */
     public CharSequence getValue() {
         if(isWiped) {
@@ -40,6 +43,9 @@ public class Redacted implements CharSequence {
         return this.value;
     }
 
+    /**
+     * Marks the value as wiped, preventing further access to the original value.
+     */
     public void wipe (){
         this.isWiped = true;
     }
@@ -54,7 +60,7 @@ public class Redacted implements CharSequence {
         return isWiped ? "<wiped>" : "<redacted>";
     }
 
-    //CharSequence Implementation
+    // CharSequence Implementation
     @Override
     public int length() {
         return 0;
