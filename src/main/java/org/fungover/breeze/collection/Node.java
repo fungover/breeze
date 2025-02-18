@@ -1,20 +1,21 @@
 package org.fungover.breeze.collection;
 
+import java.util.Objects;
+
 /**
  * Node class that represent a datapoint for tree like data structure.
- * @param <T> represents any valid data type.
  */
-class Node <T > {
+class Node<T> {
 
     /**
      * value stored in node with any data type
      */
-    T value;
+    private HashCodeWrapper<T> value;
 
     /**
      * Represents the left child of the node
      */
-    Node<T> left;
+    Node <T> left;
 
     /**
      * Represents the right child of the node
@@ -36,18 +37,25 @@ class Node <T > {
      *
      * @param value stored in node
      */
-    public Node(T value) {
-        /**
-         * value stored in node
-         */
-        this.value = value;
 
-        /**
-         * color represented as red with false
+
+    public Node( T value) {
+          /*
+          value stored in node
+         */
+
+        this.value = new HashCodeWrapper<>(value);
+
+        /*
+          color represented as red with false
          */
         this.color = false;
     }
 
+    public Node() {
+        this.value = new HashCodeWrapper<>(null);
+        this.color = false;
+    }
 
     /**
      * Getter method for value field of Node.
@@ -55,23 +63,78 @@ class Node <T > {
      * @return the stored value in Node.
      */
     public T getValue() {
-        return value;
+
+        return this.value.getValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Node <?> node)) return false;
+        return Objects.equals(value, node.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    static final class HashCodeWrapper<T> implements Comparable<HashCodeWrapper<T>> {
+
+        private final Comparable<T> value;
+        private final int hashCode;
+
+
+        public HashCodeWrapper(T value) {
+            this.value = (Comparable<T>) value;
+            this.hashCode = value != null ? value.hashCode() : 0;
+        }
+
+
+
+        @Override
+        public int compareTo(HashCodeWrapper<T> o) {
+
+            if (o.value == null && this.value == null)
+                return 0;
+
+            if (this.value == null) {
+                return -1;  // NullObject is always considered smaller than any other value
+            }
+
+            if (o.value == null) {
+                return 1;  // Any value is greater than NullObject
+            }
+
+            var hashCodeDistinct = Integer.compare(this.hashCode, o.hashCode);
+            if (hashCodeDistinct != 0) {
+                return hashCodeDistinct;
+            }
+
+
+            return this.value.compareTo((T) o.value);
+
+        }
+
+
+        public T getValue() {
+            return (T) value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            HashCodeWrapper<?> that = (HashCodeWrapper<?>) o;
+            return Objects.equals(value, that.value);
+        }
     }
 
 
-//    public class HashCodeWrapper<T> implements Comparable<HashCodeWrapper<T>> {
-//        private final T value;
-//        private final int hashCode;
-//
-//        public HashCodeWrapper(T value) {
-//            this.value = value;
-//            this.hashCode = value.hashCode();
-//        }
-//
-//        public T getValue() {
-//            return
-//
-//        }
-    // implement comparable hash and equals.
-//
+
 }
