@@ -3,115 +3,400 @@ package org.fungover.breeze.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQL {
+/**
+ * A class representing a fluent DQL SQL API.
+ * This class is meant to add an abstraction layer on top of SQL
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>
+ *   {@code String query = SQL.select().allColumns().from("my_table").build();
+ *
+ *   System.out.println(query); // "SELECT * FROM my_table
+ *   }
+ * </pre>
+ */
+public final class SQL {
+  /**
+   * Don't let anyone instantiate this class
+   */
+  private SQL() {
+  }
 
+  /**
+   * Starting point for the API
+   *
+   * @return An instance of the query API
+   */
   public static SelectStep select() {
     return new SQLBuilder();
   }
 
+  /**
+   * Provides functions to specify what to select
+   */
   public interface SelectStep {
+    /**
+     * Adds "*" after SELECT to the SQL statement
+     *
+     * @return The supported functions following DQL SQL
+     */
     SelectAfterStep allColumns();
 
+    /**
+     * Adds "DISTINCT" to the SQL statement
+     *
+     * @return The supported functions following DQL SQL
+     */
     SelectStep distinct();
 
+    /**
+     * Adds each column to the SQL statement
+     *
+     * @param columns A comma separated list of columns to be selected
+     * @return The supported functions following DQL SQL
+     */
     SelectAfterStep columns(String... columns);
   }
 
+  /**
+   * Provides a function to select which table to be used for the query
+   */
   public interface SelectAfterStep {
+    /**
+     * Adds FROM [table] to the SQL statement
+     *
+     * @param table The table from which the columns are selected from
+     * @return The supported functions following DQL SQL
+     */
     FromStep from(String table);
   }
 
+  /**
+   * Provides functions for querying the selected columns
+   */
   public interface FromStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     *
+     * @return The entire SQL statement
+     */
     String build();
 
+    /**
+     * Adds support for condition steps to the SQL statement
+     *
+     * @return The supported functions following DQL SQL
+     */
     WhereStep where();
 
+    /**
+     * Adds support for grouping by a specific column
+     *
+     * @param column The column to group by
+     * @return The supported functions following DQL SQL
+     */
     GroupByStep groupBy(String column);
 
+    /**
+     * Adds support for joining a table on a specific condition
+     *
+     * @param table     The table to join
+     * @param condition The condition to join on
+     * @return The supported functions following DQL SQL
+     */
     JoinStep join(String table, String condition);
 
+    /**
+     * Adds support for ordering the result based on a column and which order
+     *
+     * @param column    The column to order by
+     * @param ascending If the order should be ascending or not
+     * @return The supported functions following DQL SQL
+     */
     OrderByStep orderBy(String column, boolean ascending);
 
+    /**
+     * Adds support for limiting the amount returned
+     *
+     * @param limit The amount to be limited
+     * @return The supported functions following DQL SQL
+     */
     LimitStep limit(int limit);
   }
 
+  /**
+   * Provides functions to implement different JOINs in the SQL statement
+   */
   public interface JoinStep {
+    /**
+     * Adds support for INNER JOINS
+     *
+     * @return The supported functions following DQL SQL
+     */
     FromStep inner();
 
+    /**
+     * Adds support for LEFT JOINS
+     *
+     * @return The supported functions following DQL SQL
+     */
     FromStep left();
 
+    /**
+     * Adds support for RIGHT JOINS
+     *
+     * @return The supported functions following DQL SQL
+     */
     FromStep right();
 
+    /**
+     * Adds support for FULL JOINS
+     *
+     * @return The supported functions following DQL SQL
+     */
     FromStep full();
   }
 
+  /**
+   * Provides a function to select which column to apply equals to
+   */
   public interface WhereStep {
+    /**
+     * Adds support for selecting which column to apply one or multiple conditions to
+     *
+     * @param column The column to apply the condition to
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep column(String column);
   }
 
+  /**
+   * Provides functions to add condition statements such as in and like
+   */
   public interface ConditionStep {
+    /**
+     * Adds support for the AND operator
+     *
+     * @param column The column to apply the and operator to
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep and(String column);
 
+    /**
+     * Adds support for the or operator
+     *
+     * @param column The column to apply the or operator to
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep or(String column);
 
+    /**
+     * Adds the query to select on
+     *
+     * @param query The query to equal a column by
+     * @return The supported functions following DQL SQL
+     */
     EqualStep equalTo(String query);
 
+    /**
+     * Adds the query to select on
+     *
+     * @param query The query to equal a column by
+     * @return The supported functions following DQL SQL
+     */
     EqualStep equalTo(boolean query);
 
+    /**
+     * Adds the query to select on
+     *
+     * @param query The query to equal a column by
+     * @return The supported functions following DQL SQL
+     */
     EqualStep equalTo(int query);
 
+    /**
+     * Adds the query to select on
+     *
+     * @param query The query to equal a column by
+     * @return The supported functions following DQL SQL
+     */
     EqualStep equalTo(double query);
 
+    /**
+     * Adds the query to select on
+     *
+     * @param query The query to equal a column by
+     * @return The supported functions following DQL SQL
+     */
     EqualStep equalTo(float query);
 
+    /**
+     * Adds support for the between operator
+     *
+     * @param start The initial starting value
+     * @param end   The ending value
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep between(int start, int end);
 
+    /**
+     * Adds support for the like operator
+     *
+     * @param pattern The pattern to apply the like operator on
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep like(String pattern);
 
+    /**
+     * Adds support for the in operator
+     *
+     * @param values The values to apply the in operator on
+     * @return The supported functions following DQL SQL
+     */
     ConditionStep in(String... values);
 
+    /**
+     * Builds the SQL query in to a {@code String}
+     *
+     * @return The entire SQL statement
+     */
     String build();
   }
 
+  /**
+   * Provides functions to structure the query using statements such as groupBy and orderBy
+   */
   public interface EqualStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
 
+    /**
+     * Adds support for grouping by a specific column
+     * @param column The column to group by
+     * @return The supported functions following DQL SQL
+     */
     GroupByStep groupBy(String column);
 
+    /**
+     * Adds support for ordering the result based on a column and which order
+     *
+     * @param column    The column to order by
+     * @param ascending If the order should be ascending or not
+     * @return The supported functions following DQL SQL
+     */
     OrderByStep orderBy(String column, boolean ascending);
 
+    /**
+     * Adds support for limiting the amount returned
+     *
+     * @param limit The amount to be limited
+     * @return The supported functions following DQL SQL
+     */
     LimitStep limit(int limit);
 
+    /**
+     * Adds support for the having clause
+     * @param condition The condition to apply the HAVING clause on
+     * @return The supported functions following DQL SQL
+     */
     HavingStep having(String condition);
   }
 
+  /**
+   * Provides functions to sort or filter the query
+   */
   public interface GroupByStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
 
+    /**
+     * Adds support for ordering the result based on a column and which order
+     *
+     * @param column    The column to order by
+     * @param ascending If the order should be ascending or not
+     * @return The supported functions following DQL SQL
+     */
     OrderByStep orderBy(String column, boolean ascending);
 
+    /**
+     * Adds support for the having clause
+     * @param condition The condition to apply the HAVING clause on
+     * @return The supported functions following DQL SQL
+     */
     HavingStep having(String condition);
   }
 
+  /**
+   * Provides functions to either build or sort/filter the SQL query
+   */
   public interface OrderByStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
 
+    /**
+     * Adds support for limiting the amount returned
+     *
+     * @param limit The amount to be limited
+     * @return The supported functions following DQL SQL
+     */
     LimitStep limit(int limit);
 
+    /**
+     * Adds support for ordering the result based on a column and which order
+     *
+     * @param column    The column to order by
+     * @param ascending If the order should be ascending or not
+     * @return The supported functions following DQL SQL
+     */
     OrderByStep thenOrderBy(String column, boolean ascending);
   }
 
+  /**
+   * Provides functions to either build or add an offset to the SQL query
+   */
   public interface LimitStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
 
+    /**
+     * Adds support for the offset operator
+     * @param offset The amount to offset by
+     * @return The supported functions following DQL SQL
+     */
     OffsetStep offset(int offset);
   }
 
+  /**
+   * Provides a function to build the SQL statement
+   */
   public interface OffsetStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
   }
 
+  /**
+   * Provides a function to build the SQL statement
+   */
   public interface HavingStep {
+    /**
+     * Builds the SQL query in to a {@code String}
+     * @return The entire SQL statement
+     */
     String build();
   }
 
