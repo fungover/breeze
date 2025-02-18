@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class RedactedTest {
 
     @Test
-    void getValue_Should_Return_Actual_Value() {
+    void getValue_should_return_actual_value() {
         Redacted valueToBeSaved = Redacted.make("Secret");
         assertEquals("Secret",valueToBeSaved.getValue());
     }
 
     @Test
-    void two_Redacted_Should_Be_Separate_Instances(){
+    void two_redacted_should_be_separate_instances(){
         Redacted valueToBeSaved = Redacted.make("Secret");
         Redacted secondValueToBeSaved = Redacted.make("Password");
         assertEquals("Secret",valueToBeSaved.getValue());
@@ -28,7 +28,7 @@ class RedactedTest {
     void wipe_should_prevent_further_access(){
         Redacted valeToBeSaved = Redacted.make("Secret");
         valeToBeSaved.wipe();
-        assertThrows(IllegalStateException.class, () -> valeToBeSaved.getValue());
+        assertThrows(IllegalStateException.class, valeToBeSaved::getValue);
     }
 
     @Test
@@ -51,8 +51,22 @@ class RedactedTest {
     }
 
     @Test
-    void CharAt_should_be_zero(){
+    void charAt_should_be_zero(){
         Redacted valeToBeSaved = Redacted.make("Secret");
         assertEquals(0,valeToBeSaved.charAt(10));
     }
+
+    @Test
+    void subSequence_wiped_should_return_wiped(){
+        Redacted valeToBeSaved = Redacted.make("Secret");
+        valeToBeSaved.wipe();
+        assertEquals("<wiped>",valeToBeSaved.subSequence(0,10));
+    }
+
+    @Test
+    void subSequence_should_be_Redacted(){
+        Redacted valeToBeSaved = Redacted.make("Secret");
+        assertEquals("<redacted>",valeToBeSaved.subSequence(0,10));
+    }
+
 }

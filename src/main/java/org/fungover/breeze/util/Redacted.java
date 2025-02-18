@@ -73,7 +73,7 @@ public class Redacted implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return null;
+        return isWiped ? "<wiped>" : "<redacted>";
     }
 
     // HashCode and equals
