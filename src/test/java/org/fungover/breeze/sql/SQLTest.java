@@ -296,4 +296,49 @@ class SQLTest {
 
     assertThat(query).isEqualTo("SELECT * FROM users");
   }
+
+  @Test
+  @DisplayName("EqualStep supports groupBy statement")
+  void equalStepSupportsGroupByStatement() {
+    String query = SQL.select()
+            .allColumns()
+            .from("my_table")
+            .where()
+            .column("first_name")
+            .equalTo("Steve")
+            .groupBy("last_name")
+            .build();
+
+    assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' GROUP BY last_name");
+  }
+
+  @Test
+  @DisplayName("EqualStep supports having statement")
+  void equalStepSupportsHavingStatement() {
+    String query = SQL.select()
+            .allColumns()
+            .from("my_table")
+            .where()
+            .column("first_name")
+            .equalTo("Steve")
+            .having("COUNT(first_name) > 2")
+            .build();
+
+    assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' HAVING COUNT(first_name) > 2");
+  }
+
+  @Test
+  @DisplayName("EqualStep supports orderBy statement")
+  void equalStepSupportsOrderByStatement() {
+    String query = SQL.select()
+            .allColumns()
+            .from("my_table")
+            .where()
+            .column("first_name")
+            .equalTo("Steve")
+            .orderBy("last_name", true)
+            .build();
+
+    assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' ORDER BY last_name ASC");
+  }
 }
