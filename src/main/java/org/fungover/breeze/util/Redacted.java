@@ -2,7 +2,7 @@ package org.fungover.breeze.util;
 
 public class Redacted implements CharSequence {
     private final CharSequence value;
-    boolean isWipe;
+    boolean isWiped;
 
     /**
      * Private Constructor
@@ -11,7 +11,7 @@ public class Redacted implements CharSequence {
      */
     private Redacted(CharSequence savedValue) {
         this.value = savedValue;
-        this.isWipe = false;
+        this.isWiped = false;
     }
 
     /**
@@ -28,8 +28,10 @@ public class Redacted implements CharSequence {
         return new Redacted(savedValue);
     }
 
-
-
+    /**
+     * Method for retrieving the value saved in {@code Redacted}
+     * @return Saved {@code CharSequence}
+     */
     public CharSequence getValue() {
         return this.value;
     }
