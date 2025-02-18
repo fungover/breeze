@@ -67,7 +67,7 @@ class DijkstraTest {
         Node<String> nodeA = nodes.get(0);
 
         dijkstra.markNodeAsVisited(nodeA);
-        boolean visitedNodeContainsA = dijkstra.visitedNodes.contains(nodeA);
+        boolean visitedNodeContainsA = dijkstra.getVisitedNodes().contains(nodeA);
 
         assertThat(visitedNodeContainsA).isEqualTo(true);
     }
@@ -78,7 +78,7 @@ class DijkstraTest {
         Node<String> nodeA = nodes.get(0);
 
         dijkstra.markNodeAsVisited(nodeA);
-        boolean unvisitedNodeDoesNotContainA = dijkstra.unvisitedNodes.contains(nodeA);
+        boolean unvisitedNodeDoesNotContainA = dijkstra.getUnvisitedNodes().contains(nodeA);
 
         assertThat(unvisitedNodeDoesNotContainA).isEqualTo(false);
     }
@@ -288,10 +288,56 @@ class DijkstraTest {
         Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
 
         dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
+        dijkstra.getUnvisitedNodes().forEach(System.out::println);
 
         assertAll(
                 () -> assertThat(nodes.get(3).getDistance()).isEqualTo(Double.MAX_VALUE),
                 () -> assertThat(dijkstra.getPath(nodes.get(3)).isEmpty())
         );
     }
+
+    @Test
+    @DisplayName("findShortestPath should stop updating distance of nodes if disconnected")
+    void findShortestPathShouldStopUpdatingDistanceOfNodesIfDisconnected() {
+        List<Node<String>> nodes = List.of(
+                new Node<>("A"),
+                new Node<>("B"),
+                new Node<>("C"),
+                new Node<>("D")
+        );
+
+        List<Node<String>> expectedUncheckedNodes = new ArrayList<>();
+        expectedUncheckedNodes.add(nodes.get(2));
+        expectedUncheckedNodes.add(nodes.get(3));
+
+                List<Edge<String>> edges = List.of(
+                new Edge<>(nodes.get(0), nodes.get(1), 5),
+                new Edge<>(nodes.get(2), nodes.get(3), 3)
+        );
+
+        WeightedGraph<String> disconnectedGraph = new WeightedGraph<>(nodes, edges);
+        Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
+
+        dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
+
+        assertThat(dijkstra.getUnvisitedNodes()).isEqualTo(expectedUncheckedNodes);
+    }
+
+    @Test
+    @DisplayName("Initiate edge with null should throw exception")
+    void initiateEdgeWithNullShouldThrowException() {
+        Exception exceptionSource = assertThrows(IllegalArgumentException.class, () -> {
+            Edge<String> edgeWithNull = new Edge<>(null, nodes.getFirst(), 2);
+        } );
+
+        Exception exceptionDestination = assertThrows(IllegalArgumentException.class, () -> {
+            Edge<String> edgeWithNull = new Edge<>(nodes.getFirst(), null,  2);
+        } );
+
+        assertAll(
+                () -> assertThat(exceptionSource.getMessage()).isEqualTo("Value can't be null"),
+                () -> assertThat(exceptionDestination.getMessage()).isEqualTo("Value can't be null")
+        );
+    }
+    
 }

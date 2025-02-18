@@ -4,13 +4,11 @@ import java.util.*;
 
 public class Dijkstra<T> {
 
-    public List<Node<T>> unvisitedNodes = new ArrayList<>();
-    public List<Node<T>> visitedNodes = new ArrayList<>();
-    public WeightedGraph<T> graph;
+    private final List<Node<T>> unvisitedNodes = new ArrayList<>();
+    private final List<Node<T>> visitedNodes = new ArrayList<>();
 
     public Dijkstra(WeightedGraph<T> graph) {
         unvisitedNodes.addAll(graph.getNodes());
-        this.graph = graph;
     }
 
     /**
@@ -36,6 +34,7 @@ public class Dijkstra<T> {
         }
         markNodeAsVisited(node);
     }
+
 
     public boolean isDestinationNodeUnvisited(Edge<T> edge) {
         return unvisitedNodes.contains(edge.getDestination());
@@ -126,7 +125,6 @@ public class Dijkstra<T> {
     }
 
     public List<Node<T>> getUnvisitedNodes() {
-        unvisitedNodes.forEach(System.out::println);
         return unvisitedNodes;
     }
 
