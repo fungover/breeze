@@ -28,6 +28,7 @@ class RedactedTest {
     void wipe_should_prevent_further_access(){
         Redacted valeToBeSaved = Redacted.make("Secret");
         valeToBeSaved.wipe();
+        assertThrows(IllegalStateException.class, () -> valeToBeSaved.getValue());
 
     }
 

@@ -33,6 +33,9 @@ public class Redacted implements CharSequence {
      * @return Saved {@code CharSequence}
      */
     public CharSequence getValue() {
+        if(isWiped) {
+            throw new IllegalStateException("Value has been wiped and is no longer accessible");
+        }
         return this.value;
     }
 
