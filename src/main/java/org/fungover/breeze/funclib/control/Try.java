@@ -10,10 +10,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/*
+/**
+ * Represents a computation that may either result in a value (Success) or an exception (Failure).
  *
- * Represents a computation that may either result in a success or a Failure
- *
+ * @param <T> the type of the result value
  */
 public abstract class Try<T> implements Serializable {
     /**
@@ -65,20 +65,22 @@ public abstract class Try<T> implements Serializable {
     public abstract <X extends Throwable> T getOrElseThrow(Function<? super Throwable, ? extends X> exceptionMapper) throws X;
 
     /**
-     * Creates a successful Try instance.
+     * Creates a successful Try instance with the given value.
      *
-     * @param value the value of the successful computation.
-     * @return a Success instance containing the value.
+     * @param <T>   the type of the successful value
+     * @param value the value to wrap in a successful Try
+     * @return a Success instance containing the value
      */
     public static <T> Try<T> success(T value) {
         return new Success<>(value);
     }
 
     /**
-     * Creates a failed Try instance.
+     * Creates a failed Try instance with the given exception.
      *
-     * @param exception the exception that caused the Failure.
-     * @return a Failure instance containing the exception.
+     * @param <T>        the type of the expected value
+     * @param exception  the exception causing the failure
+     * @return a Failure instance containing the exception
      */
     public static <T> Try<T> failure(Exception exception) {
         Objects.requireNonNull(exception, "Throwable must not be null");
@@ -86,10 +88,11 @@ public abstract class Try<T> implements Serializable {
     }
 
     /**
-     * Executes a supplier function and returns a Try instance capturing success or Failure.
+     * Wraps the execution of a supplier in a Try, capturing any thrown exceptions.
      *
-     * @param supplier the function to execute.
-     * @return a Success instance if the function executes successfully, otherwise a Failure instance.
+     * @param <T>      the type of the value produced by the supplier
+     * @param supplier the supplier function to execute
+     * @return a Success if the supplier executes successfully, otherwise a Failure
      */
     public static <T> Try<T> of(Supplier<T> supplier) {
         try {
@@ -103,10 +106,11 @@ public abstract class Try<T> implements Serializable {
 
 
     /**
-     * Executes a Callable function and returns a Try instance capturing success or Failure.
+     * Wraps the execution of a callable in a Try, capturing any thrown exceptions.
      *
-     * @param callable the function to execute.
-     * @return a Success instance if the function executes successfully, otherwise a Failure instance.
+     * @param <T>      the type of the value produced by the callable
+     * @param callable the callable function to execute
+     * @return a Success if the callable executes successfully, otherwise a Failure
      */
     public static <T> Try<T> ofCallable(Callable<T> callable) {
         try {
@@ -262,9 +266,11 @@ public abstract class Try<T> implements Serializable {
     }
 
     /**
-     * Converts this Try into an Either, where Success is mapped to Right and Failure is mapped to Left.
+     * Converts this Try instance into an Either type.
      *
-     * @return an Either instance representing success as Right and failure as Left.
+     * @param <L> the left type representing the failure case
+     * @param <R> the right type representing the success case
+     * @return an Either representing the Try outcome
      */
     @SuppressWarnings("unchecked")
     public <L extends Serializable, R extends Serializable> Either<L, R> toEither() {
@@ -319,7 +325,9 @@ public abstract class Try<T> implements Serializable {
     }
 
     /**
-     * Represents a failed computation result.
+     * Represents a failed computation within a Try.
+     *
+     * @param <T> the type of the expected successful value
      */
     static final class Failure<T> extends Try<T> implements Serializable {
         final Exception exception;
@@ -378,7 +386,9 @@ public abstract class Try<T> implements Serializable {
     }
 
     /**
-     * Represents a successful computation result.
+     * Represents a successful computation within a Try.
+     *
+     * @param <T> the type of the successful value
      */
      static final class Success<T> extends Try<T> implements Serializable {
         private final T value;
