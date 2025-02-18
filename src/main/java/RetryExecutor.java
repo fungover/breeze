@@ -78,10 +78,10 @@ public class RetryExecutor {
                     throw new RetryExhaustedException("Max retry attempts reached", ex); // Throw if retries are exhausted
                 }
                 Thread.sleep(delay); // Wait before retrying
-                delay = Math.min(maxDelay, delay * 2);  // Exponential backoff
+                delay = Math.min(maxDelay, delay >= maxDelay/2 ? maxDelay : delay * 2);  // Exponential backoff with overflow protection  // Exponential backoff
             }
         }
-        throw new IllegalStateException("Unexpected state: Retry loop exited without returning or throwing");
+        return null;
     }
 
     /**
@@ -101,18 +101,20 @@ public class RetryExecutor {
          * @return The updated builder instance.
          */
         public Builder maxAttempts(int maxAttempts) {
+            if (maxAttempts <= 0) {
+                throw new IllegalArgumentException("maxAttempts must be positive");
+            }
             this.maxAttempts = maxAttempts;
             return this;
         }
 
-        /**
-         * Configures exponential backoff with an initial and maximum delay.
-         *
-         * @param initialDelay The initial delay in milliseconds.
-         * @param maxDelay     The maximum delay in milliseconds.
-         * @return The updated builder instance.
-         */
         public Builder exponentialBackoff(long initialDelay, long maxDelay) {
+            if (initialDelay <= 0 || maxDelay <= 0) {
+                throw new IllegalArgumentException("delays must be positive");
+            }
+            if (maxDelay < initialDelay) {
+                throw new IllegalArgumentException("maxDelay must be greater than or equal to initialDelay");
+            }
             this.initialDelay = initialDelay;
             this.maxDelay = maxDelay;
             return this;
@@ -160,9 +162,9 @@ public class RetryExecutor {
          * Executes the risky operation.
          *
          * @return The result of the operation.
-         * @throws IllegalArgumentException If an exception occurs during execution.
+         * @throws Exception If an exception occurs during execution.
          */
-        T run() throws IllegalArgumentException;
+        T run() throws Exception;
     }
 
     /**
