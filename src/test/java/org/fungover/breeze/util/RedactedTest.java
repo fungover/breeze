@@ -84,4 +84,20 @@ class RedactedTest {
         assertNotEquals(valueToBeSaved,secondValueToBeSaved);
     }
 
+    @Test
+    void hashcode_should_be_true(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        Redacted secondValueToBeSaved = Redacted.make("Secret");
+        assertEquals(valueToBeSaved.hashCode(),secondValueToBeSaved.hashCode());
+    }
+
+    @Test
+    void hashcode_should_not_be_true(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        Redacted secondValueToBeSaved = Redacted.make("Secret");
+        secondValueToBeSaved.wipe();
+        assertNotEquals(valueToBeSaved.hashCode(),secondValueToBeSaved.hashCode());
+    }
+
+
 }
