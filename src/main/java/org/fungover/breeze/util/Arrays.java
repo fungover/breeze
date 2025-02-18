@@ -1,9 +1,193 @@
 package org.fungover.breeze.util;
 
 import java.lang.reflect.Array;
+import java.util.function.BiFunction;
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+
+/**
+ * A class containing static Array utility functions.
+ */
 public class Arrays {
+    /**
+     * Don't let anyone instantiate this class
+     */
+    private Arrays() {
+        throw new IllegalStateException("Utility class");
+    }
 
+    /**
+     * Helper class to represent a tuple (pair) of two elements.
+     *
+     * @param <T> Type of the first element.
+     * @param <U> Type of the second element.
+     */
+
+    /**
+     * A generic immutable pair class that holds two values of different types.
+     *
+     * @param <T> the type of the first element
+     * @param <U> the type of the second element
+     */
+
+    public static class Pair<T, U> {
+        private final T first;
+        private final U second;
+
+        /**
+         * Constructs a new pair with the given values.
+         *
+         * @param first  the first value of the pair
+         * @param second the second value of the pair
+         */
+        public Pair(T first, U second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        /**
+         * Returns the first element of the pair.
+         *
+         * @return the first value of the pair
+         */
+        public T getFirst() {
+            return first;
+        }
+
+        /**
+         * Returns the second element of the pair.
+         *
+         * @return the second value of the pair
+         */
+        public U getSecond() {
+            return second;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+
+        /**
+         * Checks whether this pair is equal to another object.
+         * Two pairs are considered equal if they have the same class and their elements are equal.
+         *
+         * @param obj the object to compare with this pair
+         * @return true if the objects are equal, false otherwise
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+
+            Pair<?, ?> pair = (Pair<?, ?>) obj;
+            return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
+        }
+
+        /**
+         * Computes a hash code for this pair.
+         * The hash code is computed based on the hash codes of the two elements.
+         *
+         * @return the hash code of this pair
+         */
+
+        /**
+         * Pairs corresponding elements of two arrays into an array of Pairs.
+         *
+         * @param <T>    The type of the first array.
+         * @param <U>    The type of the second array.
+         * @param first  The first input array.
+         * @param second The second input array.
+         * @return An array of Pairs where each element contains one element from each input array.
+         * @throws IllegalArgumentException If the input arrays are null or have different lengths.
+         */
+    }
+
+    public static <T, U> Pair<T, U>[] zip(T[] first, U[] second) {
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Input arrays cannot be null.");
+        }
+        if (first.length != second.length) {
+            throw new IllegalArgumentException("Arrays must have the same length.");
+        }
+
+        @SuppressWarnings("unchecked")
+        Pair<T, U>[] result = new Pair[first.length];
+
+        for (int i = 0; i < first.length; i++) {
+            result[i] = new Pair<>(first[i], second[i]);
+        }
+
+        return result;
+    }
+
+    /**
+     * Combines corresponding elements from two arrays using a provided function.
+     *
+     * @param <T>         Type of elements in the first array.
+     * @param <U>         Type of elements in the second array.
+     * @param <R>         Type of the result array.
+     * @param first       The first input array.
+     * @param second      The second input array.
+     * @param combiner    A function to combine elements from both arrays.
+     * @param resultArray The pre-allocated result array where combined values will be stored.
+     * @return The result array with combined values.
+     * @throws IllegalArgumentException If any of the parameters are null or if arrays have different lengths.
+     */
+
+    public static <T, U, R> R[] zipWith(T[] first, U[] second, BiFunction<T, U, R> combiner, R[] resultArray) {
+        if (first == null || second == null || combiner == null || resultArray == null) {
+            throw new IllegalArgumentException("Inputs cannot be null.");
+        }
+        if (first.length != second.length) {
+            throw new IllegalArgumentException("Arrays must have the same length.");
+        }
+        if (resultArray.length < first.length) {
+            throw new IllegalArgumentException("Result array must be at least as long as input arrays.");
+        }
+
+        for (int i = 0; i < first.length; i++) {
+            resultArray[i] = combiner.apply(first[i], second[i]);
+        }
+
+        return resultArray;
+    }
+
+    /**
+     * Interleaves elements from two arrays, alternating between them.
+     * If one array is longer, its remaining elements are appended at the end.
+     *
+     * @param <T>         Type of elements in the arrays.
+     * @param first       The first input array.
+     * @param second      The second input array.
+     * @param resultArray The pre-allocated result array where interleaved values will be stored.
+     * @return The result array containing interleaved values.
+     * @throws IllegalArgumentException If any of the parameters are null.
+     */
+
+    public static <T> T[] weaver(T[] first, T[] second, T[] resultArray) {
+        if (first == null || second == null || resultArray == null) {
+            throw new IllegalArgumentException("Inputs cannot be null.");
+        }
+
+        int maxLength = first.length + second.length;
+        if (resultArray.length < maxLength) {
+            throw new IllegalArgumentException("Result array must be large enough to hold all elements.");
+        }
+
+
+
+        int i = 0, j = 0, k = 0;
+        while (i < first.length || j < second.length) {
+            if (i < first.length) resultArray[k++] = first[i++];
+            if (j < second.length) resultArray[k++] = second[j++];
+        }
+
+        return resultArray;
+    }
     /**
      * Transposes a 2D array, converting rows into columns and vice versa.
      *
@@ -25,6 +209,7 @@ public class Arrays {
      *
      * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
      */
+
     public static <T> T[][] transpose(T[][] array) {
         // Check if the input array is null or empty
         if (array == null || array.length == 0) {
@@ -36,7 +221,6 @@ public class Arrays {
             return array;
         }
 
-        // Determine dimensions of the array
         int rows = array.length;
         int cols = array[0].length;
 
@@ -63,4 +247,110 @@ public class Arrays {
 
         return transposed;
     }
+
+    /**
+     * Creates a new 2D array with the specific number of rows and columns.
+     * @param componentType The type of element in the array.
+     * @param row Number of row in the array.
+     * @param col Number of column in the array.
+     * @param <T> The type of the array elements.
+     * @return A new empty 2D array of the specific type and size
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> T[][] create2DArray(Class<?> componentType, int row, int col) {
+        return (T[][]) Array.newInstance(componentType, row, col);
+    }
+
+    /**
+     * Creates a new 1D array with the specific number of rows.
+     * @param componentType The type of element in the array.
+     * @param length The length of the array.
+     * @param <T> The type of the array elements.
+     * @return A new empty 1D array of the specific type and size.
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> T[] create1DArray(Class<?> componentType, int length) {
+        return (T[]) Array.newInstance(componentType, length);
+    }
+
+    /**
+     * Splits an array into smaller array-chunks of specific size.
+     * The last chunk may be smaller if the array length is not evenly divisible.
+     * @param array The input array to be chunked.
+     * @param size The size of each chunk.
+     * @param <T> The type of elements in the array.
+     * @return A 2D array where each inner array is a chunk of the original array.
+     * @throws IllegalArgumentException if the array is null, contains null elements or size is negative or zero.
+     */
+
+    public static <T> T[][] chunk(T[] array, int size) {
+
+        if (array == null ) {
+            throw new IllegalArgumentException("Input array must not be null");
+        } else {
+            for(T element : array) {
+                if (element == null) {
+                    throw new IllegalArgumentException("Element must not be null");
+                }
+            }
+        }
+
+        if (size <= 0) {
+            throw new IllegalArgumentException("Size must be greater than 0");
+        }
+
+        if (array.length == 0) {
+            return create2DArray(array.getClass().getComponentType(), 0,0);
+        }
+
+        int numberOfChunks = (int) Math.ceil((double) array.length / size);
+        Class<?> componentType = array.getClass().getComponentType();
+
+        T[][] chunks = create2DArray(componentType, numberOfChunks, size);
+
+        for (int i = 0; i < numberOfChunks; i++) {
+            int start = i * size;
+            int length = Math.min(array.length - start, size);
+
+            T[] chunk = create1DArray(componentType, length);
+
+            System.arraycopy(array, start, chunk, 0, length);
+            chunks[i] = chunk;
+        }
+
+        return chunks;
+
+    }
+
+    /**
+     * Splits a list into smaller list-chunks of specific size.
+     * The last chunk may be smaller if the list length is not evenly divisible.
+     * @param list The input list to be chunked.
+     * @param size The size of each chunk.
+     * @param <T> The type of elements in the list.
+     * @return A list of list where each inner list is a chunk of the original list.
+     * @throws IllegalArgumentException if the list is null, contains null elements or size is negative or zero.
+     */
+    public static <T>List<List<T>> chunkList(List<T> list, int size) {
+        if(list == null) {
+            throw new IllegalArgumentException("Input list must not be null");
+        } else {
+            for(T element : list) {
+                if (element == null) {
+                    throw new IllegalArgumentException("Element must not be null");
+                }
+            }
+        }
+
+        if (size <= 0)
+            throw new IllegalArgumentException("Size must be greater than 0");
+
+        List<List<T>> chunks = new ArrayList<>();
+        for (int i = 0; i < list.size(); i+= size) {
+            chunks.add(List.copyOf(list.subList(i, Math.min(list.size(), i + size))));
+        }
+
+        return Collections.unmodifiableList(chunks);
+    }
+
 }
