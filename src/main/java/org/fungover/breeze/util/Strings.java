@@ -1,4 +1,4 @@
-package org.fungover.breeze;
+package org.fungover.breeze.util;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Utility class for common string operations.
  */
-public class StringUtils {
+public class Strings {
 
     /**
      * Checks if a string is null or empty.
