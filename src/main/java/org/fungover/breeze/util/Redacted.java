@@ -1,7 +1,7 @@
 package org.fungover.breeze.util;
 
 public class Redacted implements CharSequence {
-    private CharSequence savedValue;
+    private transient CharSequence savedValue;
 
     private Redacted(CharSequence savedValue) {
         this.savedValue = savedValue;
