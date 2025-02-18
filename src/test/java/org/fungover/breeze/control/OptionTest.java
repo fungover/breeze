@@ -107,6 +107,43 @@ public class OptionTest {
         Option<Integer> none = Option.none();
         assertThrows(UnsupportedOperationException.class, none::get);
     }
+//
+    @Test
+    void getOrElseGetShouldNotEvaluateSupplierForSome() {
+        Option<Integer> some = Option.some(10);
+        assertEquals(10, some.getOrElseGet(() -> 42));
+    }
 
+    @Test
+    void orElseThrowShouldThrowForNone() {
+        Option<Integer> none = Option.none();
+        assertThrows(IllegalStateException.class, () -> none.orElseThrow(IllegalStateException::new));
+    }
+
+    @Test
+    void mapShouldApplyFunctionForSome() {
+        Option<Integer> some = Option.some(10);
+        Option<Integer> mapped = some.map(x -> x * 2);
+        assertEquals(Option.some(20), mapped);
+    }
+
+    @Test
+    void mapShouldReturnNoneForNone() {
+        Option<Integer> none = Option.none();
+        assertEquals(Option.none(), none.map(x -> x * 2));
+    }
+
+    @Test
+    void flatMapShouldApplyFunctionForSome() {
+        Option<Integer> some = Option.some(10);
+        Option<Integer> mapped = some.flatMap(x -> Option.some(x * 2));
+        assertEquals(Option.some(20), mapped);
+    }
+
+    @Test
+    void flatMapShouldReturnNoneForNone() {
+        Option<Integer> none = Option.none();
+        assertEquals(Option.none(), none.flatMap(x -> Option.some(x * 2)));
+    }
 
 }
