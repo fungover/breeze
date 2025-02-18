@@ -17,6 +17,8 @@ public record Vector4 (float x, float y, float z, float w){
     }
 
     public Vector4 div(float d) {
+        if(d == 0)
+            throw new IllegalArgumentException("Cannot divide by zero");
         return new Vector4(this.x / d, this.y / d, this.z / d, this.w / d);
     }
 
