@@ -1,8 +1,6 @@
 package org.fungover.breeze.control;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -165,14 +163,14 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
     }
 
     /**
-     * Converts this Tuple2 object into a ArrayList of type Object.
+     * Converts this Tuple2 object into an immutable List of type Object.
      * The order of the elements in this object will transpose to list order meaning that
      * this.first will be at index 0 of the list, this.second will be at index 1, and so forth if this object contains more elements.
      *
-     * @return a new ArrayList containing the elements of this Tuple2 object.
+     * @return an immutable List containing the elements of this Tuple2 object.
      */
     public List<Object> toList() {
-        return new ArrayList<>(Arrays.asList(first, second));
+        return List.of(first, second);
     }
 
     /**
@@ -207,7 +205,6 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
         if (!(o instanceof Tuple2<?, ?> tuple2)) return false;
         return Objects.equals(first, tuple2.first) && Objects.equals(second, tuple2.second);
     }
-
 
     /**
      * @return the hash code for this tuple

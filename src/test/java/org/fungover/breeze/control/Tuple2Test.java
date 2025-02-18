@@ -137,9 +137,9 @@ class Tuple2Test {
         @DisplayName("Call to any map method should not change calling object")
         <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> void callToAnyMapMethodShouldNotChangeCallingObject(T1 o1, T2 o2) {
             var tuple2 = Tuple2.of(o1, o2);
-            var map1 = tuple2.map1(e -> 1);
-            var map2 = tuple2.map2(e -> 1);
-            var mapAll = tuple2.mapAll(e1 -> 1, e2 -> 1);
+            tuple2.map1(e -> 1);
+            tuple2.map2(e -> 1);
+            tuple2.mapAll(e1 -> 1, e2 -> 1);
 
             assertThat(tuple2).isEqualTo(Tuple2.of(o1, o2));
         }
@@ -214,7 +214,7 @@ class Tuple2Test {
             var tuple1 = Tuple2.of(o1, o2);
             var tuple2 = Tuple2.of(o1, o2);
 
-            assertThat(tuple1.compareTo(tuple2)).isZero();
+            assertThat(tuple1.compareTo(tuple2)).isEqualByComparingTo(0);
         }
 
         @ParameterizedTest
@@ -255,7 +255,7 @@ class Tuple2Test {
 
             var tuple2 = Tuple2.of(1, 2);
 
-            assertThat(tuple2.equals(null)).isEqualTo(false);
+            assertThat(tuple2.equals(null)).isFalse();
         }
 
         @Test
