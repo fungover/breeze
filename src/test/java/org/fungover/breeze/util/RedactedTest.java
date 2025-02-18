@@ -26,47 +26,62 @@ class RedactedTest {
 
     @Test
     void wipe_should_prevent_further_access(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        valeToBeSaved.wipe();
-        assertThrows(IllegalStateException.class, valeToBeSaved::getValue);
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertThrows(IllegalStateException.class, valueToBeSaved::getValue);
     }
 
     @Test
     void toString_should_be_Redacted(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        assertEquals("<redacted>",valeToBeSaved.toString());
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals("<redacted>",valueToBeSaved.toString());
     }
 
     @Test
     void toString_wiped_should_return_wiped(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        valeToBeSaved.wipe();
-        assertEquals("<wiped>",valeToBeSaved.toString());
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertEquals("<wiped>",valueToBeSaved.toString());
     }
 
     @Test
     void length_should_be_zero(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        assertEquals(0,valeToBeSaved.length());
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals(0,valueToBeSaved.length());
     }
 
     @Test
     void charAt_should_be_zero(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        assertEquals(0,valeToBeSaved.charAt(10));
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals(0,valueToBeSaved.charAt(10));
     }
 
     @Test
     void subSequence_wiped_should_return_wiped(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        valeToBeSaved.wipe();
-        assertEquals("<wiped>",valeToBeSaved.subSequence(0,10));
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertEquals("<wiped>",valueToBeSaved.subSequence(0,10));
     }
 
     @Test
     void subSequence_should_be_Redacted(){
-        Redacted valeToBeSaved = Redacted.make("Secret");
-        assertEquals("<redacted>",valeToBeSaved.subSequence(0,10));
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals("<redacted>",valueToBeSaved.subSequence(0,10));
+    }
+
+    @Test
+    void equals_should_be_true(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        Redacted secondValueToBeSaved = Redacted.make("Secret");
+        assertEquals(valueToBeSaved,secondValueToBeSaved);
+    }
+
+    @Test
+    void equals_should_not_be_true(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        Redacted secondValueToBeSaved = Redacted.make("Secret");
+        secondValueToBeSaved.wipe();
+        assertNotEquals(valueToBeSaved,secondValueToBeSaved);
     }
 
 }
