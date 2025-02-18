@@ -20,7 +20,7 @@ class RedactedTest {
     }
 
     @Test
-    void redacted_can_not_be_null() {
+    void make_should_not_accept_null() {
         assertThrows(IllegalArgumentException.class, () -> Redacted.make(null));
     }
 
