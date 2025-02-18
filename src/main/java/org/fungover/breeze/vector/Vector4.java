@@ -35,6 +35,8 @@ public record Vector4 (float x, float y, float z, float w){
     //Normalization
     public Vector4 normalize() {
         float length = length();
+        if(length == 0)
+            throw new IllegalArgumentException("Cannot normalize zero-length vector");
         return new Vector4(this.x / length, this.y / length, this.z / length, this.w / length);
     }
 
