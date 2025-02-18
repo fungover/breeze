@@ -288,7 +288,6 @@ class DijkstraTest {
         Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
 
         dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
-        dijkstra.getUnvisitedNodes().forEach(System.out::println);
 
         assertAll(
                 () -> assertThat(nodes.get(3).getDistance()).isEqualTo(Double.MAX_VALUE),

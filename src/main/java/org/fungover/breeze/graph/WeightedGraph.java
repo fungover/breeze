@@ -22,10 +22,6 @@ public class WeightedGraph<T> implements Graph<T> {
         return this;
     }
 
-    public Map<Node<T>, List<Edge<T>>> getNodesWithEdges() {
-        return nodesWithEdges;
-    }
-
     @Override
     public Collection<Node<T>> getNodes() {
         return listOfNodes;
@@ -40,22 +36,4 @@ public class WeightedGraph<T> implements Graph<T> {
             }
         return edges;
     }
-
-    public void linkNodeWithEdges(Node<T> node) {
-        List<Edge<T>> edges = new ArrayList<>();
-        for (Edge<T> edge : listOfEdges) {
-            if (edge.getSource().equals(node)) {
-                Node<T> start = edge.getSource();
-                edges.add(edge);
-                nodesWithEdges.put(start, edges);
-            }
-        }
-    }
-
-    public void mapNodesWithEdges(Collection<Node<T>> listOfNodes) {
-        for (Node<T> node : listOfNodes) {
-            linkNodeWithEdges(node);
-        }
-    }
-
 }
