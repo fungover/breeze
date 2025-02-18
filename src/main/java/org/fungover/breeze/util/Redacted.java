@@ -9,25 +9,25 @@ public class Redacted implements CharSequence {
     /**
      * Private Constructor
      *
-     * @param savedValue The value to be redacted
+     * @param value The value to be redacted
      */
-    private Redacted(CharSequence savedValue) {
-        this.value = savedValue;
+    private Redacted(CharSequence value) {
+        this.value = value;
         this.isWiped = false;
     }
 
     /**
      * Static factory method to create a {@code Redacted} instance.
      *
-     * @param savedValue The value to be redacted.
+     * @param value The value to be redacted.
      * @return A new {@code Redacted} instance.
      * @throws IllegalArgumentException if the secret is null.
      */
-    public static Redacted make(CharSequence savedValue) {
-        if (savedValue == null) {
-            throw new IllegalArgumentException("SavedValue can not be null");
+    public static Redacted make(CharSequence value) {
+        if (value == null) {
+            throw new IllegalArgumentException("value can not be null");
         }
-        return new Redacted(savedValue);
+        return new Redacted(value);
     }
 
     /**
