@@ -2,6 +2,7 @@ package org.fungover.breeze.graph;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -268,54 +269,53 @@ class DijkstraTest {
         assertThat(path).isEqualTo(expectedPath);
     }
 
-    @Test
-    @DisplayName("Dijkstra should return infinity for disconnected nodes")
-    void dijkstraShouldHandleDisconnectedGraphs() {
-        List<Node<String>> nodes = List.of(
-                new Node<>("A"),
-                new Node<>("B"),
-                new Node<>("C"),
-                new Node<>("D")
-        );
+    @Nested
+    @DisplayName("Disconnected Graph Tests")
+    class DisconnectedGraphTests {
 
-        List<Edge<String>> edges = List.of(
-                new Edge<>(nodes.get(0), nodes.get(1), 5),
-                new Edge<>(nodes.get(2), nodes.get(3), 3)
-        );
+        private List<Node<String>> nodes;
+        private WeightedGraph<String> disconnectedGraph;
+        private Dijkstra<String> dijkstra;
 
-        WeightedGraph<String> disconnectedGraph = new WeightedGraph<>(nodes, edges);
-        Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
+        @BeforeEach
+        void setUp() {
+            nodes = List.of(
+                    new Node<>("A"),
+                    new Node<>("B"),
+                    new Node<>("C"),
+                    new Node<>("D")
+            );
 
-        dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
+            List<Edge<String>> edges = List.of(
+                    new Edge<>(nodes.get(0), nodes.get(1), 5),
+                    new Edge<>(nodes.get(2), nodes.get(3), 3)
+            );
 
-        assertThat(nodes.get(2).getDistance()).isEqualTo(Double.MAX_VALUE);
-    }
+            disconnectedGraph = new WeightedGraph<>(nodes, edges);
+            dijkstra = new Dijkstra<>(disconnectedGraph);
+        }
 
-    @Test
-    @DisplayName("findShortestPath should stop updating distance of nodes if disconnected")
-    void findShortestPathShouldStopUpdatingDistanceOfNodesIfDisconnected() {
-        List<Node<String>> nodes = List.of(
-                new Node<>("A"),
-                new Node<>("B"),
-                new Node<>("C"),
-                new Node<>("D")
-        );
+        @Test
+        @DisplayName("Dijkstra should return infinity for disconnected nodes")
+        void dijkstraShouldHandleDisconnectedGraphs() {
+            dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
 
-        List<Node<String>> expectedUncheckedNodes = new ArrayList<>();
-        expectedUncheckedNodes.add(nodes.get(2));
-        expectedUncheckedNodes.add(nodes.get(3));
+            assertThat(nodes.get(2).getDistance()).isEqualTo(Double.MAX_VALUE);
+        }
 
-                List<Edge<String>> edges = List.of(
-                new Edge<>(nodes.get(0), nodes.get(1), 5),
-                new Edge<>(nodes.get(2), nodes.get(3), 3)
-        );
+        @Test
+        @DisplayName("FindShortestPath should stop updating distance of nodes if disconnected")
+        void findShortestPathShouldStopUpdatingDistanceOfNodesIfDisconnected() {
+            List<Node<String>> expectedUncheckedNodes = new ArrayList<>();
+            expectedUncheckedNodes.add(nodes.get(2));
+            expectedUncheckedNodes.add(nodes.get(3));
 
-        WeightedGraph<String> disconnectedGraph = new WeightedGraph<>(nodes, edges);
-        Dijkstra<String> dijkstra = new Dijkstra<>(disconnectedGraph);
 
-        dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
+            dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
 
-        assertThat(dijkstra.getUnvisitedNodes()).isEqualTo(expectedUncheckedNodes);
+            assertThat(dijkstra.getUnvisitedNodes()).isEqualTo(expectedUncheckedNodes);
+        }
+
     }
 
     @Test

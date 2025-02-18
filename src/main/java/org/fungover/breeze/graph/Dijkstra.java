@@ -67,7 +67,7 @@ public class Dijkstra<T> {
      * @param end the end node
      */
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
-        handleCyclicGraphs(graph);
+        resetGraphState(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
 
@@ -114,7 +114,7 @@ public class Dijkstra<T> {
      * @param start the starting node
      */
     public void findAllShortestPaths(WeightedGraph<T> graph, Node<T> start) {
-        handleCyclicGraphs(graph);
+        resetGraphState(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
 
