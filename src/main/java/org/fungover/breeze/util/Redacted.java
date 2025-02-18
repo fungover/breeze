@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Redacted implements CharSequence {
     private final CharSequence value;
-    boolean isWiped;
+    private boolean isWiped;
 
     /**
      * Private Constructor
