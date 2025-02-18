@@ -100,6 +100,7 @@ public class Dijkstra<T> {
             node.setPreviousNode(null);
         }
 
+        visitedNodes.clear();
         unvisitedNodes.clear();
         unvisitedNodes.addAll(graph.getNodes());
     }
@@ -110,6 +111,7 @@ public class Dijkstra<T> {
      * @param start the starting node
      */
     public void findAllShortestPaths(WeightedGraph<T> graph, Node<T> start) {
+        handleCyclicGraphs(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
 

@@ -23,12 +23,12 @@ public class WeightedGraph<T> implements Graph<T> {
     }
 
     @Override
-    public Collection<Node<T>> getNodes() {
+    public List<Node<T>> getNodes() {
         return listOfNodes;
     }
 
     @Override
-    public Collection<Edge<T>> getEdges(Node<T> node) {
+    public List<Edge<T>> getEdges(Node<T> node) {
         List<Edge<T>> edges = new ArrayList<>();
         for (Edge<T> edge : listOfEdges)
             if (edge.getSource().equals(node)) {

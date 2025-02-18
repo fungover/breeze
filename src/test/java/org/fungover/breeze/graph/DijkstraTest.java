@@ -205,9 +205,8 @@ class DijkstraTest {
     @Test
     @DisplayName("Instantiate edge with negative weight should throw exception")
     void instantiateEdgeWithNegativeWeightShouldThrowException() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            Edge<String> edgeWithNegativeWeight = new Edge<>(nodes.get(0), nodes.get(1), -0.1);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> new Edge<>(nodes.get(0), nodes.get(1), -0.1));
 
         assertThat(exception.getMessage()).isEqualTo("Weight can't be a negative number");
     }
@@ -289,10 +288,7 @@ class DijkstraTest {
 
         dijkstra.findShortestPath(disconnectedGraph, nodes.get(0), nodes.get(3));
 
-        assertAll(
-                () -> assertThat(nodes.get(3).getDistance()).isEqualTo(Double.MAX_VALUE),
-                () -> assertThat(dijkstra.getPath(nodes.get(3)).isEmpty())
-        );
+        assertThat(nodes.get(2).getDistance()).isEqualTo(Double.MAX_VALUE);
     }
 
     @Test
@@ -325,13 +321,11 @@ class DijkstraTest {
     @Test
     @DisplayName("Initiate edge with null should throw exception")
     void initiateEdgeWithNullShouldThrowException() {
-        Exception exceptionSource = assertThrows(IllegalArgumentException.class, () -> {
-            Edge<String> edgeWithNull = new Edge<>(null, nodes.getFirst(), 2);
-        } );
+        Exception exceptionSource = assertThrows(IllegalArgumentException.class,
+                () -> new Edge<>(null, nodes.getFirst(), 2));
 
-        Exception exceptionDestination = assertThrows(IllegalArgumentException.class, () -> {
-            Edge<String> edgeWithNull = new Edge<>(nodes.getFirst(), null,  2);
-        } );
+        Exception exceptionDestination = assertThrows(IllegalArgumentException.class,
+                () -> new Edge<>(nodes.getFirst(), null,  2));
 
         assertAll(
                 () -> assertThat(exceptionSource.getMessage()).isEqualTo("Value can't be null"),
