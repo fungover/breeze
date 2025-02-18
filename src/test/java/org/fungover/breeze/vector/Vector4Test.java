@@ -93,6 +93,15 @@ class Vector4Test {
     }
 
     @Test
+    @DisplayName("Trying to normalize with zero length throws exception")
+    void tryingToNormalizeWithZeroLengthThrowsException(){
+        Vector4 vector = new Vector4(0, 0, 0, 0);
+        var exception = assertThrows(IllegalArgumentException.class, vector::normalize);
+        assertThat(exception.getMessage()).isEqualTo("Cannot normalize zero-length vector");
+    }
+
+
+    @Test
     @DisplayName("Distance calculates the distance between vectors")
     void distanceCalculatesTheDistanceBetweenVectors() {
         Vector4 vector = new Vector4(3, 3, 3, 3);

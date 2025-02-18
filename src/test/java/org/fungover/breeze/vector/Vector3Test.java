@@ -97,6 +97,13 @@ class Vector3Test {
                 () -> assertThat(v.z()).isEqualTo(0.74278134f)
         );
     }
+    @Test
+    @DisplayName("Trying to normalize with zero length throws exception")
+    void tryingToNormalizeWithZeroLengthThrowsException(){
+        Vector3 vector = new Vector3(0, 0, 0);
+        var exception = assertThrows(IllegalArgumentException.class, vector::normalize);
+        assertThat(exception.getMessage()).isEqualTo("Cannot normalize zero-length vector");
+    }
 
     @Test
     @DisplayName("Distance calculates the distance between vectors")
