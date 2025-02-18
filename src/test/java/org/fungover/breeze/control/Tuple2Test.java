@@ -20,15 +20,15 @@ class Tuple2Test {
     class Initialization {
 
         @Test
-        @DisplayName("Call to .of() method with any null argument should throw NullPointerException")
-        void callToOfGivenAnyNullArgumentShouldThrowNullPointerException() {
+        @DisplayName("Call to .of() method with any null argument should throw IllegalArgumentException")
+        void callToOfGivenAnyNullArgumentShouldThrowIllegalArgumentException() {
 
             assertAll(
                     () -> assertThatThrownBy(() -> Tuple2.of(null, 1))
-                            .isInstanceOf(NullPointerException.class)
+                            .isInstanceOf(IllegalArgumentException.class)
                             .hasMessage("Argument cannot be null"),
                     () -> assertThatThrownBy(() -> Tuple2.of(1, null))
-                            .isInstanceOf(NullPointerException.class)
+                            .isInstanceOf(IllegalArgumentException.class)
                             .hasMessage("Argument cannot be null")
             );
         }
@@ -145,20 +145,20 @@ class Tuple2Test {
         }
 
         @Test
-        @DisplayName("Call to all map methods with null function should trigger NullPointerException")
-        void callToAnyMapMethodWithNullFunctionShouldTriggerNullPointerException() {
+        @DisplayName("Call to all map methods with null function should trigger IllegalArgumentException")
+        void callToAnyMapMethodWithNullFunctionShouldTriggerIllegalArgumentException() {
 
             var tuple2 = Tuple2.of("s", "s");
 
             assertAll(
                     () -> assertThatThrownBy(() -> tuple2.mapAll(e1 -> null, e2 -> null))
-                            .isInstanceOf(NullPointerException.class)
+                            .isInstanceOf(IllegalArgumentException.class)
                             .hasMessage("Function result cannot be null. Functions must return non-null values."),
                     () -> assertThatThrownBy(() -> tuple2.map1(e -> null))
-                            .isInstanceOf(NullPointerException.class)
+                            .isInstanceOf(IllegalArgumentException.class)
                             .hasMessage("Function result cannot be null. Functions must return non-null values."),
                     () -> assertThatThrownBy(() -> tuple2.map2(e -> null))
-                            .isInstanceOf(NullPointerException.class)
+                            .isInstanceOf(IllegalArgumentException.class)
                             .hasMessage("Function result cannot be null. Functions must return non-null values.")
             );
         }

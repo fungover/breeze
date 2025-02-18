@@ -49,14 +49,14 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      *
      * @param first  first not null element in the tuple
      * @param second second not null element in the tuple
-     * @param <T1>   class type of first element (class or super must implement comparable)
-     * @param <T2>   class type of second element (class or super must implement comparable)
+     * @param <T1>   class type of first element where class must implement serializable and class (or superclass) must implement comparable.
+     * @param <T2>   class type of second element where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple2 with two elements
-     * @throws NullPointerException if any argument is null
+     * @throws IllegalArgumentException if any argument is null
      */
-    public static <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> Tuple2<T1, T2> of(T1 first, T2 second) throws IllegalArgumentException {
+    public static <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable> Tuple2<T1, T2> of(T1 first, T2 second) {
         if (first == null || second == null) {
-            throw new NullPointerException("Argument cannot be null");
+            throw new IllegalArgumentException("Argument cannot be null");
         }
         return new Tuple2<>(first, second);
     }
@@ -106,9 +106,9 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      * a new Tuple2 object with the result of the function as its first element and this.second as its second element.
      *
      * @param function the function that should be applied on this objects first element
-     * @param <R>      class type of the element that results from the function (class or super must implement Comparable)
+     * @param <R>      class type of the element that results from the function where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple2 with R first and T2 second as values.
-     * @throws NullPointerException if result of the function (R) is null
+     * @throws IllegalArgumentException if result of the function (R) is null
      */
     public <R extends Comparable<? super R> & Serializable> Tuple2<R, T2> map1(Function<T1, R> function) {
 
@@ -122,9 +122,9 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      * a new Tuple2 object with this.first as its first element and the result of the function as its second element.
      *
      * @param function the function that should be applied on this objects second element
-     * @param <R>      class type of the element that results from the function (class or super must implement Comparable)
+     * @param <R>      class type of the element that results from the function where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple2 with T1 first and R second as values.
-     * @throws NullPointerException if result of the function (R) is null
+     * @throws IllegalArgumentException if result of the function (R) is null
      */
     public <R extends Comparable<? super R> & Serializable> Tuple2<T1, R> map2(Function<T2, R> function) {
 
@@ -140,10 +140,10 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      *
      * @param function1 the function that should be applied on this objects first element
      * @param function2 the function that should be applied on this objects second element
-     * @param <R1>      class type of the element that results from function1 (class or super must implement Comparable)
-     * @param <R2>      class type of the element that results from function2 (class or super must implement Comparable)
+     * @param <R1>      class type of the element that results from function1 where class must implement serializable and class (or superclass) must implement comparable.
+     * @param <R2>      class type of the element that results from function2 where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple2 with R1 first and R2 second as values.
-     * @throws NullPointerException if result of any function (R1 or R2) is null
+     * @throws IllegalArgumentException if result of any function (R1 or R2) is null
      */
     public <R1 extends Comparable<? super R1> & Serializable, R2 extends Comparable<? super R2> & Serializable> Tuple2<R1, R2> mapAll(Function<T1, R1> function1, Function<T2, R2> function2) {
 
@@ -233,11 +233,11 @@ public final class Tuple2<T1 extends Comparable<? super T1> & Serializable, T2 e
      *
      * @param functionResult the result of the function
      * @param <R>            class type for the result of the function
-     * @throws NullPointerException if functionResult is null
+     * @throws IllegalArgumentException if functionResult is null
      */
     private static <R> R checkForNullFunctionResult(R functionResult) {
         if (functionResult == null) {
-            throw new NullPointerException("Function result cannot be null. Functions must return non-null values.");
+            throw new IllegalArgumentException("Function result cannot be null. Functions must return non-null values.");
         }
         return functionResult;
     }
