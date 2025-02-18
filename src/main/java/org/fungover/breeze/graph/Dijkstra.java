@@ -36,16 +36,16 @@ public class Dijkstra<T> {
     }
 
 
-    public boolean isDestinationNodeUnvisited(Edge<T> edge) {
+    boolean isDestinationNodeUnvisited(Edge<T> edge) {
         return unvisitedNodes.contains(edge.getDestination());
     }
 
 
-    public void setPreviousNode(Node<T> node, Edge<T> edge) {
+    void setPreviousNode(Node<T> node, Edge<T> edge) {
         edge.getDestination().setPreviousNode(node);
     }
 
-    public void markNodeAsVisited(Node<T> currentNode) {
+    void markNodeAsVisited(Node<T> currentNode) {
         visitedNodes.add(currentNode);
         unvisitedNodes.remove(currentNode);
     }
@@ -97,7 +97,7 @@ public class Dijkstra<T> {
      *
      * @param graph the weighted graph containing the nodes and edges
      */
-    private void handleCyclicGraphs(WeightedGraph<T> graph) {
+    private void resetGraphState(WeightedGraph<T> graph) {
         for (Node<T> node : graph.getNodes()) {
             node.setDistance(Double.MAX_VALUE);
             node.setPreviousNode(null);
@@ -129,11 +129,11 @@ public class Dijkstra<T> {
         }
     }
 
-    public List<Node<T>> getUnvisitedNodes() {
+    List<Node<T>> getUnvisitedNodes() {
         return unvisitedNodes;
     }
 
-    public List<Node<T>> getVisitedNodes() {
+    List<Node<T>> getVisitedNodes() {
         return visitedNodes;
     }
 
