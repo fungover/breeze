@@ -25,6 +25,12 @@ class RedactedTest {
     }
 
     @Test
+    void make_should_accept_empty_string() {
+        Redacted empty = Redacted.make("");
+        assertEquals("", empty.getValue());
+    }
+
+    @Test
     void wipe_should_prevent_further_access(){
         Redacted valueToBeSaved = Redacted.make("Secret");
         valueToBeSaved.wipe();
