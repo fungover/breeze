@@ -29,7 +29,8 @@ public class Redacted implements CharSequence {
     }
 
     /**
-     * Method for retrieving the value saved in {@code Redacted}
+     * Method for returning the saved value in {@code Redacted}
+     *
      * @return Saved {@code CharSequence}
      */
     public CharSequence getValue() {
@@ -43,6 +44,17 @@ public class Redacted implements CharSequence {
         this.isWiped = true;
     }
 
+    /**
+     * Returns a redacted or wiped representation of the value.
+     *
+     * @return {@code <redacted>} if the value is not wiped, otherwise {@code <wiped>}.
+     */
+    @Override
+    public String toString() {
+        return isWiped ? "<wiped>" : "<redacted>";
+    }
+
+    //CharSequence Implementation
     @Override
     public int length() {
         return 0;

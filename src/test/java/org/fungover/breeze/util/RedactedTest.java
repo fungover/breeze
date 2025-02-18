@@ -29,7 +29,12 @@ class RedactedTest {
         Redacted valeToBeSaved = Redacted.make("Secret");
         valeToBeSaved.wipe();
         assertThrows(IllegalStateException.class, () -> valeToBeSaved.getValue());
+    }
 
+    @Test
+    void toString_should_be_Redacted(){
+        Redacted valeToBeSaved = Redacted.make("Secret");
+        assertEquals("<redacted>",valeToBeSaved.toString());
     }
 
 }
