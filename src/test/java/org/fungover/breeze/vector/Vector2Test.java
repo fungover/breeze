@@ -147,7 +147,7 @@ class Vector2Test {
     }
 
     @Test
-    @DisplayName("toVector3 returns Vector3 object with the Vector2 values plus input")
+    @DisplayName("toVector3 returns new Vector3 object with the Vector2 values plus input")
     void toVector3ReturnsVector3ObjectWithTheVector2ValuesPlusInput(){
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector3(3);
@@ -158,7 +158,7 @@ class Vector2Test {
         );
     }
     @Test
-    @DisplayName("toVector4 returns Vector4 object with the Vector2 values plus input")
+    @DisplayName("toVector4 returns new Vector4 object with the Vector2 values plus input")
     void toVector4ReturnsVector4ObjectWithTheVector2ValuesPlusInput(){
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector4(3,3);

@@ -163,7 +163,7 @@ class Vector4Test {
     }
 
     @Test
-    @DisplayName("toVector2 returns Vector2 object with the Vector4 x and y values")
+    @DisplayName("toVector2 returns new Vector2 object with the Vector4 x and y values")
     void toVector2ReturnsVector2ObjectWithTheVector4XAndYValues(){
         Vector4 vector = new Vector4(1, 2, 3, 4);
         var v = vector.toVector2();
@@ -174,7 +174,7 @@ class Vector4Test {
     }
 
     @Test
-    @DisplayName("toVector3 returns Vector3 object with the Vector4 x, y and z values")
+    @DisplayName("toVector3 returns new Vector3 object with the Vector4 x, y and z values")
     void toVector3ReturnsVector3ObjectWithTheVector4XYAndZValues(){
         Vector4 vector = new Vector4(1, 2, 3, 4);
         var v = vector.toVector3();
