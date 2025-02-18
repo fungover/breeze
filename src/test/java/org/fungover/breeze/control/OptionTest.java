@@ -107,7 +107,7 @@ public class OptionTest {
         Option<Integer> none = Option.none();
         assertThrows(UnsupportedOperationException.class, none::get);
     }
-//
+
     @Test
     void getOrElseGetShouldNotEvaluateSupplierForSome() {
         Option<Integer> some = Option.some(10);
@@ -144,6 +144,34 @@ public class OptionTest {
     void flatMapShouldReturnNoneForNone() {
         Option<Integer> none = Option.none();
         assertEquals(Option.none(), none.flatMap(x -> Option.some(x * 2)));
+    }
+
+    @Test
+    void filterShouldRetainSomeIfPredicateIsTrue() {
+        Option<Integer> some = Option.some(10);
+        assertEquals(Option.some(10), some.filter(x -> x > 5));
+    }
+
+    @Test
+    void filterShouldReturnNoneIfPredicateIsFalse() {
+        Option<Integer> some = Option.some(10);
+        assertEquals(Option.none(), some.filter(x -> x < 5));
+    }
+
+    @Test
+    void forEachShouldExecuteForSome() {
+        Option<Integer> some = Option.some(10);
+        final int[] result = {0};
+        some.forEach(x -> result[0] = x);
+        assertEquals(10, result[0]);
+    }
+
+    @Test
+    void forEachShouldDoNothingForNone() {
+        Option<Integer> none = Option.none();
+        final int[] result = {0};
+        none.forEach(x -> result[0] = x);
+        assertEquals(0, result[0]);
     }
 
 }
