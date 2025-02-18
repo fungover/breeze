@@ -17,7 +17,7 @@ public class Dijkstra<T> {
      * @param node the current node being processed
      * @param graph the weighted graph containing the nodes and edges
      */
-    public void updateDistance(Node<T> node, WeightedGraph<T> graph) {
+    void updateDistance(Node<T> node, WeightedGraph<T> graph) {
         Collection<Edge<T>> edges = graph.getEdges(node);
         for (Edge<T> edge : edges) {
             if (edge.getSource().equals(edge.getDestination())) {
@@ -55,7 +55,7 @@ public class Dijkstra<T> {
      * @return an Optional containing the unvisited node with the shortest distance,
      * or an empty Optional if no unvisited nodes remain
      */
-    public Optional<Node<T>> findShortestUnvisitedDistance() {
+    Optional<Node<T>> findShortestUnvisitedDistance() {
         return unvisitedNodes.stream()
                 .min(Comparator.comparingDouble(Node::getDistance));
     }
