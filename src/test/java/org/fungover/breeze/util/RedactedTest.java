@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RedactedTest {
 
+
     @Test
     void redacted_Is_Able_to_Save_A_value () {
-        Redacted redacted = new Redacted();
+        Redacted redacted = Redacted.make("Secret");
+        assertEquals(redacted.getValue, "Secret");
     }
 
 }
