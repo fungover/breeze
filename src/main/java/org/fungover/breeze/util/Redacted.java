@@ -76,6 +76,17 @@ public class Redacted implements CharSequence {
         return null;
     }
 
+    // HashCode and equals
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Redacted redacted)) return false;
+        return isWiped == redacted.isWiped && Objects.equals(value, redacted.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, isWiped);
+    }
 
 }
 
