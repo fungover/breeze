@@ -1,18 +1,37 @@
 package org.fungover.breeze.util;
 
 public class Redacted implements CharSequence {
-    private transient CharSequence savedValue;
+    private final CharSequence value;
+    boolean isWipe;
 
+    /**
+     * Private Constructor
+     *
+     * @param savedValue The value to be redacted
+     */
     private Redacted(CharSequence savedValue) {
-        this.savedValue = savedValue;
+        this.value = savedValue;
+        this.isWipe = false;
     }
 
+    /**
+     * Static factory method to create a {@code Redacted} instance.
+     *
+     * @param savedValue The value to be redacted.
+     * @return A new {@code Redacted} instance.
+     * @throws IllegalArgumentException if the secret is null.
+     */
     public static Redacted make(CharSequence savedValue) {
+        if (savedValue == null) {
+            throw new IllegalArgumentException("SavedValue can not be null");
+        }
         return new Redacted(savedValue);
     }
 
+
+
     public CharSequence getValue() {
-        return this.savedValue;
+        return this.value;
     }
 
     @Override
