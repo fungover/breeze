@@ -1,12 +1,18 @@
 package org.fungover.breeze.util;
 
 public class Redacted implements CharSequence {
+    private CharSequence savedValue;
 
     private Redacted(CharSequence savedValue) {
+        this.savedValue = savedValue;
     }
 
     public static Redacted make(CharSequence savedValue) {
         return new Redacted(savedValue);
+    }
+
+    public CharSequence getValue() {
+        return this.savedValue;
     }
 
     @Override
