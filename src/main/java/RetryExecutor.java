@@ -59,28 +59,30 @@ public class RetryExecutor {
 
         while (attempts < maxAttempts) {
             try {
-                return operation.run();
-            } catch (Throwable ex) {
+                return operation.run(); // Return the result if the operation succeeds
+            } catch (Exception ex) {  // Narrowed to Exception
                 if (!retryOn.isAssignableFrom(ex.getClass())) {
-                    throw new RuntimeException("Operation failed", ex);
+                    throw new IllegalArgumentException("Operation failed", ex); // Throw if the exception is not retryable
                 }
                 attempts++;
                 if (attempts >= maxAttempts) {
                     if (onFailure != null) {
-                        onFailure.apply(ex);
+                        onFailure.apply(ex); // Call the failure handler if provided
                     }
-                    throw new RetryExhaustedException("Max retry attempts reached", ex);
+                    throw new RetryExhaustedException("Max retry attempts reached", ex); // Throw if retries are exhausted
                 }
-                Thread.sleep(delay);
+                Thread.sleep(delay); // Wait before retrying
                 delay = Math.min(maxDelay, delay * 2);  // Exponential backoff
             }
         }
-        return null;
+
+        // This line is technically unreachable, but the compiler requires it
+        throw new IllegalStateException("Unexpected state: Retry loop exited without returning or throwing");
     }
 
     // Functional interface for risky operation
     public interface RiskyOperation<T> {
-        T run() throws Throwable;
+        T run() throws IllegalArgumentException;  // Updated to throw Exception instead of Throwable
     }
 
     // Exception for when retry attempts are exhausted
@@ -89,12 +91,4 @@ public class RetryExecutor {
             super(message, cause);
         }
     }
-
-
-
-
-
-
-
-
 }
