@@ -225,4 +225,12 @@ public class OptionTest {
         assertThat(deserializedNone).isSameAs(none);
 
     }
+
+    @Test
+    void orElseThrowWithoutSupplierShouldThrowExceptionForNone() {
+        Option<Integer> none = Option.none();
+        assertThrows(UnsupportedOperationException.class, none::orElseThrow);
+    }
+
+
 }

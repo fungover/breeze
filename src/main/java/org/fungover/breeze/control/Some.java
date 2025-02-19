@@ -241,4 +241,15 @@ public final class Some<T extends Serializable> extends Option<T> {
     public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
         return Either.right(value);
     }
+
+    /**
+     * Returns the wrapped value of this {@link Some<T>}.
+     *
+     * @return the contained value.
+     */
+    @Override
+    public T orElseThrow() {
+        return this.value;
+    }
+
 }
