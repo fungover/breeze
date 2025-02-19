@@ -1,5 +1,4 @@
 package org.fungover.breeze.stringInterpolation;
-
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
@@ -69,6 +68,15 @@ class StringTemplateTest {
                 .build();
         String result = template.render();
         assertEquals("Hi John Doe, amount: 99.99", result);
+    }
+    @Test
+    void testMissingPlaceholderValueThrowsException() {
+        String template = "Hi {name}!";
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> StringTemplate.format(template, Map.of("Random", "John Doe"))
+        );
+        assertTrue(exception.getMessage().contains("Missing value for placeholder"));
     }
 
 }
