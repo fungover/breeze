@@ -174,4 +174,16 @@ public class OptionTest {
         assertEquals(0, result[0]);
     }
 
+    @Test
+    void someInstanceForSomeValueShouldBeEqual() {
+
+        Option<Integer> option = Option.some(10);
+        Option<Integer> option2 = Option.some(10);
+
+        assertThat(option).isEqualTo(option2);
+        assertThat(option.hashCode()).isEqualTo(option2.hashCode());
+
+    }
+
+
 }
