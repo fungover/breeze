@@ -107,4 +107,57 @@ class SomeTest {
         assertTrue(either.isRight());
         assertEquals(7, either.getRight());
     }
+
+    @Test
+    void equalsReturnsTrueForSameValue() {
+
+        Some<Integer> some1 = new Some<>(10);
+        Some<Integer> some2 = new Some<>(10);
+
+        assertTrue(some1.equals(some2));
+    }
+
+    @Test
+    void equalsReturnsFalseForDifferentValue() {
+        Some<Integer> some1 = new Some<>(10);
+        Some<Integer> some2 = new Some<>(20);
+        assertNotEquals(some1, some2);
+    }
+
+    @Test
+    void hashCodeIsSameForEqualValues() {
+        Some<Integer> some1 = new Some<>(10);
+        Some<Integer> some2 = new Some<>(10);
+        assertEquals(some1.hashCode(), some2.hashCode());
+    }
+
+    @Test
+    void toStringReturnsExpectedFormat() {
+        Some<Integer> some = new Some<>(99);
+        assertEquals("Some(value=99, type= Integer)", some.toString());
+    }
+
+    @Test
+    void nullValueThrowsException() {
+        assertThrows(NullPointerException.class, () -> new Some<>(null));
+    }
+
+    @Test
+    void mapWithNullFunctionThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.map(null));
+    }
+
+    @Test
+    void flatMapWithNullFunctionThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.flatMap(null));
+    }
+
+    @Test
+    void filterWithNullPredicateThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.filter(null));
+    }
+
 }
