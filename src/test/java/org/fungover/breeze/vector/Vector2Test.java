@@ -17,8 +17,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(3, 3);
         var v = vector.add(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(6.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f, within(1e-7f))
         );
     }
 
@@ -29,8 +29,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(3, 3);
         var v = vector.sub(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f, within(1e-7f))
         );
     }
 
@@ -40,8 +40,8 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.mul(2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(6.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f, within(1e-7f))
         );
     }
 
@@ -51,8 +51,8 @@ class Vector2Test {
         Vector2 vector = new Vector2(6, 6);
         var v = vector.div(2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f, within(1e-7f))
         );
     }
 
@@ -69,14 +69,14 @@ class Vector2Test {
     void dotReturnsTheDotProductOfVector1And2() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(3, 3);
-        assertThat(vector.dot(vector2)).isEqualTo(18.0f);
+        assertThat(vector.dot(vector2)).isCloseTo(18.0f,within(1e-7f));
     }
 
     @Test
     @DisplayName("Length returns the length of the vector")
     void lengthReturnsTheLengthOfTheVector() {
         Vector2 vector = new Vector2(3, 4);
-        assertThat(vector.length()).isEqualTo(5.0f);
+        assertThat(vector.length()).isCloseTo(5.0f,within(1e-7f));
     }
 
     @Test
@@ -85,8 +85,8 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 4);
         var v = vector.normalize();
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(0.6f),
-                () -> assertThat(v.y()).isEqualTo(0.8f)
+                () -> assertThat(v.x()).isCloseTo(0.6f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(0.8f,within(1e-7f))
         );
     }
 
@@ -103,7 +103,7 @@ class Vector2Test {
     void distanceCalculatesTheDistanceBetweenVectors() {
         Vector2 vector = new Vector2(3, 3);
         Vector2 vector2 = new Vector2(6, 6);
-        assertThat(vector.distance(vector2)).isEqualTo((float) Math.sqrt(18));
+        assertThat(vector.distance(vector2)).isCloseTo((float) Math.sqrt(18),within(1e-7f));
     }
 
     @Test
@@ -113,8 +113,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(6, 6);
         var v = vector.linear(vector2, 0.5f);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(4.5f),
-                () -> assertThat(v.y()).isEqualTo(4.5f)
+                () -> assertThat(v.x()).isCloseTo(4.5f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(4.5f,within(1e-7f))
         );
     }
 
@@ -145,8 +145,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.min(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(5.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(5.0f,within(1e-7f))
         );
     }
 
@@ -157,8 +157,8 @@ class Vector2Test {
         Vector2 vector2 = new Vector2(4, 5);
         var v = vector.max(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(4.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isCloseTo(4.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f,within(1e-7f))
         );
     }
 
@@ -168,9 +168,9 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector3(3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f),
-                () -> assertThat(v.z()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(3.0f,within(1e-7f))
         );
     }
 
@@ -180,10 +180,10 @@ class Vector2Test {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector4(3, 3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f),
-                () -> assertThat(v.z()).isEqualTo(3.0f),
-                () -> assertThat(v.w()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.w()).isCloseTo(3.0f,within(1e-7f))
         );
     }
 

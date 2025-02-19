@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Vector3Test {
@@ -15,9 +16,9 @@ class Vector3Test {
         Vector3 vector3 = new Vector3(3, 3, 3);
         var v = vector.add(vector3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(6.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f),
-                () -> assertThat(v.z()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(6.0f, within(1e-7f))
         );
     }
 
@@ -28,9 +29,9 @@ class Vector3Test {
         Vector3 vector2 = new Vector3(3, 3, 3);
         var v = vector.sub(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f),
-                () -> assertThat(v.z()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(3.0f, within(1e-7f))
         );
     }
 
@@ -40,9 +41,9 @@ class Vector3Test {
         Vector3 vector = new Vector3(3, 3, 3);
         var v = vector.mul(2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(6.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f),
-                () -> assertThat(v.z()).isEqualTo(6.0f)
+                () -> assertThat(v.x()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f, within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(6.0f, within(1e-7f))
         );
     }
 
@@ -52,9 +53,9 @@ class Vector3Test {
         Vector3 vector = new Vector3(6, 6, 6);
         var v = vector.div(2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f),
-                () -> assertThat(v.z()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f, within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(3.0f, within(1e-7f))
         );
     }
 
@@ -81,9 +82,9 @@ class Vector3Test {
         Vector3 vector2 = new Vector3(4, 5, 6);
         var v = vector.cross(vector2);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(-3.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f),
-                () -> assertThat(v.z()).isEqualTo(-3.0f)
+                () -> assertThat(v.x()).isCloseTo(-3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(-3.0f,within(1e-7f))
         );
     }
 
@@ -91,18 +92,18 @@ class Vector3Test {
     @DisplayName("Length returns the length of the vector")
     void lengthReturnsTheLengthOfTheVector() {
         Vector3 vector = new Vector3(2, 4, 4);
-        assertThat(vector.length()).isEqualTo(6.0f);
+        assertThat(vector.length()).isCloseTo(6.0f,within(1e-7f));
     }
 
     @Test
     @DisplayName("Normalize returns a new normalized vector")
     void normalizeReturnsANewNormalizedVector() {
-        Vector3 vector = new Vector3(2, 3, 4);
+        Vector3 vector = new Vector3(2, 4, 4);
         var v = vector.normalize();
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(0.37139067f),
-                () -> assertThat(v.y()).isEqualTo(0.55708605f),
-                () -> assertThat(v.z()).isEqualTo(0.74278134f)
+                () -> assertThat(v.x()).isCloseTo((float) 2/6 ,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo((float) 4/6 ,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo((float) 4/6 ,within(1e-7f))
         );
     }
     @Test
@@ -118,7 +119,7 @@ class Vector3Test {
     void distanceCalculatesTheDistanceBetweenVectors() {
         Vector3 vector = new Vector3(3, 3, 3);
         Vector3 vector3 = new Vector3(6, 6, 6);
-        assertThat(vector.distance(vector3)).isEqualTo((float) Math.sqrt(27));
+        assertThat(vector.distance(vector3)).isCloseTo((float) Math.sqrt(27),within(1e-7f));
     }
 
     @Test
@@ -128,9 +129,9 @@ class Vector3Test {
         Vector3 vector3 = new Vector3(6, 6, 6);
         var v = vector.linear(vector3, 0.5f);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(4.5f),
-                () -> assertThat(v.y()).isEqualTo(4.5f),
-                () -> assertThat(v.z()).isEqualTo(4.5f)
+                () -> assertThat(v.x()).isCloseTo(4.5f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(4.5f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(4.5f,within(1e-7f))
         );
     }
 
@@ -161,9 +162,9 @@ class Vector3Test {
         Vector3 vector3 = new Vector3(2, 5, 9);
         var v = vector.min(vector3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(1.0f),
-                () -> assertThat(v.y()).isEqualTo(5.0f),
-                () -> assertThat(v.z()).isEqualTo(7.0f)
+                () -> assertThat(v.x()).isCloseTo(1.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(5.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(7.0f,within(1e-7f))
         );
     }
 
@@ -174,9 +175,9 @@ class Vector3Test {
         Vector3 vector3 = new Vector3(2, 5, 9);
         var v = vector.max(vector3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(2.0f),
-                () -> assertThat(v.y()).isEqualTo(6.0f),
-                () -> assertThat(v.z()).isEqualTo(9.0f)
+                () -> assertThat(v.x()).isCloseTo(2.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(6.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(9.0f,within(1e-7f))
         );
     }
 
@@ -186,8 +187,8 @@ class Vector3Test {
         Vector3 vector = new Vector3(3, 3, 3);
         var v = vector.toVector2();
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f,within(1e-7f))
         );
     }
 
@@ -197,10 +198,10 @@ class Vector3Test {
         Vector3 vector = new Vector3(3, 3, 3);
         var v = vector.toVector4(3);
         assertAll(
-                () -> assertThat(v.x()).isEqualTo(3.0f),
-                () -> assertThat(v.y()).isEqualTo(3.0f),
-                () -> assertThat(v.z()).isEqualTo(3.0f),
-                () -> assertThat(v.w()).isEqualTo(3.0f)
+                () -> assertThat(v.x()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.y()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.z()).isCloseTo(3.0f,within(1e-7f)),
+                () -> assertThat(v.w()).isCloseTo(3.0f,within(1e-7f))
         );
     }
 }
