@@ -57,7 +57,6 @@ class CircularBufferTest {
                 .hasMessage("OverflowStrategy cannot be null");
     }
 
-    // REJECT
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     @DisplayName("Reject overflow strategy does not add element to buffer")
@@ -71,7 +70,6 @@ class CircularBufferTest {
         assertThat(cb.getAt(0)).isNotEqualTo(3);
     }
 
-    // OVERWRITE
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     @DisplayName("Overwrite overflow strategy overwrites oldest element in buffer")
@@ -136,7 +134,6 @@ class CircularBufferTest {
                 .hasMessage("Buffer is empty");
     }
 
-    //Skall count va med ???
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     @DisplayName("Remove returns the oldest element")
