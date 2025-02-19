@@ -59,6 +59,14 @@ class Vector3Test {
     }
 
     @Test
+    @DisplayName("Trying to divide by 0 throws exception")
+    void tryingToDivideBy0ThrowsException() {
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.div(0));
+        assertThat(exception.getMessage()).isEqualTo("Cannot divide by zero");
+    }
+
+    @Test
     @DisplayName("Dot returns the dot product of vector 1 and 2")
     void dotReturnsTheDotProductOfVector1And2() {
         Vector3 vector = new Vector3(3, 3, 3);

@@ -57,6 +57,14 @@ class Vector2Test {
     }
 
     @Test
+    @DisplayName("Trying to divide by 0 throws exception")
+    void tryingToDivideBy0ThrowsException() {
+        Vector2 vector = new Vector2(3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.div(0));
+        assertThat(exception.getMessage()).isEqualTo("Cannot divide by zero");
+    }
+
+    @Test
     @DisplayName("Dot returns the dot product of vector 1 and 2")
     void dotReturnsTheDotProductOfVector1And2() {
         Vector2 vector = new Vector2(3, 3);
@@ -84,7 +92,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("Trying to normalize with zero length throws exception")
-    void tryingToNormalizeWithZeroLengthThrowsException(){
+    void tryingToNormalizeWithZeroLengthThrowsException() {
         Vector2 vector = new Vector2(0, 0);
         var exception = assertThrows(IllegalArgumentException.class, vector::normalize);
         assertThat(exception.getMessage()).isEqualTo("Cannot normalize zero-length vector");
@@ -156,7 +164,7 @@ class Vector2Test {
 
     @Test
     @DisplayName("toVector3 returns new Vector3 object with the Vector2 values plus input")
-    void toVector3ReturnsVector3ObjectWithTheVector2ValuesPlusInput(){
+    void toVector3ReturnsVector3ObjectWithTheVector2ValuesPlusInput() {
         Vector2 vector = new Vector2(3, 3);
         var v = vector.toVector3(3);
         assertAll(
@@ -165,11 +173,12 @@ class Vector2Test {
                 () -> assertThat(v.z()).isEqualTo(3.0f)
         );
     }
+
     @Test
     @DisplayName("toVector4 returns new Vector4 object with the Vector2 values plus input")
-    void toVector4ReturnsVector4ObjectWithTheVector2ValuesPlusInput(){
+    void toVector4ReturnsVector4ObjectWithTheVector2ValuesPlusInput() {
         Vector2 vector = new Vector2(3, 3);
-        var v = vector.toVector4(3,3);
+        var v = vector.toVector4(3, 3);
         assertAll(
                 () -> assertThat(v.x()).isEqualTo(3.0f),
                 () -> assertThat(v.y()).isEqualTo(3.0f),
