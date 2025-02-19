@@ -1,65 +1,87 @@
 package org.fungover.breeze.simd;
-import jdk.incubator.vector.*;
 
-import java.util.Arrays;
+import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.VectorOperators;
+import jdk.incubator.vector.VectorSpecies;
 
-/*
-Features:
-Array addition/subtraction
-Array multiplication
-Dot product
-Element-wise operations
-Bulk transformations
-
-Implementation:
-Use FloatVector from Vector API
-Support different vector sizes
-Provide both sequential and parallel versions
-Include benchmarking tools
-*/
 
 public class SimdArrayOps {
 
-    static final VectorSpecies<Integer> SPECIES = IntVector.SPECIES_PREFERRED;
+    SimdUtils simdUtils = new SimdUtils();
+    static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_PREFERRED;
 
-    public int[] addTwoVectorArrays(int[] arr1, int[] arr2) {
-        var v1 = IntVector.fromArray(SPECIES, arr1, 0);
-        var v2 = IntVector.fromArray(SPECIES, arr2, 0);
-        var result = v1.add(v2);
-        return result.toArray();
+    /**
+     * Perform a generic elementwise operation on two arrays of equal length. The operation is applied
+     * in bulk using vectorized processing.
+     *
+     * @param arr1 the first input array
+     * @param arr2 the second input array
+     * @param op   the binary operator to apply (e.g. ADD, SUB, MUL)
+     * @return a new array that containing the result of applying op elementwise
+     * @throws NullPointerException if binary Operator is null
+     */
+    public float[] elementwiseOperation(float[] arr1, float[] arr2,
+                                        VectorOperators.Binary op) {
+        if (op == null) throw new NullPointerException("Binary Operator can not be null");
+        simdUtils.checkNullInputs(arr1,arr2);
+        int start = 0;
+        int end = arr1.length;
+        float[] result = new float[arr1.length];
+        simdUtils.chunkElementwise(arr1, arr2, result, start, end, op);
+        return result;
     }
 
-    public int[] subTwoVectorArrays(int[] arr1, int[] arr2) {
-        var v1 = IntVector.fromArray(SPECIES, arr1, 0);
-        var v2 = IntVector.fromArray(SPECIES, arr2, 0);
-        var result = v1.sub(v2);
-        return result.toArray();
+    /**
+     * Perform an addition operation on two arrays of equal length. The operation is applied in bulk
+     * using vectorized processing.
+     *
+     * @param arr1 the first input array
+     * @param arr2 the second input array
+     * @return the sum of addition on two float Arrays
+     */
+    public float[] addTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
+        return elementwiseOperation(arr1, arr2, VectorOperators.ADD);
     }
 
-
-    public static int[] mulTwoVectorArrays(int[] arr1, int[] arr2) {
-        var v1 = IntVector.fromArray(SPECIES, arr1, 0);
-        var v2 = IntVector.fromArray(SPECIES, arr2, 0);
-        var result = v1.sub(v2);
-        return result.toArray();
+    /**
+     * Perform a subtraction operation on two arrays of equal length. The operation is applied in bulk
+     * using vectorized processing.
+     *
+     * @param arr1 the first input array
+     * @param arr2 the second input array
+     * @return the result of subtraction on two float Arrays
+     */
+    public float[] subTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
+        return elementwiseOperation(arr1, arr2, VectorOperators.SUB);
     }
 
-    public static void main(String[] args) {
-        int[] arr1 = {1,2,3,4,5};
-        int[] arr2 = {2,2,2,2,2};
-        mulTwoVectorArrays(arr1, arr2);
-        System.out.println(Arrays.toString(arr1));
+    /**
+     * Perform a multiplication operation on two arrays of equal length. The operation is applied in
+     * bulk using vectorized processing.
+     *
+     * @param arr1 the first input aray
+     * @param arr2 the second input array
+     * @return the result of multiplication on two float Arrays
+     */
+    public float[] mulTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
+        return elementwiseOperation(arr1, arr2, VectorOperators.MUL);
     }
 
-    public int[] dotTwoVectorArrays(int[] arr1, int[] arr2) {
-        var a = IntVector.fromArray(SPECIES, arr1, 0);
-        var b = IntVector.fromArray(SPECIES, arr2, 0);
-        int n = arr1.length;
-        int sum = 0;
-        //for (int i = 0; i < n; i++) {
-       //     sum += a[i] * b[i];
-        //}
-        return new int[]{1, 2};
+    /**
+     * Performs dot product on two equally sized float arrays using the Vector API.
+     *
+     * @param arr1 the first input array
+     * @param arr2 the second input array
+     * @return the dot product of the two float arrays
+     */
+    public float dotTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
+        int end = arr1.length;
+        int start = 0;
+        return simdUtils.dotProductForSpecies(arr1, arr2, start, end);
     }
 
 }
