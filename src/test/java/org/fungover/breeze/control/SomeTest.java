@@ -160,4 +160,28 @@ class SomeTest {
         assertThrows(NullPointerException.class, () -> some.filter(null));
     }
 
+    @Test
+    void peekWithNullConsumerThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.peek(null));
+    }
+
+    @Test
+    void orElseThrowWithNullSupplierThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.orElseThrow(null));
+    }
+
+    @Test
+    void foldWithNullIfNoneSupplierThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.fold(null, val -> val));
+    }
+
+    @Test
+    void foldWithNullIfPresentFunctionThrowsException() {
+        Some<Integer> some = new Some<>(5);
+        assertThrows(NullPointerException.class, () -> some.fold(() -> 0, null));
+    }
+
 }
