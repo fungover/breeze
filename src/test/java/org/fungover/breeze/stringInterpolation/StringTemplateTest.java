@@ -60,5 +60,15 @@ class StringTemplateTest {
                 Map.of("name", "John Doe", "date", LocalDate.of(2025, 2, 19)));
         assertEquals("Hello, John Doe! Today is 2025-02-19", result);
     }
+    @Test
+    void testBuilderPattern() {
+        StringTemplate template = StringTemplate.builder()
+                .template("Hi {name}, amount: {amount:%.2f}")
+                .put("name", "John Doe")
+                .put("amount", 99.99)
+                .build();
+        String result = template.render();
+        assertEquals("Hi John Doe, amount: 99.99", result);
+    }
 
 }
