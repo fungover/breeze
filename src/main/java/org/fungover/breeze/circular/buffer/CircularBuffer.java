@@ -1,20 +1,17 @@
 package org.fungover.breeze.circular.buffer;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class CircularBuffer<T> implements Iterable<T> {
-    private final OverflowStrategy overflowStrategy;
+    private static final int DEFAULT_CAPACITY = 10;
 
     private final T[] buffer;
-    private static final int DEFAULT_CAPACITY = 10;
     private final int capacity;
+    private final OverflowStrategy overflowStrategy;
+    private final boolean threadSafe;
     private int count;
     private int head;
     private int tail;
-    private final boolean threadSafe;
 
     @SuppressWarnings("unchecked")
     public CircularBuffer() {
@@ -29,6 +26,10 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     @SuppressWarnings("unchecked")
     public CircularBuffer(int capacity, OverflowStrategy overflowStrategy, boolean threadSafe) {
+        if (capacity <= 0)
+            throw new IllegalArgumentException("Capacity must be greater than 0");
+        if (overflowStrategy == null)
+            throw new IllegalArgumentException("OverflowStrategy cannot be null");
         this.capacity = capacity;
         this.overflowStrategy = overflowStrategy;
         this.threadSafe = threadSafe;
@@ -57,9 +58,9 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     private void addInternal(T element) {
         if (isFull()) {
-            if (overflowStrategy == OverflowStrategy.REJECT)
+            if (overflowStrategy == OverflowStrategy.REJECT) {
                 throw new IllegalStateException("Buffer is full");
-            else {
+            } else {
                 head = (head + 1) % capacity;
                 count--;
             }
@@ -69,6 +70,13 @@ public class CircularBuffer<T> implements Iterable<T> {
         count++;
     }
 
+    /**
+     * Adds multiple elements to the buffer, depending on the overflow strategy:
+     * <br>OVERWRITE: overwrites oldest element(s) inside buffer if full
+     * <br>REJECT: cancels write and throws exception if buffer is full
+     *
+     * @param elements New element(s) to be added to the buffer
+     */
     public void addAll(Collection<? extends T> elements) {
         if (threadSafe) {
             synchronized (this) {
@@ -83,6 +91,13 @@ public class CircularBuffer<T> implements Iterable<T> {
         }
     }
 
+    /**
+     * Adds multiple elements to the buffer, depending on the overflow strategy:
+     * <br>OVERWRITE: overwrites oldest element(s) inside buffer if full
+     * <br>REJECT: cancels write and throws exception if buffer is full
+     *
+     * @param elements New element(s) to be added to the buffer
+     */
     @SafeVarargs
     public final void addAll(T... elements) {
         if (threadSafe) {
@@ -99,7 +114,7 @@ public class CircularBuffer<T> implements Iterable<T> {
     }
 
     /**
-     * Returns the oldest element inside the buffer, <b>without</b> removing it.
+     * Returns the oldest element inside the buffer.
      *
      * @return the oldest element
      */
@@ -108,8 +123,7 @@ public class CircularBuffer<T> implements Iterable<T> {
             synchronized (this) {
                 return peekInternal();
             }
-        }
-        return peekInternal();
+        } else return peekInternal();
     }
 
     private T peekInternal() {
@@ -133,6 +147,7 @@ public class CircularBuffer<T> implements Iterable<T> {
     private T removeInternal() {
         if (isEmpty())
             throw new NoSuchElementException("Buffer is empty");
+
         T element = buffer[head];
         buffer[head] = null;
         head = (head + 1) % capacity;
@@ -145,9 +160,14 @@ public class CircularBuffer<T> implements Iterable<T> {
      *
      * @param count the number of elements to remove
      * @return a collection containing the removed elements
+     * @throws IllegalArgumentException if element amount exceeds capacity
      */
     public Collection<T> removeBatch(int count) {
-        Collection<T> removedElements = new LinkedList<>();
+        if (count > capacity)
+            throw new IllegalArgumentException("Count cannot be greater than capacity");
+
+        Collection<T> removedElements = new ArrayList<>();
+
         if (threadSafe) {
             synchronized (this) {
                 for (int i = 0; i < count; i++) {
@@ -163,7 +183,7 @@ public class CircularBuffer<T> implements Iterable<T> {
     }
 
     /**
-     * Clears the buffer and resets head, tail and count.
+     * Clears the buffer and resets head, tail, and count.
      */
     public void clear() {
         if (threadSafe) {
@@ -174,12 +194,20 @@ public class CircularBuffer<T> implements Iterable<T> {
     }
 
     private void clearInternal() {
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < capacity; i++) {
             buffer[i] = null;
         }
         head = 0;
         tail = 0;
         count = 0;
+    }
+
+    public boolean isThreadSafe() {
+        return threadSafe;
+    }
+
+    public OverflowStrategy getOverflowStrategy() {
+        return overflowStrategy;
     }
 
     /**
@@ -201,17 +229,22 @@ public class CircularBuffer<T> implements Iterable<T> {
             synchronized (this) {
                 return capacity;
             }
-        }
-        return capacity;
+        } else return capacity;
     }
 
+    /**
+     * Returns element at specified index.
+     * @param index to access
+     * @return element at specified index
+     */
     protected T getAt(int index) {
+        if (index < 0 || index >= count)
+            throw new IndexOutOfBoundsException("Index does not exist");
         if (threadSafe) {
             synchronized (this) {
                 return buffer[index];
             }
-        }
-        return buffer[index];
+        } else return buffer[index];
     }
 
     protected int getHead() {
@@ -246,30 +279,31 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new CustomIterator<>(this);
-    }
-}
-
-class CustomIterator<T> implements Iterator<T> {
-    private final CircularBuffer<T> buffer;
-    private int index, count;
-
-    public CustomIterator(CircularBuffer<T> buffer) {
-        this.buffer = buffer;
-        this.index = buffer.getHead();
-        count = 0;
+        return new CircularBufferIterator<>(this);
     }
 
-    @Override
-    public boolean hasNext() {
-        return count < buffer.count();
-    }
+    private static class CircularBufferIterator<T> implements Iterator<T> {
+        private final CircularBuffer<T> buffer;
+        private int index, count;
 
-    @Override
-    public T next() {
-        T element = buffer.getAt(index);
-        index = (index + 1) % buffer.capacity();
-        count++;
-        return element;
+        public CircularBufferIterator(CircularBuffer<T> buffer) {
+            this.buffer = buffer;
+            this.index = buffer.getHead();
+            count = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return count < buffer.count();
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            T element = buffer.getAt(index);
+            index = (index + 1) % buffer.capacity();
+            count++;
+            return element;
+        }
     }
 }
