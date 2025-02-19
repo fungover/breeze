@@ -23,6 +23,14 @@ class Vector3Test {
     }
 
     @Test
+    @DisplayName("Add method throws exception if vector parameter is null")
+    void addMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.add(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
+    }
+
+    @Test
     @DisplayName("Sub method subtracts new values from old values")
     void subMethodSubtractsNewValuesFromOldValues() {
         Vector3 vector = new Vector3(6, 6, 6);
@@ -33,6 +41,13 @@ class Vector3Test {
                 () -> assertThat(v.y()).isCloseTo(3.0f, within(1e-7f)),
                 () -> assertThat(v.z()).isCloseTo(3.0f, within(1e-7f))
         );
+    }
+    @Test
+    @DisplayName("Sub method throws exception if vector parameter is null")
+    void subMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.sub(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
     }
 
     @Test
@@ -76,6 +91,14 @@ class Vector3Test {
     }
 
     @Test
+    @DisplayName("Dot method throws exception if vector parameter is null")
+    void dotMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.dot(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
+    }
+
+    @Test
     @DisplayName("Cross returns new Vector3 as a cross product of the two vectors")
     void crossReturnsNewVector3AsACrossProductOfTheTwoVectors() {
         Vector3 vector = new Vector3(1, 2, 3);
@@ -86,6 +109,14 @@ class Vector3Test {
                 () -> assertThat(v.y()).isCloseTo(6.0f,within(1e-7f)),
                 () -> assertThat(v.z()).isCloseTo(-3.0f,within(1e-7f))
         );
+    }
+
+    @Test
+    @DisplayName("Cross method throws exception if vector parameter is null")
+    void crossMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.cross(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
     }
 
     @Test
@@ -106,6 +137,7 @@ class Vector3Test {
                 () -> assertThat(v.z()).isCloseTo((float) 4/6 ,within(1e-7f))
         );
     }
+
     @Test
     @DisplayName("Trying to normalize with zero length throws exception")
     void tryingToNormalizeWithZeroLengthThrowsException(){
@@ -123,6 +155,14 @@ class Vector3Test {
     }
 
     @Test
+    @DisplayName("Distance method throws exception if vector parameter is null")
+    void distanceMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.distance(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
+    }
+
+    @Test
     @DisplayName("Linear interpolation find the middle between vectors")
     void linearInterpolationFindTheMiddleBetweenVectors() {
         Vector3 vector = new Vector3(3, 3, 3);
@@ -133,6 +173,14 @@ class Vector3Test {
                 () -> assertThat(v.y()).isCloseTo(4.5f,within(1e-7f)),
                 () -> assertThat(v.z()).isCloseTo(4.5f,within(1e-7f))
         );
+    }
+
+    @Test
+    @DisplayName("Linear method throws exception if vector parameter is null")
+    void linearMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.linear(null,0.5f));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
     }
 
     @Test
@@ -169,6 +217,14 @@ class Vector3Test {
     }
 
     @Test
+    @DisplayName("Min method throws exception if vector parameter is null")
+    void minMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.min(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
+    }
+
+    @Test
     @DisplayName("Max returns new Vector3 with the largest x, y and z values from two vectors")
     void maxReturnsNewVector3WithTheLargestXYAndZValuesFromTwoVectors() {
         Vector3 vector = new Vector3(1, 6, 7);
@@ -179,6 +235,14 @@ class Vector3Test {
                 () -> assertThat(v.y()).isCloseTo(6.0f,within(1e-7f)),
                 () -> assertThat(v.z()).isCloseTo(9.0f,within(1e-7f))
         );
+    }
+
+    @Test
+    @DisplayName("Max method throws exception if vector parameter is null")
+    void maxMethodThrowsExceptionIfVectorParameterIsNull(){
+        Vector3 vector = new Vector3(3, 3, 3);
+        var exception = assertThrows(IllegalArgumentException.class, () -> vector.max(null));
+        assertThat(exception.getMessage()).isEqualTo("Vector parameter cannot be null");
     }
 
     @Test
