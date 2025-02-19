@@ -10,4 +10,10 @@ class StringTemplateTest {
         assertEquals("Test", result);
 
     }
+    @Test
+    void testApplyFormtatWithNumericFormat() {
+        String result = StringTemplate.applyFormat("Test", null);
+        assertEquals("Test", result);
+    }
+
 }
