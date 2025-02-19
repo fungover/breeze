@@ -68,8 +68,12 @@ public class CsvReader {
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+
             List<String> parsed = parseLine(line);
-            rows.add(parsed.toArray(new String[parsed.size()]));
+            rows.add(parsed.toArray(new String[0])); // Convert list to array and add to rows
         }
         return rows;
     }
@@ -97,4 +101,6 @@ public class CsvReader {
         tokens.add(token);
         return tokens;
     }
+
 }
+

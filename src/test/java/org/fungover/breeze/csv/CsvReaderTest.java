@@ -1,5 +1,6 @@
 package org.fungover.breeze.csv;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -10,6 +11,8 @@ import java.nio.file.Files;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsvReaderTest {
 
@@ -84,5 +87,20 @@ class CsvReaderTest {
                 new String[]{"123", "234", "865"},
                 new String[]{"4534346", "5", "77"},
                 new String[]{"243", "23", "6767"});
+    }
+
+    @Test
+    @DisplayName("Should not read empty lines")
+    void shouldNotReadEmptyLines() throws IOException {
+        String csvData = "name,age,city\n\nBert,30,Karlskrona\n\nSigmund,25,Göteborg\n";
+        CsvReader reader = CsvReader.builder()
+                .build()
+                .withSource(csvData);
+
+        List<String[]> rows = reader.readAll();
+        assertEquals(3, rows.size());  // Empty lines should be skipped
+        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));  // Header row
+        assertArrayEquals(new String[] {"Bert", "30", "Karlskrona"}, rows.get(1));
+        assertArrayEquals(new String[] {"Sigmund", "25", "Göteborg"}, rows.get(2));
     }
 }
