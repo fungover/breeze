@@ -3,6 +3,8 @@ package org.fungover.breeze.stringInterpolation;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StringTemplateTest {
@@ -50,6 +52,13 @@ class StringTemplateTest {
         String template = "Hello, {0}! Your balance is {1:%.2f}";
         String result = StringTemplate.format(template, "John Doe", 123.456);
         assertEquals("Hello, John Doe! Your balance is 123.46", result);
+    }
+    @Test
+    void testRenderWithNamedPlaceholders() {
+        String template = "Hello, {name}! Today is {date:yyyy-MM-dd}";
+        String result = StringTemplate.format(template,
+                Map.of("name", "John Doe", "date", LocalDate.of(2025, 2, 19)));
+        assertEquals("Hello, John Doe! Today is 2025-02-19", result);
     }
 
 }
