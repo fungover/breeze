@@ -184,4 +184,82 @@ class SomeTest {
         assertThrows(NullPointerException.class, () -> some.fold(() -> 0, null));
     }
 
+    // Extreme Values Test Cases
+
+    @Test
+    void someHandlesIntegerMaxValue() {
+        Some<Integer> some = new Some<>(Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, some.get());
+    }
+
+    @Test
+    void someHandlesIntegerMinValue() {
+        Some<Integer> some = new Some<>(Integer.MIN_VALUE);
+        assertEquals(Integer.MIN_VALUE, some.get());
+    }
+
+    @Test
+    void someHandlesPositiveInfinity() {
+        Some<Double> some = new Some<>(Double.POSITIVE_INFINITY);
+        assertEquals(Double.POSITIVE_INFINITY, some.get());
+    }
+
+    @Test
+    void someHandlesNegativeInfinity() {
+        Some<Double> some = new Some<>(Double.NEGATIVE_INFINITY);
+        assertEquals(Double.NEGATIVE_INFINITY, some.get());
+    }
+
+    //
+
+
+    @Test
+    void someHandlesNaN() {
+        Some<Double> some = new Some<>(Double.NaN);
+        assertTrue(Double.isNaN(some.get()));
+    }
+
+    @Test
+    void someHandlesEmptyString() {
+        Some<String> some = new Some<>("");
+        assertEquals("", some.get());
+    }
+
+    @Test
+    void mapOnEmptyStringRetainsEmptyString() {
+        Some<String> some = new Some<>("");
+        Option<String> mapped = some.map(str -> str.toUpperCase());
+        assertInstanceOf(Some.class, mapped);
+        assertEquals("", mapped.get());
+    }
+
+    @Test
+    void flatMapOnEmptyStringRetainsEmptyString() {
+        Some<String> some = new Some<>("");
+        Option<String> flatMapped = some.flatMap(str -> new Some<>(str + " modified"));
+        assertInstanceOf(Some.class, flatMapped);
+        assertEquals(" modified", flatMapped.get());
+    }
+
+    @Test
+    void filterOnEmptyStringFails() {
+        Some<String> some = new Some<>("");
+        Option<String> filtered = some.filter(str -> !str.isEmpty());
+        assertInstanceOf(None.class, filtered);
+    }
+
+    @Test
+    void someHandlesWhitespaceString() {
+        Some<String> some = new Some<>(" ");
+        assertEquals(" ", some.get());
+    }
+
+    @Test
+    void filterOnWhitespaceStringFails() {
+        Some<String> some = new Some<>(" ");
+        Option<String> filtered = some.filter(str -> !str.isBlank());
+        assertInstanceOf(None.class, filtered);
+    }
+
+
 }
