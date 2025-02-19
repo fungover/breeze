@@ -45,5 +45,11 @@ class StringTemplateTest {
         assertTrue(tokens.get(4).isLiteral());
         assertEquals(".", tokens.get(4).getContent());
     }
+    @Test
+    void testRenderWithIndexedPlaceholders() {
+        String template = "Hello, {0}! Your balance is {1:%.2f}";
+        String result = StringTemplate.format(template, "John Doe", 123.456);
+        assertEquals("Hello, John Doe! Your balance is 123.46", result);
+    }
 
 }
