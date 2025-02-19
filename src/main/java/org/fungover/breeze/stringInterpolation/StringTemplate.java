@@ -67,7 +67,6 @@ public class StringTemplate {
     }
 
 
-     // Applies an optional format specifier to the provided value.
     static String applyFormat(Object value, String format) {
         if (format == null || format.isEmpty()) {
             return String.valueOf(value);
@@ -76,17 +75,16 @@ public class StringTemplate {
         // Handle date/time formatting for TemporalAccessor instances.
         if (value instanceof TemporalAccessor) {
             try {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, Locale.US);
                 return dtf.format((TemporalAccessor) value);
             } catch (Exception e) {
 
             }
         }
-
-        // Attempt to use String.format for other values.
         try {
-            return String.format(format, value);
+            return String.format(Locale.US, format, value);
         } catch (Exception e) {
+
             return String.valueOf(value);
         }
     }
