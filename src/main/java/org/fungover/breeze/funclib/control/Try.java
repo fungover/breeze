@@ -100,7 +100,7 @@ public abstract class Try<T> implements Serializable {
         } catch (Exception e) {
             return failure(e);
         } catch (Error e) {
-            return failure(new Exception("Critical error occurred", e));
+            return failure(new Exception("Critical error occurred: " + e.getClass().getSimpleName(), e));
         }
     }
 
@@ -225,11 +225,7 @@ public abstract class Try<T> implements Serializable {
         } else {
             try {
                 Exception cause = ((Failure<T>) this).exception;
-                if (cause != null) {
-                    return recoverWithFunction.apply(cause);
-                } else {
-                    return failure(null);
-                }
+                return recoverWithFunction.apply(cause);
             } catch (Exception e) {
                 return failure(e);
             }
