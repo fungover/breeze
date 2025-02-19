@@ -1,6 +1,7 @@
 package org.fungover.breeze.collection;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class FTreeTest {
@@ -60,7 +61,7 @@ class FTreeTest {
 
         FTree<String> mappedTree = tree.map(Object::toString);
 
-        assertTrue(mappedTree instanceof EmptyTree);
+        assertInstanceOf(EmptyTree.class, mappedTree);
     }
 
     @Test
@@ -88,4 +89,21 @@ class FTreeTest {
         assertEquals(21, mappedTree.right().value());
     }
 
+    @Test
+    void testMapAndRebuildPreservesNaturalOrder() {
+
+        FTree<Integer> tree = FTree.<Integer>empty().insert(10).insert(5).insert(20);
+
+        FTree<Integer> mappedTree = tree.mapAndRebuild(i -> i);
+
+        assertEquals(5, mappedTree.value());
+        assertInstanceOf(EmptyTree.class, mappedTree.left());
+
+        assertEquals(10, mappedTree.right().value());
+        assertInstanceOf(EmptyTree.class, mappedTree.right().left());
+
+        assertEquals(20, mappedTree.right().right().value());
+        assertInstanceOf(EmptyTree.class, mappedTree.right().right().left());
+        assertInstanceOf(EmptyTree.class, mappedTree.right().right().right());
+    }
 }

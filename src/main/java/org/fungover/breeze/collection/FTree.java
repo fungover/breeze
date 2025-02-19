@@ -4,6 +4,7 @@ import java.util.function.Function;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * The {@code FTree} interface represents a functional, immutable binary search tree (BST).
  * It supports insertion, searching, and transformation of elements in a persistent manner.
@@ -81,7 +82,7 @@ public interface FTree<T extends Comparable<T>> {
      * @return a new tree built from the mapped values.
      */
     default <R extends Comparable<R>> FTree<R> mapAndRebuild(Function<T, R> f) {
-        List<R> mappedValues = new ArrayList<>();
+        List<R> mappedValues = new ArrayList<>(size());
         inOrderTraversal(this, f, mappedValues);
         FTree<R> newTree = FTree.empty();
         for (R value : mappedValues) {
@@ -89,6 +90,7 @@ public interface FTree<T extends Comparable<T>> {
         }
         return newTree;
     }
+
 
     /**
      * Performs an in-order traversal of the tree, applying the given function to each node's value,
@@ -102,13 +104,15 @@ public interface FTree<T extends Comparable<T>> {
      */
     static <T extends Comparable<T>, R extends Comparable<R>> void inOrderTraversal(
             FTree<T> tree, Function<T, R> f, List<R> list) {
-        if (tree instanceof EmptyTree) {
+        if (tree instanceof EmptyTree<?>) {
             return;
         }
         inOrderTraversal(tree.left(), f, list);
         list.add(f.apply(tree.value()));
         inOrderTraversal(tree.right(), f, list);
     }
+
+    int size();
 }
 
 /**
@@ -169,6 +173,11 @@ class EmptyTree<T extends Comparable<T>> implements FTree<T> {
     public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
         return getInstance();
     }
+
+    @Override
+    public int size() {
+        return 0;
+    }
 }
 
 /**
@@ -189,7 +198,10 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     public FTree<T> insert(T newValue) {
         if (newValue.compareTo(value) < 0) {
             return new NonEmptyTree<>(value, left.insert(newValue), right);
+        } else if (newValue.compareTo(value) > 0) {
+            return new NonEmptyTree<>(value, left, right.insert(newValue));
         } else {
+
             return new NonEmptyTree<>(value, left, right.insert(newValue));
         }
     }
@@ -203,8 +215,11 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     @Override
     public boolean contains(T searchValue) {
         int cmp = searchValue.compareTo(value);
-        if (cmp == 0) return true;
-        return (cmp < 0) ? left.contains(searchValue) : right.contains(searchValue);
+        if (cmp == 0) {
+            return true;
+        }
+        FTree<T> nextSubtree = (cmp < 0) ? left : right;
+        return nextSubtree.contains(searchValue);
     }
 
     /**
@@ -218,5 +233,10 @@ record NonEmptyTree<T extends Comparable<T>>(T value, FTree<T> left, FTree<T> ri
     @Override
     public <R extends Comparable<R>> FTree<R> map(Function<T, R> f) {
         return new NonEmptyTree<>(f.apply(value), left.map(f), right.map(f));
+    }
+
+    @Override
+    public int size() {
+        return 1 + left.size() + right.size();
     }
 }
