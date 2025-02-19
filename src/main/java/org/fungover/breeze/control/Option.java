@@ -367,5 +367,6 @@ public abstract class Option<T extends Serializable> implements Serializable {
         public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
 
+    public abstract T orElseThrow();
 
 }
