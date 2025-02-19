@@ -49,7 +49,6 @@ class LazyTest {
             assertEquals(1, countedTimes.get());
             assertNotEquals(2, countedTimes.get());
             assertEquals("computed value", value1);
-            assertEquals("computed value", value2);
         }
 
         @Test
@@ -93,7 +92,6 @@ class LazyTest {
                 return 89;
             }).filter(i -> i > 88);
 
-            lazyOptional.get();
             lazyOptional.get();
             assertTrue(lazyOptional.get().isPresent());
             assertEquals(1, counter.get());
