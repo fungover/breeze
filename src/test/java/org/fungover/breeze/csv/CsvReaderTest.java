@@ -89,10 +89,11 @@ class CsvReaderTest {
                 new String[]{"243", "23", "6767"});
     }
 
+
     @Test
     @DisplayName("Should not read empty lines")
     void shouldNotReadEmptyLines() throws IOException {
-        String csvData = "name,age,city\n\nBert,30,Karlskrona\n\nSigmund,25,Göteborg\n";
+        String csvData = "name,age,city\n\nBert,30,Karlskrona\n\nSigmund,25,Gothenburg\n";
         CsvReader reader = CsvReader.builder()
                 .build()
                 .withSource(csvData);
@@ -101,6 +102,35 @@ class CsvReaderTest {
         assertEquals(3, rows.size());  // Empty lines should be skipped
         assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));  // Header row
         assertArrayEquals(new String[] {"Bert", "30", "Karlskrona"}, rows.get(1));
-        assertArrayEquals(new String[] {"Sigmund", "25", "Göteborg"}, rows.get(2));
+        assertArrayEquals(new String[] {"Sigmund", "25", "Gothenburg"}, rows.get(2));
     }
+
+
+    @Test
+    @DisplayName("Should ignore rows with only whitespace")
+    void shouldIgnoreRowsWithOnlyWhitespace() throws IOException {
+        String csvData = "name,age,city\n   \nSpacer,30,Stockholm\n  \nJerry,25,Oslo\n";
+        CsvReader reader = CsvReader.builder()
+                .build()
+                .withSource(csvData);
+
+        List<String[]> rows = reader.readAll();
+        assertEquals(3, rows.size());
+        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));  // Header row
+        assertArrayEquals(new String[] {"Spacer", "30", "Stockholm"}, rows.get(1));  // Första dataraden
+        assertArrayEquals(new String[] {"Jerry", "25", "Oslo"}, rows.get(2));  // Andra dataraden
+    }
+
+    @Test
+    @DisplayName("Should Not Ignore whitespaceInTokens")
+    void shouldNotIgnoreWhiteSpaceInTokens() throws IOException {
+        String csvData = "name  ,age,  city ";
+        CsvReader reader = CsvReader.builder()
+                .build()
+                .withSource(csvData);
+
+        List<String[]> rows = reader.readAll();
+        assertArrayEquals(new String[] {"name  ", "age", "  city "}, rows.getFirst());
+    }
+
 }
