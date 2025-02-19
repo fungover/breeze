@@ -70,22 +70,26 @@ class Node<T> {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Node <?> node)) return false;
-        return Objects.equals(value, node.value);
+        return value.equals(node.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(value);
+        return value.hashCode();
+    }
+
+    public int compareTo(Node<T> otherNode) {
+        return this.value.compareTo(otherNode.value);  // Use compareTo in HashCodeWrapper
     }
 
     static final class HashCodeWrapper<T> implements Comparable<HashCodeWrapper<T>> {
 
-        private final Comparable<T> value;
+        private final T value;
         private final int hashCode;
 
 
         public HashCodeWrapper(T value) {
-            this.value = (Comparable<T>) value;
+            this.value =  value;
             this.hashCode = value != null ? value.hashCode() : 0;
         }
 
@@ -111,18 +115,18 @@ class Node<T> {
             }
 
 
-            return this.value.compareTo((T) o.value);
+            return ((Comparable<T>) this.value).compareTo( o.value);
 
         }
 
 
         public T getValue() {
-            return (T) value;
+            return value;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(value);
+            return Objects.hash(this.value);
         }
 
 

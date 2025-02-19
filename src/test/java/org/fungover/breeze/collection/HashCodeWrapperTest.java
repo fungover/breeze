@@ -52,6 +52,7 @@ class HashCodeWrapperTest {
         @DisplayName("Node has predictable hash value test")
         void nodeHasPredictableHashValueTest() {
             var expectedValue = hash(20);
+            System.out.println(bigValueNode.hashCode());
             assertThat(bigValueNode.hashCode()).isEqualTo(expectedValue);
 
         }
@@ -93,13 +94,15 @@ class HashCodeWrapperTest {
         void nodeComparisonAgainstOtherDatatypesIsAlwaysFalseTest() {
             var otherDataType =  Integer.parseInt("10");
             var isFalseBoolean = smallValueNode.equals(otherDataType);
+            var isFalseBoolean2 = bigValueNode.equals(10);
             assertThat(isFalseBoolean).isFalse();
+            assertThat(isFalseBoolean2).isFalse();
 
         }
 
         @Test
-        @DisplayName("Node comparsion between null and node values is False Test")
-        void nodeComparsionBetweenNullAndNodeValuesIsFalseTest() {
+        @DisplayName("Node comparison between null and node values is False Test")
+        void nodeComparisonBetweenNullAndNodeValuesIsFalseTest() {
             var nullLocalValueNode = new Node.HashCodeWrapper<>(null);
             var isFalseBoolean = smallValueNode.equals(nullLocalValueNode);
             var isFalseBoolean2 = bigValueNode == null;
@@ -143,6 +146,31 @@ class HashCodeWrapperTest {
             var actual = smallValueNode.compareTo(nullValueNode);
             assertThat(actual).isPositive();
 
+        }
+
+        @Test
+        @DisplayName("Nodes with null values is True test")
+        void nodesWithNullValuesIsTrueTest() {
+            var expectedNullNode = new Node.HashCodeWrapper<>(null);
+            var isBoolean = nullValueNode.equals(nullValueNode);
+            var isBoolean2 = nullValueNode.equals(expectedNullNode);
+            assertThat(isBoolean).isTrue();
+            assertThat(isBoolean2).isTrue();
+
+        }
+
+        @Test
+        @DisplayName("Comparison between null and non-null value returns false")
+        void comparisonBetweenNullAndNonNullValueReturnsFalseTest() {
+            var actual = smallValueNode.equals(nullValueNode);
+            assertThat(actual).isFalse();
+        }
+
+        @Test
+        @DisplayName("Comparing two null wrapped nodes returns true")
+        void comparingTwoNullWrappedNodesReturnsTrueTest() {
+            var actual = nullValueNode.equals(nullValueNode2);
+            assertThat(actual).isTrue();
         }
 
 
