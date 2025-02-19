@@ -2,6 +2,7 @@ package org.fungover.breeze.control;
 
 import org.fungover.breeze.funclib.control.Try;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -25,7 +26,7 @@ public final class Lazy<T> {
      * @param supplier the supplier function that computes the value
      */
     private Lazy(Supplier<? extends T> supplier) {
-        this.supplier = supplier;
+        this.supplier = Objects.requireNonNull(supplier, "Supplier must not be null");
         this.value = null;
         this.evaluated = false;
     }
