@@ -50,7 +50,7 @@ class SomeTest {
     void mapTransformsValue() {
         Some<Integer> some = new Some<>(5);
         Option<String> mapped = some.map(Object::toString);
-        assertTrue(mapped instanceof Some);
+        assertInstanceOf(Some.class, mapped);
         assertEquals("5", mapped.get());
     }
 
@@ -58,7 +58,7 @@ class SomeTest {
     void flatMapTransformsToAnotherOption() {
         Some<Integer> some = new Some<>(10);
         Option<String> flatMapped = some.flatMap(val -> new Some<>("Value: " + val));
-        assertTrue(flatMapped instanceof Some);
+        assertInstanceOf(Some.class, flatMapped);
         assertEquals("Value: 10", flatMapped.get());
     }
 
@@ -66,7 +66,7 @@ class SomeTest {
     void filterKeepsValueIfPredicateMatches() {
         Some<Integer> some = new Some<>(42);
         Option<Integer> filtered = some.filter(n -> n > 40);
-        assertTrue(filtered instanceof Some);
+        assertInstanceOf(Some.class, filtered);
         assertEquals(42, filtered.get());
     }
 
@@ -74,7 +74,7 @@ class SomeTest {
     void filterRemovesValueIfPredicateFails() {
         Some<Integer> some = new Some<>(42);
         Option<Integer> filtered = some.filter(n -> n > 50);
-        assertTrue(filtered instanceof None);
+        assertInstanceOf(None.class, filtered);
     }
 
     @Test
