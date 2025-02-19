@@ -232,5 +232,32 @@ public class OptionTest {
         assertThrows(UnsupportedOperationException.class, none::orElseThrow);
     }
 
+    @Test
+    void filterWithNullPredicateShouldThrowException() {
+        Option<Integer> some = Option.some(10);
+        assertThrows(NullPointerException.class, () -> some.filter(null));
+    }
 
+    @Test
+    void filterWithAlwaysFalsePredicateShouldReturnNone() {
+        Option<Integer> some = Option.some(10);
+        assertEquals(Option.none(), some.filter(x -> false));
+    }
+
+    @Test
+    void flatMapWithNoneProducingFunctionShouldReturnNone() {
+        Option<Integer> some = Option.some(10);
+        Option<Integer> mapped = some.flatMap(x -> Option.none());
+
+        assertEquals(Option.none(), mapped);
+    }
+
+    @Test
+    void toOptionalShouldConvertSomeAndNoneCorrectly() {
+        Option<Integer> some = Option.some(10);
+        Option<Integer> none = Option.none();
+
+        assertThat(some.toOptional()).isEqualTo(Optional.of(10));
+        assertThat(none.toOptional()).isEqualTo(Optional.empty());
+    }
 }
