@@ -9,12 +9,20 @@ package org.fungover.breeze.vector;
 public record Vector2(float x, float y) {
 
     /**
+     * Error message used when vector parameter is null
+     */
+    public static final String ParameterNull = "Vector parameter cannot be null";
+
+    /**
      * Adds the given vector to this vector
      *
      * @param v the vector to add
      * @return a new vector that is the sum of this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector2 add(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector2(this.x + v.x, this.y + v.y);
     }
 
@@ -23,8 +31,11 @@ public record Vector2(float x, float y) {
      *
      * @param v the vector to subtract
      * @return a new vector that is the difference between this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector2 sub(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector2(this.x - v.x, this.y - v.y);
     }
 
@@ -56,8 +67,11 @@ public record Vector2(float x, float y) {
      *
      * @param v the vector to calculate the dor product with
      * @return the dot product of this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public float dot(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return this.x * v.x + this.y * v.y;
     }
 
@@ -88,8 +102,11 @@ public record Vector2(float x, float y) {
      *
      * @param v the vector to calculate the distance to
      * @return the distance between this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public float distance(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return (float) Math.sqrt(Math.pow(v.x - this.x, 2) + Math.pow(v.y - this.y, 2));
     }
 
@@ -99,9 +116,12 @@ public record Vector2(float x, float y) {
      * @param v the vector to interpolate to
      * @param t the interpolation factor (between 0 and 1)
      * @return a new vector that is the result of linear interpolation
+     * @throws IllegalArgumentException if vector parameter is null
      * @throws IllegalArgumentException if t is not in the range 0 - 1
      */
     public Vector2 linear(Vector2 v, float t) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         if (t > 1)
             throw new IllegalArgumentException("lerp can not be larger than 1");
         if (t < 0)
@@ -115,8 +135,11 @@ public record Vector2(float x, float y) {
      *
      * @param v the vector to compare with
      * @return a new vector with the minimum components
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector2 min(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector2(Math.min(this.x, v.x), Math.min(this.y, v.y));
     }
 
@@ -125,8 +148,11 @@ public record Vector2(float x, float y) {
      *
      * @param v the vector to compare with
      * @return a new vector with the maximum components
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector2 max(Vector2 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector2(Math.max(this.x, v.x), Math.max(this.y, v.y));
     }
 

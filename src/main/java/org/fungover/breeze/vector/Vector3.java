@@ -10,12 +10,20 @@ package org.fungover.breeze.vector;
 public record Vector3(float x, float y, float z) {
 
     /**
+     * Error message used when vector parameter is null
+     */
+    public static final String ParameterNull = "Vector parameter cannot be null";
+
+    /**
      * Adds the given vector to this vector
      *
      * @param v the vector to add
      * @return a new vector that is the sum of this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector3 add(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
     }
 
@@ -24,8 +32,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to subtract
      * @return a new vector that is the difference between this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector3 sub(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
     }
 
@@ -57,8 +68,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to calculate the dor product with
      * @return the dot product of this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public float dot(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return this.x * v.x + this.y * v.y + this.z * v.z;
     }
 
@@ -67,8 +81,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to calculate the cross product with
      * @return a new vector that is the cross product of this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector3 cross(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector3(
                 this.y * v.z - this.z * v.y,
                 this.z * v.x - this.x * v.z,
@@ -104,8 +121,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to calculate the distance to
      * @return the distance between this vector and the given vector
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public float distance(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return (float) Math.sqrt(Math.pow(v.x - this.x, 2) + Math.pow(v.y - this.y, 2) + Math.pow(v.z - this.z, 2));
     }
 
@@ -115,9 +135,12 @@ public record Vector3(float x, float y, float z) {
      * @param v the vector to interpolate to
      * @param t the interpolation factor (between 0 and 1)
      * @return a new vector that is the result of linear interpolation
+     * @throws IllegalArgumentException if vector parameter is null
      * @throws IllegalArgumentException if t is not in the range 0 - 1
      */
     public Vector3 linear(Vector3 v, float t) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         if (t > 1)
             throw new IllegalArgumentException("lerp can not be larger than 1");
         if (t < 0)
@@ -131,8 +154,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to compare with
      * @return a new vector with the minimum components
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector3 min(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector3(Math.min(this.x, v.x), Math.min(this.y, v.y), Math.min(this.z, v.z));
     }
 
@@ -141,8 +167,11 @@ public record Vector3(float x, float y, float z) {
      *
      * @param v the vector to compare with
      * @return a new vector with the maximum components
+     * @throws IllegalArgumentException if vector parameter is null
      */
     public Vector3 max(Vector3 v) {
+        if (v == null)
+            throw new IllegalArgumentException(ParameterNull);
         return new Vector3(Math.max(this.x, v.x), Math.max(this.y, v.y), Math.max(this.z, v.z));
     }
 
