@@ -1,23 +1,27 @@
 package org.fungover.breeze.stringInterpolation;
-
-import java.lang.reflect.Constructor;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utility for string interpolation with indexed (e.g., {0}) and named (e.g., {name})
+ * placeholders, supporting optional format specifiers (e.g., {amount:%.2f}, {date:yyyy-MM-dd}).
+ * Provides static methods for quick formatting and a builder for complex templates.
+ *
+ * <p>Example:
+ * {@code StringTemplate.format("Hello, {name}!", Map.of("name", "John Doe")); }
+ */
 
 public class StringTemplate {
 
-    // Constant for placeholder pattern: {name[:format]}
-    static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{(\\w+)(?::([^}]+))?\\}");
-
-    // Instance fields
+    // Constant for placeholder pattern
+    static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{(\\w+)(?::([^}]+))?}");
     private final String template;
     private final Map<String, Object> values;
 
-    // Private constructor: use builder or static factory methods
+
     private StringTemplate(String template, Map<String, Object> values) {
         this.template = template;
         this.values = values;
@@ -25,7 +29,6 @@ public class StringTemplate {
 
     // Formats a template using indexed placeholders.
     public static String format(String template, Object... args) {
-        // Build a map from indices (as String) to argument values.
         Map<String, Object> argMap = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
             argMap.put(String.valueOf(i), args[i]);
@@ -53,7 +56,6 @@ public class StringTemplate {
             if (token.isLiteral()) {
                 result.append(token.getContent());
             } else {
-                // token is a placeholder; get the corresponding value
                 String key = token.getContent();
                 Object value = values.get(key);
                 if (value == null) {
@@ -90,7 +92,7 @@ public class StringTemplate {
     }
 
 
-    // Parses the template string into a list of tokens.
+    // Parses the template string into a list of tokens
     static List<Token> parseTemplate(String template) {
         List<Token> tokens = new ArrayList<>();
         Matcher matcher = PLACEHOLDER_PATTERN.matcher(template);
@@ -105,7 +107,7 @@ public class StringTemplate {
             tokens.add(new Token(key, format, true));
             lastIndex = matcher.end();
         }
-        // Add remaining literal if any.
+        // Add remaining literal if any
         if (lastIndex < template.length()) {
             tokens.add(new Token(template.substring(lastIndex)));
         }
@@ -133,10 +135,6 @@ public class StringTemplate {
             this.isPlaceholder = isPlaceholder;
         }
 
-        // Factory method for placeholder tokens.
-        static Token placeholder(String key, String format) {
-            return new Token(key, format, true);
-        }
 
         public String getContent() {
             return content;
