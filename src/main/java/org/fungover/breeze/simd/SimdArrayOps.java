@@ -84,4 +84,37 @@ public class SimdArrayOps {
         return simdUtils.dotProductForSpecies(arr1, arr2, start, end);
     }
 
+
+  public static void main(String[] args) {
+    float[] TEST_ARR1 = {1, 2, 3, 4, 5, 6, 7, 8};
+    float[] TEST_ARR2 = {8, 7, 6, 5, 4, 3, 2, 1};
+    SimdArrayOpsParallel simdArrayOpsParallel = new SimdArrayOpsParallel();
+    SimdArrayOps simdArrayOps = new SimdArrayOps();
+    System.out.println("Add");
+    System.out.println(Arrays.toString(simdArrayOps.addTwoVectorArrays(TEST_ARR1, TEST_ARR2)));
+    System.out.println("sub");
+    System.out.println(Arrays.toString(simdArrayOps.subTwoVectorArrays(TEST_ARR1, TEST_ARR2)));
+    System.out.println("mul");
+    System.out.println(Arrays.toString(simdArrayOps.mulTwoVectorArrays(TEST_ARR1, TEST_ARR2)));
+    System.out.println("dot");
+    System.out.println(simdArrayOps.dotTwoVectorArrays(TEST_ARR1, TEST_ARR2));
+    System.out.println("----------PARALLEL----------");
+    System.out.println(
+        Arrays.toString(simdArrayOpsParallel.addTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2)));
+    System.out.println("sub");
+    System.out.println(
+        Arrays.toString(simdArrayOpsParallel.subTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2)));
+    System.out.println("mul");
+    System.out.println(
+        Arrays.toString(simdArrayOpsParallel.mulTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2)));
+    System.out.println("dot");
+    System.out.println(simdArrayOpsParallel.dotTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2));
+    System.out.println("------------TEST------------------");
+    float[] TEST_ARR3 = {1, 2, 3, 4, 5, 6, 7, 8};
+    float[] TEST_ARR4 = {8, 7, 6, 5, 4, 3, 2, 1};
+    System.out.println("Add");
+    System.out.println(Arrays.toString(simdArrayOps.addTwoVectorArrays(TEST_ARR3, TEST_ARR4)));
+  }
+
+
 }
