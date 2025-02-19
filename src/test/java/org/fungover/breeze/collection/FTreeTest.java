@@ -90,7 +90,7 @@ class FTreeTest {
     }
 
     @Test
-    void testMapAndRebuildPreservesNaturalOrder() {
+    void testMapAndRebuildPreservesNaturalOrderInTree() {
 
         FTree<Integer> tree = FTree.<Integer>empty().insert(10).insert(5).insert(20);
 
