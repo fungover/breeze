@@ -260,5 +260,20 @@ public final class None<T extends Serializable> extends Option<T> {
         return Either.left(leftValue);
     }
 
+    /**
+     * Ensures that deserialization of {@code None} always returns the singleton instance.
+     * <p>
+     * This method is called automatically during deserialization.
+     * Instead of creating a new instance, it ensures that {@code Option.none()} is used,
+     * maintaining the singleton property of {@code None}.
+     *
+     * @return The singleton instance of {@code None}.
+     * @see java.io.Serializable
+     */
+    @Serial
+    private Object readResolve() {
+        return INSTANCE; // Ensure deserialized None is the same singleton instance
+    }
+
 
 }

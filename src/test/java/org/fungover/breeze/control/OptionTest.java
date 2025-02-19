@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.Optional;
 
 public class OptionTest {
@@ -177,13 +177,52 @@ public class OptionTest {
     @Test
     void someInstanceForSomeValueShouldBeEqual() {
 
-        Option<Integer> option = Option.some(10);
-        Option<Integer> option2 = Option.some(10);
+        Option<Integer> some1 = Option.some(10);
+        Option<Integer> some2 = Option.some(10);
 
-        assertThat(option).isEqualTo(option2);
-        assertThat(option.hashCode()).isEqualTo(option2.hashCode());
+        assertThat(some1).isEqualTo(some2);
+        assertThat(some1.hashCode()).isEqualTo(some2.hashCode());
 
     }
 
+    @Test
+    void noneInstancesShouldAlwaysBeEqual() {
 
+        Option<Integer> none = Option.none();
+        Option<Integer> none2 = Option.none();
+
+        assertThat(none).isEqualTo(none2);
+        assertThat(none2.hashCode()).isEqualTo(none2.hashCode());
+
+    }
+
+    @Test
+    void someShouldNeverBeEqualToNone() {
+        Option<Integer> some = Option.some(10);
+        Option<Integer> none = Option.none();
+
+        assertThat(some).isNotEqualTo(none);
+    }
+
+    @Test
+    void optionShouldBeSerializable() throws IOException, ClassNotFoundException {
+        Option<String> some = Option.some("test");
+        Option<String> none = Option.none();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(some);
+        oos.writeObject(none);
+        oos.close();
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        Option<?> deserializedSome = (Option<?>) ois.readObject();
+        Option<?> deserializedNone = (Option<?>) ois.readObject();
+
+        assertThat(deserializedSome).isEqualTo(some);
+        assertThat(deserializedNone).isSameAs(none);
+
+    }
 }
