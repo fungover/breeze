@@ -20,7 +20,8 @@ class SimdArrayOpsTest {
   @Test
   void dotTwoVectorArrays() {
     var product = simdArrayOps.dotTwoVectorArrays(TEST_ARR1, TEST_ARR2);
-    System.out.println(product);
+    var productParallel = simdArrayOpsParallel.dotTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2);
+    assertThat(productParallel == product).isTrue();
     assertThat(product).isEqualTo(120);
   }
 
