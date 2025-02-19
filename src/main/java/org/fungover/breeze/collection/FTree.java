@@ -91,7 +91,6 @@ public interface FTree<T extends Comparable<T>> {
         return newTree;
     }
 
-
     /**
      * Performs an in-order traversal of the tree, applying the given function to each node's value,
      * and collects the results in the provided list.
