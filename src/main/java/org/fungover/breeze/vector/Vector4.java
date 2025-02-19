@@ -1,7 +1,7 @@
 package org.fungover.breeze.vector;
 
 /**
- * A record that represent a 4D vector with basic arithmetic operations and vector calculations
+ * A record that represents a 4D vector with basic arithmetic operations and vector calculations
  *
  * @param x the x - coordinate of the vector
  * @param y the y - coordinate of the vector
@@ -25,7 +25,7 @@ public record Vector4(float x, float y, float z, float w) {
      * Subtract the given vector from this vector
      *
      * @param v the vector to subtract
-     * @return a new vector that is the differnce between this vector and the given vector
+     * @return a new vector that is the difference between this vector and the given vector
      */
     public Vector4 sub(Vector4 v) {
         return new Vector4(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
@@ -93,7 +93,11 @@ public record Vector4(float x, float y, float z, float w) {
      * @return the distance between this vector and the given vector
      */
     public float distance(Vector4 v) {
-        return (float) Math.sqrt(Math.pow(v.x - this.x, 2) + Math.pow(v.y - this.y, 2) + Math.pow(v.z - this.z, 2) + Math.pow(v.w - this.w, 2));
+        float dx = v.x - this.x;
+        float dy = v.y - this.y;
+        float dz = v.z - this.z;
+        float dw = v.w - this.w;
+        return (float) Math.sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
     }
 
     /**
@@ -134,7 +138,7 @@ public record Vector4(float x, float y, float z, float w) {
     }
 
     /**
-     * Convert this vector to a 2D vector by not including z and w component
+     * Convert this vector to a 2D vector by excluding z and w component
      *
      * @return a new 2D vector
      */
@@ -143,7 +147,7 @@ public record Vector4(float x, float y, float z, float w) {
     }
 
     /**
-     * Convert this vector to a 3D vector by including w component
+     * Convert this vector to a 3D vector by excluding w component
      *
      * @return a new 3D vector
      */
