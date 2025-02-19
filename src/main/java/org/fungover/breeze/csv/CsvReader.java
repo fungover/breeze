@@ -15,11 +15,13 @@ import java.util.List;
 public class CsvReader {
 
     private final char delimiter;
+    private final boolean skipEmptyLines;
 
     private BufferedReader bufferedReader;
 
     private CsvReader(Builder builder) {
         this.delimiter = builder.delimiter;
+        this.skipEmptyLines = builder.skipEmptyLines;
     }
 
     public static Builder builder() {
@@ -28,6 +30,7 @@ public class CsvReader {
 
     public static class Builder {
         private char delimiter = ','; // Default value
+        private boolean skipEmptyLines = true; // Default value
 
         private Builder() {
             // private constructor
@@ -35,6 +38,11 @@ public class CsvReader {
 
         public Builder withDelimiter(char delimiter) {
             this.delimiter = delimiter;
+            return this;
+        }
+
+        public Builder skipEmptyLines(boolean skipEmptyLines) {
+            this.skipEmptyLines = skipEmptyLines;
             return this;
         }
 
@@ -68,12 +76,13 @@ public class CsvReader {
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
-            if (line.trim().isEmpty()) {
+            if (skipEmptyLines && line.trim().isEmpty())  { // Skip empty line
                 continue;
             }
-
             List<String> parsed = parseLine(line);
-            rows.add(parsed.toArray(new String[0])); // Convert list to array and add to rows
+            // Convert line to array and add to rows
+            // (use parsed.size() instead of 0 to avoid creating two arrays each time):
+            rows.add(parsed.toArray(new String[parsed.size()]));
         }
         return rows;
     }
@@ -103,4 +112,3 @@ public class CsvReader {
     }
 
 }
-
