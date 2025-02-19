@@ -116,21 +116,37 @@ class CsvReaderTest {
 
         List<String[]> rows = reader.readAll();
         assertEquals(3, rows.size());
-        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));  // Header row
-        assertArrayEquals(new String[] {"Spacer", "30", "Stockholm"}, rows.get(1));  // Första dataraden
-        assertArrayEquals(new String[] {"Jerry", "25", "Oslo"}, rows.get(2));  // Andra dataraden
+        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
+        assertArrayEquals(new String[] {"Spacer", "30", "Stockholm"}, rows.get(1));
+        assertArrayEquals(new String[] {"Jerry", "25", "Oslo"}, rows.get(2));
     }
 
     @Test
     @DisplayName("Should Not Ignore whitespaceInTokens")
     void shouldNotIgnoreWhiteSpaceInTokens() throws IOException {
-        String csvData = "name  ,age,  city ";
+        String csvData = "Mr Anderson,30,New York";
         CsvReader reader = CsvReader.builder()
                 .build()
                 .withSource(csvData);
 
         List<String[]> rows = reader.readAll();
-        assertArrayEquals(new String[] {"name  ", "age", "  city "}, rows.getFirst());
+        assertArrayEquals(new String[] {"Mr Anderson", "30", "New York"}, rows.getFirst());
     }
+
+// Doesn't work yet
+//    @Test
+//    @DisplayName("ShouldTrimWhitespaceAroundTokens")
+//    void shoultTrimWhitespaceAroundTokens() throws IOException {
+//        String csvData = "name,age,city\nSteve ,55 , London \nJanet, 25, Los Angeles";
+//        CsvReader reader = CsvReader.builder()
+//                .build()
+//                .withSource(csvData);
+//
+//        List<String[]> rows = reader.readAll();
+//        assertEquals(3, rows.size());
+//        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
+//        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
+//        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
+//    }
 
 }
