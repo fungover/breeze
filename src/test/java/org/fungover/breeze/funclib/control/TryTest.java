@@ -137,7 +137,7 @@ class TryTest {
         assertTrue(result.isFailure());
 
         Exception exception = assertThrows(Exception.class, () -> result.getOrElseThrow(e -> e));
-        assertEquals("java.lang.RuntimeException: Mapper exception", exception.getMessage());
+        assertEquals("Mapper exception", exception.getMessage());
     }
 
     @Test
@@ -162,7 +162,7 @@ class TryTest {
         assertTrue(result.isFailure());
 
         Exception exception = assertThrows(Exception.class, () -> result.getOrElseThrow(e -> e));
-        assertEquals("java.lang.RuntimeException: FlatMap exception", exception.getMessage());
+        assertEquals("FlatMap exception", exception.getMessage());
     }
 
     @Test

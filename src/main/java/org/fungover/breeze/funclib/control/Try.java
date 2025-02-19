@@ -134,8 +134,8 @@ public abstract class Try<T> implements Serializable {
         if (isSuccess()) {
             try {
                 return success(mapper.apply(get()));
-            } catch (Throwable t) {
-                return failure(new Exception(t));
+            } catch (Exception e) {
+                return failure(e);
             }
         } else {
             return failure(((Failure<T>) this).exception);
@@ -155,8 +155,8 @@ public abstract class Try<T> implements Serializable {
         if (isSuccess()) {
             try {
                 return mapper.apply(get());
-            } catch (Throwable t) {
-                return failure(new Exception(t));
+            } catch (Exception e) {
+                return failure(e);
             }
         } else {
             return failure(((Failure<T>) this).exception);
@@ -178,8 +178,8 @@ public abstract class Try<T> implements Serializable {
                 if (!predicate.test(value))
                     return failure(new NoSuchElementException("Value " + value + " does not satisfy the predicate"));
                 return this;
-            } catch (Throwable t) {
-                return failure(new Exception(t));
+            } catch (Exception e) {
+                return failure(e);
             }
         } else {
             return this;
@@ -287,7 +287,7 @@ public abstract class Try<T> implements Serializable {
         if (isSuccess()) {
             try {
                 return Optional.ofNullable(get());
-            } catch (Throwable t) {
+            } catch (Exception e) {
                 return Optional.empty();
             }
         }
