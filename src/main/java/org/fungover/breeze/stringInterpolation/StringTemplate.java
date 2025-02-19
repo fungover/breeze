@@ -102,7 +102,7 @@ public class StringTemplate {
             }
             String key = matcher.group(1);
             String format = matcher.group(2);
-            tokens.add(new Token(key, format, false));
+            tokens.add(new Token(key, format, true));
             lastIndex = matcher.end();
         }
         // Add remaining literal if any.
