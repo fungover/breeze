@@ -275,5 +275,15 @@ public final class None<T extends Serializable> extends Option<T> {
         return INSTANCE; // Ensure deserialized None is the same singleton instance
     }
 
+    /**
+     * Throws an {@link UnsupportedOperationException} when attempting to retrieve a value.
+     * This method should only be called on {@link Some<T>}, as {@link None<T>} does not contain a value.
+     *
+     * @throws UnsupportedOperationException always, since there is no value to retrieve.
+     */
+    @Override
+    public T orElseThrow() {
+        throw new UnsupportedOperationException("Cannot get value from None");
+    }
 
 }
