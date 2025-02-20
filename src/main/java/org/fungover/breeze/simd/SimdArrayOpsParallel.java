@@ -23,6 +23,9 @@ public class SimdArrayOpsParallel {
    */
   public float[] elementwiseOperationParallel(float[] arr1, float[] arr2,
       VectorOperators.Binary op) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     int n = arr1.length;
     float[] result = new float[n];
     // Get the available workers
@@ -97,6 +100,9 @@ public class SimdArrayOpsParallel {
    * @return the dot product of the two float arrays
    */
   public  float dotTwoVectorArraysParallel(float[] arr1, float[] arr2) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     int n = arr1.length;
     int numThreads = Runtime.getRuntime().availableProcessors();
     Thread[] threads = new Thread[numThreads];
