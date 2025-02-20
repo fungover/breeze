@@ -303,6 +303,32 @@ class RedBlackTreeTest {
     }
 
 
+    @Test
+    @DisplayName("Adding tree1 to tree2 test")
+    void addingTree1ToTree2Test() {
+        RedBlackTree<Integer> bigTree = new RedBlackTree<>();
+        RedBlackTree<Integer> smallTree = new RedBlackTree<>();
+        var bigTreeValues = new int[]{10, 30, 50, 70, 90, 110};
+        var smallTreeValues = new int[]{1, 3, 5, 7};
+
+        for(int bigval : bigTreeValues) {
+            bigTree.insert(bigval);
+
+        }
+        for(int smallval : smallTreeValues) {
+            smallTree.insert(smallval);
+        }
+
+        bigTree.insertFromAnotherTree(smallTree);
+
+        assertThat(bigTree.getSize()).isEqualTo(10);
+        bigTree.printRedBlackTree();
+        assertThat(bigTree.isNodeWithValueFound(1)).isTrue();
+
+
+    }
+
+
 
 
 

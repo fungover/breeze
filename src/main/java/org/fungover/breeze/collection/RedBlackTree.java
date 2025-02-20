@@ -255,6 +255,21 @@ class RedBlackTree<T extends Comparable<T>> {
 
     }
 
+    // In the RedBlackTree class, add this method
+    public void insertFromAnotherTree(RedBlackTree<T> anotherTree) {
+        insertFromAnotherTreeHelper(anotherTree.root);
+    }
 
+    // Helper method to insert values from another tree into the current tree
+    private void insertFromAnotherTreeHelper(Node<T> node) {
+        if (node == null) return;
+
+        // Insert the current node's value
+        insert(node.getValue());
+
+        // Recurse to insert left and right children
+        insertFromAnotherTreeHelper(node.left);
+        insertFromAnotherTreeHelper(node.right);
+    }
 
 }
