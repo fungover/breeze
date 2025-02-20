@@ -27,7 +27,6 @@ public final class Lazy<T> {
      */
     private Lazy(Supplier<? extends T> supplier) {
         this.supplier = Objects.requireNonNull(supplier, "Supplier must not be null");
-        this.value = null;
         this.evaluated = false;
     }
 
@@ -118,9 +117,9 @@ public final class Lazy<T> {
     }
 
     /**
-     * Converts the lazy value to an optional value.
-     *
-     * @return an optional value
+     * Converts the lazy value to an optional, reflecting its evaluation state.
+     * This method does not force evaluation; it returns Optional.empty() if the value has not been computed.
+     * @return an optional containing the value if already evaluated, otherwise Optional.empty()
      */
     public Optional<T> toOption() {
         return isEvaluated() ? Optional.ofNullable(value) : Optional.empty();
