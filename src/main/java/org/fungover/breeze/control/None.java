@@ -55,9 +55,8 @@ public final class None<T extends Serializable> extends Option<T> {
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj;
+        return obj instanceof None; // Ensures correct behavior even if different instances exist due to serialization issues.
     }
-
     @Override
     public int hashCode() {
         return 0; // All instances of None have the same hash code since they are the same instance.
@@ -145,6 +144,7 @@ public final class None<T extends Serializable> extends Option<T> {
      */
     @Override
     public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
+        Objects.requireNonNull(mapper, "Mapper function cannot be null");
         return None.getInstance();
     }
 
@@ -157,6 +157,7 @@ public final class None<T extends Serializable> extends Option<T> {
      */
     @Override
     public <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+        Objects.requireNonNull(mapper, "Mapper function cannot be null");
         return None.getInstance();
     }
 
@@ -274,7 +275,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @see java.io.Serializable
      */
     @Serial
-    private Object readResolve() throws ObjectStreamException {
+    private Object readResolve() {
         return INSTANCE; // Ensure deserialized None is the same singleton instance
     }
 
@@ -292,6 +293,11 @@ public final class None<T extends Serializable> extends Option<T> {
 
 
     public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
-        return Try.failure(exceptionSupplier != null ? exceptionSupplier.get() : new NoSuchElementException("No value present"));
+        Objects.requireNonNull(exceptionSupplier, "Exception supplier cannot be null");
+        Exception exception = exceptionSupplier.get();
+        if (exception == null) {
+            exception = new NoSuchElementException("No value present");
+        }
+        return Try.failure(exception);
     }
 }
