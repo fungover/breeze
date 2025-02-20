@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Locale; // Add this import
+import java.util.Locale;
 
 public class SizeFormatter {
 
@@ -18,7 +18,7 @@ public class SizeFormatter {
 
         for (SizeUnit unit : units) {
             BigDecimal converted = unit.fromBytes(size);
-            if (converted.abs().compareTo(BigDecimal.ONE) >= 0) { // Check absolute value
+            if (converted.abs().compareTo(BigDecimal.ONE) >= 0) {
                 return format(converted, unit, decimalPlaces);
             }
         }
@@ -39,15 +39,24 @@ public class SizeFormatter {
             throw new IllegalArgumentException("Input string cannot be null or empty");
         }
 
-        Matcher matcher = Pattern.compile("([\\d.]+)\\s*([a-zA-Z]+)").matcher(sizeString.trim());
-        if (!matcher.find()) {
+        // Optimized regex to prevent invalid decimal formats
+        Matcher matcher = Pattern.compile("^([-+]?(?:\\d+\\.\\d+|\\d+|\\.\\d+))(\\s*)([a-zA-Z]+)$", Pattern.CASE_INSENSITIVE)
+                .matcher(sizeString.trim());
+
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("Invalid size format: " + sizeString);
         }
 
-        BigDecimal number = new BigDecimal(matcher.group(1));
-        SizeUnit unit = parseUnit(matcher.group(2));
+        BigDecimal number;
+        try {
+            number = new BigDecimal(matcher.group(1));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid numeric value: " + matcher.group(1), e);
+        }
 
+        SizeUnit unit = parseUnit(matcher.group(3));
         BigDecimal bytes = unit.toBytes(number);
+
         if (bytes.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0) {
             throw new ArithmeticException("Size exceeds maximum Long value");
         }
@@ -71,13 +80,13 @@ public class SizeFormatter {
             BigDecimal divisor = BigDecimal.valueOf(unit.getBase()).pow(unit.getExponent());
             BigDecimal converted = bitsPerSecond.divide(divisor, MathContext.DECIMAL128);
             if (converted.compareTo(BigDecimal.ONE) >= 0) {
-                return String.format(Locale.US, // Use Locale.US here
+                return String.format(Locale.US,
                         "%." + decimalPlaces + "f %sps",
                         converted.setScale(decimalPlaces, RoundingMode.HALF_UP),
                         unit.getSuffix());
             }
         }
-        return String.format(Locale.US, // And here
+        return String.format(Locale.US,
                 "%." + decimalPlaces + "f bps",
                 bitsPerSecond.setScale(decimalPlaces, RoundingMode.HALF_UP));
     }

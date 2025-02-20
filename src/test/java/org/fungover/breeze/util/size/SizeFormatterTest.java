@@ -35,21 +35,43 @@ class SizeFormatterTest {
 
     @Test
     void handleEdgeCases() {
-        // Test max value handling
         assertThrows(ArithmeticException.class, () ->
-                SizeFormatter.parse("9223372036854775808B") // Long.MAX_VALUE + 1
-        );
+                SizeFormatter.parse("9223372036854775808B"));
 
-        // Test negative values
         assertEquals("-1.46 KiB", SizeFormatter.autoFormat(-1500, true, 2));
 
-        // Test maximum long value
-        assertDoesNotThrow(() -> SizeFormatter.parse("9223372036854775807B"));
+        assertDoesNotThrow(() ->
+                SizeFormatter.parse("9223372036854775807B"));
     }
 
     @Test
     void testNetworkRatePrecision() {
         assertEquals("1.500 Gbps",
                 SizeFormatter.formatRate(1_500_000_000, TimeUnit.SECONDS, 3));
+    }
+
+    @Test
+    void parseInvalidNumbers() {
+        // Test multiple decimal points
+        assertThrows(IllegalArgumentException.class, () ->
+                SizeFormatter.parse("1.2.3GB"));
+
+        // Test trailing decimal (now properly rejected)
+        assertThrows(IllegalArgumentException.class, () ->
+                SizeFormatter.parse("123.GB"));
+
+        // Test valid leading decimal
+        assertDoesNotThrow(() ->
+                SizeFormatter.parse(".5KB"));  // Valid as 0.5KB
+
+        // Test invalid characters in number
+        assertThrows(IllegalArgumentException.class, () ->
+                SizeFormatter.parse("12A3MB"));
+
+        // Test decimal units
+        assertEquals(-1500, SizeFormatter.parse("-1.5KB"));  // 1.5 * 1000
+
+        // Test binary units
+        assertEquals(-1536, SizeFormatter.parse("-1.5KiB")); // 1.5 * 1024
     }
 }
