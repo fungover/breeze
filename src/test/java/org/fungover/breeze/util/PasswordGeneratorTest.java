@@ -63,4 +63,13 @@ public class PasswordGeneratorTest {
         assertEquals(5, passwords.size());
         passwords.forEach(password -> assertEquals(12, password.length()));
     }
+
+    @Test
+    public void testStrengthEstimation() {
+        assertEquals(1, PasswordGenerator.estimateStrength("1234"));
+        assertEquals(2, PasswordGenerator.estimateStrength("password12"));
+        assertEquals(3, PasswordGenerator.estimateStrength("PassWord12"));
+        assertEquals(4, PasswordGenerator.estimateStrength("PassWord12!"));
+        assertEquals(5, PasswordGenerator.estimateStrength("StrongPass123!@#"));
+    }
 }
