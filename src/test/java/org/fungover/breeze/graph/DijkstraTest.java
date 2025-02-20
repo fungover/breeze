@@ -71,7 +71,7 @@ class DijkstraTest {
         dijkstra.markNodeAsVisited(nodeA);
         boolean visitedNodeContainsA = dijkstra.getVisitedNodes().contains(nodeA);
 
-        assertThat(visitedNodeContainsA).isEqualTo(true);
+        assertThat(visitedNodeContainsA).isTrue();
     }
 
     @Test
@@ -82,7 +82,7 @@ class DijkstraTest {
         dijkstra.markNodeAsVisited(nodeA);
         boolean unvisitedNodeDoesNotContainA = dijkstra.getUnvisitedNodes().contains(nodeA);
 
-        assertThat(unvisitedNodeDoesNotContainA).isEqualTo(false);
+        assertThat(unvisitedNodeDoesNotContainA).isFalse();
     }
 
     @Test
@@ -113,7 +113,7 @@ class DijkstraTest {
         dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(1));
         boolean nodeExists = dijkstra.isDestinationNodeUnvisited(edges.get(5));
 
-        assertThat(nodeExists).isEqualTo(true);
+        assertThat(nodeExists).isTrue();
     }
 
     @Test

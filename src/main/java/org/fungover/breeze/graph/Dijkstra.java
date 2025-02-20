@@ -85,10 +85,6 @@ public class Dijkstra<T> {
         }
     }
 
-    private static <T> boolean breakWhenReachingEnd(Node<T> end, Node<T> currentNode) {
-        return currentNode.equals(end);
-    }
-
     /**
      * Handles cyclic graphs by resetting the distance and previous node information for all nodes
      * in the graph. This method ensures that Dijkstra's algorithm can be run multiple times without
