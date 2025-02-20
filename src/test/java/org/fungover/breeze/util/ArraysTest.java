@@ -25,7 +25,6 @@ class ArraysTest {
 
         assertEquals(tuple1, tuple2);
     }
-
     @Test
     void testShouldPairElementsIntoTuples() {
         String[] first = {"A", "B", "C"};
