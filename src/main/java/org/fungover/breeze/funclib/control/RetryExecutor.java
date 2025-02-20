@@ -1,3 +1,5 @@
+package org.fungover.breeze.funclib.control;
+
 import java.util.function.Function;
 
 /**
@@ -8,7 +10,7 @@ import java.util.function.Function;
  * </p>
  * Example usage:
  * <pre>{@code
- * RetryExecutor executor = RetryExecutor.builder()
+ * org.fungover.breeze.funclib.control.RetryExecutor executor = org.fungover.breeze.funclib.control.RetryExecutor.builder()
  *     .maxAttempts(5)
  *     .exponentialBackoff(100, 1000)
  *     .retryOn(IOException.class)
