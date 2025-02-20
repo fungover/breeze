@@ -36,4 +36,20 @@ public class PasswordGeneratorTest {
         String password = generator.generate();
         assertTrue(password.chars().filter(Character::isDigit).count() >= 2);
     }
+
+    @Test
+    public void testIncludeSymbols() {
+        PasswordGenerator generator = PasswordGenerator.builder().includeSymbols().minSymbols(2).build();
+        String password = generator.generate();
+        assertTrue(password.chars().filter(ch -> PasswordGenerator.SYMBOLS.indexOf(ch) >= 0).count() >= 2);
+    }
+
+    @Test
+    public void testExcludeAmbiguous() {
+        PasswordGenerator generator = PasswordGenerator.builder().excludeAmbiguous().build();
+        String password = generator.generate();
+        for (char ch : "l1O0".toCharArray()) {
+            assertFalse(password.contains(String.valueOf(ch)));
+        }
+    }
 }
