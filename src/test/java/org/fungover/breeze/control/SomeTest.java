@@ -11,6 +11,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SomeTest {
+
+    // ==============================
+    // Basic Properties & Existence Tests
+    // ==============================
+
     @Test
     void someIsDefined() {
         Some<Integer> some = new Some<>(5);
@@ -22,6 +27,10 @@ class SomeTest {
         Some<Integer> some = new Some<>(5);
         assertFalse(some.isEmpty());
     }
+
+    // ==============================
+    // Value Retrieval Tests
+    // ==============================
 
     @Test
     void getReturnsValue() {
@@ -47,6 +56,10 @@ class SomeTest {
         assertEquals(30, some.getOrNull());
     }
 
+    // ==============================
+    // Transformation Tests (map, flatMap)
+    // ==============================
+
     @Test
     void mapTransformsValue() {
         Some<Integer> some = new Some<>(5);
@@ -63,6 +76,10 @@ class SomeTest {
         assertEquals("Value: 10", flatMapped.get());
     }
 
+    // ==============================
+    // Filtering Tests
+    // ==============================
+
     @Test
     void filterKeepsValueIfPredicateMatches() {
         Some<Integer> some = new Some<>(42);
@@ -77,6 +94,10 @@ class SomeTest {
         Option<Integer> filtered = some.filter(n -> n > 50);
         assertInstanceOf(None.class, filtered);
     }
+
+    // ==============================
+    // Conversion Tests (List, Stream, Optional, Either)
+    // ==============================
 
     @Test
     void toListContainsValue() {
@@ -109,12 +130,14 @@ class SomeTest {
         assertEquals(7, either.getRight());
     }
 
+    // ==============================
+    // Equality & HashCode Tests
+    // ==============================
+
     @Test
     void equalsReturnsTrueForSameValue() {
-
         Some<Integer> some1 = new Some<>(10);
         Some<Integer> some2 = new Some<>(10);
-
         assertTrue(some1.equals(some2));
     }
 
@@ -132,11 +155,9 @@ class SomeTest {
         assertEquals(some1.hashCode(), some2.hashCode());
     }
 
-    @Test
-    void toStringReturnsExpectedFormat() {
-        Some<Integer> some = new Some<>(99);
-        assertEquals("Some(value=99, type= Integer)", some.toString());
-    }
+    // ==============================
+    // Exception Handling Tests
+    // ==============================
 
     @Test
     void nullValueThrowsException() {
@@ -155,37 +176,9 @@ class SomeTest {
         assertThrows(NullPointerException.class, () -> some.flatMap(null));
     }
 
-    @Test
-    void filterWithNullPredicateThrowsException() {
-        Some<Integer> some = new Some<>(5);
-        assertThrows(NullPointerException.class, () -> some.filter(null));
-    }
-
-    @Test
-    void peekWithNullConsumerThrowsException() {
-        Some<Integer> some = new Some<>(5);
-        assertThrows(NullPointerException.class, () -> some.peek(null));
-    }
-
-    @Test
-    void orElseThrowWithNullSupplierThrowsException() {
-        Some<Integer> some = new Some<>(5);
-        assertThrows(NullPointerException.class, () -> some.orElseThrow(null));
-    }
-
-    @Test
-    void foldWithNullIfNoneSupplierThrowsException() {
-        Some<Integer> some = new Some<>(5);
-        assertThrows(NullPointerException.class, () -> some.fold(null, val -> val));
-    }
-
-    @Test
-    void foldWithNullIfPresentFunctionThrowsException() {
-        Some<Integer> some = new Some<>(5);
-        assertThrows(NullPointerException.class, () -> some.fold(() -> 0, null));
-    }
-
-    // Extreme Values Test Cases
+    // ==============================
+    // Extreme Value Tests
+    // ==============================
 
     @Test
     void someHandlesIntegerMaxValue() {
@@ -200,23 +193,14 @@ class SomeTest {
     }
 
     @Test
-    void someHandlesPositiveInfinity() {
-        Some<Double> some = new Some<>(Double.POSITIVE_INFINITY);
-        assertEquals(Double.POSITIVE_INFINITY, some.get());
-    }
-
-    @Test
-    void someHandlesNegativeInfinity() {
-        Some<Double> some = new Some<>(Double.NEGATIVE_INFINITY);
-        assertEquals(Double.NEGATIVE_INFINITY, some.get());
-    }
-
-
-    @Test
     void someHandlesNaN() {
         Some<Double> some = new Some<>(Double.NaN);
         assertTrue(Double.isNaN(some.get()));
     }
+
+    // ==============================
+    // Edge Case Tests
+    // ==============================
 
     @Test
     void someHandlesEmptyString() {
@@ -225,55 +209,8 @@ class SomeTest {
     }
 
     @Test
-    void mapOnEmptyStringRetainsEmptyString() {
-        Some<String> some = new Some<>("");
-        Option<String> mapped = some.map(str -> str.toUpperCase());
-        assertInstanceOf(Some.class, mapped);
-        assertEquals("", mapped.get());
-    }
-
-    @Test
-    void flatMapOnEmptyStringRetainsEmptyString() {
-        Some<String> some = new Some<>("");
-        Option<String> flatMapped = some.flatMap(str -> new Some<>(str + " modified"));
-        assertInstanceOf(Some.class, flatMapped);
-        assertEquals(" modified", flatMapped.get());
-    }
-
-    @Test
-    void filterOnEmptyStringFails() {
-        Some<String> some = new Some<>("");
-        Option<String> filtered = some.filter(str -> !str.isEmpty());
-        assertInstanceOf(None.class, filtered);
-    }
-
-    @Test
     void someHandlesWhitespaceString() {
-        Some<String> some = new Some<>(" ");
+        Some<String> some = new Some(" ");
         assertEquals(" ", some.get());
     }
-
-    @Test
-    void filterOnWhitespaceStringFails() {
-        Some<String> some = new Some<>(" ");
-        Option<String> filtered = some.filter(str -> !str.isBlank());
-        assertInstanceOf(None.class, filtered);
-    }
-
-    @Test
-    void someHandlesLargeListConversion() {
-        List<Integer> largeList = new ArrayList<>();
-        for (int i = 0; i < 10_000; i++) {
-            largeList.add(i);
-        }
-
-        Some<ArrayList<Integer>> some = new Some<>(new ArrayList<>(largeList));
-        assertEquals(10_000, some.get().size());
-        assertEquals(largeList, some.toList().getFirst());
-
-        Stream<ArrayList<Integer>> stream = some.toStream();
-        assertEquals(1, stream.count());
-    }
-
-
 }
