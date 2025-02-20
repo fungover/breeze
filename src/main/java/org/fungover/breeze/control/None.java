@@ -123,13 +123,12 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Throws an exception provided by the supplier since {@code None} has no value.
      *
-     * @param <X> The type of the exception to be thrown.
+     * @param <X>               The type of the exception to be thrown.
      * @param exceptionSupplier The supplier function that provides the exception.
-     * @return never returns a value.
      * @throws X the provided exception.
      */
     @Override
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         throw exceptionSupplier.get();
     }
 
@@ -282,7 +281,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @throws UnsupportedOperationException always, since there is no value to retrieve.
      */
     @Override
-    public T orElseThrow() {
+    public void orElseThrow() {
         throw new UnsupportedOperationException("Cannot get value from None");
     }
 
