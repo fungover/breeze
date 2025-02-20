@@ -17,7 +17,7 @@ public class SizeFormatter {
 
         for (SizeUnit unit : units) {
             BigDecimal converted = unit.fromBytes(size);
-            if (converted.compareTo(BigDecimal.ONE) >= 0) {
+            if (converted.abs().compareTo(BigDecimal.ONE) >= 0) { // Check absolute value
                 return format(converted, unit, decimalPlaces);
             }
         }
@@ -100,9 +100,10 @@ public class SizeFormatter {
     }
 
     private static String format(BigDecimal value, SizeUnit unit, int decimalPlaces) {
-        return value.setScale(decimalPlaces, RoundingMode.HALF_UP) + " " + unit.getSuffix();
+        return value.setScale(decimalPlaces, RoundingMode.HALF_UP)
+                .toString()
+                .replace(",", ".") + " " + unit.getSuffix();
     }
-
     private static SizeUnit parseUnit(String unitPart) {
         for (SizeUnit unit : SizeUnit.values()) {
             if (unit.getSuffix().equalsIgnoreCase(unitPart)) {
