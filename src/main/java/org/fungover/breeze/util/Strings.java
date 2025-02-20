@@ -243,7 +243,6 @@ public class Strings {
 
     /**
      * Removes all non-alphanumeric characters from the given string.
-     *
      * This method retains only letters (A-Z, a-z) and digits (0-9),
      * removing all special characters, punctuation, and whitespace.
      *
