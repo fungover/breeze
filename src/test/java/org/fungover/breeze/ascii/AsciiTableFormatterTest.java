@@ -1,8 +1,5 @@
 package org.fungover.breeze.ascii;
-
-
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,5 +30,22 @@ class AsciiTableFormatterTest {
         String result = AsciiTableFormatter.formatTable(null, new ArrayList<>(rows));
         assertTrue(result.contains("| Dog | 4 |"));
         assertTrue(result.contains("| Cat | 2 |"));
+    }
+
+    @Test
+    void testColumnAlignment(){
+        List<String> headers = Arrays.asList("Item", "Qty", "Price");
+        List<List<String>> rows = Arrays.asList(
+                Arrays.asList("Apple", "10", "$2.00"),
+                Arrays.asList("Banana", "5", "$1.50")
+        );
+        List<AsciiTableFormatter.Alignment> alignments = Arrays.asList(
+                AsciiTableFormatter.Alignment.LEFT,
+                AsciiTableFormatter.Alignment.CENTER,
+                AsciiTableFormatter.Alignment.RIGHT
+        );
+        String result = AsciiTableFormatter.formatTable(headers, new ArrayList<>(rows), alignments);
+        assertTrue(result.contains("| Apple  | 10  | $2.00 |"));
+        assertTrue(result.contains("| Banana |  5  | $1.50 |"));
     }
 }
