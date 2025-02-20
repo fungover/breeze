@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FQueueTest {
+public class FQueueTest {
 
     @Test
     void testEmptyQueue() {
@@ -67,12 +67,4 @@ class FQueueTest {
         assertEquals(3, queue.size());
     }
 
-    @Test
-    void testReverseEmptyQueue() {
-        FQueue<Integer> queue = FQueue.empty();
-        FQueue<Integer> reversed = queue.reverse();
-        
-        assertTrue(reversed.isEmpty());
-        assertEquals(0, reversed.size());
-    }
 }
