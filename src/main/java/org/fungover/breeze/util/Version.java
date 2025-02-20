@@ -61,9 +61,12 @@ public class Version implements Comparable<Version> {
      * <p>
      * Examples:
      * <ul>
-     *   <li>{@code new Version("1.0.0").compareTo(new Version("1.0.0-beta"))} returns positive value (1.0.0 > 1.0.0-beta)</li>
-     *   <li>{@code new Version("1.0.0-alpha").compareTo(new Version("1.0.0-beta"))} returns negative value (alpha < beta)</li>
-     *   <li>{@code new Version("1.2.3").compareTo(new Version("1.2.3"))} returns 0 (equal)</li>
+     *   <li>{@code new Version("1.0.0").compareTo(new Version("1.0.0-beta"))}
+     *       returns positive value (1.0.0 &gt; 1.0.0-beta)</li>
+     *   <li>{@code new Version("1.0.0-alpha").compareTo(new Version("1.0.0-beta"))}
+     *       returns negative value (alpha &lt; beta)</li>
+     *   <li>{@code new Version("1.2.3").compareTo(new Version("1.2.3"))}
+     *       returns 0 (equal)</li>
      * </ul>
      *
      * @param other The other version to compare to
