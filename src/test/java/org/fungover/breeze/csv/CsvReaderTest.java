@@ -120,9 +120,9 @@ class CsvReaderTest {
 
         List<String[]> rows = reader.readAll();
         assertEquals(3, rows.size());  // Empty lines should be skipped
-        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));  // Header row
-        assertArrayEquals(new String[] {"Bert", "30", "Karlskrona"}, rows.get(1));
-        assertArrayEquals(new String[] {"Sigmund", "25", "Gothenburg"}, rows.get(2));
+        assertArrayEquals(new String[]{"name", "age", "city"}, rows.get(0));  // Header row
+        assertArrayEquals(new String[]{"Bert", "30", "Karlskrona"}, rows.get(1));
+        assertArrayEquals(new String[]{"Sigmund", "25", "Gothenburg"}, rows.get(2));
     }
 
     @Test
@@ -135,9 +135,9 @@ class CsvReaderTest {
 
         List<String[]> rows = reader.readAll();
         assertEquals(3, rows.size());
-        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
-        assertArrayEquals(new String[] {"Spacer", "30", "Stockholm"}, rows.get(1));
-        assertArrayEquals(new String[] {"Jerry", "25", "Oslo"}, rows.get(2));
+        assertArrayEquals(new String[]{"name", "age", "city"}, rows.get(0));
+        assertArrayEquals(new String[]{"Spacer", "30", "Stockholm"}, rows.get(1));
+        assertArrayEquals(new String[]{"Jerry", "25", "Oslo"}, rows.get(2));
     }
 
     @Test
@@ -149,7 +149,7 @@ class CsvReaderTest {
                 .withSource(csvData);
 
         List<String[]> rows = reader.readAll();
-        assertArrayEquals(new String[] {"Mr Anderson", "30", "New York"}, rows.getFirst());
+        assertArrayEquals(new String[]{"Mr Anderson", "30", "New York"}, rows.getFirst());
     }
 
 // Doesn't work yet
@@ -235,4 +235,24 @@ class CsvReaderTest {
         assertEquals("Los Angeles", secondRow.get("City"));
     }
 
+    @Test
+    @DisplayName("readAll with quote handling")
+    void readAll_withQuotes() throws IOException {
+
+        // Arrange
+        String csvContent = """
+                Hello,"Hello, World!"
+                Good bye,"have a nice ""flight""!
+                """;
+        CsvReader classUnderTest = CsvReader.builder().withQuoteChar('"').build();
+
+        // Act
+        List<String[]> actual = classUnderTest.withSource(csvContent).readAll();
+
+        // Assert
+        assertThat(actual).containsExactly(
+                new String[]{"Hello", "Hello, World!"},
+                new String[]{"Good bye", "have a nice \"flight\"!"}
+        );
+    }
 }
