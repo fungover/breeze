@@ -4,12 +4,10 @@ import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
 
-import static org.fungover.breeze.simd.SimdUtils.chunkElementwise;
-import static org.fungover.breeze.simd.SimdUtils.dotProductForSpecies;
 
 public class SimdArrayOps {
 
-
+    SimdUtils simdUtils = new SimdUtils();
     static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_PREFERRED;
 
     /**
@@ -20,14 +18,16 @@ public class SimdArrayOps {
      * @param arr2 the second input array
      * @param op   the binary operator to apply (e.g. ADD, SUB, MUL)
      * @return a new array that containing the result of applying op elementwise
+     * @throws NullPointerException if binary Operator is null
      */
     public float[] elementwiseOperation(float[] arr1, float[] arr2,
                                         VectorOperators.Binary op) {
-
+        if (op == null) throw new NullPointerException("Binary Operator can not be null");
+        simdUtils.checkNullInputs(arr1,arr2);
         int start = 0;
         int end = arr1.length;
         float[] result = new float[arr1.length];
-        chunkElementwise(arr1, arr2, result, start, end, op);
+        simdUtils.chunkElementwise(arr1, arr2, result, start, end, op);
         return result;
     }
 
@@ -37,9 +37,10 @@ public class SimdArrayOps {
      *
      * @param arr1 the first input array
      * @param arr2 the second input array
-     * @return the result of multiplication on two float Arrays
+     * @return the sum of addition on two float Arrays
      */
     public float[] addTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperation(arr1, arr2, VectorOperators.ADD);
     }
 
@@ -52,6 +53,7 @@ public class SimdArrayOps {
      * @return the result of subtraction on two float Arrays
      */
     public float[] subTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperation(arr1, arr2, VectorOperators.SUB);
     }
 
@@ -64,6 +66,7 @@ public class SimdArrayOps {
      * @return the result of multiplication on two float Arrays
      */
     public float[] mulTwoVectorArrays(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperation(arr1, arr2, VectorOperators.MUL);
     }
 
@@ -75,10 +78,10 @@ public class SimdArrayOps {
      * @return the dot product of the two float arrays
      */
     public float dotTwoVectorArrays(float[] arr1, float[] arr2) {
-
+        simdUtils.checkNullInputs(arr1,arr2);
         int end = arr1.length;
         int start = 0;
-        return dotProductForSpecies(arr1, arr2, start, end);
+        return simdUtils.dotProductForSpecies(arr1, arr2, start, end);
     }
 
 }

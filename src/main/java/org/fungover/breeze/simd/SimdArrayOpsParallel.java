@@ -4,12 +4,10 @@ import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
 
-import static org.fungover.breeze.simd.SimdUtils.chunkElementwise;
-import static org.fungover.breeze.simd.SimdUtils.dotProductForSpecies;
 
 public class SimdArrayOpsParallel {
 
-
+    SimdUtils simdUtils = new SimdUtils();
     static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_PREFERRED;
 
     /**
@@ -20,10 +18,12 @@ public class SimdArrayOpsParallel {
      * @param arr2 the second input array
      * @param op   the binary operator to apply (e.g. ADD, SUB, MUL)
      * @return a new array containing the result of applying op elementwise
+     * @throws NullPointerException if binary Operator is null
      */
     public float[] elementwiseOperationParallel(float[] arr1, float[] arr2,
                                                 VectorOperators.Binary op) {
-
+        if (op == null) throw new NullPointerException("Binary Operator can not be null");
+        simdUtils.checkNullInputs(arr1,arr2);
         int n = arr1.length;
         float[] result = new float[n];
         // Get the available workers
@@ -38,7 +38,7 @@ public class SimdArrayOpsParallel {
             //Make designate the end for that worker
             final int end = Math.min(n, start + chunkSizePerWorker);
             //Give worker load
-            threads[t] = new Thread(() -> chunkElementwise(arr1, arr2, result, start, end, op));
+            threads[t] = new Thread(() -> simdUtils.chunkElementwise(arr1, arr2, result, start, end, op));
             //compute
             threads[t].start();
         }
@@ -60,9 +60,10 @@ public class SimdArrayOpsParallel {
      *
      * @param arr1 the first input array
      * @param arr2 the second input array
-     * @return the result of multiplication on two float Arrays
+     * @return the sum of addition on two float Arrays
      */
     public float[] addTwoVectorArraysParallel(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperationParallel(arr1, arr2, VectorOperators.ADD);
     }
 
@@ -75,6 +76,7 @@ public class SimdArrayOpsParallel {
      * @return the result of subtraction on two float Arrays
      */
     public float[] subTwoVectorArraysParallel(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperationParallel(arr1, arr2, VectorOperators.SUB);
     }
 
@@ -87,6 +89,7 @@ public class SimdArrayOpsParallel {
      * @return the result of multiplication on two float Arrays
      */
     public float[] mulTwoVectorArraysParallel(float[] arr1, float[] arr2) {
+        simdUtils.checkNullInputs(arr1,arr2);
         return elementwiseOperationParallel(arr1, arr2, VectorOperators.MUL);
     }
 
@@ -98,12 +101,12 @@ public class SimdArrayOpsParallel {
      * @return the dot product of the two float arrays
      */
     public float dotTwoVectorArraysParallel(float[] arr1, float[] arr2) {
-
+        simdUtils.checkNullInputs(arr1,arr2);
         int n = arr1.length;
         int numThreads = Runtime.getRuntime().availableProcessors();
         Thread[] threads = new Thread[numThreads];
 
-        //calculate the chynck for each worker
+        //calculate the chunk for each worker
         int chunkSize = (n + numThreads - 1) / numThreads;
         //array for partial sum calcs
         float[] partialSums = new float[numThreads];
@@ -113,7 +116,7 @@ public class SimdArrayOpsParallel {
             final int start = t * chunkSize;
             final int end = Math.min(n, start + chunkSize);
             threads[t] = new Thread(
-                    () -> partialSums[threadIndex] = dotProductForSpecies(arr1, arr2, start, end));
+                    () -> partialSums[threadIndex] = simdUtils.dotProductForSpecies(arr1, arr2, start, end));
             threads[t].start();
         }
 
