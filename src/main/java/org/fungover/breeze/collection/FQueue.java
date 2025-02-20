@@ -116,4 +116,20 @@ public class FQueue<T> {
         Collections.reverse(reversedBack);
         return new FQueue<>(reversedBack, reversedFront);
     }
+
+    /**
+     * Returns an immutable list containing all elements in the queue in FIFO order.
+     *
+     * @return an immutable list of the queue's elements
+     */
+    public List<T> toList(){
+        List<T> reveresedBack = new ArrayList<>(back);
+        Collections.reverse(reveresedBack);
+
+        List<T> combined = Stream.concat(front.stream(), reveresedBack.stream())
+                .collect(Collectors.toList());
+
+        return Collections.unmodifiableList(combined);
+
+    }
 }
