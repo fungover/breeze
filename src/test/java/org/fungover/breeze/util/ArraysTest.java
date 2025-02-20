@@ -1,4 +1,5 @@
 package org.fungover.breeze.util;
+import org.fungover.breeze.control.Tuple2;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,17 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 
 class ArraysTest {
 
     @Test
-    void testPairEquality() {
-        Arrays.Pair<String, String> pair1 = new Arrays.Pair<>("a1", "b1");
-        Arrays.Pair<String, String> pair2 = new Arrays.Pair<>("a1", "b1");
+    void testTupleEquality() {
+        Tuple2<String, String> tuple1 = Tuple2.of("a1", "b1");
+        Tuple2<String, String> tuple2 = Tuple2.of("a1", "b1");
 
-        assertEquals(pair1, pair2); // Ska vara true om equals() fungerar korrekt
+        assertEquals(tuple1, tuple2);
     }
 
     @Test
@@ -29,26 +28,28 @@ class ArraysTest {
 
         assertThrows(IllegalArgumentException.class, () -> Arrays.zip(words, numbers));
     }
+
     @Test
     void testZip_EmptyArrays() {
         String[] empty1 = {};
         String[] empty2 = {};
 
-        Arrays.Pair<String, String>[] result = Arrays.zip(empty1, empty2);
+        Tuple2<String, String>[] result = Arrays.zip(empty1, empty2);
         assertEquals(0, result.length);
     }
+
     @Test
     void testZip_NullElements() {
         String[] first = {null, "b"};
         String[] second = {"a", null};
 
-        Arrays.Pair<String, String>[] result = Arrays.zip(first, second);
+        Tuple2<String, String>[] result = Arrays.zip(first, second);
 
         assertEquals(2, result.length);
-        assertNull(result[0].getFirst());
-        assertEquals("a", result[0].getSecond());
-        assertEquals("b", result[1].getFirst());
-        assertNull(result[1].getSecond());
+        assertNull(result[0].first());
+        assertEquals("a", result[0].second());
+        assertEquals("b", result[1].first());
+        assertNull(result[1].second());
     }
 
     @Test
@@ -84,10 +85,11 @@ class ArraysTest {
         Integer[] result = new Integer[first.length];
 
         BiFunction<Integer, Integer, Integer> sumFunction = Integer::sum;
-        Arrays.zipWith(first, second, sumFunction, result);
+        Integer[] actualResult = Arrays.zipWith(first, second, sumFunction, result);
 
-        assertArrayEquals(new Integer[]{11, 22, 33}, result);
+        assertArrayEquals(new Integer[]{11, 22, 33}, actualResult);
     }
+
     @Test
     void testZipWith_DifferentTypes() {
         Integer[] first = {1, 2, 3};
@@ -125,8 +127,9 @@ class ArraysTest {
         String[] second = {"1", "2", "3"};
         String[] result = new String[first.length + second.length];
 
-        Arrays.weaver(first, second, result);
+        String[] x = Arrays.weaver(first, second, result);
 
+        assertArrayEquals(x, result);
         assertArrayEquals(new String[]{"x", "1", "y", "2", "z", "3"}, result);
     }
 
@@ -307,9 +310,9 @@ class ArraysTest {
 
     @Test
     @DisplayName("Empty Arrays")
-    void emtpyArrays() {
-        Integer[][] input = {}; // Empty array
-        Integer[][] expected = {}; // Expected result
+    void emptyArrays() {
+        Integer[][] input = {};
+        Integer[][] expected = {};
 
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
