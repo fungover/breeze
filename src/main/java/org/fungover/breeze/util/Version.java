@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The Version class is a tool for parsing, comparing, and managing version numbers.
+ * The Version class is a tool for interpreting, comparing, and managing version numbers.
  * It supports standard version numbers and versions with pre-release identifiers,
  * following semantic versioning principles.
  */
@@ -15,6 +15,7 @@ public class Version implements Comparable<Version> {
     private final int patch;
     private final String preRelease;
 
+    // Regular expression pattern to match version strings
     private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?");
     private static final int GROUP_MAJOR = 1;
     private static final int GROUP_MINOR = 2;
@@ -25,11 +26,11 @@ public class Version implements Comparable<Version> {
      * Creates a new Version instance based on a version string.
      *
      * @param version The version string to parse.
-     * @throws IllegalArgumentException if the version string is null, empty, or does not match the expected format.
+     * @throws IllegalArgumentException if the version string is null, empty, or invalid.
      */
     public Version(String version) {
         if (version == null || version.isEmpty()) {
-            throw new IllegalArgumentException("Version string cannot be null or empty");
+            throw new IllegalArgumentException("Version string must not be null or empty");
         }
 
         Matcher matcher = VERSION_PATTERN.matcher(version);
@@ -46,9 +47,9 @@ public class Version implements Comparable<Version> {
     /**
      * Compares this version with another version.
      *
-     * @param other The version to compare with.
+     * @param other The other version to compare to.
      * @return A negative integer, zero, or a positive integer as this version is less than, equal to, or greater than the specified version.
-     * @throws NullPointerException if the specified version is null.
+     * @throws NullPointerException if the other version is null.
      */
     @Override
     public int compareTo(Version other) {
@@ -74,8 +75,8 @@ public class Version implements Comparable<Version> {
     /**
      * Checks if this version is greater than another version.
      *
-     * @param other The version to compare with.
-     * @return True if this version is greater than the specified version, false otherwise.
+     * @param other The other version to compare to.
+     * @return True if this version is greater than the other version, false otherwise.
      */
     public boolean isGreaterThan(Version other) {
         return this.compareTo(other) > 0;
@@ -84,8 +85,8 @@ public class Version implements Comparable<Version> {
     /**
      * Checks if this version is less than another version.
      *
-     * @param other The version to compare with.
-     * @return True if this version is less than the specified version, false otherwise.
+     * @param other The other version to compare to.
+     * @return True if this version is less than the other version, false otherwise.
      */
     public boolean isLessThan(Version other) {
         return this.compareTo(other) < 0;
@@ -94,8 +95,8 @@ public class Version implements Comparable<Version> {
     /**
      * Checks if this version is equal to another version.
      *
-     * @param other The version to compare with.
-     * @return True if this version is equal to the specified version, false otherwise.
+     * @param other The other version to compare to.
+     * @return True if this version is equal to the other version, false otherwise.
      */
     public boolean isEqual(Version other) {
         return this.compareTo(other) == 0;
@@ -120,7 +121,7 @@ public class Version implements Comparable<Version> {
     /**
      * Returns the string representation of the version.
      *
-     * @return The version as a string in the format "major.minor.patch(-preRelease)".
+     * @return The version string.
      */
     @Override
     public String toString() {
@@ -134,18 +135,18 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Parses a version component and ensures it is not negative.
+     * Parses a value and ensures it is non-negative.
      *
-     * @param value The string value to parse.
-     * @param component The name of the version component (e.g., "major", "minor", "patch").
+     * @param value The value to parse.
+     * @param component The component name (major, minor, patch).
      * @return The parsed integer value.
-     * @throws IllegalArgumentException if the value is negative.
+     * @throws NumberFormatException if the value is not a valid integer.
      */
     private int parseNonNegative(String value, String component) {
-        int result = Integer.parseInt(value);
-        if (result < 0) {
-            throw new IllegalArgumentException(component + " version number cannot be negative: " + result);
+        int parsedValue = Integer.parseInt(value);
+        if (parsedValue < 0) {
+            throw new IllegalArgumentException(component + " version component must be non-negative");
         }
-        return result;
+        return parsedValue;
     }
 }
