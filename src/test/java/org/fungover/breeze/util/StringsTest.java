@@ -153,6 +153,22 @@ class StringsTest {
         assertEquals(0, Strings.countVowels("123"));
     }
 
+    @Test
+    public void testCountVowels_emptyString() {
+        assertEquals(0, Strings.countVowels(""));
+    }
+
+    @Test
+    public void testCountVowels_nullString() {
+        assertEquals(0, Strings.countVowels(null));
+    }
+
+    @Test
+    public void testCountVowels_mixedString() {
+        assertEquals(3, Strings.countVowels("Hello World")); // Vowels: e, o, o
+        assertEquals(5, Strings.countVowels("Programming is fun")); // Vowels: o, a, i, i, u
+    }
+
 
 }
 
