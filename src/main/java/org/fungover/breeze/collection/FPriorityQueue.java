@@ -52,23 +52,39 @@ public final class FPriorityQueue<T>{
 
     public FPriorityQueue<T> dequeue() {
         if(heap.isEmpty()) return this;
+
         List<Node<T>> newHeap = new ArrayList<>(heap);
         Collections.swap(newHeap, 0, heap.size() - 1);
         newHeap.remove(newHeap.size() - 1);
-        return new FPriorityQueue<>(heapifyDown(newHeap, 0));
+
+        return new FPriorityQueue<>(heapifyDown(new ArrayList<>(newHeap),0));
     }
 
-    private List<Node<T>> heapifyDown(List<Node<T>> heap, int index) {
+    public T peek(){
+       if(isEmpty())
+        throw new NoSuchElementException("Priority queue is empty");
+       return heap.getFirst().element;
+    }
+
+    public boolean isEmpty(){
+        return heap.isEmpty();
+    }
+
+    private static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
+        if(index>= originalHeap.size()) return originalHeap;
+
+        List<Node<T>> heap = new ArrayList<>(originalHeap);
         int size = heap.size();
+
         while (true){
             int left = 2 * index + 1;
             int right = 2 * index + 2;
             int smallest = index;
 
-            if(left<size && heap.get(left).priority > heap.get(smallest).priority){
+            if(left<size && heap.get(left).priority < heap.get(smallest).priority){
                 smallest = left;
             }
-            if(right<size && heap.get(right).priority > heap.get(smallest).priority){
+            if(right<size && heap.get(right).priority < heap.get(smallest).priority){
                 smallest = right;
             }
             if(smallest == index)
@@ -99,10 +115,6 @@ public final class FPriorityQueue<T>{
             index = parentIndex;
         }
     }
-
-
-
-
 
 
     /**
