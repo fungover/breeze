@@ -45,11 +45,31 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Compares this version with another version.
+     * Compares this version with another version following semantic versioning rules.
+     * <p>
+     * The comparison is performed in the following order:
+     * <ol>
+     *   <li>Major version number</li>
+     *   <li>Minor version number</li>
+     *   <li>Patch version number</li>
+     *   <li>Pre-release identifiers (if present)</li>
+     * </ol>
      *
-     * @param other The other version to compare to.
-     * @return A negative integer, zero, or a positive integer as this version is less than, equal to, or greater than the specified version.
-     * @throws NullPointerException if the other version is null.
+     * Pre-release versions have lower precedence than normal versions. When comparing pre-release
+     * versions with the same major, minor, and patch versions, lexicographical ASCII comparison
+     * is used for the pre-release identifiers.
+     * <p>
+     * Examples:
+     * <ul>
+     *   <li>{@code new Version("1.0.0").compareTo(new Version("1.0.0-beta"))} returns positive value (1.0.0 > 1.0.0-beta)</li>
+     *   <li>{@code new Version("1.0.0-alpha").compareTo(new Version("1.0.0-beta"))} returns negative value (alpha < beta)</li>
+     *   <li>{@code new Version("1.2.3").compareTo(new Version("1.2.3"))} returns 0 (equal)</li>
+     * </ul>
+     *
+     * @param other The other version to compare to
+     * @return A negative integer, zero, or a positive integer as this version is
+     *         less than, equal to, or greater than the specified version
+     * @throws NullPointerException if the other version is null
      */
     @Override
     public int compareTo(Version other) {
