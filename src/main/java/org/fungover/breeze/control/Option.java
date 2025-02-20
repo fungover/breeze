@@ -1,6 +1,7 @@
 package org.fungover.breeze.control;
 
 import org.fungover.breeze.funclib.control.Either;
+import org.fungover.breeze.funclib.control.Try;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -363,10 +364,11 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return an {@code Either<L, T>} with {@code Right<T>} if value is present, otherwise {@code Left<L>}
      * @throws NullPointerException if {@code leftSupplier} is null or returns null
      */
-        public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
+    public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
-        public Option<T> toOption() { return this; }
+    public Option<T> toOption() { return this; }
 
+    public abstract Try<T> toTry(Supplier<Exception> exceptionSupplier);
 
     public abstract void orElseThrow();
 

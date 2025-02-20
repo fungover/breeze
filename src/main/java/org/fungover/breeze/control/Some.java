@@ -1,5 +1,6 @@
 package org.fungover.breeze.control;
 import org.fungover.breeze.funclib.control.Either;
+import org.fungover.breeze.funclib.control.Try;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -249,6 +250,12 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
     @Override
     public void orElseThrow() {
+    }
+
+
+    @Override
+    public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
+        return Try.success(value);
     }
 
 }
