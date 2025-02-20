@@ -1,10 +1,8 @@
 package org.fungover.breeze.control;
 
-import com.sun.net.httpserver.Authenticator;
 import org.fungover.breeze.funclib.control.Either;
 import org.fungover.breeze.funclib.control.Try;
 
-import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -131,8 +129,8 @@ public final class None<T extends Serializable> extends Option<T> {
      * @throws X the provided exception.
      */
     @Override
-    public <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        throw exceptionSupplier.get();
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        throw exceptionSupplier.get(); // Throw the provided exception
     }
 
     /**
@@ -293,11 +291,15 @@ public final class None<T extends Serializable> extends Option<T> {
 
 
     public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
-        Objects.requireNonNull(exceptionSupplier, "Exception supplier cannot be null");
+        if (exceptionSupplier == null) {
+            return Try.failure(new NoSuchElementException("No value present"));
+        }
+
         Exception exception = exceptionSupplier.get();
         if (exception == null) {
             exception = new NoSuchElementException("No value present");
         }
+
         return Try.failure(exception);
     }
 }
