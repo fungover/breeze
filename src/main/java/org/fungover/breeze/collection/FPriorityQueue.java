@@ -70,6 +70,10 @@ public final class FPriorityQueue<T>{
         return heap.isEmpty();
     }
 
+    public int size() {
+        return heap.size();
+    }
+
     private static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
         if(index>= originalHeap.size()) return originalHeap;
 
