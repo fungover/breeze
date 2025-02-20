@@ -178,7 +178,7 @@ class LazyTest {
 
     @Nested
     class TestsForThreadSafety {
-        final int[] calculationCount = {0};
+        private final AtomicInteger calculationCount = new AtomicInteger(0);
         private static final long HEAVY_COMPUTATION_DELAY_NANOS = 1_000_000_000L;
 
         @Test
@@ -186,7 +186,7 @@ class LazyTest {
         void threadSafetyWhenCountingValueInMultipleThreads() throws InterruptedException, ExecutionException {
 
             Lazy<Integer> lazy = Lazy.of(() -> {
-                calculationCount[0]++;
+                calculationCount.incrementAndGet();
                 long start = System.nanoTime();
 
                 //Simulates a heavy calculation
@@ -210,7 +210,7 @@ class LazyTest {
                     assertEquals(expectedValue, result.get(), "Thread didn't return the correct value");
                 }
 
-                assertEquals(1, calculationCount[0], "Value should only be calculated once");
+                assertEquals(1, calculationCount.get(), "Value should only be calculated once");
             }
         }
 
@@ -219,7 +219,7 @@ class LazyTest {
         void memoryConsistencyWhenMultipleThreadsAccessLazyValue() throws InterruptedException, ExecutionException {
 
             Lazy<Integer> lazy = Lazy.of(() -> {
-                calculationCount[0]++;
+                calculationCount.incrementAndGet();
                 long start = System.nanoTime();
 
                 while (System.nanoTime() - start < HEAVY_COMPUTATION_DELAY_NANOS) {
@@ -276,6 +276,14 @@ class LazyTest {
 
             assertTrue(lazy.isEvaluated());
             assertNull(value);
+        }
+
+        @Test
+        @DisplayName("map handles null values correctly")
+        void mapHandlesNullValuesCorrectly() {
+            Lazy<String> lazy = Lazy.of(() -> null);
+            Lazy<Integer> mapped = lazy.map(str -> str == null ? 0 : str.length());
+            assertEquals(0, mapped.get());
         }
 
     }
