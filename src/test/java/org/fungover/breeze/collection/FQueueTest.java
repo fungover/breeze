@@ -2,8 +2,11 @@ package org.fungover.breeze.collection;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FQueueTest {
@@ -75,4 +78,17 @@ class FQueueTest {
         assertTrue(reversed.isEmpty());
         assertEquals(0, reversed.size());
     }
+
+    @Test
+    void testToListReturnsImmutableListOfQueue(){
+        FQueue<Integer> queue = FQueue.empty();
+        queue = queue.enqueue(10);
+        queue = queue.enqueue(20);
+        queue = queue.enqueue(30);
+
+        assertThat(queue.toList()).containsExactly(10,20,30);
+    }
+
 }
+
+
