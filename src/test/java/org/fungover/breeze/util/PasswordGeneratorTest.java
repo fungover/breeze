@@ -101,5 +101,6 @@ public class PasswordGeneratorTest {
                         .generate()
         );
         assertNotNull(exception.getMessage());
+        assertTrue(exception.getMessage().contains("No valid character sets selected"));
     }
 }
