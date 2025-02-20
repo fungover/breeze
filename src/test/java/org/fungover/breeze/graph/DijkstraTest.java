@@ -268,7 +268,7 @@ class DijkstraTest {
         expectedPath.add(nodes.get(1));
         expectedPath.add(nodes.get(2));
 
-        dijkstra.findShortestPath(graphCyclic, nodes.get(0), nodes.get(2));
+        dijkstraCyclic.findShortestPath(graphCyclic, nodes.get(0), nodes.get(2));
 
         List<Node<String>> path = dijkstraCyclic.getPath(nodes.get(2));
         assertThat(path).isEqualTo(expectedPath);
@@ -280,7 +280,7 @@ class DijkstraTest {
 
         private List<Node<String>> nodeList;
         private WeightedGraph<String> disconnectedGraph;
-        private Dijkstra<String> dijkstra;
+        private Dijkstra<String> dijkstraDisconnected;
 
         @BeforeEach
         void setUp() {
@@ -303,7 +303,7 @@ class DijkstraTest {
         @Test
         @DisplayName("Dijkstra should return infinity for disconnected nodes")
         void dijkstraShouldHandleDisconnectedGraphs() {
-            dijkstra.findShortestPath(disconnectedGraph, nodeList.get(0), nodeList.get(3));
+            dijkstraDisconnected.findShortestPath(disconnectedGraph, nodeList.get(0), nodeList.get(3));
 
             assertThat(nodeList.get(2).getDistance()).isEqualTo(Double.MAX_VALUE);
         }
@@ -316,9 +316,9 @@ class DijkstraTest {
             expectedUncheckedNodes.add(nodeList.get(3));
 
 
-            dijkstra.findShortestPath(disconnectedGraph, nodeList.get(0), nodeList.get(3));
+            dijkstraDisconnected.findShortestPath(disconnectedGraph, nodeList.get(0), nodeList.get(3));
 
-            assertThat(dijkstra.getUnvisitedNodes()).isEqualTo(expectedUncheckedNodes);
+            assertThat(dijkstraDisconnected.getUnvisitedNodes()).isEqualTo(expectedUncheckedNodes);
         }
 
     }
