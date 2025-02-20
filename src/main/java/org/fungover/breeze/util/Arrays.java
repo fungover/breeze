@@ -179,8 +179,9 @@ public class Arrays {
         }
 
 
-
-        int i = 0, j = 0, k = 0;
+        int i = 0;
+        int j = 0;
+        int k = 0;
         while (i < first.length || j < second.length) {
             if (i < first.length) resultArray[k++] = first[i++];
             if (j < second.length) resultArray[k++] = second[j++];
@@ -188,72 +189,14 @@ public class Arrays {
 
         return resultArray;
     }
-    /**
-     * Transposes a 2D array, converting rows into columns and vice versa.
-     *
-     * <p>For example:
-     * <pre>
-     * Input:
-     * [[1, 2, 3],
-     *  [4, 5, 6]]
-     *
-     * Output:
-     * [[1, 4],
-     *  [2, 5],
-     *  [3, 6]]
-     * </pre>
-     *
-     * @param array The 2D array to transpose.
-     * @param <T>   The type of elements in the array.
-     * @return The transposed 2D array, where rows become columns.
-     *
-     * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
-     */
-
-    public static <T> T[][] transpose(T[][] array) {
-        // Check if the input array is null or empty
-        if (array == null || array.length == 0) {
-            return array;
-        }
-
-        // Check if the first row exists and has elements
-        if (array[0].length == 0) {
-            return array;
-        }
-
-        int rows = array.length;
-        int cols = array[0].length;
-
-        // Validate that all rows have the same length
-        for (T[] row : array) {
-            if (row == null) {
-                throw new IllegalArgumentException("Irregular array: null rows are not allowed");
-            }
-            if (row.length != cols) {
-                throw new IllegalArgumentException("Irregular array: all rows must have the same length");
-            }
-        }
-
-        // Create a new 2D array with transposed dimensions (cols x rows)
-        @SuppressWarnings("unchecked")
-        T[][] transposed = (T[][]) Array.newInstance(array.getClass().getComponentType().getComponentType(), cols, rows);
-
-        // Transpose the array by swapping rows and columns
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                transposed[j][i] = array[i][j];
-            }
-        }
-
-        return transposed;
-    }
 
     /**
      * Creates a new 2D array with the specific number of rows and columns.
+     *
      * @param componentType The type of element in the array.
-     * @param row Number of row in the array.
-     * @param col Number of column in the array.
-     * @param <T> The type of the array elements.
+     * @param row           Number of row in the array.
+     * @param col           Number of column in the array.
+     * @param <T>           The type of the array elements.
      * @return A new empty 2D array of the specific type and size
      */
     @SuppressWarnings("unchecked")
@@ -263,9 +206,10 @@ public class Arrays {
 
     /**
      * Creates a new 1D array with the specific number of rows.
+     *
      * @param componentType The type of element in the array.
-     * @param length The length of the array.
-     * @param <T> The type of the array elements.
+     * @param length        The length of the array.
+     * @param <T>           The type of the array elements.
      * @return A new empty 1D array of the specific type and size.
      */
     @SuppressWarnings("unchecked")
@@ -276,19 +220,20 @@ public class Arrays {
     /**
      * Splits an array into smaller array-chunks of specific size.
      * The last chunk may be smaller if the array length is not evenly divisible.
+     *
      * @param array The input array to be chunked.
-     * @param size The size of each chunk.
-     * @param <T> The type of elements in the array.
+     * @param size  The size of each chunk.
+     * @param <T>   The type of elements in the array.
      * @return A 2D array where each inner array is a chunk of the original array.
      * @throws IllegalArgumentException if the array is null, contains null elements or size is negative or zero.
      */
 
     public static <T> T[][] chunk(T[] array, int size) {
 
-        if (array == null ) {
+        if (array == null) {
             throw new IllegalArgumentException("Input array must not be null");
         } else {
-            for(T element : array) {
+            for (T element : array) {
                 if (element == null) {
                     throw new IllegalArgumentException("Element must not be null");
                 }
@@ -300,7 +245,7 @@ public class Arrays {
         }
 
         if (array.length == 0) {
-            return create2DArray(array.getClass().getComponentType(), 0,0);
+            return create2DArray(array.getClass().getComponentType(), 0, 0);
         }
 
         int numberOfChunks = (int) Math.ceil((double) array.length / size);
@@ -325,17 +270,18 @@ public class Arrays {
     /**
      * Splits a list into smaller list-chunks of specific size.
      * The last chunk may be smaller if the list length is not evenly divisible.
+     *
      * @param list The input list to be chunked.
      * @param size The size of each chunk.
-     * @param <T> The type of elements in the list.
+     * @param <T>  The type of elements in the list.
      * @return A list of list where each inner list is a chunk of the original list.
      * @throws IllegalArgumentException if the list is null, contains null elements or size is negative or zero.
      */
-    public static <T>List<List<T>> chunkList(List<T> list, int size) {
-        if(list == null) {
+    public static <T> List<List<T>> chunkList(List<T> list, int size) {
+        if (list == null) {
             throw new IllegalArgumentException("Input list must not be null");
         } else {
-            for(T element : list) {
+            for (T element : list) {
                 if (element == null) {
                     throw new IllegalArgumentException("Element must not be null");
                 }
@@ -346,11 +292,77 @@ public class Arrays {
             throw new IllegalArgumentException("Size must be greater than 0");
 
         List<List<T>> chunks = new ArrayList<>();
-        for (int i = 0; i < list.size(); i+= size) {
+        for (int i = 0; i < list.size(); i += size) {
             chunks.add(List.copyOf(list.subList(i, Math.min(list.size(), i + size))));
         }
 
         return Collections.unmodifiableList(chunks);
     }
 
+    /**
+     * Efficiently transposes a 2D array using a blocked approach to improve cache utilization.
+     *
+     * <p>Standard row-by-row transposition can lead to inefficient memory access patterns.
+     * This implementation processes the array in 32×32 blocks, reducing cache misses and
+     * improving performance, especially for large datasets.</p>
+     *
+     * <p>Example:</p>
+     * <pre>
+     * Input:
+     * [[1, 2, 3],
+     *  [4, 5, 6]]
+     *
+     * Output:
+     * [[1, 4],
+     *  [2, 5],
+     *  [3, 6]]
+     * </pre>
+     *
+     * @param array The 2D array to transpose.
+     * @param <T>   The type of elements in the array.
+     * @return The transposed 2D array with optimized memory access.
+     * @throws IllegalArgumentException If the input array contains null rows or has inconsistent row lengths.
+     */
+    public static <T> T[][] transpose(T[][] array) {
+        // Check if the input array is null or empty
+        if (array == null || array.length == 0) {
+            return array;
+        }
+
+        // Check if the first row exists and has elements
+        if (array[0].length == 0) {
+            return array;
+        }
+
+        // Determine dimensions of the array
+        int rows = array.length;
+        int cols = array[0].length;
+
+        // Validate that all rows have the same length
+        for (T[] row : array) {
+            if (row == null) {
+                throw new IllegalArgumentException("Irregular array: null rows are not allowed");
+            }
+            if (row.length != cols) {
+                throw new IllegalArgumentException("Irregular array: all rows must have the same length");
+            }
+        }
+
+        // Create a new 2D array with transposed dimensions (cols x rows)
+        @SuppressWarnings("unchecked")
+        T[][] transposed = (T[][]) Array.newInstance(array.getClass().getComponentType().getComponentType(), cols, rows);
+
+        // Transpose the array by swapping rows and columns
+        final int BLOCK_SIZE = 32;
+        for (int i = 0; i < rows; i += BLOCK_SIZE) {
+            for (int j = 0; j < cols; j += BLOCK_SIZE) {
+                for (int ii = i; ii < Math.min(i + BLOCK_SIZE, rows); ii++) {
+                    for (int jj = j; jj < Math.min(j + BLOCK_SIZE, cols); jj++) {
+                        transposed[jj][ii] = array[ii][jj];
+                    }
+                }
+            }
+        }
+        return transposed;
+    }
 }
