@@ -339,8 +339,6 @@ class SQLTest {
             .orderBy("last_name", true)
             .build();
 
-    System.out.println(SQL.select().allColumns().from("my_table").where().column("first_name").build());
-
     assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' ORDER BY last_name ASC");
   }
 }
