@@ -13,4 +13,12 @@ public class PasswordGeneratorTest {
         assertNotNull(password);
         assertEquals(12, password.length());
     }
+
+    @Test
+    public void testCustomLengthPassword() {
+        PasswordGenerator generator = PasswordGenerator.builder().length(16).build();
+        String password = generator.generate();
+        assertNotNull(password);
+        assertEquals(16, password.length());
+    }
 }
