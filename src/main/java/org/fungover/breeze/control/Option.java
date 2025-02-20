@@ -366,10 +366,43 @@ public abstract class Option<T extends Serializable> implements Serializable {
      */
     public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
+
+    /**
+     * Returns this instance as an {@link Option}.
+     * <p>
+     * This method is useful when working with APIs expecting an {@code Option<T>}.
+     * Since the implementing class is already an {@code Option<T>}, it simply returns itself.
+     * </p>
+     *
+     * @return This {@code Option<T>} instance.
+     */
     public Option<T> toOption() { return this; }
 
+
+    /**
+     * Converts this value into a {@link Try}, wrapping any potential failure scenario.
+     * <p>
+     * If this instance represents an absent value (e.g., {@code None}), the provided exception
+     * supplier is used to generate an exception, which is wrapped inside a failed {@code Try}.
+     * </p>
+     *
+     * @param exceptionSupplier A supplier providing the exception in case of absence.
+     * @return A successful {@code Try<T>} if this instance contains a value,
+     *         otherwise a failed {@code Try} with the supplied exception.
+     * @throws NullPointerException if {@code exceptionSupplier} is null or produces a null exception.
+     */
     public abstract Try<T> toTry(Supplier<Exception> exceptionSupplier);
 
+
+    /**
+     * Throws an exception if the value is absent.
+     * <p>
+     * This method enforces strict handling of missing values, ensuring that users explicitly
+     * deal with cases where the value may not be present.
+     * </p>
+     *
+     * @throws UnsupportedOperationException if called on a {@code None} instance.
+     */
     public abstract void orElseThrow();
 
 }
