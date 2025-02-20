@@ -3,6 +3,7 @@ package org.fungover.breeze.control;
 import org.fungover.breeze.funclib.control.Either;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -210,8 +211,6 @@ class SomeTest {
         assertEquals(Double.NEGATIVE_INFINITY, some.get());
     }
 
-    //
-
 
     @Test
     void someHandlesNaN() {
@@ -260,6 +259,4 @@ class SomeTest {
         Option<String> filtered = some.filter(str -> !str.isBlank());
         assertInstanceOf(None.class, filtered);
     }
-
-
 }
