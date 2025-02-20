@@ -27,7 +27,7 @@ class SQLTest {
   @Test
   @DisplayName("Can add where clause to SELECT statement")
   void canSelectWhereClause() {
-    String selectColumnsEqualTo = SQL.select().columns("id", "car").from("orders").where().column("id").equalTo(1).build();
+    String selectColumnsEqualTo = SQL.select().columns("id", "car").from("orders").where().column("id").isEqualTo(1).build();
 
     assertThat(selectColumnsEqualTo).isEqualTo("SELECT id, car FROM orders WHERE id = 1");
   }
@@ -35,7 +35,7 @@ class SQLTest {
   @Test
   @DisplayName("WHERE clause supports multiple conditions")
   void whereClauseSupportsMultipleConditions() {
-    String whereWithAnd = SQL.select().allColumns().from("users").where().column("age").between(18, 30).and("status").equalTo("active").build();
+    String whereWithAnd = SQL.select().allColumns().from("users").where().column("age").between(18, 30).and("status").isEqualTo("active").build();
 
     assertThat(whereWithAnd).isEqualTo("SELECT * FROM users WHERE age BETWEEN 18 AND 30 AND status = 'active'");
   }
@@ -185,7 +185,7 @@ class SQLTest {
             .column("age")
             .between(18, 30)
             .or("status")
-            .equalTo("inactive")
+            .isEqualTo("inactive")
             .build();
 
     assertThat(whereWithOr).isEqualTo("SELECT * FROM users WHERE age BETWEEN 18 AND 30 OR status = 'inactive'");
@@ -199,7 +199,7 @@ class SQLTest {
             .from("employees")
             .where()
             .column("is_active")
-            .equalTo(true)
+            .isEqualTo(true)
             .build();
 
     assertThat(whereBoolean).isEqualTo("SELECT * FROM employees WHERE is_active = true");
@@ -213,7 +213,7 @@ class SQLTest {
             .from("transactions")
             .where()
             .column("amount")
-            .equalTo(99.99f)
+            .isEqualTo(99.99f)
             .build();
 
     String whereDouble = SQL.select()
@@ -221,7 +221,7 @@ class SQLTest {
             .from("transactions")
             .where()
             .column("amount")
-            .equalTo(1000.50)
+            .isEqualTo(1000.50)
             .build();
 
     assertAll(
@@ -263,7 +263,7 @@ class SQLTest {
             .from("customers")
             .where()
             .column("city")
-            .equalTo("New York")
+            .isEqualTo("New York")
             .limit(5)
             .build();
 
@@ -291,7 +291,7 @@ class SQLTest {
             .from("users")
             .where()
             .column("name")
-            .equalTo("")
+            .isEqualTo("")
             .build();
 
     assertThat(query).isEqualTo("SELECT * FROM users");
@@ -305,7 +305,7 @@ class SQLTest {
             .from("my_table")
             .where()
             .column("first_name")
-            .equalTo("Steve")
+            .isEqualTo("Steve")
             .groupBy("last_name")
             .build();
 
@@ -320,7 +320,7 @@ class SQLTest {
             .from("my_table")
             .where()
             .column("first_name")
-            .equalTo("Steve")
+            .isEqualTo("Steve")
             .having("COUNT(first_name) > 2")
             .build();
 
@@ -335,9 +335,11 @@ class SQLTest {
             .from("my_table")
             .where()
             .column("first_name")
-            .equalTo("Steve")
+            .isEqualTo("Steve")
             .orderBy("last_name", true)
             .build();
+
+    System.out.println(SQL.select().allColumns().from("my_table").where().column("first_name").build());
 
     assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' ORDER BY last_name ASC");
   }

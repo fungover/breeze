@@ -196,7 +196,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep equalTo(String query);
+    EqualStep isEqualTo(String query);
 
     /**
      * Adds the query to select on
@@ -204,7 +204,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep equalTo(boolean query);
+    EqualStep isEqualTo(boolean query);
 
     /**
      * Adds the query to select on
@@ -212,7 +212,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep equalTo(int query);
+    EqualStep isEqualTo(int query);
 
     /**
      * Adds the query to select on
@@ -220,7 +220,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep equalTo(double query);
+    EqualStep isEqualTo(double query);
 
     /**
      * Adds the query to select on
@@ -228,7 +228,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep equalTo(float query);
+    EqualStep isEqualTo(float query);
 
     /**
      * Adds support for the between operator
@@ -489,31 +489,31 @@ public final class SQL {
     }
 
     @Override
-    public EqualStep equalTo(String query) {
+    public EqualStep isEqualTo(String query) {
       this.equal = "'" + query + "'";
       return this;
     }
 
     @Override
-    public EqualStep equalTo(boolean query) {
+    public EqualStep isEqualTo(boolean query) {
       this.equal = String.valueOf(query);
       return this;
     }
 
     @Override
-    public EqualStep equalTo(int query) {
+    public EqualStep isEqualTo(int query) {
       this.equal = String.valueOf(query);
       return this;
     }
 
     @Override
-    public EqualStep equalTo(double query) {
+    public EqualStep isEqualTo(double query) {
       this.equal = String.valueOf(query);
       return this;
     }
 
     @Override
-    public EqualStep equalTo(float query) {
+    public EqualStep isEqualTo(float query) {
       this.equal = String.valueOf(query);
       return this;
     }
