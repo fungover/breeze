@@ -69,7 +69,8 @@ class OptionTryIntegrationTest {
         Option<Integer> none = Option.none();
 
         assertThatThrownBy(() -> none.toTry(() -> null).get())
-                .isInstanceOf(NullPointerException.class);
+                .isInstanceOf(NoSuchElementException.class) // Expect NoSuchElementException instead
+                .hasMessage("No value present");
     }
 
     @Test

@@ -151,7 +151,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return {@code true} if this is Some, otherwise {@code false}.
      */
 
-    public boolean isDefined(){
+    public final boolean isDefined(){
         return !isEmpty();
 
     }
@@ -198,7 +198,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @throws X if the Option is None, the supplied exception is thrown
      */
 
-    public abstract <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+    public abstract <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * Transforms the contained value using the provided mapping function.
