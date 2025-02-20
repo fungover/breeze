@@ -106,4 +106,17 @@ public class OptionTest {
         assertThat(some.toOptional()).isEqualTo(Optional.of(10));
         assertThat(none.toOptional()).isEqualTo(Optional.empty());
     }
+
+
+    // ==============================
+    // Exception Handling Tests
+    // ==============================
+    @Test
+    void someShouldThrowIfValueIsNull() {
+        assertThatThrownBy(() -> Option.some(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Cannot create 'Some' with null");
+    }
+
+
 }

@@ -8,14 +8,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SomeTest {
 
+
     // ==============================
     // Basic Properties & Existence Tests
     // ==============================
-
     @Test
     void someIsDefined() {
         Some<Integer> some = new Some<>(5);
@@ -28,10 +29,11 @@ class SomeTest {
         assertFalse(some.isEmpty());
     }
 
+
+
     // ==============================
     // Value Retrieval Tests
     // ==============================
-
     @Test
     void getReturnsValue() {
         Some<String> some = new Some<>("Hello");
@@ -56,10 +58,47 @@ class SomeTest {
         assertEquals(30, some.getOrNull());
     }
 
+    @Test
+    void orElseThrowShouldReturnValueForSome() {
+        Option<Integer> some = Option.some(10);
+
+        assertThat(some.orElseThrow(IllegalStateException::new)).isEqualTo(10);
+    }
+
+    @Test
+    void forEachShouldExecuteConsumer() {
+        Option<Integer> some = Option.some(10);
+        final int[] capturedValue = {0};
+
+        some.forEach(val -> capturedValue[0] = val);
+
+        assertThat(capturedValue[0]).isEqualTo(10);
+    }
+
+    @Test
+    void peekShouldPerformActionAndReturnSameInstance() {
+        Option<Integer> some = Option.some(10);
+        final int[] capturedValue = {0};
+
+        Option<Integer> result = some.peek(val -> capturedValue[0] = val);
+
+        assertThat(result).isSameAs(some);
+        assertThat(capturedValue[0]).isEqualTo(10);
+    }
+
+    @Test
+    void foldShouldReturnMappedValueForSome() {
+        Option<Integer> some = Option.some(10);
+
+        String result = some.fold(() -> "Default Value", val -> "Value: " + val);
+
+        assertThat(result).isEqualTo("Value: 10");
+    }
+
+
     // ==============================
     // Transformation Tests (map, flatMap)
     // ==============================
-
     @Test
     void mapTransformsValue() {
         Some<Integer> some = new Some<>(5);
@@ -76,10 +115,10 @@ class SomeTest {
         assertEquals("Value: 10", flatMapped.get());
     }
 
+
     // ==============================
     // Filtering Tests
     // ==============================
-
     @Test
     void filterKeepsValueIfPredicateMatches() {
         Some<Integer> some = new Some<>(42);
@@ -95,10 +134,10 @@ class SomeTest {
         assertInstanceOf(None.class, filtered);
     }
 
+
     // ==============================
     // Conversion Tests (List, Stream, Optional, Either)
     // ==============================
-
     @Test
     void toListContainsValue() {
         Some<Integer> some = new Some<>(7);
@@ -130,10 +169,16 @@ class SomeTest {
         assertEquals(7, either.getRight());
     }
 
+    @Test
+    void toOptionShouldReturnSameInstance() {
+        Option<String> some = Option.some("test");
+        assertThat(some.toOption()).isSameAs(some);
+    }
+
+
     // ==============================
     // Equality & HashCode Tests
     // ==============================
-
     @Test
     void equalsReturnsTrueForSameValue() {
         Some<Integer> some1 = new Some<>(10);
@@ -155,10 +200,10 @@ class SomeTest {
         assertEquals(some1.hashCode(), some2.hashCode());
     }
 
+
     // ==============================
     // Exception Handling Tests
     // ==============================
-
     @Test
     void nullValueThrowsException() {
         assertThrows(NullPointerException.class, () -> new Some<>(null));
@@ -176,10 +221,40 @@ class SomeTest {
         assertThrows(NullPointerException.class, () -> some.flatMap(null));
     }
 
+
+    @Test
+    void orElseThrowShouldThrowIfSupplierIsNull() {
+        Option<Integer> some = Option.some(10);
+
+        assertThrows(NullPointerException.class, () -> some.orElseThrow(null));
+    }
+
+    @Test
+    void peekShouldThrowIfActionIsNull() {
+        Option<Integer> some = Option.some(10);
+
+        assertThrows(NullPointerException.class, () -> some.peek(null));
+    }
+    @Test
+    void foldShouldThrowIfPresentFunctionIsNull() {
+        Option<Integer> some = Option.some(10);
+
+        assertThrows(NullPointerException.class, () -> some.fold(() -> "Default Value", null));
+    }
+
+    @Test
+    void foldShouldThrowIfNoneSupplierIsNull() {
+        Option<Integer> some = Option.some(10);
+
+        assertThrows(NullPointerException.class, () -> some.fold(null, val -> "Value: " + val));
+    }
+
+
+
+
     // ==============================
     // Extreme Value Tests
     // ==============================
-
     @Test
     void someHandlesIntegerMaxValue() {
         Some<Integer> some = new Some<>(Integer.MAX_VALUE);
