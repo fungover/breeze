@@ -145,6 +145,7 @@ public class NoneTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void serializationShouldPreserveSingletonProperty() throws IOException, ClassNotFoundException {
         Option<Integer> none = Option.none();
 
