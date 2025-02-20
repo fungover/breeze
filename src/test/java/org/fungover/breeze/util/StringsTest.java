@@ -140,6 +140,20 @@ class StringsTest {
         assertEquals("ABCD", Strings.removeNonAlphaNumeric("AB!#¤%CD"));
         assertNull(Strings.removeNonAlphaNumeric(null));
     }
+
+    @Test
+    public void testCountVowels_allVowels() {
+        assertEquals(5, Strings.countVowels("aeiou"));
+        assertEquals(5, Strings.countVowels("AEIOU"));
+    }
+
+    @Test
+    public void testCountVowels_noVowels() {
+        assertEquals(0, Strings.countVowels("xyz"));
+        assertEquals(0, Strings.countVowels("123"));
+    }
+
+
 }
 
 
