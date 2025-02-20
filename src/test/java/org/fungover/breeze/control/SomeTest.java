@@ -288,4 +288,25 @@ class SomeTest {
         Some<String> some = new Some(" ");
         assertEquals(" ", some.get());
     }
+
+    @Test
+    void orElseThrowShouldDoNothingForSome() {
+        Option<Integer> some = Option.some(42);
+
+        assertDoesNotThrow(() -> some.orElseThrow()); // Ensures it doesn't throw an exception
+    }
+
+
+    // ==============================
+    // String Representation
+    // ==============================
+    @Test
+    void toStringShouldReturnFormattedStringForSome() {
+        Option<Integer> some = Option.some(42);
+        assertThat(some.toString()).isEqualTo("Some(value=42, type= Integer)");
+
+        Option<String> someString = Option.some("test");
+        assertThat(someString.toString()).isEqualTo("Some(value=test, type= String)");
+    }
+
 }
