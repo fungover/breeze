@@ -64,5 +64,4 @@ class AsciiTableFormatterTest {
                 AsciiTableFormatter.formatTable(headers, new ArrayList<>(rows))
         );
     }
-
 }

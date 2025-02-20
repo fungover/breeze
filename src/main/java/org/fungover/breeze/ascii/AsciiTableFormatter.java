@@ -1,4 +1,5 @@
 package org.fungover.breeze.ascii;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,7 @@ public class AsciiTableFormatter {
      * @param headers    List of header strings; can be {@code null} or empty if no headers are required.
      * @param rows       List of row data, where each row is a list of cell strings.
      * @param alignments List of {@link Alignment} values corresponding to each column; defaults to LEFT if {@code null}
-     * or incomplete.
+     *                   or incomplete.
      * @return A formatted ASCII table as a string.
      * @throws IllegalArgumentException if rows are empty or columns are inconsistent.
      */
