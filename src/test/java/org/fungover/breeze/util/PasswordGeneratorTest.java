@@ -2,6 +2,8 @@ package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -51,5 +53,14 @@ public class PasswordGeneratorTest {
         for (char ch : "l1O0".toCharArray()) {
             assertFalse(password.contains(String.valueOf(ch)));
         }
+    }
+
+    @Test
+    public void testGenerateMultiplePasswords() {
+        PasswordGenerator generator = PasswordGenerator.builder().length(12).includeAll().build();
+        List<String> passwords = generator.generateMultiple(5);
+        assertNotNull(passwords);
+        assertEquals(5, passwords.size());
+        passwords.forEach(password -> assertEquals(12, password.length()));
     }
 }
