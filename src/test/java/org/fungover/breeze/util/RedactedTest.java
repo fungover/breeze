@@ -30,4 +30,17 @@ class RedactedTest {
         Redacted empty = Redacted.make("");
         assertEquals("", empty.getValue());
     }
+
+    @Test
+    void make_should_handle_special_characters() {
+        Redacted special = Redacted.make("!@#$%^&*()");
+        assertEquals("!@#$%^&*()", special.getValue());
+    }
+
+    @Test
+    void make_should_handle_very_long_input() {
+        String longInput = "x".repeat(10000);
+        Redacted valueToBeSaved = Redacted.make(longInput);
+        assertEquals(longInput, valueToBeSaved.getValue());
+    }
 }
