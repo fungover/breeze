@@ -10,18 +10,24 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CsvReader {
 
     private final char delimiter;
     private final boolean skipEmptyLines;
+    private final boolean hasHeader;
 
     private BufferedReader bufferedReader;
+    private String[] headers;
 
     private CsvReader(Builder builder) {
         this.delimiter = builder.delimiter;
         this.skipEmptyLines = builder.skipEmptyLines;
+        this.hasHeader = builder.hasHeader;
     }
 
     public static Builder builder() {
@@ -31,6 +37,7 @@ public class CsvReader {
     public static class Builder {
         private char delimiter = ','; // Default value
         private boolean skipEmptyLines = true; // Default value
+        private boolean hasHeader = false;
 
         private Builder() {
             // private constructor
@@ -43,6 +50,11 @@ public class CsvReader {
 
         public Builder skipEmptyLines(boolean skipEmptyLines) {
             this.skipEmptyLines = skipEmptyLines;
+            return this;
+        }
+
+        public Builder hasHeader(boolean hasHeader) {
+            this.hasHeader = hasHeader;
             return this;
         }
 
@@ -120,6 +132,36 @@ public class CsvReader {
             return readNext();
         }
         return parseLine(line).toArray(new String[0]);
+    }
+
+
+
+    public Map<String, String> readNextAsMap() throws IOException {
+        if (headers == null && hasHeader) {
+            String headerLine = bufferedReader.readLine();
+            if (headerLine == null) {
+                return Collections.emptyMap();
+            }
+            headers = parseLine(headerLine).toArray(new String[0]);
+        }
+
+        String line = bufferedReader.readLine();
+        if (line == null) {
+            return Collections.emptyMap();
+        }
+
+        if (skipEmptyLines && line.trim().isEmpty()) {
+            return readNextAsMap();
+        }
+
+        List<String> values = parseLine(line);
+        Map<String, String> rowMap = new HashMap<>();
+
+        for (int i = 0; i < headers.length && i < values.size(); i++) {
+            rowMap.put(headers[i], values.get(i));
+        }
+
+        return rowMap;
     }
 
 }
