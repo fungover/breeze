@@ -132,6 +132,13 @@ class StringsTest {
         assertEquals("", Strings.substringAfter("", " "));
         assertEquals("Hello World", Strings.substringAfter("Hello World", ""));
     }
+
+    @Test
+    public void testNonAlphaNumeric_ShouldRemoveSpecialCharacters(){
+        assertEquals("HelloWorld123", Strings.removeNonAlphaNumeric("Hello, World! 123"));
+        assertEquals("", Strings.removeNonAlphaNumeric("!!!"));
+        assertEquals("ABCD", Strings.removeNonAlphaNumeric("AB!#¤%CD"));
+    }
 }
 
 
