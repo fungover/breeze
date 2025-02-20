@@ -1,6 +1,7 @@
 package org.fungover.breeze.collection;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -45,8 +46,8 @@ public class FQueue<T> {
      * @return a new {@code FQueue} with the element added
      */
     public FQueue<T> enqueue(T element) {
-        return new FQueue<>(front, 
-            Stream.concat(Stream.of(element), back.stream()).toList());
+        return new FQueue<>(front, Stream.concat(Stream.of(element), back.stream())
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -63,7 +64,8 @@ public class FQueue<T> {
         if (front.isEmpty()) {
             // Reverse 'back' and move it to 'front'
             List<T> newFront = new ArrayList<>(back);
-            return new FQueue<>(newFront.reversed(), Collections.emptyList());
+            Collections.reverse(newFront);
+            return new FQueue<>(newFront.subList(1, newFront.size()), Collections.emptyList());
         }
 
         return new FQueue<>(front.subList(1, front.size()), back);
@@ -104,13 +106,14 @@ public class FQueue<T> {
 
     /**
      * Returns a new queue with the elements in reverse order.
-     * Uses Java 21's Sequenced Collections API for efficient reversal.
      *
      * @return a new {@code FQueue} with elements in reverse order
      */
     public FQueue<T> reverse() {
-        List<T> allElements = new ArrayList<>(front);
-        allElements.addAll(back.reversed());
-        return new FQueue<>(allElements.reversed(), Collections.emptyList());
+        List<T> reversedFront = new ArrayList<>(front);
+        List<T> reversedBack = new ArrayList<>(back);
+        Collections.reverse(reversedFront);
+        Collections.reverse(reversedBack);
+        return new FQueue<>(reversedBack, reversedFront);
     }
 }
