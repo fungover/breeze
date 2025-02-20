@@ -38,6 +38,14 @@ public class Redacted implements CharSequence {
         return isWiped ? "<wiped>" : value;
     }
 
+    /**
+     * Marks the value as wiped, preventing further access to the original value.
+     */
+    public void wipe (){
+        this.isWiped = true;
+    }
+
+    // CharSequence Implementation
     @Override
     public int length() {
         return 0;

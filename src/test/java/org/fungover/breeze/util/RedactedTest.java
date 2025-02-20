@@ -43,4 +43,11 @@ class RedactedTest {
         Redacted valueToBeSaved = Redacted.make(longInput);
         assertEquals(longInput, valueToBeSaved.getValue());
     }
+
+    @Test
+    void wipe_should_prevent_further_access(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertEquals("<wiped>", valueToBeSaved.getValue());
+    }
 }
