@@ -1,76 +1,128 @@
 package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * VersionTest class contains unit tests for the Version class.
- * These tests verify the functionality for version parsing, comparison, and error handling.
- */
-public class VersionTest {
+class VersionTest {
+
+    // ----------- Comparison Tests -----------
 
     @Test
-    public void testVersionComparison() {
+    void isLessThan_WhenFirstVersionIsLess_ReturnsTrue() {
         Version v1 = new Version("1.2.3");
         Version v2 = new Version("1.2.4");
-        Version v3 = new Version("1.2.3-alpha");
-        Version v4 = new Version("1.2.3-beta");
-        Version v5 = new Version("2.0.0");
-
         assertTrue(v1.isLessThan(v2));
-        assertTrue(v2.isGreaterThan(v1));
-        assertTrue(v1.isGreaterThan(v3));
-        assertTrue(v3.isLessThan(v4));
-        assertTrue(v1.isEqual(new Version("1.2.3")));
-        assertTrue(v2.isLessThan(v5));
     }
 
     @Test
-    public void testInvalidVersion() {
-        assertThrows(IllegalArgumentException.class, () -> new Version("invalid"));
-        assertThrows(IllegalArgumentException.class, () -> new Version("1.2"));
-        assertThrows(IllegalArgumentException.class, () -> new Version("1.2.3.4"));
-        assertThrows(IllegalArgumentException.class, () -> new Version("-1.2.3"));
-        assertThrows(IllegalArgumentException.class, () -> new Version("1.-2.3"));
-        assertThrows(IllegalArgumentException.class, () -> new Version("1.2.-3"));
+    void isGreaterThan_WhenFirstVersionIsGreater_ReturnsTrue() {
+        Version v1 = new Version("1.2.4");
+        Version v2 = new Version("1.2.3");
+        assertTrue(v1.isGreaterThan(v2));
     }
 
     @Test
-    public void testNullVersion() {
+    void isEqual_WhenVersionsAreIdentical_ReturnsTrue() {
+        Version v1 = new Version("1.2.3");
+        Version v2 = new Version("1.2.3");
+        assertTrue(v1.isEqual(v2));
+    }
+
+    @Test
+    void isLessThan_WhenPreReleaseVersionIsComparedToRelease_ReturnsTrue() {
+        Version release = new Version("1.2.3");
+        Version preRelease = new Version("1.2.3-alpha");
+        assertTrue(preRelease.isLessThan(release));
+    }
+
+    @Test
+    void compareTo_WhenPreReleasesDiffer_ReturnsLexicographicalOrder() {
+        Version alpha = new Version("1.2.3-alpha");
+        Version beta = new Version("1.2.3-beta");
+        assertTrue(alpha.compareTo(beta) < 0);
+    }
+
+    // ----------- Parameterized Comparison Tests -----------
+
+    static Stream<Arguments> versionComparisonProvider() {
+        return Stream.of(
+                Arguments.of("1.2.3", "1.2.4", -1),
+                Arguments.of("2.0.0", "1.2.4", 1),
+                Arguments.of("1.2.3", "1.2.3", 0),
+                Arguments.of("1.2.3-alpha", "1.2.3", -1),
+                Arguments.of("1.2.3-beta", "1.2.3-alpha", 1)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("versionComparisonProvider")
+    void compareTo_WithVariousVersions_ReturnsExpectedResult(String v1, String v2, int expected) {
+        Version version1 = new Version(v1);
+        Version version2 = new Version(v2);
+        assertEquals(expected, Integer.signum(version1.compareTo(version2)));
+    }
+
+    // ----------- Invalid Version Tests -----------
+
+    @ParameterizedTest
+    @ValueSource(strings = {"invalid", "1.2", "1.2.3.4", "-1.2.3", "1.-2.3", "1.2.-3"})
+    void constructor_WhenInvalidVersion_ThrowsIllegalArgumentException(String invalidVersion) {
+        assertThrows(IllegalArgumentException.class, () -> new Version(invalidVersion));
+    }
+
+    @Test
+    void constructor_WhenNullVersion_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Version(null));
     }
 
     @Test
-    public void testEmptyVersion() {
+    void constructor_WhenEmptyVersion_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Version(""));
     }
 
-    @Test
-    public void testToString() {
-        Version v1 = new Version("1.2.3");
-        Version v2 = new Version("1.2.3-alpha");
-
-        assertEquals("1.2.3", v1.toString());
-        assertEquals("1.2.3-alpha", v2.toString());
-    }
+    // ----------- Equals & HashCode Tests -----------
 
     @Test
-    public void testEqualsAndHashCode() {
+    void equals_WhenVersionsAreSame_ReturnsTrue() {
         Version v1 = new Version("1.2.3");
         Version v2 = new Version("1.2.3");
-        Version v3 = new Version("1.2.4");
-        Version v4 = new Version("1.2.3-alpha");
-
         assertEquals(v1, v2);
-        assertNotEquals(v1, v3);
-        assertNotEquals(v1, v4);
-        assertEquals(v1.hashCode(), v2.hashCode());
-        assertNotEquals(v1.hashCode(), v3.hashCode());
     }
 
     @Test
-    public void testCompareToWithNull() {
+    void equals_WhenPreReleasesDiffer_ReturnsFalse() {
+        Version v1 = new Version("1.2.3-alpha");
+        Version v2 = new Version("1.2.3-beta");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void hashCode_WhenVersionsAreSame_ReturnsEqualHashCodes() {
         Version v1 = new Version("1.2.3");
-        assertThrows(NullPointerException.class, () -> v1.compareTo(null));
+        Version v2 = new Version("1.2.3");
+        assertEquals(v1.hashCode(), v2.hashCode());
+    }
+
+    // ----------- Other Tests -----------
+
+    @Test
+    void toString_ReturnsCorrectFormat() {
+        Version v1 = new Version("1.2.3");
+        Version v2 = new Version("1.2.3-beta");
+        assertEquals("1.2.3", v1.toString());
+        assertEquals("1.2.3-beta", v2.toString());
+    }
+
+    @Test
+    void compareTo_WhenOtherIsNull_ThrowsNullPointerException() {
+        Version v = new Version("1.2.3");
+        assertThrows(NullPointerException.class, () -> v.compareTo(null));
     }
 }
