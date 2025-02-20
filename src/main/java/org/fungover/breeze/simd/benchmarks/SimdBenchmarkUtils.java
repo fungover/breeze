@@ -7,9 +7,10 @@ public class SimdBenchmarkUtils {
 
     /**
      * Benchmarks the sequential addition operation.
-     * @param simdOps the instance of SimdArrayOps
-     * @param arr1 first input array
-     * @param arr2 second input array
+     *
+     * @param simdOps    the instance of SimdArrayOps
+     * @param arr1       first input array
+     * @param arr2       second input array
      * @param iterations number of iterations to average
      * @return average time per iteration in nanoseconds
      */
@@ -26,10 +27,11 @@ public class SimdBenchmarkUtils {
 
     /**
      * Benchmarks the parallel addition operation.
+     *
      * @param simdOpsParallel the instance of SimdArrayOpsParallel
-     * @param arr1 first input array
-     * @param arr2 second input array
-     * @param iterations number of iterations to average
+     * @param arr1            first input array
+     * @param arr2            second input array
+     * @param iterations      number of iterations to average
      * @return average time per iteration in nanoseconds
      */
     public static long benchmarkParallelAddition(SimdArrayOpsParallel simdOpsParallel, float[] arr1, float[] arr2, int iterations) {
@@ -45,9 +47,10 @@ public class SimdBenchmarkUtils {
 
     /**
      * Benchmarks the sequential dot product operation.
-     * @param simdOps the instance of SimdArrayOps
-     * @param arr1 first input array
-     * @param arr2 second input array
+     *
+     * @param simdOps    the instance of SimdArrayOps
+     * @param arr1       first input array
+     * @param arr2       second input array
      * @param iterations number of iterations to average
      * @return average time per iteration in nanoseconds
      */
@@ -64,10 +67,11 @@ public class SimdBenchmarkUtils {
 
     /**
      * Benchmarks the parallel dot product operation.
+     *
      * @param simdOpsParallel the instance of SimdArrayOpsParallel
-     * @param arr1 first input array
-     * @param arr2 second input array
-     * @param iterations number of iterations to average
+     * @param arr1            first input array
+     * @param arr2            second input array
+     * @param iterations      number of iterations to average
      * @return average time per iteration in nanoseconds
      */
     public static long benchmarkParallelDotProduct(SimdArrayOpsParallel simdOpsParallel, float[] arr1, float[] arr2, int iterations) {
