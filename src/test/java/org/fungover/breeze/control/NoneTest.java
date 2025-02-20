@@ -126,6 +126,23 @@ public class NoneTest {
         assertThat(none.toStream().count()).isEqualTo(0);
     }
 
+    @Test
+    void toEitherShouldReturnLeftValueForNone() {
+        Option<Integer> none = Option.none();
+        assertThat(none.toEither(() -> "LeftValue").isLeft()).isTrue();
+    }
+
+    @Test
+    void toEitherShouldThrowIfSupplierIsNull() {
+        Option<Integer> none = Option.none();
+        assertThrows(NullPointerException.class, () -> none.toEither(null));
+    }
+
+    @Test
+    void toEitherShouldThrowIfSupplierReturnsNull() {
+        Option<Integer> none = Option.none();
+        assertThrows(NullPointerException.class, () -> none.toEither(() -> null));
+    }
 
 
 }
