@@ -14,7 +14,7 @@ public class PasswordGenerator {
     private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
     private static final String NUMBERS = "0123456789";
-    private static final String SYMBOLS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+    public static final String SYMBOLS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
     private static final String AMBIGUOUS = "l1O0";
 
     private final int length;
@@ -44,12 +44,13 @@ public class PasswordGenerator {
     /**
      * Generates a single password based on the configured criteria.
      *
-     * @return A randomly generated secure password
+     * @return A randomly generated secure password.
      */
     public String generate() {
         if (length < minUppercase + minNumbers + minSymbols) {
             throw new IllegalArgumentException("Password length too short for specified minimum requirements");
         }
+
         List<Character> passwordChars = new ArrayList<>();
         String availableCharacters = "";
 
@@ -63,12 +64,17 @@ public class PasswordGenerator {
                     .mapToObj(c -> String.valueOf((char) c))
                     .collect(Collectors.joining());
         }
+
         if (availableCharacters.isEmpty()) {
             throw new IllegalArgumentException("No valid character sets selected");
         }
-        for (int i = 0; i < minUppercase; i++) passwordChars.add(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
-        for (int i = 0; i < minNumbers; i++) passwordChars.add(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
-        for (int i = 0; i < minSymbols; i++) passwordChars.add(SYMBOLS.charAt(random.nextInt(SYMBOLS.length())));
+
+        for (int i = 0; i < minUppercase; i++)
+            passwordChars.add(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        for (int i = 0; i < minNumbers; i++)
+            passwordChars.add(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
+        for (int i = 0; i < minSymbols; i++)
+            passwordChars.add(SYMBOLS.charAt(random.nextInt(SYMBOLS.length())));
 
         while (passwordChars.size() < length) {
             passwordChars.add(availableCharacters.charAt(random.nextInt(availableCharacters.length())));
@@ -152,6 +158,26 @@ public class PasswordGenerator {
             return this;
         }
 
+        public Builder disableUppercase() {
+            this.includeUppercase = false;
+            return this;
+        }
+
+        public Builder disableLowercase() {
+            this.includeLowercase = false;
+            return this;
+        }
+
+        public Builder disableNumbers() {
+            this.includeNumbers = false;
+            return this;
+        }
+
+        public Builder disableSymbols() {
+            this.includeSymbols = false;
+            return this;
+        }
+
         public Builder includeAll() {
             return this.includeUppercase().includeLowercase().includeNumbers().includeSymbols();
         }
@@ -168,12 +194,12 @@ public class PasswordGenerator {
      * @return Strength score from 1 (weak) to 5 (very strong).
      */
     public static int estimateStrength(String password) {
-        int score = 1;
+        int score = 0;
         if (password.length() >= 8) score++;
         if (password.length() >= 12) score++;
         if (password.chars().anyMatch(Character::isUpperCase)) score++;
         if (password.chars().anyMatch(Character::isDigit)) score++;
         if (password.chars().anyMatch(ch -> SYMBOLS.indexOf(ch) >= 0)) score++;
-        return score;
+        return Math.max(score, 1);
     }
 }

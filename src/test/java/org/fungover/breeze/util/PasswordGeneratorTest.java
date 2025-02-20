@@ -1,17 +1,20 @@
 package org.fungover.breeze.util;
 
+import org.fungover.breeze.util.PasswordGenerator;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 
+/**
+ * Unit tests for PasswordGenerator class ensuring 100% coverage.
+ */
 public class PasswordGeneratorTest {
 
     @Test
     public void testGenerateDefaultPassword() {
-        PasswordGenerator generator = new PasswordGenerator().builder().buld();
+        PasswordGenerator generator = PasswordGenerator.builder().build();
         String password = generator.generate();
         assertNotNull(password);
         assertEquals(12, password.length());
@@ -84,7 +87,14 @@ public class PasswordGeneratorTest {
     @Test
     public void testNoCharacterSetThrowsException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                PasswordGenerator.builder().length(12).build().generate()
+                PasswordGenerator.builder()
+                        .length(12)
+                        .disableUppercase()
+                        .disableLowercase()
+                        .disableNumbers()
+                        .disableSymbols()
+                        .build()
+                        .generate()
         );
         assertNotNull(exception.getMessage());
     }
