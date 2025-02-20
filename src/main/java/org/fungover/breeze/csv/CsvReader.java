@@ -76,7 +76,7 @@ public class CsvReader {
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
-            if (skipEmptyLines && line.trim().isEmpty())  { // Skip empty line
+            if (skipEmptyLines && line.trim().isEmpty()) { // Skip empty line
                 continue;
             }
             List<String> parsed = parseLine(line);
@@ -109,6 +109,17 @@ public class CsvReader {
         String token = sb.toString();
         tokens.add(token);
         return tokens;
+    }
+
+    public String[] readNext() throws IOException {
+        String line = bufferedReader.readLine();
+        if (line == null) {
+            return new String[0];
+        }
+        if (skipEmptyLines && line.trim().isEmpty()) {
+            return readNext();
+        }
+        return parseLine(line).toArray(new String[0]);
     }
 
 }
