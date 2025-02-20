@@ -43,7 +43,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
      *
      * @param first  first element of the tuple
      * @param second second element of the tuple
-     * @param third third element of the tuple
+     * @param third  third element of the tuple
      */
     private Tuple3(T1 first, T2 second, T3 third) {
         this.first = first;
@@ -56,7 +56,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
      *
      * @param first  first not null element in the tuple
      * @param second second not null element in the tuple
-     * @param third third not null element in the tuple
+     * @param third  third not null element in the tuple
      * @param <T1>   class type of first element where class must implement serializable and class (or superclass) must implement comparable.
      * @param <T2>   class type of second element where class must implement serializable and class (or superclass) must implement comparable.
      * @param <T3>   class type of third element where class must implement serializable and class (or superclass) must implement comparable.
@@ -74,6 +74,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the first element of this tuple
+     *
      * @return first
      */
     public T1 _1() {
@@ -82,6 +83,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the second element of this tuple
+     *
      * @return second
      */
     public T2 _2() {
@@ -90,6 +92,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the third element of this tuple
+     *
      * @return third
      */
     public T3 _3() {
@@ -98,6 +101,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the first element of this tuple
+     *
      * @return first
      */
     public T1 first() {
@@ -106,6 +110,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the second element of this tuple
+     *
      * @return second
      */
     public T2 second() {
@@ -114,6 +119,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
 
     /**
      * Returns the third element of this tuple
+     *
      * @return second
      */
     public T3 third() {
@@ -235,19 +241,19 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
     @Override
     public int compareTo(Tuple3<T1, T2, T3> o) {
 
-        if(o == null) {
+        if (o == null) {
             throw new IllegalArgumentException("Cannot compare with null");
         }
 
         int isFirstElementsEqual = first.compareTo(o.first);
 
-        if(isFirstElementsEqual != 0) {
+        if (isFirstElementsEqual != 0) {
             return isFirstElementsEqual;
         }
 
         int isSecondElementsEqual = second.compareTo(o.second);
 
-        return isSecondElementsEqual != 0 ? isSecondElementsEqual: third.compareTo(o.third);
+        return isSecondElementsEqual != 0 ? isSecondElementsEqual : third.compareTo(o.third);
     }
 
     /**
