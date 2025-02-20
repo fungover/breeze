@@ -6,9 +6,9 @@ package org.fungover.breeze.graph;
  * @param <T> the type of data stored in the nodes connected by this edge.
  */
 public class Edge<T> {
-    private Node<T> source;
-    private double weight;
-    private Node<T> destination;
+    private final Node<T> source;
+    private final double weight;
+    private final Node<T> destination;
 
     /**
      * Constructs an edge with the specified source node, destination node, and weight.
@@ -23,7 +23,7 @@ public class Edge<T> {
             throw new IllegalArgumentException("Weight can't be a negative number");
         }
         if (source == null || destination == null) {
-            throw new IllegalArgumentException("Value can't be null");
+            throw new IllegalArgumentException("Source and destination nodes cannot be null");
         }
 
         this.source = source;

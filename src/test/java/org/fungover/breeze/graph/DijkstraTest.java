@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DijkstraTest {
@@ -206,10 +207,13 @@ class DijkstraTest {
     @Test
     @DisplayName("Instantiate edge with negative weight should throw exception")
     void instantiateEdgeWithNegativeWeightShouldThrowException() {
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> new Edge<>(nodes.get(0), nodes.get(1), -0.1));
+        Node<String> nodeA = nodes.get(0);
+        Node<String> nodeB = nodes.get(0);
 
-        assertThat(exception.getMessage()).isEqualTo("Weight can't be a negative number");
+        assertThatThrownBy(
+                () -> new Edge<>(nodeA, nodeB, -0.1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Weight can't be a negative number");
     }
 
     @Test
@@ -321,16 +325,42 @@ class DijkstraTest {
     @Test
     @DisplayName("Initiate edge with null should throw exception")
     void initiateEdgeWithNullShouldThrowException() {
-        Exception exceptionSource = assertThrows(IllegalArgumentException.class,
-                () -> new Edge<>(null, nodes.getFirst(), 2));
+        Node<String> nodeA = nodes.get(0);
 
-        Exception exceptionDestination = assertThrows(IllegalArgumentException.class,
-                () -> new Edge<>(nodes.getFirst(), null,  2));
+        assertThatThrownBy(
+                () -> new Edge<>(null, nodeA, 2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Source and destination nodes cannot be null");
+
+        assertThatThrownBy(
+                () -> new Edge<>(nodeA, null, 2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Source and destination nodes cannot be null");
+    }
+
+
+    @Test
+    @DisplayName("Dijkstra methods should throw exception for null parameters")
+    void dijkstraMethodsShouldThrowExceptionForNullParameters() {
+        Node<String> nodeA = nodes.get(0);
+        Node<String> nodeB = nodes.get(1);
 
         assertAll(
-                () -> assertThat(exceptionSource.getMessage()).isEqualTo("Value can't be null"),
-                () -> assertThat(exceptionDestination.getMessage()).isEqualTo("Value can't be null")
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.findShortestPath(null, nodeA, nodeB)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.findShortestPath(graph, null, nodeB)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.findShortestPath(graph, nodeA, null)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.findAllShortestPaths(null, nodeA)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.findAllShortestPaths(graph, null)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.getPath(null)),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> dijkstra.getDistance(null))
         );
     }
-    
+
 }

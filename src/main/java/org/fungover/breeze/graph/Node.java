@@ -10,7 +10,7 @@ public class Node<T> {
     /**
      * The data stored in this node.
      */
-    private T data;
+    private final T data;
 
     /**
      * The previous node in the path. This can be used to reconstruct the path taken
@@ -32,6 +32,9 @@ public class Node<T> {
      * @param data the data to be stored in this node
      */
     public Node(T data) {
+        if (data == null) {
+            throw new IllegalArgumentException("Data cannot be null");
+        }
         this.data = data;
         this.previousNode = null;
         this.distance = Double.MAX_VALUE;

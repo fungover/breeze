@@ -67,6 +67,9 @@ public class Dijkstra<T> {
      * @param end the end node
      */
     public void findShortestPath(WeightedGraph<T> graph, Node<T> start, Node<T> end) {
+        if (graph == null || start == null || end == null) {
+            throw new IllegalArgumentException("Graph, start and end node cannot be null");
+        }
         resetGraphState(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
@@ -114,6 +117,9 @@ public class Dijkstra<T> {
      * @param start the starting node
      */
     public void findAllShortestPaths(WeightedGraph<T> graph, Node<T> start) {
+        if (graph == null || start == null) {
+            throw new IllegalArgumentException("Graph and start node cannot be null");
+        }
         resetGraphState(graph);
         start.setDistance(0);
         Node<T> currentNode = start;
@@ -145,6 +151,9 @@ public class Dijkstra<T> {
      * @return the list containing the nodes from the start node to the target node
      */
     public List<Node<T>> getPath(Node<T> target) {
+        if (target == null) {
+            throw new IllegalArgumentException("Target node cannot be null");
+        }
         List<Node<T>> path = new ArrayList<>();
         Node<T> currentNode = target;
 
@@ -164,6 +173,9 @@ public class Dijkstra<T> {
      * @return the target nodes distance
      */
     public double getDistance(Node<T> target) {
+        if (target == null) {
+            throw new IllegalArgumentException("Target node cannot be null");
+        }
         return target.getDistance();
     }
 }
