@@ -160,5 +160,29 @@ public class NoneTest {
         assertThat(deserializedNone).isSameAs(none);
     }
 
+    @Test
+    void foldShouldReturnIfNoneSupplierValueForNone() {
+        Option<Integer> none = Option.none();
+
+        String result = none.fold(() -> "Default Value", val -> "Value: " + val);
+
+        assertThat(result).isEqualTo("Default Value");
+    }
+
+    @Test
+    void foldShouldThrowExceptionIfNoneSupplierIsNull() {
+        Option<Integer> none = Option.none();
+
+        assertThrows(NullPointerException.class, () -> none.fold(null, val -> "Value: " + val));
+    }
+
+    @Test
+    void foldShouldThrowExceptionIfPresentFunctionIsNull() {
+        Option<Integer> none = Option.none();
+
+        assertThrows(NullPointerException.class, () -> none.fold(() -> "Default Value", null));
+    }
+
+
 }
 
