@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -176,7 +177,7 @@ class CsvReaderTest {
         // Test med anpassad delimiter
         String csvSource = "Alice|30|Stockholm\nBob|25|Gothenburg\n";
         CsvReader csvReader = CsvReader.builder()
-                .withDelimiter('|')  // Använd | istället för ,
+                .withDelimiter('|')
                 .skipEmptyLines(true)
                 .build();
         csvReader.withSource(csvSource);
@@ -194,6 +195,27 @@ class CsvReaderTest {
         assertEquals("Bob", result[0]);
         assertEquals("25", result[1]);
         assertEquals("Gothenburg", result[2]);
+    }
+
+    @Test
+    @DisplayName("Should map header keys and column values together if hasHeader is true")
+    void shouldMapHeaderKeysAndColumnValuesTogetherIfHasHeaderIsTrue() throws IOException {
+        String csvData = "Name,Age,City\nJohn,30,New York\nAlice,25,Los Angeles\nBob,35,Chicago";
+        CsvReader reader = CsvReader.builder()
+                .hasHeader(true)
+                .build()
+                .withSource(csvData);
+
+
+        Map<String, String> firstRow = reader.readNextAsMap();
+        assertEquals("John", firstRow.get("Name"));
+        assertEquals("30", firstRow.get("Age"));
+        assertEquals("New York", firstRow.get("City"));
+
+        Map<String, String> secondRow = reader.readNextAsMap();
+        assertEquals("Alice", secondRow.get("Name"));
+        assertEquals("25", secondRow.get("Age"));
+        assertEquals("Los Angeles", secondRow.get("City"));
     }
 
 }
