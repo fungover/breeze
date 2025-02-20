@@ -138,6 +138,7 @@ class StringsTest {
         assertEquals("HelloWorld123", Strings.removeNonAlphaNumeric("Hello, World! 123"));
         assertEquals("", Strings.removeNonAlphaNumeric("!!!"));
         assertEquals("ABCD", Strings.removeNonAlphaNumeric("AB!#¤%CD"));
+        assertNull(Strings.removeNonAlphaNumeric(null));
     }
 }
 
