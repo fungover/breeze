@@ -194,11 +194,10 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @param <X>               the type of the exception to be thrown
      * @param exceptionSupplier a supplier function that provides the exception to throw
-     * @return the contained value if present
      * @throws X if the Option is None, the supplied exception is thrown
      */
 
-    public abstract <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+    public abstract <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * Transforms the contained value using the provided mapping function.
@@ -367,6 +366,6 @@ public abstract class Option<T extends Serializable> implements Serializable {
         public abstract <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier);
 
 
-    public abstract T orElseThrow();
+    public abstract void orElseThrow();
 
 }
