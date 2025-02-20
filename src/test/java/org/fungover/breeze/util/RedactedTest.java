@@ -12,4 +12,12 @@ class RedactedTest {
         assertEquals("Secret",valueToBeSaved.getValue());
     }
 
+    @Test
+    void two_redacted_should_be_separate_instances(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        Redacted secondValueToBeSaved = Redacted.make("Password");
+        assertEquals("Secret",valueToBeSaved.getValue());
+        assertEquals("Password",secondValueToBeSaved.getValue());
+    }
+
 }
