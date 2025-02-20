@@ -5,6 +5,8 @@ import java.util.Objects;
 public class Redacted implements CharSequence {
     private final CharSequence value;
     private boolean isWiped;
+    private final String wiped = "<wiped>";
+    private final String redacted = "<redacted>";
 
     /**
      * Private Constructor
@@ -37,7 +39,7 @@ public class Redacted implements CharSequence {
      * @throws IllegalStateException if value has been wiped.
      */
     public CharSequence getValue() {
-        return isWiped ? "<wiped>" : value;
+        return isWiped ? wiped : value;
     }
 
     /**
@@ -54,7 +56,7 @@ public class Redacted implements CharSequence {
      */
     @Override
     public String toString() {
-        return isWiped ? "<wiped>" : "<redacted>";
+        return isWiped ? wiped : redacted;
     }
 
     // CharSequence Implementation.
@@ -71,14 +73,14 @@ public class Redacted implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return isWiped ? "<wiped>" : "<redacted>";
+        return isWiped ? wiped : redacted;
     }
 
     // HashCode and equals
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Redacted redacted)) return false;
-        return isWiped == redacted.isWiped && Objects.equals(value, redacted.value);
+        if (!(o instanceof Redacted secret)) return false;
+        return isWiped == secret.isWiped && Objects.equals(value, secret.value);
     }
 
     @Override
