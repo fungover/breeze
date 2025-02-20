@@ -9,6 +9,9 @@ public class SimdUtils {
 
   static void chunkElementwise(
       float[] arr1, float[] arr2, float[] result, int start, int end, VectorOperators.Binary op) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     int i = start;
     // Process vectorized chunks.
     for (; i <= end - SPECIES.length(); i += SPECIES.length()) {
@@ -37,6 +40,9 @@ public class SimdUtils {
    * @return the dot product computed for the given segment.
    */
   static float dotProductForSpecies(float[] arr1, float[] arr2, int start, int end) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     float sum = 0f;
     int i = start;
     // Process chunks.
