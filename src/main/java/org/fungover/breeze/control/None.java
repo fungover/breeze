@@ -2,6 +2,7 @@ package org.fungover.breeze.control;
 
 import org.fungover.breeze.funclib.control.Either;
 
+import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -270,7 +271,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @see java.io.Serializable
      */
     @Serial
-    private Object readResolve() {
+    private Object readResolve() throws ObjectStreamException {
         return INSTANCE; // Ensure deserialized None is the same singleton instance
     }
 
