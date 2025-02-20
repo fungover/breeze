@@ -20,6 +20,7 @@ public class CsvReader {
     private final char delimiter;
     private final boolean skipEmptyLines;
     private final boolean hasHeader;
+    private final char quoteChar;
 
     private BufferedReader bufferedReader;
     private String[] headers;
@@ -28,6 +29,7 @@ public class CsvReader {
         this.delimiter = builder.delimiter;
         this.skipEmptyLines = builder.skipEmptyLines;
         this.hasHeader = builder.hasHeader;
+        this.quoteChar = builder.quoteChar;
     }
 
     public static Builder builder() {
@@ -38,6 +40,7 @@ public class CsvReader {
         private char delimiter = ','; // Default value
         private boolean skipEmptyLines = true; // Default value
         private boolean hasHeader = false;
+        private char quoteChar = '\"';
 
         private Builder() {
             // private constructor
@@ -50,6 +53,11 @@ public class CsvReader {
 
         public Builder skipEmptyLines(boolean skipEmptyLines) {
             this.skipEmptyLines = skipEmptyLines;
+            return this;
+        }
+
+        public Builder withQuoteChar(char quoteChar) {
+            this.quoteChar = quoteChar;
             return this;
         }
 
@@ -81,7 +89,7 @@ public class CsvReader {
 
     public List<String[]> readAll() throws IOException {
 
-        if(bufferedReader == null) {
+        if (bufferedReader == null) {
             throw new IllegalStateException("withSource(..) must be called before readAll()");
         }
 
@@ -108,10 +116,21 @@ public class CsvReader {
         }
 
         StringBuilder sb = new StringBuilder();
+        boolean inQuotes = false;
         int length = line.length();
         for (int i = 0; i < length; i++) {
             char c = line.charAt(i);
-            if (c == delimiter) {
+
+            if (c == quoteChar) {
+                if (inQuotesAndNextCharIsAlsoAQuote(line, inQuotes, i, length)) {
+                    // The csv contains an escaped quoteChar, i.e. double quotChars inside a quote
+                    // E.g. "Some text with ""a quote"" inside the quoted value". Ad a single quoteChar
+                    sb.append(quoteChar);
+                    i++; // Skip the second quote char
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (c == delimiter && !inQuotes) {
                 String token = sb.toString();
                 tokens.add(token);
                 sb.setLength(0);
@@ -161,6 +180,10 @@ public class CsvReader {
         }
 
         return rowMap;
+    }
+
+    private boolean inQuotesAndNextCharIsAlsoAQuote(String line, boolean inQuotes, int i, int len) {
+        return inQuotes && i + 1 < len && line.charAt(i + 1) == quoteChar;
     }
 
 }
