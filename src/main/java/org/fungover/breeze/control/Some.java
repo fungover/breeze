@@ -253,7 +253,15 @@ public final class Some<T extends Serializable> extends Option<T> {
     public void orElseThrow() {
     }
 
-
+    /**
+     * Converts this {@code Some} instance into a {@code Try} instance.
+     * Since this instance contains a value, it returns a successful {@code Try}
+     * wrapping the contained value.
+     *
+     * @param exceptionSupplier A supplier for an exception, which is ignored in this implementation
+     *                          because {@code Some} always represents a present value.
+     * @return A {@code Try} instance containing the stored value as a success.
+     */
     @Override
     public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
         return Try.success(value);
