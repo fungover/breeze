@@ -45,6 +45,16 @@ public class Redacted implements CharSequence {
         this.isWiped = true;
     }
 
+    /**
+     * Returns a redacted or wiped representation of the value.
+     *
+     * @return {@code <redacted>} if the value is not wiped, otherwise {@code <wiped>}.
+     */
+    @Override
+    public String toString() {
+        return isWiped ? "<wiped>" : "<redacted>";
+    }
+
     // CharSequence Implementation
     @Override
     public int length() {
