@@ -1,7 +1,7 @@
 package org.fungover.breeze.simd;
 
-import static org.fungover.breeze.simd.SimdUtils.computeDotSegment;
-import static org.fungover.breeze.simd.SimdUtils.processSegmentElementwise;
+import static org.fungover.breeze.simd.SimdUtils.dotProductForSpecies;
+import static org.fungover.breeze.simd.SimdUtils.chunkElementwise;
 
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
@@ -40,7 +40,7 @@ public class SimdArrayOpsParallel {
       //Make designate the end for that worker
       final int end = Math.min(n, start + chunkSizePerWorker);
       //Give worker load
-      threads[t] = new Thread(() -> processSegmentElementwise(arr1, arr2, result, start, end, op));
+      threads[t] = new Thread(() -> chunkElementwise(arr1, arr2, result, start, end, op));
       //compute
       threads[t].start();
     }
@@ -117,7 +117,7 @@ public class SimdArrayOpsParallel {
       final int start = t * chunkSize;
       final int end = Math.min(n, start + chunkSize);
       threads[t] = new Thread(
-          () -> partialSums[threadIndex] = computeDotSegment(arr1, arr2, start, end));
+          () -> partialSums[threadIndex] = dotProductForSpecies(arr1, arr2, start, end));
       threads[t].start();
     }
 
