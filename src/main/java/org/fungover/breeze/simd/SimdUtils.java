@@ -8,10 +8,6 @@ import jdk.incubator.vector.VectorOperators;
 
 public class SimdUtils {
 
-
-
-
-
   static void processSegmentElementwise(
       float[] arr1, float[] arr2, float[] result, int start, int end, VectorOperators.Binary op) {
     int i = start;
