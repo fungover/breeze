@@ -11,8 +11,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CsvReaderTest {
 
@@ -148,5 +147,53 @@ class CsvReaderTest {
 //        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
 //        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
 //    }
+
+
+
+    @Test
+    @DisplayName("Read next should work on not empty lines")
+    void readNextShouldWorkOnNotEmptyLines() throws IOException {
+        String csvData = "\nAlice,30,Stockholm\n\nBob,25,Gothenburg\n";
+        CsvReader reader = CsvReader.builder()
+                .build()
+                .withSource(csvData);
+
+        // Läs första icke-tomma raden
+        String[] result = reader.readNext();
+        assertNotNull(result);
+        assertEquals(3, result.length);
+        assertEquals("Alice", result[0]);
+
+        result = reader.readNext();
+        assertNotNull(result);
+        assertEquals(3, result.length);
+        assertEquals("25", result[1]);
+    }
+
+    @Test
+    @DisplayName("Customed delimiter should work as input")
+    void customedDelimiterShouldWorkAsInput() throws IOException {
+        // Test med anpassad delimiter
+        String csvSource = "Alice|30|Stockholm\nBob|25|Gothenburg\n";
+        CsvReader csvReader = CsvReader.builder()
+                .withDelimiter('|')  // Använd | istället för ,
+                .skipEmptyLines(true)
+                .build();
+        csvReader.withSource(csvSource);
+
+        String[] result = csvReader.readNext();
+        assertNotNull(result);
+        assertEquals(3, result.length);
+        assertEquals("Alice", result[0]);
+        assertEquals("30", result[1]);
+        assertEquals("Stockholm", result[2]);
+
+        result = csvReader.readNext();
+        assertNotNull(result);
+        assertEquals(3, result.length);
+        assertEquals("Bob", result[0]);
+        assertEquals("25", result[1]);
+        assertEquals("Gothenburg", result[2]);
+    }
 
 }
