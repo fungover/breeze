@@ -135,6 +135,4 @@ class MathUtilsTest {
     void testAtan2() {
         assertEquals(Math.PI / 4, MathUtils.atan2(1, 1), 1e-6);
     }
-
-
 }

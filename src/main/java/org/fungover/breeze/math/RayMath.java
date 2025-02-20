@@ -1,11 +1,22 @@
 package org.fungover.breeze.math;
 
+/**
+ * Utility class for mathematical ray operations such as intersections.
+ */
 
 public class RayMath {
 
     private static final float EPSILON = 1e-6f;
 
-    // Function to check if a ray hits a sphere
+    /**
+     * Checks if a ray intersects with a sphere.
+     *
+     * @param ray The ray to check.
+     * @param center The center of the sphere.
+     * @param radius The radius of the sphere.
+     * @return true if the ray intersects the sphere, false otherwise.
+     * @throws IllegalArgumentException if parameters are null or radius is negative.
+     */
     public static boolean rayIntersectsSphere(Ray ray, Vector3 center, float radius) throws IllegalArgumentException {
 
         if (ray == null || center == null) {
@@ -15,68 +26,79 @@ public class RayMath {
             throw new IllegalArgumentException("Radius must be positive");
         }
 
-        if (ray.direction.x == 0 && ray.direction.y == 0 && ray.direction.z == 0) {
+        if (ray.getDirection().getX() == 0 && ray.getDirection().getY() == 0 && ray.getDirection().getZ() == 0) {
             throw new IllegalArgumentException("Ray direction must be non-zero and normalized");
         }
 
-        Vector3 oc = ray.origin.subtract(center);
-        float a = 1.0f; // Since direction is normalized
-        float b = 2.0f * oc.dot(ray.direction);
+        Vector3 oc = ray.getOrigin().subtract(center);
+        float a = ray.getDirection().dot(ray.getDirection());
+        float b = 2.0f * oc.dot(ray.getDirection());
         float c = oc.dot(oc) - radius * radius;
         float discriminant = b * b - 4 * a * c;
         return discriminant >= 0; // Ray hits or touches the sphere
     }
 
-    //Function to check if a ray hits a plane and returns the hit point if it does.
+    /**
+     * Checks if a ray intersects with a plane and returns the intersection point if it does.
+     *
+     * @param ray The ray to check.
+     * @param planePoint A point on the plane.
+     * @param planeNormal The normal vector of the plane (must be normalized).
+     * @return The intersection point as a {@code Vector3}, or null if there is no intersection.
+     * @throws IllegalArgumentException if parameters are null or vectors are not normalized.
+     */
     public static Vector3 rayIntersectsPlane(Ray ray, Vector3 planePoint, Vector3 planeNormal) {
-
         if (ray == null || planePoint == null || planeNormal == null) {
             throw new IllegalArgumentException("Parameters must not be null");
-            }
-        if (Math.abs(ray.direction.dot(ray.direction) - 1.0f) > EPSILON) {
+        }
+        if (Math.abs(ray.getDirection().dot(ray.getDirection()) - 1.0f) > EPSILON) {
             throw new IllegalArgumentException("Ray direction must be normalized");
-            }
+        }
         if (Math.abs(planeNormal.dot(planeNormal) - 1.0f) > EPSILON) {
             throw new IllegalArgumentException("Plane normal must be normalized");
-            }
+        }
 
-        float denom = planeNormal.dot(ray.direction);
-
-        // If the denominator is too small, the ray is almost parallel to the plane (no intersection)
+        float denom = planeNormal.dot(ray.getDirection());
         if (Math.abs(denom) < EPSILON) {
-            return null; // No intersection
+            return null; // No intersection, ray is parallel to the plane
         }
 
-        float t = (planePoint.subtract(ray.origin)).dot(planeNormal) / denom;
-
-        // If t is negative, the plane is behind the ray (no valid intersection)
+        float t = (planePoint.subtract(ray.getOrigin())).dot(planeNormal) / denom;
         if (t < 0) {
-            return null;
+            return null; // Plane is behind the ray
         }
 
-        // Calculate intersection point
         return new Vector3(
-                ray.origin.x + ray.direction.x * t,
-                ray.origin.y + ray.direction.y * t,
-                ray.origin.z + ray.direction.z * t
+                ray.getOrigin().getX() + ray.getDirection().getX() * t,
+                ray.getOrigin().getY() + ray.getDirection().getY() * t,
+                ray.getOrigin().getZ() + ray.getDirection().getZ() * t
         );
     }
 
-    //This function checks if a ray hits a box (like a wall or a cube).
+
+    /**
+     * Checks if a ray intersects with an axis-aligned bounding box (AABB).
+     *
+     * @param ray The ray to check.
+     * @param boxMin The minimum corner of the bounding box.
+     * @param boxMax The maximum corner of the bounding box.
+     * @return true if the ray intersects the bounding box, false otherwise.
+     * @throws IllegalArgumentException if parameters are null or boxMin is greater than boxMax.
+     */
     public static boolean rayIntersectsBox(Ray ray, Vector3 boxMin, Vector3 boxMax) {
 
         if (ray == null || boxMin == null || boxMax == null) {
             throw new IllegalArgumentException("Parameters must not be null");
             }
-        if (Math.abs(ray.direction.dot(ray.direction) - 1.0f) > EPSILON) {
+        if (Math.abs(ray.getDirection().dot(ray.getDirection()) - 1.0f) > EPSILON) {
             throw new IllegalArgumentException("Ray direction must be normalized");
             }
-        if (boxMin.x > boxMax.x || boxMin.y > boxMax.y || boxMin.z > boxMax.z) {
+        if (boxMin.getX() > boxMax.getX() || boxMin.getY() > boxMax.getY() || boxMin.getZ() > boxMax.getZ()) {
             throw new IllegalArgumentException("boxMin must be less than boxMax");
             }
 
-        float tMin = (boxMin.x - ray.origin.x) / ray.direction.x;
-        float tMax = (boxMax.x - ray.origin.x) / ray.direction.x;
+        float tMin = (boxMin.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+        float tMax = (boxMax.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
 
         if (tMin > tMax) {
             float temp = tMin;
@@ -84,8 +106,8 @@ public class RayMath {
             tMax = temp;
         }
 
-        float tyMin = (boxMin.y - ray.origin.y) / ray.direction.y;
-        float tyMax = (boxMax.y - ray.origin.y) / ray.direction.y;
+        float tyMin = (boxMin.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+        float tyMax = (boxMax.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
 
         if (tyMin > tyMax) {
             float temp = tyMin;
@@ -100,8 +122,8 @@ public class RayMath {
         tMin = Math.max(tMin, tyMin);
         tMax = Math.min(tMax, tyMax);
 
-        float tzMin = (boxMin.z - ray.origin.z) / ray.direction.z;
-        float tzMax = (boxMax.z - ray.origin.z) / ray.direction.z;
+        float tzMin = (boxMin.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+        float tzMax = (boxMax.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
 
         if (tzMin > tzMax) {
             float temp = tzMin;
@@ -109,38 +131,36 @@ public class RayMath {
             tzMax = temp;
             }
 
-            if ((tMin > tzMax) || (tzMin > tMax)) {
-                return false; // No intersection
-            }
-
-        return true; // Ray hits the box
+        return (!(tMin > tzMax)) && (!(tzMin > tMax)); // No intersection
+// Ray hits the box
     }
 
-    //Function to find the closest point on a ray to a target point.
+    /**
+     * Finds the closest point on a ray to a given point in 3D space.
+     *
+     * @param ray   The ray from which to find the closest point.
+     * @param point The target point in space.
+     * @return The closest point on the ray to the given point.
+     * @throws IllegalArgumentException if the ray or point is null, or if the ray direction is not normalized.
+     */
     public static Vector3 closestPointOnRay(Ray ray, Vector3 point) {
 
-        if (ray == null || point == null) {
-            throw new IllegalArgumentException("Parameters must not be null");
-            }
-        if (Math.abs(ray.direction.dot(ray.direction) - 1.0f) > EPSILON) {
+        if (Math.abs(ray.getDirection().dot(ray.getDirection()) - 1.0f) > EPSILON) {
             throw new IllegalArgumentException("Ray direction must be normalized");
         }
 
 
-        Vector3 originToPoint = point.subtract(ray.origin);
-        float t = originToPoint.dot(ray.direction);
+        Vector3 originToPoint = point.subtract(ray.getOrigin());
+        float t = originToPoint.dot(ray.getDirection());
 
         if (t < 0) {
-            return ray.origin; // Closest point is the ray origin
+            return ray.getOrigin(); // Closest point is the ray origin
         }
 
         return new Vector3(
-                ray.origin.x + ray.direction.x * t,
-                ray.origin.y + ray.direction.y * t,
-                ray.origin.z + ray.direction.z * t
+            ray.getOrigin().getX() + ray.getDirection().getX() * t,
+            ray.getOrigin().getY() + ray.getDirection().getY() * t,
+            ray.getOrigin().getZ() + ray.getDirection().getZ() * t
         );
     }
 }
-
-
-

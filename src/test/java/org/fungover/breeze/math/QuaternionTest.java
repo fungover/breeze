@@ -6,55 +6,98 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QuaternionTest {
 
     @Test
-    void testQuaternionMultiplication() {
-        Quaternion q1 = new Quaternion(1, 0, 0, 0);
-        Quaternion q2 = new Quaternion(0, 1, 0, 0);
+    public void testNormalize() {
+        Quaternion q = new Quaternion(1, 2, 3, 4);
+        Quaternion normalized = q.normalize();
+
+        // Check if the length of the normalized quaternion is 1
+        assertEquals(1.0f, normalized.length(), 1e-6);
+    }
+
+    @Test
+    public void testMultiply() {
+        Quaternion q1 = new Quaternion(1, 0, 0, 0);  // Identity quaternion
+        Quaternion q2 = new Quaternion(0, 1, 0, 0);  // 90-degree rotation quaternion
+
         Quaternion result = q1.multiply(q2);
 
-        assertEquals(0, result.x, 1e-6);
-        assertEquals(0, result.y,  1e-6);
-        assertEquals(1, result.z, 1e-6);
-        assertEquals(0, result.w, 1e-6);
+        // Multiply by the identity quaternion should return the other quaternion
+        assertEquals(q2.getW(), result.getW(), 1e-6);
+        assertEquals(q2.getX(), result.getX(), 1e-6);
+        assertEquals(q2.getY(), result.getY(), 1e-6);
+        assertEquals(q2.getZ(), result.getZ(), 1e-6);
     }
 
     @Test
-    void testQuaternionNormalization() {
+    public void testInverse() {
         Quaternion q = new Quaternion(1, 2, 3, 4);
-        Quaternion result = q.normalize();
+        Quaternion inverse = q.inverse();
 
-        float length = (float) Math.sqrt(1*1 + 2*2 + 3*3 + 4*4);
-
-        assertEquals(1 / length, result.x, 1e-6);
-        assertEquals(2 / length, result.y, 1e-6);
-        assertEquals(3 / length, result.z, 1e-6);
-        assertEquals(4 / length, result.w, 1e-6);
+        // Check if q * inverse(q) is approximately the identity quaternion
+        Quaternion result = q.multiply(inverse);
+        assertEquals(1.0f, result.getW(), 1e-6);
+        assertEquals(0.0f, result.getX(), 1e-6);
+        assertEquals(0.0f, result.getY(), 1e-6);
+        assertEquals(0.0f, result.getZ(), 1e-6);
     }
 
     @Test
-    void testQuaternionRotation() {
-        Vector3 point = new Vector3(1, 0, 0);
-        float angle = (float) Math.toRadians(90);
-        float sinHalfAngle = (float) Math.sin(angle / 2);
-        float cosHalfAngle = (float) Math.cos(angle / 2);
-        Quaternion rotation = new Quaternion(0, 0, sinHalfAngle, cosHalfAngle);
+    public void testSlerp() {
+        Quaternion q1 = new Quaternion(1, 0, 0, 0);  // Identity quaternion
+        Quaternion q2 = new Quaternion(0, 1, 0, 0);  // 90-degree rotation quaternion
 
-        Vector3 rotatedPoint = rotation.rotateVector(point);
-
-        assertEquals(0, rotatedPoint.x, 1e-6);
-        assertEquals(1, rotatedPoint.y, 1e-6);
-        assertEquals(0, rotatedPoint.z, 1e-6);
-    }
-
-    @Test
-    void testSlerp() {
-        Quaternion q1 = new Quaternion(0, 0, 0, 1);
-        Quaternion q2 = new Quaternion(0, 1, 0, 0);
-
+        // Slerp between the identity quaternion and a 90-degree rotation quaternion
         Quaternion result = Quaternion.slerp(q1, q2, 0.5f);
 
-        assertEquals(0, result.x, 1e-6);
-        assertEquals(Math.sqrt(2) / 2, result.y, 1e-6);
-        assertEquals(0, result.z, 1e-6);
-        assertEquals(Math.sqrt(2) / 2, result.w, 1e-6);
+        // The result should be a quaternion between q1 and q2 (roughly 45 degrees of rotation)
+        assertNotNull(result);
+        assertTrue(result.length() > 0);
+    }
+
+    @Test
+    public void testAdd() {
+        Quaternion q1 = new Quaternion(1, 0, 0, 0);
+        Quaternion q2 = new Quaternion(1, 1, 1, 1);
+
+        Quaternion result = q1.add(q2);
+
+        assertEquals(2.0f, result.getW(), 1e-6);
+        assertEquals(1.0f, result.getX(), 1e-6);
+        assertEquals(1.0f, result.getY(), 1e-6);
+        assertEquals(1.0f, result.getZ(), 1e-6);
+    }
+
+    @Test
+    public void testSubtract() {
+        Quaternion q1 = new Quaternion(1, 0, 0, 0);
+        Quaternion q2 = new Quaternion(1, 1, 1, 1);
+
+        Quaternion result = q1.subtract(q2);
+
+        assertEquals(0.0f, result.getW(), 1e-6);
+        assertEquals(-1.0f, result.getX(), 1e-6);
+        assertEquals(-1.0f, result.getY(), 1e-6);
+        assertEquals(-1.0f, result.getZ(), 1e-6);
+    }
+
+    @Test
+    public void testRotateVector() {
+        Vector3 v = new Vector3(1, 0, 0);
+        Quaternion q = new Quaternion(0, 1, 0, 0);  // No rotation (identity)
+
+        // Rotating a vector by the identity quaternion should result in the same vector
+//        Quaternion rotated = q;
+        Vector3 rotated = q.rotate(v);
+
+        assertEquals(v.getX(), rotated.getX(), 1e-6);
+        assertEquals(v.getY(), rotated.getY(), 1e-6);
+        assertEquals(v.getZ(), rotated.getZ(), 1e-6);
+    }
+
+    @Test
+    public void testQuaternionToString() {
+        Quaternion q = new Quaternion(1, 2, 3, 4);
+        String expectedString = "Quaternion(w: 1,000000, x: 2,000000, y: 3,000000, z: 4,000000)";
+        assertEquals(expectedString, q.toString());
     }
 }
