@@ -36,6 +36,7 @@ class RedBlackTree<T extends Comparable<T>> {
 
     }
 
+
     private void fixInsert(Node<T> current) {
 
         Node<T> parent;
@@ -105,30 +106,8 @@ class RedBlackTree<T extends Comparable<T>> {
     }
 
 
-    private void rightRotate(Node<T> node) {
-        Node<T> leftChild = node.left;
 
-        if (leftChild == null) {
-            // Return null if leftChild is null, early exit
-            return;
-        }
-        node.left = leftChild.right;
-        if (leftChild.right != null) {
-            leftChild.right.parent = node;
-        }
-        leftChild.parent = node.parent;
-        if (node.parent == null) {
-            root = leftChild;
-        } else if (node == node.parent.right) {
-            node.parent.right = leftChild;
-
-        } else {
-            node.parent.left = leftChild;
-        }
-        leftChild.right = node;
-        node.parent = leftChild;
-    }
-
+    // Left rotation for Red-Black Tree rebalancing
     private void leftRotate(Node<T> node) {
         Node<T> rightChild = node.right;
         node.right = rightChild.left;
@@ -137,7 +116,7 @@ class RedBlackTree<T extends Comparable<T>> {
         }
         rightChild.parent = node.parent;
         if (node.parent == null) {
-            root = rightChild; // If node was root, now rightChild becomes the root.
+            root = rightChild;  // If node was root, update root
         } else if (node == node.parent.left) {
             node.parent.left = rightChild;
         } else {
@@ -146,6 +125,27 @@ class RedBlackTree<T extends Comparable<T>> {
         rightChild.left = node;
         node.parent = rightChild;
     }
+
+    // Right rotation for Red-Black Tree rebalancing
+    private void rightRotate(Node<T> node) {
+        Node<T> leftChild = node.left;
+        node.left = leftChild.right;
+        if (leftChild.right != null) {
+            leftChild.right.parent = node;
+        }
+        leftChild.parent = node.parent;
+        if (node.parent == null) {
+            root = leftChild;  // If node was root, update root
+        } else if (node == node.parent.right) {
+            node.parent.right = leftChild;
+        } else {
+            node.parent.left = leftChild;
+        }
+        leftChild.right = node;
+        node.parent = leftChild;
+    }
+
+
 
 
     private Node<T> insertNode(Node<T> root, Node<T> newNode) {
@@ -166,18 +166,6 @@ class RedBlackTree<T extends Comparable<T>> {
 
         return root;
 
-    }
-
-    // In-order traversal to print the tree
-    public void inorder() {
-        inorder(root);
-    }
-
-    private void inorder(Node<T> node) {
-        if (node == null) return;
-        inorder(node.left);
-        System.out.println(node.getValue() + " ");
-        inorder(node.right);
     }
 
 
@@ -208,6 +196,22 @@ class RedBlackTree<T extends Comparable<T>> {
             return node;
         }
     }
+
+
+    // Helper methods that are not part of the bulk work but are good to have things.
+
+    // In-order traversal to print the tree
+    public void inorder() {
+        inorder(root);
+    }
+
+    private void inorder(Node<T> node) {
+        if (node == null) return;
+        inorder(node.left);
+        System.out.println(node.getValue() + " ");
+        inorder(node.right);
+    }
+
 
     public boolean isNodeWithValueFound(T value) {
         return findValue(root, value) != null;
@@ -250,6 +254,7 @@ class RedBlackTree<T extends Comparable<T>> {
         printRedBlackTree(node.right, indent + "     ", false);
 
     }
+
 
 
 }

@@ -10,7 +10,7 @@ class Node<T> {
     /**
      * value stored in node with any data type
      */
-    private HashCodeWrapper<T> value;
+    HashCodeWrapper<T> value;
 
     /**
      * Represents the left child of the node

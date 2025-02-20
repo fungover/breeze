@@ -80,21 +80,7 @@ class RedBlackTreeTest {
 
     }
 
-    @Test
-    @DisplayName("Adding consecutive smaller node values to tree trigger Right rotation Test")
-    void addingConsecutiveSmallerNodeValuesToTreeTriggerRightRotationTest() {
-        tree.insert(10);
-        tree.insert(5);
-        tree.insert(2);
-        var expectedly = tree.findValue(10);
-        var expectedly2 = tree.findValue(5);
-        var expectedly3 = tree.findValue(2);
 
-        assertThat(expectedly.color).isFalse();
-        assertThat(expectedly2.color).isTrue();
-        assertThat(expectedly3.color).isFalse();
-
-    }
 
     @Test
     @DisplayName("Adding forth node to tree that is in between 10 and 20 Test")
@@ -245,6 +231,82 @@ class RedBlackTreeTest {
     }
 
 
+    @Test
+    @DisplayName("Left Rotation Parent-Child Relationships Test")
+    void leftRotationParentChildTest() {
+        tree.insert(10);
+        tree.insert(20);
+        tree.insert(30);  // This should trigger a left rotation on node 10.
 
+        Node<Integer> node10 = tree.findValue(10);  // Root before rotation
+        Node<Integer> node20 = tree.findValue(20);  // Node after rotation
 
+        // Verify that the parent-child relationship is updated after the rotation
+        assertThat(node10.parent).isEqualTo(node20);
+        assertThat(node20.left).isEqualTo(node10);
     }
+
+
+    @Test
+    @DisplayName("Right Rotation Parent-Child Relationships Test")
+    void rightRotationParentChildTest() {
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(10);  // This should trigger a right rotation on node 30.
+
+        Node<Integer> node30 = tree.findValue(30);  // Root before rotation
+        Node<Integer> node20 = tree.findValue(20);  // Node after rotation
+
+        // Verify that the parent-child relationship is updated after the rotation
+        assertThat(node30.parent).isEqualTo(node20);
+        assertThat(node20.right).isEqualTo(node30);
+    }
+
+
+    @Test
+    @DisplayName("Multiple Rotations for Tree Balancing Test")
+    void multipleRotationsTest() {
+        // Insert nodes in a specific order to trigger multiple rotations
+        tree.insert(10);
+        tree.insert(20);
+        tree.insert(30);  // Should trigger a left rotation on 10
+        tree.insert(15);  // Should trigger a right rotation on 20
+
+        // After rotations, verify the final tree structure and parent-child relationships
+        Node<Integer> rootNode = tree.findValue(20);
+        assertThat(rootNode.left.getValue()).isEqualTo(10);
+        assertThat(rootNode.right.getValue()).isEqualTo(30);
+    }
+
+    @Test
+    @DisplayName("Right Rotation Triggered by Consecutive Smaller Node Values Test")
+    void addingConsecutiveSmallerNodeValuesToTreeTriggerRightRotationTest() {
+        tree.insert(10);  // Root node, black
+        tree.insert(5);   // Will be a red child of 10
+        tree.insert(2);   // Will trigger right rotation on 10
+
+        // Retrieve the nodes after insertion
+        Node<Integer> node10 = tree.findValue(10);
+        Node<Integer> node5 = tree.findValue(5);
+        Node<Integer> node2 = tree.findValue(2);
+
+        // After right rotation, node 5 should become the root, and node 10 should be its right child.
+        assertThat(node5.parent).isNull();  // Node 5 is now the root
+        assertThat(node10.parent).isEqualTo(node5);  // Node 10 is the right child of node 5
+        assertThat(node5.right).isEqualTo(node10);  // Node 5's right child is node 10
+        assertThat(node5.left).isEqualTo(node2);   // Node 5's left child is node 2
+
+        // Ensure that the colors are correct (root is black, others are red)
+        assertThat(node5.color).isTrue();  // Root is black
+        assertThat(node10.color).isFalse(); // Node 10 should be red
+        assertThat(node2.color).isFalse();  // Node 2 should also be red
+    }
+
+
+
+
+
+
+
+
+}
