@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Locale; // Add this import
 
 public class SizeFormatter {
 
@@ -70,12 +71,14 @@ public class SizeFormatter {
             BigDecimal divisor = BigDecimal.valueOf(unit.getBase()).pow(unit.getExponent());
             BigDecimal converted = bitsPerSecond.divide(divisor, MathContext.DECIMAL128);
             if (converted.compareTo(BigDecimal.ONE) >= 0) {
-                return String.format("%." + decimalPlaces + "f %sps",
+                return String.format(Locale.US, // Use Locale.US here
+                        "%." + decimalPlaces + "f %sps",
                         converted.setScale(decimalPlaces, RoundingMode.HALF_UP),
                         unit.getSuffix());
             }
         }
-        return String.format("%." + decimalPlaces + "f bps",
+        return String.format(Locale.US, // And here
+                "%." + decimalPlaces + "f bps",
                 bitsPerSecond.setScale(decimalPlaces, RoundingMode.HALF_UP));
     }
 
@@ -104,6 +107,7 @@ public class SizeFormatter {
                 .toString()
                 .replace(",", ".") + " " + unit.getSuffix();
     }
+
     private static SizeUnit parseUnit(String unitPart) {
         for (SizeUnit unit : SizeUnit.values()) {
             if (unit.getSuffix().equalsIgnoreCase(unitPart)) {
