@@ -100,4 +100,33 @@ public class NoneTest {
         Option<Integer> none = Option.none();
         assertThat(none.toOptional()).isEqualTo(Optional.empty());
     }
+
+    @Test
+    void peekShouldReturnSameInstanceForNone() {
+        Option<Integer> none = Option.none();
+        assertThat(none.peek(System.out::println)).isSameAs(none);
+    }
+
+    @Test
+    void filterShouldReturnSameInstanceForNone() {
+        Option<Integer> none = Option.none();
+        assertThat(none.filter(x -> x > 5)).isSameAs(none);
+    }
+
+    @Test
+    void toListShouldReturnEmptyListForNone() {
+        Option<Integer> none = Option.none();
+        assertThat(none.toList()).isEmpty();
+    }
+
+
+    @Test
+    void toStreamShouldReturnEmptyStreamForNone() {
+        Option<Integer> none = Option.none();
+        assertThat(none.toStream().count()).isEqualTo(0);
+    }
+
+
+
 }
+
