@@ -405,4 +405,20 @@ public abstract class Option<T extends Serializable> implements Serializable {
      */
     public abstract void orElseThrow();
 
+
+    /**
+     * Converts an {@code Either<L, R>} to an {@code Option<R>}.
+     * <p>
+     * If the {@code Either} contains a right value, it returns {@code Some<R>} with that value.
+     * If the {@code Either} contains a left value, it returns {@code None}.
+     * </p>
+     *
+     * @param either the {@code Either} instance to convert
+     * @param <L>    the type of the left value (must be {@link Serializable})
+     * @param <R>    the type of the right value (must be {@link Serializable})
+     * @return an {@code Option<R>} containing the right value if present, otherwise {@code None}
+     */
+    public static <L extends Serializable, R extends Serializable> Option<R> fromEither(Either<L, R> either) {
+        return either.isRight() ? Option.some(either.getRight()) : Option.none();
+    }
 }
