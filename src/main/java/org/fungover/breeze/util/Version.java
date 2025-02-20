@@ -5,9 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Version-klassen är ett verktyg för att tolka, jämföra och hantera versionsnummer.
- * Den stöder standardversionsnummer och versioner med pre-release-identifierare,
- * enligt semantiska versionsprinciper.
+ * The Version class is a tool for parsing, comparing, and managing version numbers.
+ * It supports standard version numbers and versions with pre-release identifiers,
+ * following semantic versioning principles.
  */
 public class Version implements Comparable<Version> {
     private final int major;
@@ -22,16 +22,19 @@ public class Version implements Comparable<Version> {
     private static final int GROUP_PRE_RELEASE = 4;
 
     /**
-     * Skapar en ny Version-instans baserat på en versionssträng.
+     * Creates a new Version instance based on a version string.
+     *
+     * @param version The version string to parse.
+     * @throws IllegalArgumentException if the version string is null, empty, or does not match the expected format.
      */
     public Version(String version) {
         if (version == null || version.isEmpty()) {
-            throw new IllegalArgumentException("Versionssträngen får inte vara null eller tom");
+            throw new IllegalArgumentException("Version string cannot be null or empty");
         }
 
         Matcher matcher = VERSION_PATTERN.matcher(version);
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Ogiltigt versionsformat: " + version);
+            throw new IllegalArgumentException("Invalid version format: " + version);
         }
 
         this.major = parseNonNegative(matcher.group(GROUP_MAJOR), "major");
@@ -41,7 +44,11 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Jämför denna version med en annan version.
+     * Compares this version with another version.
+     *
+     * @param other The version to compare with.
+     * @return A negative integer, zero, or a positive integer as this version is less than, equal to, or greater than the specified version.
+     * @throws NullPointerException if the specified version is null.
      */
     @Override
     public int compareTo(Version other) {
@@ -65,21 +72,30 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Kontrollerar om denna version är större än en annan version.
+     * Checks if this version is greater than another version.
+     *
+     * @param other The version to compare with.
+     * @return True if this version is greater than the specified version, false otherwise.
      */
     public boolean isGreaterThan(Version other) {
         return this.compareTo(other) > 0;
     }
 
     /**
-     * Kontrollerar om denna version är mindre än en annan version.
+     * Checks if this version is less than another version.
+     *
+     * @param other The version to compare with.
+     * @return True if this version is less than the specified version, false otherwise.
      */
     public boolean isLessThan(Version other) {
         return this.compareTo(other) < 0;
     }
 
     /**
-     * Kontrollerar om denna version är lika med en annan version.
+     * Checks if this version is equal to another version.
+     *
+     * @param other The version to compare with.
+     * @return True if this version is equal to the specified version, false otherwise.
      */
     public boolean isEqual(Version other) {
         return this.compareTo(other) == 0;
@@ -102,7 +118,9 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Returnerar strängrepresentationen av versionen.
+     * Returns the string representation of the version.
+     *
+     * @return The version as a string in the format "major.minor.patch(-preRelease)".
      */
     @Override
     public String toString() {
@@ -116,9 +134,18 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Parsar ett värde och kontrollerar att det inte är negativt.
+     * Parses a version component and ensures it is not negative.
+     *
+     * @param value The string value to parse.
+     * @param component The name of the version component (e.g., "major", "minor", "patch").
+     * @return The parsed integer value.
+     * @throws IllegalArgumentException if the value is negative.
      */
     private int parseNonNegative(String value, String component) {
-        return Integer.parseInt(value);
+        int result = Integer.parseInt(value);
+        if (result < 0) {
+            throw new IllegalArgumentException(component + " version number cannot be negative: " + result);
+        }
+        return result;
     }
 }
