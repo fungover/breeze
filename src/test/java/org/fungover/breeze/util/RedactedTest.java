@@ -63,4 +63,29 @@ class RedactedTest {
         valueToBeSaved.wipe();
         assertEquals("<wiped>",valueToBeSaved.toString());
     }
+
+    @Test
+    void length_should_be_zero(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals(0,valueToBeSaved.length());
+    }
+
+    @Test
+    void charAt_should_be_zero(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals(0,valueToBeSaved.charAt(10));
+    }
+
+    @Test
+    void subSequence_wiped_should_return_wiped(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertEquals("<wiped>",valueToBeSaved.subSequence(0,10));
+    }
+
+    @Test
+    void subSequence_should_be_Redacted(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals("<redacted>",valueToBeSaved.subSequence(0,10));
+    }
 }
