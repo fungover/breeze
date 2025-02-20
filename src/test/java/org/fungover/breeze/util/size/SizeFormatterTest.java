@@ -46,17 +46,10 @@ class SizeFormatterTest {
         // Test maximum long value
         assertDoesNotThrow(() -> SizeFormatter.parse("9223372036854775807B"));
     }
-    @Test
-    void testEdgeCases() {
-        // Test maximum long value
-        assertDoesNotThrow(() -> SizeFormatter.parse("9223372036854775807B"));
-
-        // Test negative values
-        assertEquals("-1.46 KiB", SizeFormatter.autoFormat(-1500, true, 2));
-    }
 
     @Test
     void testNetworkRatePrecision() {
         assertEquals("1.500 Gbps",
                 SizeFormatter.formatRate(1_500_000_000, TimeUnit.SECONDS, 3));
-    }}
+    }
+}
