@@ -4,16 +4,27 @@ import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorMask;
 import jdk.incubator.vector.VectorOperators;
 
+<<<<<<< HEAD
 import java.util.Objects;
 
+=======
+>>>>>>> c0f78e8 (reformat)
 import static org.fungover.breeze.simd.SimdArrayOps.SPECIES;
 
 public class SimdUtils {
 
+<<<<<<< HEAD
     public void chunkElementwise(
             float[] arr1, float[] arr2, float[] result, int start, int end, VectorOperators.Binary op) {
         if (arr1.length != arr2.length) throw new IllegalArgumentException("Input arrays must have the same length");
         checkNullInputs(arr1, arr2);
+=======
+    static void chunkElementwise(
+            float[] arr1, float[] arr2, float[] result, int start, int end, VectorOperators.Binary op) {
+        if (arr1.length != arr2.length) {
+            throw new IllegalArgumentException("Input arrays must have the same length");
+        }
+>>>>>>> c0f78e8 (reformat)
         int i = start;
         // Process vectorized chunks.
         for (; i <= end - SPECIES.length(); i += SPECIES.length()) {
@@ -41,9 +52,16 @@ public class SimdUtils {
      * @param end   the ending index (exclusive) of the segment.
      * @return the dot product computed for the given segment.
      */
+<<<<<<< HEAD
     public float dotProductForSpecies(float[] arr1, float[] arr2, int start, int end) {
         if (arr1.length != arr2.length) throw new IllegalArgumentException("Input arrays must have the same length");
         checkNullInputs(arr1, arr2);
+=======
+    static float dotProductForSpecies(float[] arr1, float[] arr2, int start, int end) {
+        if (arr1.length != arr2.length) {
+            throw new IllegalArgumentException("Input arrays must have the same length");
+        }
+>>>>>>> c0f78e8 (reformat)
         float sum = 0f;
         int i = start;
         // Process chunks.
@@ -62,6 +80,7 @@ public class SimdUtils {
         return sum;
     }
 
+<<<<<<< HEAD
     /**
      *nullChecker for arrays, if either is null then we throw and return a message that specifies which array was null.
      *Since primitive types like float cannot be null, you can only check the array references for null.
@@ -74,3 +93,7 @@ public class SimdUtils {
 
 
 }
+=======
+
+}
+>>>>>>> c0f78e8 (reformat)
