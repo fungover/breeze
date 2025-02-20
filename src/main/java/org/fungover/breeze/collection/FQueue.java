@@ -103,4 +103,17 @@ public class FQueue<T> {
     public int size() {
         return front.size() + back.size();
     }
+
+    /**
+     * Returns a new queue with the elements in reverse order.
+     *
+     * @return a new {@code FQueue} with elements in reverse order
+     */
+    public FQueue<T> reverse() {
+        List<T> reversedFront = new ArrayList<>(front);
+        List<T> reversedBack = new ArrayList<>(back);
+        Collections.reverse(reversedFront);
+        Collections.reverse(reversedBack);
+        return new FQueue<>(reversedBack, reversedFront);
+    }
 }
