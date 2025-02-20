@@ -1,5 +1,7 @@
 package org.fungover.breeze.util;
 
+import java.util.Objects;
+
 public class Redacted implements CharSequence {
     private final CharSequence value;
     private boolean isWiped;
@@ -55,7 +57,8 @@ public class Redacted implements CharSequence {
         return isWiped ? "<wiped>" : "<redacted>";
     }
 
-    // CharSequence Implementation
+    // CharSequence Implementation.
+    // Value is redacted or wiped and therefor should not return information about value.
     @Override
     public int length() {
         return 0;
@@ -70,4 +73,17 @@ public class Redacted implements CharSequence {
     public CharSequence subSequence(int start, int end) {
         return isWiped ? "<wiped>" : "<redacted>";
     }
+
+    // HashCode and equals
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Redacted redacted)) return false;
+        return isWiped == redacted.isWiped && Objects.equals(value, redacted.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, isWiped);
+    }
+
 }
