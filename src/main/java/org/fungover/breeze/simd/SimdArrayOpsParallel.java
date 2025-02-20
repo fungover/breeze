@@ -23,9 +23,7 @@ public class SimdArrayOpsParallel {
    */
   public float[] elementwiseOperationParallel(float[] arr1, float[] arr2,
       VectorOperators.Binary op) {
-    if (arr1.length != arr2.length) {
-      throw new IllegalArgumentException("Input arrays must have the same length");
-    }
+
     int n = arr1.length;
     float[] result = new float[n];
     // Get the available workers
