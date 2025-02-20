@@ -2,6 +2,9 @@ package org.fungover.breeze.csv;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -10,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -18,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CsvReaderTest {
+
     @Test
     @DisplayName("Throw exception if BufferedReader is null when calling readAll")
     void readAll_whenBufferedReaderIsNull_throwException() {
@@ -46,7 +51,6 @@ class CsvReaderTest {
                 """;
 
         CsvReader classUnderTest = CsvReader.builder()
-                .withDelimiter(',')
                 .build();
 
         // Act
@@ -108,6 +112,34 @@ class CsvReaderTest {
                 new String[]{"123", "234", "865"},
                 new String[]{"4534346", "5", "77"},
                 new String[]{"243", "23", "6767"});
+    }
+
+    @ParameterizedTest(name = "readAll with delimiter [{0}]")
+    @MethodSource("provideDelimitersAndCsvContent")
+    void readAll_String(char delimiter, String csvContent) throws IOException {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder()
+                .withDelimiter(delimiter)
+                .build();
+
+        // Act
+        List<String[]> actual = classUnderTest.withSource(csvContent).readAll();
+
+        // Assert
+        assertThat(actual).containsExactly(
+                new String[]{"123", "234", "865"},
+                new String[]{"4534346", "5", "77"},
+                new String[]{"243", "23", "6767"});
+    }
+
+    private static Stream<Arguments> provideDelimitersAndCsvContent() {
+        return Stream.of(
+                Arguments.of(',', "123,234,865\n4534346,5,77\n243,23,6767\n"),
+                Arguments.of(';', "123;234;865\n4534346;5;77\n243;23;6767\n"),
+                Arguments.of(' ', "123 234 865\n4534346 5 77\n243 23 6767\n"),
+                Arguments.of('\t', "123\t234\t865\n4534346\t5\t77\n243\t23\t6767\n")
+        );
     }
 
     @Test
