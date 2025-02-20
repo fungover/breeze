@@ -93,7 +93,7 @@ public class PasswordGenerator {
     public List<String> generateMultiple(int count) {
         if (count <= 0) {
             throw new IllegalArgumentException("Count must be positive");
-        }
+            }
         List<String> passwords = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             passwords.add(generate());
@@ -147,8 +147,8 @@ public class PasswordGenerator {
         }
 
         public Builder minUppercase(int count) {
-            if (length <= 0) {
-                throw new IllegalArgumentException("Length must be positive");
+            if (count < 0) {
+                throw new IllegalArgumentException("Count must be non negative");
             }
             this.minUppercase = count;
             return this;
@@ -172,6 +172,9 @@ public class PasswordGenerator {
         }
 
         public Builder minSymbols(int count) {
+            if (count < 0) {
+                throw new IllegalArgumentException("Count must be non-negative");
+            }
             this.minSymbols = count;
             return this;
         }
