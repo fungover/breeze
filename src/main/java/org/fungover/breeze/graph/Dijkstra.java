@@ -7,8 +7,7 @@ public class Dijkstra<T> {
     private final List<Node<T>> unvisitedNodes = new ArrayList<>();
     private final List<Node<T>> visitedNodes = new ArrayList<>();
 
-    public Dijkstra(WeightedGraph<T> graph) {
-        unvisitedNodes.addAll(graph.getNodes());
+    public Dijkstra() {
     }
 
     /**
@@ -100,7 +99,7 @@ public class Dijkstra<T> {
      *
      * @param graph the weighted graph containing the nodes and edges
      */
-    private void resetGraphState(WeightedGraph<T> graph) {
+    void resetGraphState(WeightedGraph<T> graph) {
         for (Node<T> node : graph.getNodes()) {
             node.setDistance(Double.MAX_VALUE);
             node.setPreviousNode(null);

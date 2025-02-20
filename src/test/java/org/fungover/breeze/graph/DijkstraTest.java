@@ -40,7 +40,7 @@ class DijkstraTest {
         );
 
         graph = new WeightedGraph<>(nodes, edges);
-        dijkstra = new Dijkstra<>(graph);
+        dijkstra = new Dijkstra<>();
 
         //Update start node to 0
         nodes.get(0).setDistance(0);
@@ -53,7 +53,7 @@ class DijkstraTest {
         double expectedDistanceB = 5;
         double expectedDistanceC = 2;
 
-        dijkstra.updateDistance(nodes.get(0), graph);
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(2));
 
         assertAll(
                 "Distances A, B and C",
@@ -88,11 +88,12 @@ class DijkstraTest {
     @Test
     @DisplayName("FindShortestUnvisitedDistance returns node with lowest distance")
     void findShortestUnvisitedDistanceReturnsNodeWithLowestDistance() {
-        double nodeC = 2;
-        dijkstra.updateDistance(nodes.get(0), graph);
+        double expectedLowestNodeDistance = 5;
+
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(2));
 
         Optional<Node<String>> lowestNode = dijkstra.findShortestUnvisitedDistance();
-        assertThat(lowestNode.get().getDistance()).isEqualTo(nodeC);
+        assertThat(lowestNode.get().getDistance()).isEqualTo(expectedLowestNodeDistance);
     }
 
     @Test
@@ -106,10 +107,11 @@ class DijkstraTest {
     }
 
     @Test
-    @DisplayName("SourceNodeExistInUnvisitedNodes return true if node exist")
-    void sourceNodeExistInUnvisitedNodesReturnTrueIfNodeExist() {
+    @DisplayName("IsDestinationNodeUnvisited return true if node exist")
+    void isDestinationNodeUnvisitedReturnTrueIfNodeExist() {
 
-        boolean nodeExists = dijkstra.isDestinationNodeUnvisited(edges.get(0));
+        dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(1));
+        boolean nodeExists = dijkstra.isDestinationNodeUnvisited(edges.get(5));
 
         assertThat(nodeExists).isEqualTo(true);
     }
@@ -188,7 +190,7 @@ class DijkstraTest {
         );
 
         WeightedGraph<Integer> graphInteger = new WeightedGraph<>(nodesInteger, edgesInteger);
-        Dijkstra<Integer> dijkstraInteger = new Dijkstra<>(graphInteger);
+        Dijkstra<Integer> dijkstraInteger = new Dijkstra<>();
 
         List<Node<Integer>> expectedNodes = new ArrayList<>();
         expectedNodes.add(nodesInteger.get(0));
@@ -231,7 +233,7 @@ class DijkstraTest {
                 new Edge<>(nodes.get(0), nodes.get(1), 4));
 
         graphSelfLoop = new WeightedGraph<>(nodes, edges);
-        dijkstraSelfLoop = new Dijkstra<>(graphSelfLoop);
+        dijkstraSelfLoop = new Dijkstra<>();
 
         dijkstraSelfLoop.findShortestPath(graphSelfLoop, nodes.get(0), nodes.get(1));
 
@@ -260,7 +262,7 @@ class DijkstraTest {
         );
 
         graphCyclic = new WeightedGraph<>(nodes, edges);
-        dijkstraCyclic = new Dijkstra<>(graphCyclic);
+        dijkstraCyclic = new Dijkstra<>();
 
         List<Node<String>> expectedPath = new ArrayList<>();
         expectedPath.add(nodes.get(0));
