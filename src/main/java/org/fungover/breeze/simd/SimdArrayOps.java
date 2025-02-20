@@ -1,9 +1,8 @@
 package org.fungover.breeze.simd;
 
-import static org.fungover.breeze.simd.SimdUtils.computeDotSegment;
-import static org.fungover.breeze.simd.SimdUtils.processSegmentElementwise;
+import static org.fungover.breeze.simd.SimdUtils.dotProductForSpecies;
+import static org.fungover.breeze.simd.SimdUtils.chunkElementwise;
 
-import java.util.Arrays;
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
@@ -30,7 +29,7 @@ public class SimdArrayOps {
     int start = 0;
     int end = arr1.length;
     float[] result = new float[arr1.length];
-    processSegmentElementwise(arr1, arr2, result, start, end, op);
+    chunkElementwise(arr1, arr2, result, start, end, op);
     return result;
   }
 
@@ -83,7 +82,7 @@ public class SimdArrayOps {
     }
     int end = arr1.length;
     int start = 0;
-    return computeDotSegment(arr1, arr2, start, end);
+    return dotProductForSpecies(arr1, arr2, start, end);
   }
 
 }
