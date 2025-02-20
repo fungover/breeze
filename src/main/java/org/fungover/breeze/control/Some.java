@@ -99,15 +99,13 @@ public final class Some<T extends Serializable> extends Option<T> {
     /**
      * Returns the contained value since Some<T> is never empty.
      *
-     * @param <X> the type of the exception to be thrown (ignored in Some)
+     * @param <X>               the type of the exception to be thrown (ignored in Some)
      * @param exceptionSupplier a supplier function that provides an exception (ignored in Some)
-     * @return the contained value
      */
 
     @Override
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         Objects.requireNonNull(exceptionSupplier, "Exception supplier must not be null");
-        return value;
     }
 
     /**
@@ -248,12 +246,9 @@ public final class Some<T extends Serializable> extends Option<T> {
 
     /**
      * Returns the wrapped value of this {@link Some<T>}.
-     *
-     * @return the contained value.
      */
     @Override
-    public T orElseThrow() {
-        return this.value;
+    public void orElseThrow() {
     }
 
 }
