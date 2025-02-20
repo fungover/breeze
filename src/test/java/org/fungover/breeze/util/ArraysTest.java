@@ -44,17 +44,11 @@ class ArraysTest {
     }
 
     @Test
-    void testZip_NullElements() {
+    void testZip_NullElements_ShouldThrowException() {
         String[] first = {null, "b"};
         String[] second = {"a", null};
 
-        Tuple2<String, String>[] result = Arrays.zip(first, second);
-
-        assertEquals(2, result.length);
-        assertNull(result[0].first());
-        assertEquals("a", result[0].second());
-        assertEquals("b", result[1].first());
-        assertNull(result[1].second());
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zip(first, second));
     }
 
     @Test
