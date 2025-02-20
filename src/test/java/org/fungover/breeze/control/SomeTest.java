@@ -259,4 +259,21 @@ class SomeTest {
         Option<String> filtered = some.filter(str -> !str.isBlank());
         assertInstanceOf(None.class, filtered);
     }
+
+    @Test
+    void someHandlesLargeListConversion() {
+        List<Integer> largeList = new ArrayList<>();
+        for (int i = 0; i < 10_000; i++) {
+            largeList.add(i);
+        }
+
+        Some<ArrayList<Integer>> some = new Some<>(new ArrayList<>(largeList));
+        assertEquals(10_000, some.get().size());
+        assertEquals(largeList, some.toList().getFirst());
+
+        Stream<ArrayList<Integer>> stream = some.toStream();
+        assertEquals(1, stream.count());
+    }
+
+
 }
