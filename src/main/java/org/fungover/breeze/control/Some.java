@@ -105,8 +105,9 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public <X extends Throwable> void orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         Objects.requireNonNull(exceptionSupplier, "Exception supplier must not be null");
+        return value;
     }
 
     /**
