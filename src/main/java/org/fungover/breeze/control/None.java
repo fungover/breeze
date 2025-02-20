@@ -51,10 +51,26 @@ public final class None<T extends Serializable> extends Option<T> {
     return (None<T>) INSTANCE;
     }
 
+    /**
+     * Checks whether the given object is an instance of {@code None}.
+     * This ensures that all instances of {@code None} are considered equal,
+     * even if multiple instances exist due to serialization or other mechanisms.
+     *
+     * @param obj the object to compare with this instance
+     * @return {@code true} if {@code obj} is an instance of {@code None}, otherwise {@code false}
+     */
     @Override
     public boolean equals(Object obj) {
         return obj instanceof None; // Ensures correct behavior even if different instances exist due to serialization issues.
     }
+
+    /**
+     * Returns a constant hash code for all instances of {@code None}.
+     * Since {@code None} represents a singleton-like concept, all instances
+     * share the same hash code to ensure consistent behavior in hash-based collections.
+     *
+     * @return the hash code value (always {@code 0})
+     */
     @Override
     public int hashCode() {
         return 0; // All instances of None have the same hash code since they are the same instance.
@@ -289,7 +305,16 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
 
-
+    /**
+     * Converts this {@code None} instance into a {@code Try<T>} failure.
+     * If an exception supplier is provided, it is used to generate the failure exception.
+     * If the supplier is {@code null} or returns {@code null}, a {@link NoSuchElementException}
+     * with the message "No value present" is used as the failure.
+     *
+     * @param exceptionSupplier a supplier providing the exception to be used for failure;
+     *                          if {@code null} or returns {@code null}, a {@code NoSuchElementException} is used.
+     * @return a {@code Try<T>} instance representing failure with the provided or default exception
+     */
     public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
         if (exceptionSupplier == null) {
             return Try.failure(new NoSuchElementException("No value present"));
