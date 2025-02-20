@@ -144,6 +144,21 @@ public class NoneTest {
         assertThrows(NullPointerException.class, () -> none.toEither(() -> null));
     }
 
+    @Test
+    void serializationShouldPreserveSingletonProperty() throws IOException, ClassNotFoundException {
+        Option<Integer> none = Option.none();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(none);
+        oos.close();
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        Option<Integer> deserializedNone = (Option<Integer>) ois.readObject();
+
+        assertThat(deserializedNone).isSameAs(none);
+    }
 
 }
 
