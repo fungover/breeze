@@ -43,4 +43,21 @@ class OptionEitherIntegrationTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
+    @Test
+    void rightToOptionShouldReturnSome() {
+        Either<String, Integer> right = Either.right(42);
+        Option<Integer> result = Option.fromEither(right);
+
+        assertThat(result).isInstanceOf(Some.class);
+        assertThat(result.get()).isEqualTo(42);
+    }
+
+    @Test
+    void leftToOptionShouldReturnNone() {
+        Either<String, Integer> left = Either.left("Error");
+        Option<Integer> result = Option.fromEither(left);
+
+        assertThat(result).isInstanceOf(None.class);
+    }
+
 }
