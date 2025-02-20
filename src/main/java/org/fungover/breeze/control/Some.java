@@ -111,19 +111,23 @@ public final class Some<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Transforms the contained value using the provided mapping function.
+     * Applies the given mapping function to the contained value and returns a transformed {@code Option<U>}.
      * <p>
-     * Since Some<T> contains a value, the function is applied to the value, and the result
-     * is wrapped in a new Some<U>.
+     * If the mapping function returns the same instance as the original value, the existing {@code Some<T>}
+     * instance is returned to avoid unnecessary object creation. Otherwise, the result is wrapped in a new
+     * {@code Some<U>} or {@code None} if the mapping function returns {@code null}.
      *
      * @param <U>    the type of the transformed value
      * @param mapper a function to apply to the contained value
-     * @return a new Some<U> containing the transformed value
+     * @return the same {@code Some<T>} instance if the mapping function returns the original value;
+     *         otherwise, a new {@code Some<U>} or {@code None} if the result is {@code null}.
+     * @throws NullPointerException if the mapping function is {@code null}
      */
-
     @Override
     public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
-        return Option.ofNullable(mapper.apply(value));
+        U result = mapper.apply(value);
+
+        return result == value ? (Option<U>) this : Option.ofNullable(result);
     }
 
     /**
