@@ -88,7 +88,7 @@ class DijkstraTest {
     @Test
     @DisplayName("FindShortestUnvisitedDistance returns node with lowest distance")
     void findShortestUnvisitedDistanceReturnsNodeWithLowestDistance() {
-        double expectedLowestNodeDistance = 5;
+        double expectedLowestNodeDistance = 2;
 
         dijkstra.findShortestPath(graph, nodes.get(0), nodes.get(2));
 

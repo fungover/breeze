@@ -73,10 +73,8 @@ public class Dijkstra<T> {
         start.setDistance(0);
         Node<T> currentNode = start;
 
-        while (!unvisitedNodes.isEmpty()) {
+        while (!unvisitedNodes.isEmpty() && !currentNode.equals(end)) {
             updateDistance(currentNode, graph);
-
-            if (breakWhenReachingEnd(end, currentNode)) break;
 
             Optional<Node<T>> optionalNode = findShortestUnvisitedDistance();
             if (optionalNode.isEmpty() || optionalNode.get().getDistance() == Double.MAX_VALUE) {
