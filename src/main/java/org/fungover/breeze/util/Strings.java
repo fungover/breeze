@@ -240,6 +240,24 @@ public class Strings {
         }
         return str.substring(index + seperator.length());
     }
+
+    /**
+     * Removes all non-alphanumeric characters from the given string.
+     *
+     * This method retains only letters (A-Z, a-z) and digits (0-9),
+     * removing all special characters, punctuation, and whitespace.
+     *
+     * @param str the input string
+     * @return a string containing only alphanumeric characters,
+     *         or null if the input is null
+     */
+
+    public static String removeNonAlphaNumeric(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.replaceAll("[^a-zA-Z0-9]", "");
+    }
 }
 
 
