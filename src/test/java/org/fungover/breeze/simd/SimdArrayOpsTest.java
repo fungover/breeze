@@ -141,14 +141,14 @@ class SimdArrayOpsTest {
         });
     }
 
-        @Test
-        @DisplayName("dotProductForSpecies throws IllegalArgumentException for mismatched array lengths")
-        void dotProductForSpeciesThrowsForMismatchedLengths() {
-            float[] arr1 = {5, 6, 7};
-            assertThrows(IllegalArgumentException.class, () -> {
-                SimdUtils.dotProductForSpecies(TEST_ARR1, arr1, 0, arr1.length);
-            });
-        }
+    @Test
+    @DisplayName("dotProductForSpecies throws IllegalArgumentException for mismatched array lengths")
+    void dotProductForSpeciesThrowsForMismatchedLengths() {
+        float[] arr1 = {5, 6, 7};
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimdUtils.dotProductForSpecies(TEST_ARR1, arr1, 0, arr1.length);
+        });
+    }
 
 }
 
