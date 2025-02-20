@@ -1,4 +1,5 @@
 package org.fungover.breeze.stringInterpolation;
+
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -48,7 +49,7 @@ public class StringTemplate {
         return new Builder();
     }
 
-     // Renders the template by replacing placeholders with corresponding values.
+    // Renders the template by replacing placeholders with corresponding values.
     public String render() {
         StringBuilder result = new StringBuilder();
         List<Token> tokens = parseTemplate(template);
@@ -80,7 +81,8 @@ public class StringTemplate {
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, Locale.US);
                 return dtf.format((TemporalAccessor) value);
             } catch (Exception e) {
-
+                System.err.println("Date formatting failed: " + e.getMessage());
+                return String.valueOf(value);
             }
         }
         try {
@@ -153,7 +155,6 @@ public class StringTemplate {
     public static class Builder {
         private String template;
         private final Map<String, Object> values = new HashMap<>();
-
 
 
         public Builder template(String template) {

@@ -1,8 +1,11 @@
 package org.fungover.breeze.stringInterpolation;
+
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StringTemplateTest {
@@ -12,17 +15,20 @@ class StringTemplateTest {
         assertEquals("Test", result);
 
     }
+
     @Test
     void testApplyFormatWithNumericFormat() {
         String result = StringTemplate.applyFormat(123.456, "%.2f");
         assertEquals("123.46", result);
     }
+
     @Test
-    void testApplyFormatWithDateTimeFormat(){
+    void testApplyFormatWithDateTimeFormat() {
         LocalDate date = LocalDate.of(2025, 2, 19);
         String result = StringTemplate.applyFormat(date, "yyyy-MM-dd");
         assertEquals("2025-02-19", result);
     }
+
     @Test
     void testParseTemplate() {
         String template = "Hello, {name}! Today is {date:yyyy-MM-dd}.";
@@ -45,12 +51,14 @@ class StringTemplateTest {
         assertTrue(tokens.get(4).isLiteral());
         assertEquals(".", tokens.get(4).getContent());
     }
+
     @Test
     void testRenderWithIndexedPlaceholders() {
         String template = "Hello, {0}! Your balance is {1:%.2f}";
         String result = StringTemplate.format(template, "John Doe", 123.456);
         assertEquals("Hello, John Doe! Your balance is 123.46", result);
     }
+
     @Test
     void testRenderWithNamedPlaceholders() {
         String template = "Hello, {name}! Today is {date:yyyy-MM-dd}";
@@ -58,6 +66,7 @@ class StringTemplateTest {
                 Map.of("name", "John Doe", "date", LocalDate.of(2025, 2, 19)));
         assertEquals("Hello, John Doe! Today is 2025-02-19", result);
     }
+
     @Test
     void testBuilderPattern() {
         StringTemplate template = StringTemplate.builder()
@@ -68,6 +77,7 @@ class StringTemplateTest {
         String result = template.render();
         assertEquals("Hi John Doe, amount: 99.99", result);
     }
+
     @Test
     void testMissingPlaceholderValueThrowsException() {
         String template = "Hi {name}!";
