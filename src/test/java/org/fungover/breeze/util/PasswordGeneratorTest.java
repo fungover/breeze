@@ -1,6 +1,5 @@
 package org.fungover.breeze.util;
 
-import org.fungover.breeze.util.PasswordGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,11 +77,16 @@ public class PasswordGeneratorTest {
 
     @Test
     public void testInvalidConfigurationThrowsException() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                PasswordGenerator.builder().length(5).minUppercase(3).minNumbers(3).build().generate()
-        );
+        PasswordGenerator generator = PasswordGenerator.builder()
+                .length(5)
+                .minUppercase(3)
+                .minNumbers(3)
+                .build();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, generator::generate);
         assertEquals("Password length too short for specified minimum requirements", exception.getMessage());
     }
+
 
     @Test
     public void testNoCharacterSetThrowsException() {
