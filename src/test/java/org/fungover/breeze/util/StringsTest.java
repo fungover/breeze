@@ -28,13 +28,13 @@ class StringsTest {
     }
 
     @Test
-    void testPadRight() {
+    void testPadLeft() {
         assertEquals("  hej", Strings.padLeft("hej", 5, ' '));
         assertEquals("hej", Strings.padLeft("hej", 3, ' ')); // Ingen padding behövs
     }
 
     @Test
-    void testPadLeft() {
+    void testPadRight() {
         assertEquals("hej  ", Strings.padRight("hej", 5, ' '));
         assertEquals("hej", Strings.padRight("hej", 3, ' ')); // Ingen padding behövs
     }
