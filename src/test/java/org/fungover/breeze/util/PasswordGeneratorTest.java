@@ -72,4 +72,20 @@ public class PasswordGeneratorTest {
         assertEquals(4, PasswordGenerator.estimateStrength("PassWord12!"));
         assertEquals(5, PasswordGenerator.estimateStrength("StrongPass123!@#"));
     }
+
+    @Test
+    public void testInvalidConfigurationThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                PasswordGenerator.builder().length(5).minUppercase(3).minNumbers(3).build().generate()
+        );
+        assertEquals("Password length too short for specified minimum requirements", exception.getMessage());
+    }
+
+    @Test
+    public void testNoCharacterSetThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                PasswordGenerator.builder().length(12).build().generate()
+        );
+        assertNotNull(exception.getMessage());
+    }
 }
