@@ -1,6 +1,7 @@
 package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -20,5 +21,19 @@ public class PasswordGeneratorTest {
         String password = generator.generate();
         assertNotNull(password);
         assertEquals(16, password.length());
+    }
+
+    @Test
+    public void testIncludeUppercase() {
+        PasswordGenerator generator = PasswordGenerator.builder().includeUppercase().minUppercase(2).build();
+        String password = generator.generate();
+        assertTrue(password.chars().filter(Character::isUpperCase).count() >= 2);
+    }
+
+    @Test
+    public void testIncludeNumbers() {
+        PasswordGenerator generator = PasswordGenerator.builder().includeNumbers().minNumbers(2).build();
+        String password = generator.generate();
+        assertTrue(password.chars().filter(Character::isDigit).count() >= 2);
     }
 }
