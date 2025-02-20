@@ -95,7 +95,7 @@ public class CsvReader {
             }
             List<String> parsed = parseLine(line);
             // Convert line to array and add to rows
-            rows.add(parsed.toArray(new String[parsed.size()]));
+            rows.add(parsed.toArray(String[]::new));
         }
         return rows;
     }
