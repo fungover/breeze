@@ -47,7 +47,7 @@ class SimdArrayOpsTest {
     }
 
     @Test
-    @DisplayName("Dot Product: Sequential and Parallel results match and equal -204 for negative vectors")
+    @DisplayName("Dot Product:Sequential and Parallel results match and equal -204 for negative vectors")
     void dotTwoVectorNegativeFloatArray() {
         var product = simdArrayOps.dotTwoVectorArrays(TEST_ARR1, TEST_NEG_ARR1);
         var productParallel = simdArrayOpsParallel.dotTwoVectorArraysParallel(TEST_ARR1, TEST_NEG_ARR1);
