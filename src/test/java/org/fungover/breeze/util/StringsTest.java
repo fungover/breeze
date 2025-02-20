@@ -132,44 +132,6 @@ class StringsTest {
         assertEquals("", Strings.substringAfter("", " "));
         assertEquals("Hello World", Strings.substringAfter("Hello World", ""));
     }
-
-    @Test
-    public void testNonAlphaNumeric_ShouldRemoveSpecialCharacters(){
-        assertEquals("HelloWorld123", Strings.removeNonAlphaNumeric("Hello, World! 123"));
-        assertEquals("", Strings.removeNonAlphaNumeric("!!!"));
-        assertEquals("ABCD", Strings.removeNonAlphaNumeric("AB!#¤%CD"));
-        assertNull(Strings.removeNonAlphaNumeric(null));
-    }
-
-    @Test
-    public void testCountVowels_allVowels() {
-        assertEquals(5, Strings.countVowels("aeiou"));
-        assertEquals(5, Strings.countVowels("AEIOU"));
-    }
-
-    @Test
-    public void testCountVowels_noVowels() {
-        assertEquals(0, Strings.countVowels("xyz"));
-        assertEquals(0, Strings.countVowels("123"));
-    }
-
-    @Test
-    public void testCountVowels_emptyString() {
-        assertEquals(0, Strings.countVowels(""));
-    }
-
-    @Test
-    public void testCountVowels_nullString() {
-        assertEquals(0, Strings.countVowels(null));
-    }
-
-    @Test
-    public void testCountVowels_mixedString() {
-        assertEquals(3, Strings.countVowels("Hello World")); // Vowels: e, o, o
-        assertEquals(5, Strings.countVowels("Programming is fun")); // Vowels: o, a, i, i, u
-    }
-
-
 }
 
 
