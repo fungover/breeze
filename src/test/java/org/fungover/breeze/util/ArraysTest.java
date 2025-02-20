@@ -353,7 +353,7 @@ class ArraysTest {
 
         // Measure time for the optimized transpose
         startTime = System.nanoTime();
-        result = Arrays.transposeFaster(input);
+        result = Arrays.transpose(input);
         duration = System.nanoTime() - startTime;
         System.out.println("Optimized transpose time: " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms");
 
