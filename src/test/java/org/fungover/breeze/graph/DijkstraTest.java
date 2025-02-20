@@ -296,8 +296,8 @@ class DijkstraTest {
                     new Edge<>(nodeList.get(2), nodeList.get(3), 3)
             );
 
-            disconnectedGraph = new WeightedGraph<>(nodes, edges);
-            dijkstra = new Dijkstra<>(disconnectedGraph);
+            disconnectedGraph = new WeightedGraph<>(nodeList, edgesList);
+            dijkstraIsDisconnected = new Dijkstra<>();
         }
 
         @Test
