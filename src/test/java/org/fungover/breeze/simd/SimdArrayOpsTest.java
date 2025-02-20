@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("SIMD Array Operations Tests")
@@ -19,16 +20,17 @@ class SimdArrayOpsTest {
     float[] TEST_NEG_ARR1 = {-1, -2, -3, -4, -5, -6, -7, -8};
 
     // For non-integer literals, we cast to float.
-    float[] TEST_NEG_FLOAT = {(float) 8.2, (float) 7.2, (float) 4.4, (float) 5.5, 4, 3, (float) -2, 1};
+    float[] TEST_NEG_FLOAT = {(float) -8.2, (float) -7.2, (float) -4.4, (float) -5.5, -4, -3, (float) -2, -1};
 
     float[] TEST_SMALL_ARR2 = {1, 2};
     float[] TEST_SMALL_ARR1 = {1, 2};
 
     SimdArrayOps simdArrayOps = new SimdArrayOps();
     SimdArrayOpsParallel simdArrayOpsParallel = new SimdArrayOpsParallel();
+    SimdUtils simdUtils = new SimdUtils();
 
     @Test
-    @DisplayName("Dot Product: Sequential and Parallel results match and equal 120")
+    @DisplayName("Dot Product: Sequential and Parallel results match and equal 114.0")
     void dotTwoVectorArrays() {
         var product = simdArrayOps.dotTwoVectorArrays(TEST_ARR1, TEST_ARR2);
         var productParallel = simdArrayOpsParallel.dotTwoVectorArraysParallel(TEST_ARR1, TEST_ARR2);
@@ -37,12 +39,12 @@ class SimdArrayOpsTest {
     }
 
     @Test
-    @DisplayName("Dot Product: Sequential and Parallel results match and equal -89.8 with float and negative")
+    @DisplayName("Dot Product: Sequential and Parallel results match and equal -117.8 with float and negative")
     void dotTwoVectorNegativeArray() {
         var product = simdArrayOps.dotTwoVectorArrays(TEST_ARR1, TEST_NEG_FLOAT);
         var productParallel = simdArrayOpsParallel.dotTwoVectorArraysParallel(TEST_ARR1, TEST_NEG_FLOAT);
         assertThat(productParallel == product).isTrue();
-        assertThat(product).isEqualTo(89.8f);
+        assertThat(product).isEqualTo(-117.8f);
 
     }
 
@@ -137,7 +139,7 @@ class SimdArrayOpsTest {
 
         // Expect an IllegalArgumentException because arr1.length != arr2.length.
         assertThrows(IllegalArgumentException.class, () -> {
-            SimdUtils.chunkElementwise(arr1, TEST_ARR2, result, 0, arr1.length, VectorOperators.ADD);
+            simdUtils.chunkElementwise(arr1, TEST_ARR2, result, 0, arr1.length, VectorOperators.ADD);
         });
     }
 
@@ -146,9 +148,52 @@ class SimdArrayOpsTest {
     void dotProductForSpeciesThrowsForMismatchedLengths() {
         float[] arr1 = {5, 6, 7};
         assertThrows(IllegalArgumentException.class, () -> {
-            SimdUtils.dotProductForSpecies(TEST_ARR1, arr1, 0, arr1.length);
+            simdUtils.dotProductForSpecies(TEST_ARR1, arr1, 0, arr1.length);
         });
     }
 
+    @Test
+    @DisplayName("dotProductForSpecies throws IllegalArgumentException for mismatched array lengths")
+    void dotProductForSpeciesThrowsForNull() {
+        float[] arr1 = null;
+        assertThrows(NullPointerException.class, () -> {
+            simdUtils.dotProductForSpecies(TEST_ARR1, arr1, 0, arr1.length);
+        });
+    }
+
+    @Test
+    @DisplayName("dotProduct and operations can handle empty arrays")
+    void dotProductWorksAndAOpsForEmptyLengths() {
+        float[] arr1Empty = {};
+        float[] arr2Empty = {};
+        assertThat(simdArrayOps.addTwoVectorArrays(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOps.subTwoVectorArrays(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOps.mulTwoVectorArrays(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOps.dotTwoVectorArrays(arr1Empty, arr2Empty)).isEqualTo(0.0f);
+        assertThat(simdArrayOpsParallel.addTwoVectorArraysParallel(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOpsParallel.subTwoVectorArraysParallel(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOpsParallel.mulTwoVectorArraysParallel(arr1Empty, arr2Empty)).isEqualTo(new float[]{});
+        assertThat(simdArrayOpsParallel.dotTwoVectorArraysParallel(arr1Empty, arr2Empty)).isEqualTo(0.0f);
+    }
+
+    @Test
+    @DisplayName("elementwiseOperation throws NullPointerException when operator is null")
+    void testElementwiseOperationNullOperator() {
+        float[] arr1 = {1, 2, 3};
+        float[] arr2 = {4, 5, 6};
+        NullPointerException ex = assertThrows(NullPointerException.class,
+                () -> simdArrayOps.elementwiseOperation(arr1, arr2, null));
+        assertEquals("Binary Operator can not be null", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("elementwiseOperationParallel throws NullPointerException when operator is null")
+    void testElementwiseOperationParallelNullOperator() {
+        float[] arr1 = {1, 2, 3};
+        float[] arr2 = {4, 5, 6};
+        NullPointerException ex = assertThrows(NullPointerException.class,
+                () -> simdArrayOpsParallel.elementwiseOperationParallel(arr1, arr2, null));
+        assertEquals("Binary Operator can not be null", ex.getMessage());
+    }
 }
 
