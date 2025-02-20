@@ -27,6 +27,26 @@ class ArraysTest {
     }
 
     @Test
+    void testShouldPairElementsIntoTuples() {
+        String[] first = {"A", "B", "C"};
+        Integer[] second = {1, 2, 3};
+
+        Tuple2<String, Integer>[] result = Arrays.zip(first, second);
+
+        assertNotNull(result);
+        assertEquals(3, result.length);
+
+        assertEquals("A", result[0].first());
+        assertEquals(1, result[0].second());
+
+        assertEquals("B", result[1].first());
+        assertEquals(2, result[1].second());
+
+        assertEquals("C", result[2].first());
+        assertEquals(3, result[2].second());
+    }
+
+    @Test
     void testZip_DifferentLengths_ShouldThrowException() {
         String[] words = {"a1", "a2"};
         String[] numbers = {"b1", "b2", "b3"};
