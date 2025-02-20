@@ -1,9 +1,12 @@
 package org.fungover.breeze.ascii;
+
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AsciiTableFormatterTest {
@@ -33,7 +36,7 @@ class AsciiTableFormatterTest {
     }
 
     @Test
-    void testColumnAlignment(){
+    void testColumnAlignment() {
         List<String> headers = Arrays.asList("Item", "Qty", "Price");
         List<List<String>> rows = Arrays.asList(
                 Arrays.asList("Apple", "10", "$2.00"),
@@ -48,4 +51,18 @@ class AsciiTableFormatterTest {
         assertTrue(result.contains("| Apple  | 10  | $2.00 |"));
         assertTrue(result.contains("| Banana |  5  | $1.50 |"));
     }
+
+    @Test
+    void testInvalidRowLengths() {
+        List<String> headers = Arrays.asList("A", "B");
+        List<List<String>> rows = Arrays.asList(
+                Arrays.asList("1", "2"),
+                Arrays.asList("3")
+        );
+
+        assertThrows(IllegalArgumentException.class, () ->
+                AsciiTableFormatter.formatTable(headers, new ArrayList<>(rows))
+        );
+    }
+
 }
