@@ -4,7 +4,6 @@ import org.fungover.breeze.control.Tuple2;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.function.BiFunction;
-import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +31,7 @@ public class Arrays {
      * @param <U> The type of elements in the second array.
      * @param first The first input array.
      * @param second The second input array.
-     * @return An array of Tuple2<T, U> where each tuple contains one element from each input array.
+     * @return An array of {@code Tuple2<T, U>} where each tuple contains one element from each input array.
      * @throws IllegalArgumentException If either input array is null or if they have different lengths.
      */
     public static <T extends Comparable<? super T> & Serializable,
