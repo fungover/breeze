@@ -20,4 +20,14 @@ class RedactedTest {
         assertEquals("Password",secondValueToBeSaved.getValue());
     }
 
+    @Test
+    void make_should_not_accept_null() {
+        assertThrows(IllegalArgumentException.class, () -> Redacted.make(null));
+    }
+
+    @Test
+    void make_should_accept_empty_string() {
+        Redacted empty = Redacted.make("");
+        assertEquals("", empty.getValue());
+    }
 }
