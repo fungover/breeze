@@ -1,7 +1,42 @@
-package org.fungover.breeze.circular.buffer;
+package org.fungover.breeze.circularbuffer;
 
 import java.util.*;
 
+/**
+ * A fixed-size, FIFO (First-In, First-Out) circular buffer that supports both thread-safe and
+ * non-thread-safe operation, as well as multiple overflow strategies.
+ *
+ * <p>The buffer has a fixed {@linkplain #capacity() capacity} and maintains a count of
+ * current elements. When {@link OverflowStrategy#OVERWRITE} is used and the buffer is full,
+ * adding a new element overwrites the oldest one. When {@link OverflowStrategy#REJECT} is used,
+ * attempting to add an element to a full buffer throws an {@link IllegalStateException}.
+ *
+ * <p>Thread-safety is configurable via the constructor flag. If {@code threadSafe} is {@code true},
+ * all public operations are internally synchronized on {@code this}, ensuring that
+ * only one thread can mutate or read the buffer's shared state at a time.
+ *
+ * <p>Typical usage example:
+ * <pre>{@code
+ * // Create a circular buffer of capacity 5, using OVERWRITE on overflow, and thread-safe operations
+ * CircularBuffer<String> cb = new CircularBuffer<>(5, OverflowStrategy.OVERWRITE, true);
+ *
+ * cb.add("A");
+ * cb.add("B");
+ * String oldest = cb.remove(); // Removes and returns "A"
+ *
+ * cb.addAll("C", "D", "E", "F", "G");
+ * // This will overwrite the oldest items if the buffer becomes full.
+ *
+ * // Remove multiple elements at once
+ * Collection<String> removed = cb.removeBatch(2); // Removes oldest two items in FIFO order
+ *
+ * // Clear the buffer completely
+ * cb.clear();
+ * }</pre>
+ *
+ * @param <T> the type of elements stored in this buffer
+ * @see OverflowStrategy
+ */
 public class CircularBuffer<T> implements Iterable<T> {
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -234,6 +269,7 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     /**
      * Returns element at specified index.
+     *
      * @param index to access
      * @return element at specified index
      */

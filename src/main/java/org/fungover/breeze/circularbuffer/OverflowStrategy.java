@@ -1,4 +1,4 @@
-package org.fungover.breeze.circular.buffer;
+package org.fungover.breeze.circularbuffer;
 
 public enum OverflowStrategy {
     OVERWRITE,

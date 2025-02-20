@@ -1,4 +1,4 @@
-package org.fungover.breeze.circular.buffer;
+package org.fungover.breeze.circularbuffer;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -169,6 +169,16 @@ class CircularBufferTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
+    @DisplayName("When removeBatch count equals elements present removes all elements")
+    void whenRemoveBatchCountEqualsElementsPresentRemovesAllElements(boolean threadSafe) {
+        CircularBuffer<Integer> cb = new CircularBuffer<>(5, OverflowStrategy.OVERWRITE, threadSafe);
+        cb.addAll(1, 2, 3, 4, 5);
+        assertThat(cb.removeBatch(5)).containsExactly(1, 2, 3, 4, 5);
+        assertThat(cb).isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
     @DisplayName("removeBatch with empty buffer throws NoSuchElementException")
     void removeBatchWithEmptyBufferThrowsNoSuchElementException(boolean threadSafe) {
         CircularBuffer<String> cb = new CircularBuffer<>(3, OverflowStrategy.OVERWRITE, threadSafe);
@@ -211,7 +221,7 @@ class CircularBufferTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { true, false })
+    @ValueSource(booleans = {true, false})
     @DisplayName("getTail is 0 when buffer is empty")
     void getTailIs0WhenEmpty(boolean threadSafe) {
         CircularBuffer<String> cb = new CircularBuffer<>(5, OverflowStrategy.OVERWRITE, threadSafe);
@@ -219,7 +229,7 @@ class CircularBufferTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { true, false })
+    @ValueSource(booleans = {true, false})
     @DisplayName("getTail reflects position after adding elements")
     void getTailReflectsPositionAfterAddingElement(boolean threadSafe) {
         CircularBuffer<Integer> cb = new CircularBuffer<>(3, OverflowStrategy.OVERWRITE, threadSafe);
@@ -234,7 +244,7 @@ class CircularBufferTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { true, false })
+    @ValueSource(booleans = {true, false})
     @DisplayName("hasNext on empty buffer is false")
     void hasNextOnEmptyBufferIsFalse(boolean threadSafe) {
         CircularBuffer<Integer> cb = new CircularBuffer<>(3, OverflowStrategy.OVERWRITE, threadSafe);
@@ -243,7 +253,7 @@ class CircularBufferTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { true, false })
+    @ValueSource(booleans = {true, false})
     @DisplayName("Iterator returns elements in FIFO order")
     void iteratorReturnsElementsInFifoOrder(boolean threadSafe) {
         CircularBuffer<String> cb = new CircularBuffer<>(5, OverflowStrategy.OVERWRITE, threadSafe);
