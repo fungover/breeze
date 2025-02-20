@@ -12,11 +12,30 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CsvReaderTest {
+    @Test
+    @DisplayName("Throw exception if BufferedReader is null when calling readAll")
+    void readAll_whenBufferedReaderIsNull_throwException() {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder().build();
+
+        // Act
+        Throwable actual = catchThrowable(classUnderTest::readAll);
+
+        // Assert
+        assertThat(actual)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("withSource(..) must be called before readAll()");
+    }
 
     @Test
+    @DisplayName("readAll with String CSV")
     void readAll_String() throws IOException {
 
         // Arrange
@@ -41,6 +60,7 @@ class CsvReaderTest {
     }
 
     @Test
+    @DisplayName("readAll with InputStream CSV")
     void readAll_InputStream() throws IOException {
 
         // Arrange
@@ -66,6 +86,7 @@ class CsvReaderTest {
     }
 
     @Test
+    @DisplayName("readAll with File CSV")
     void readAll_File() throws IOException {
 
         // Arrange
@@ -89,7 +110,6 @@ class CsvReaderTest {
                 new String[]{"243", "23", "6767"});
     }
 
-
     @Test
     @DisplayName("Should not read empty lines")
     void shouldNotReadEmptyLines() throws IOException {
@@ -104,7 +124,6 @@ class CsvReaderTest {
         assertArrayEquals(new String[] {"Bert", "30", "Karlskrona"}, rows.get(1));
         assertArrayEquals(new String[] {"Sigmund", "25", "Gothenburg"}, rows.get(2));
     }
-
 
     @Test
     @DisplayName("Should ignore rows with only whitespace")
@@ -136,7 +155,7 @@ class CsvReaderTest {
 // Doesn't work yet
 //    @Test
 //    @DisplayName("ShouldTrimWhitespaceAroundTokens")
-//    void shoultTrimWhitespaceAroundTokens() throws IOException {
+//    void shouldTrimWhitespaceAroundTokens() throws IOException {
 //        String csvData = "name,age,city\nSteve ,55 , London \nJanet, 25, Los Angeles";
 //        CsvReader reader = CsvReader.builder()
 //                .build()
@@ -148,8 +167,6 @@ class CsvReaderTest {
 //        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
 //        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
 //    }
-
-
 
     @Test
     @DisplayName("Read next should work on not empty lines")

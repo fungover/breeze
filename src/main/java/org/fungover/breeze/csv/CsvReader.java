@@ -81,7 +81,9 @@ public class CsvReader {
 
     public List<String[]> readAll() throws IOException {
 
-        // TODO: check that bufferedReader is not null
+        if(bufferedReader == null) {
+            throw new IllegalStateException("withSource(..) must be called before readAll()");
+        }
 
         List<String[]> rows = new ArrayList<>();
 
@@ -93,7 +95,6 @@ public class CsvReader {
             }
             List<String> parsed = parseLine(line);
             // Convert line to array and add to rows
-            // (use parsed.size() instead of 0 to avoid creating two arrays each time):
             rows.add(parsed.toArray(new String[parsed.size()]));
         }
         return rows;
@@ -133,8 +134,6 @@ public class CsvReader {
         }
         return parseLine(line).toArray(new String[0]);
     }
-
-
 
     public Map<String, String> readNextAsMap() throws IOException {
         if (headers == null && hasHeader) {
