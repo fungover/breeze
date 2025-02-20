@@ -2,6 +2,8 @@ package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class ArraysTest {
@@ -326,6 +327,37 @@ class ArraysTest {
                 {"b", "d" },
         };
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Performance Benchmarking")
+    void performanceBenchmarking() {
+        int size = 1000; // You can adjust this size for different tests
+        Integer[][] input = new Integer[size][size];
+        Integer[][] expected = new Integer[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                input[i][j] = i * size + j;
+                expected[i][j] = j * size + i;
+            }
+        }
+
+        // Measure time for the original transpose
+        long startTime = System.nanoTime();
+        Integer[][] result = Arrays.transpose(input);
+        long duration = System.nanoTime() - startTime;
+        System.out.println("Original transpose time: " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms");
+
+        assertThat(result).isDeepEqualTo(expected);
+
+        // Measure time for the optimized transpose
+        startTime = System.nanoTime();
+        result = Arrays.transposeFaster(input);
+        duration = System.nanoTime() - startTime;
+        System.out.println("Optimized transpose time: " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms");
+
+        assertThat(result).isDeepEqualTo(expected);
     }
 
     @Test
