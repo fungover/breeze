@@ -56,4 +56,11 @@ class RedactedTest {
         Redacted valueToBeSaved = Redacted.make("Secret");
         assertEquals("<redacted>",valueToBeSaved.toString());
     }
+
+    @Test
+    void toString_wiped_should_return_wiped(){
+        Redacted valueToBeSaved = Redacted.make("Secret");
+        valueToBeSaved.wipe();
+        assertEquals("<wiped>",valueToBeSaved.toString());
+    }
 }
