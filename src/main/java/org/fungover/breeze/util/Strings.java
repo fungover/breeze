@@ -258,4 +258,42 @@ public class Strings {
         }
         return str.replaceAll("[^a-zA-Z0-9]", "");
     }
+
+        /**
+         * Counts the number of vowels (a, e, i, o, u) in a given string, ignoring case.
+         * If the input string is null, the method returns 0.
+         *
+         * @param str The input string to count vowels in.
+         * @return The count of vowels in the string. Returns 0 if the input string is null.
+         */
+        public static int countVowels(String str) {
+            // Check if the input string is null
+            if (str == null) {
+                return 0;
+            }
+
+            int count = 0;
+            // Convert the string to lowercase
+            String lowerCaseStr = str.toLowerCase();
+
+            // Iterate through each character in the string
+            for (int i = 0; i < lowerCaseStr.length(); i++) {
+                char ch = lowerCaseStr.charAt(i);
+                // Condition that checks if the character is a vowel
+                if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+
+
 }
+
+
+
+
+
+
