@@ -625,6 +625,15 @@ class ArraysTest {
     }
 
     @Test
+    void testTranspose_1x1Array() {
+        Integer[][] input = {{42}};
+        Integer[][] result = Arrays.transpose(input);
+
+        // Check if the same instance is returned (optimization)
+        assertSame(input, result, "1×1 array transposition should return the same instance");
+    }
+
+    @Test
     @DisplayName("Preserve Type Information")
     void preservedTypeInformation() {
         String[][] input = {
