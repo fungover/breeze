@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public class OptionTest {
 
+    // ================================================
+    // Creation & Presence Checks
+    // ================================================
+
     @Test
     void ofShouldCreateSomeIfValueIsNotNull() {
         Option<Serializable> option = Option.of(42);
@@ -33,6 +37,10 @@ public class OptionTest {
         assertThat(someOption.isDefined()).isTrue();
         assertThat(noneOption.isDefined()).isFalse();
     }
+
+    // ================================================
+    // Retrieval & Transformation
+    // ================================================
 
     @Test
     void getOrElseShouldReturnValueIfPresentOrDefaultOtherwise() {
@@ -65,6 +73,10 @@ public class OptionTest {
         assertThat(some.flatMap(x -> Option.some(x * 2))).isEqualTo(Option.some(20));
         assertThat(none.flatMap(x -> Option.some(x * 2))).isEqualTo(Option.none());
     }
+
+    // ================================================
+    // Serialization & Conversion
+    // ================================================
 
     @Test
     void optionShouldBeSerializable() throws IOException, ClassNotFoundException {
