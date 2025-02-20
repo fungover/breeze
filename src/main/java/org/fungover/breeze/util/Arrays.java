@@ -338,6 +338,11 @@ public class Arrays {
         int rows = array.length;
         int cols = array[0].length;
 
+        // Handle the 1×1 edge case
+        if (rows == 1 && cols == 1) {
+            return array; // No need to transpose a single-element array
+        }
+
         // Validate that all rows have the same length
         for (T[] row : array) {
             if (row == null) {
