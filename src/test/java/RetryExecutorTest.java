@@ -21,7 +21,7 @@ class RetryExecutorTest {
 
     // Test retry logic for exception
     @Test
-    void testExecute_RetryOnException() throws InterruptedException {
+    void testExecute_RetryOnException() {
         RetryExecutor executor = RetryExecutor.builder()
                 .maxAttempts(3)
                 .exponentialBackoff(100, 1000)
@@ -38,7 +38,7 @@ class RetryExecutorTest {
 
     // Test exhaustion handler
     @Test
-    void testExecute_OnExhaustion() throws InterruptedException {
+    void testExecute_OnExhaustion() {
         RetryExecutor executor = RetryExecutor.builder()
                 .maxAttempts(3)
                 .exponentialBackoff(100, 1000)
