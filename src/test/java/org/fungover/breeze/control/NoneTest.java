@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public class NoneTest {
 
+    // =========================
+    // Creation & Basic Properties
+    // =========================
+
     @Test
     void noneShouldReturnNone() {
         Option<String> option1 = Option.none();
@@ -27,6 +31,10 @@ public class NoneTest {
         assertThat(option).isInstanceOf(None.class);
         assertThat(option.isEmpty()).isTrue();
     }
+
+    // =========================
+    // Retrieval & Default Values
+    // =========================
 
     @Test
     void getShouldThrowExceptionForNone() {
@@ -53,6 +61,16 @@ public class NoneTest {
     }
 
     @Test
+    void orElseThrowWithoutSupplierShouldThrowExceptionForNone() {
+        Option<Integer> none = Option.none();
+        assertThrows(UnsupportedOperationException.class, none::orElseThrow);
+    }
+
+    // =========================
+    // Transformation Methods
+    // =========================
+
+    @Test
     void mapShouldReturnNoneForNone() {
         Option<Integer> none = Option.none();
         assertEquals(Option.none(), none.map(x -> x * 2));
@@ -72,6 +90,10 @@ public class NoneTest {
         assertEquals(0, result[0]);
     }
 
+    // =========================
+    // Equality & Identity
+    // =========================
+
     @Test
     void noneInstancesShouldAlwaysBeEqual() {
         Option<Integer> none1 = Option.none();
@@ -89,11 +111,9 @@ public class NoneTest {
         assertThat(some).isNotEqualTo(none);
     }
 
-    @Test
-    void orElseThrowWithoutSupplierShouldThrowExceptionForNone() {
-        Option<Integer> none = Option.none();
-        assertThrows(UnsupportedOperationException.class, none::orElseThrow);
-    }
+    // =========================
+    // Collection & Conversion
+    // =========================
 
     @Test
     void toOptionalShouldConvertNoneCorrectly() {
@@ -119,12 +139,15 @@ public class NoneTest {
         assertThat(none.toList()).isEmpty();
     }
 
-
     @Test
     void toStreamShouldReturnEmptyStreamForNone() {
         Option<Integer> none = Option.none();
         assertThat(none.toStream().count()).isEqualTo(0);
     }
+
+    // =========================
+    // Either Conversion & Exception Handling
+    // =========================
 
     @Test
     void toEitherShouldReturnLeftValueForNone() {
@@ -144,6 +167,10 @@ public class NoneTest {
         assertThrows(NullPointerException.class, () -> none.toEither(() -> null));
     }
 
+    // =========================
+    // Serialization & Singleton
+    // =========================
+
     @Test
     @SuppressWarnings("unchecked")
     void serializationShouldPreserveSingletonProperty() throws IOException, ClassNotFoundException {
@@ -161,29 +188,26 @@ public class NoneTest {
         assertThat(deserializedNone).isSameAs(none);
     }
 
+    // =========================
+    // Fold Behavior
+    // =========================
+
     @Test
     void foldShouldReturnIfNoneSupplierValueForNone() {
         Option<Integer> none = Option.none();
-
         String result = none.fold(() -> "Default Value", val -> "Value: " + val);
-
         assertThat(result).isEqualTo("Default Value");
     }
 
     @Test
     void foldShouldThrowExceptionIfNoneSupplierIsNull() {
         Option<Integer> none = Option.none();
-
         assertThrows(NullPointerException.class, () -> none.fold(null, val -> "Value: " + val));
     }
 
     @Test
     void foldShouldThrowExceptionIfPresentFunctionIsNull() {
         Option<Integer> none = Option.none();
-
         assertThrows(NullPointerException.class, () -> none.fold(() -> "Default Value", null));
     }
-
-
 }
-
