@@ -24,6 +24,9 @@ public class SimdArrayOps {
    */
   public float[] elementwiseOperation(float[] arr1, float[] arr2,
       VectorOperators.Binary op) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     int start = 0;
     int end = arr1.length;
     float[] result = new float[arr1.length];
@@ -75,6 +78,9 @@ public class SimdArrayOps {
    * @return the dot product of the two float arrays
    */
   public float dotTwoVectorArrays(float[] arr1, float[] arr2) {
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("Input arrays must have the same length");
+    }
     int end = arr1.length;
     int start = 0;
     return computeDotSegment(arr1, arr2, start, end);
