@@ -28,6 +28,16 @@ public class Redacted implements CharSequence {
         return new Redacted(value);
     }
 
+    /**
+     * Method for retrieving the original value.
+     *
+     * @return Saved {@code CharSequence}.
+     * @throws IllegalStateException if value has been wiped.
+     */
+    public CharSequence getValue() {
+        return isWiped ? "<wiped>" : value;
+    }
+
     @Override
     public int length() {
         return 0;

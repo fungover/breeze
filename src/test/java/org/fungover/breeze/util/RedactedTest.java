@@ -9,6 +9,7 @@ class RedactedTest {
     @Test
     void getValue_should_return_actual_value() {
         Redacted valueToBeSaved = Redacted.make("Secret");
+        assertEquals("Secret",valueToBeSaved.getValue());
     }
 
 }
