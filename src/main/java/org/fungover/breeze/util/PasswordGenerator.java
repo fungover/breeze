@@ -77,4 +77,87 @@ public class PasswordGenerator {
         Collections.shuffle(passwordChars);
         return passwordChars.stream().map(String::valueOf).collect(Collectors.joining());
     }
+
+    /**
+     * Generates multiple passwords.
+     *
+     * @param count Number of passwords to generate.
+     * @return List of generated passwords.
+     */
+    public List<String> generateMultiple(int count) {
+        List<String> passwords = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            passwords.add(generate());
+        }
+        return passwords;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private int length = 12;
+        private boolean includeUppercase = true;
+        private boolean includeLowercase = true;
+        private boolean includeNumbers = true;
+        private boolean includeSymbols = true;
+        private boolean excludeAmbiguous = false;
+        private int minUppercase = 0;
+        private int minNumbers = 0;
+        private int minSymbols = 0;
+
+        public Builder length(int length) {
+            this.length = length;
+            return this;
+        }
+
+        public Builder includeUppercase() {
+            this.includeUppercase = true;
+            return this;
+        }
+
+        public Builder includeLowercase() {
+            this.includeLowercase = true;
+            return this;
+        }
+
+        public Builder includeNumbers() {
+            this.includeNumbers = true;
+            return this;
+        }
+
+        public Builder includeSymbols() {
+            this.includeSymbols = true;
+            return this;
+        }
+
+        public Builder excludeAmbiguous() {
+            this.excludeAmbiguous = true;
+            return this;
+        }
+
+        public Builder minUppercase(int count) {
+            this.minUppercase = count;
+            return this;
+        }
+
+        public Builder minNumbers(int count) {
+            this.minNumbers = count;
+            return this;
+        }
+
+        public Builder minSymbols(int count) {
+            this.minSymbols = count;
+            return this;
+        }
+
+        public Builder includeAll() {
+            return this.includeUppercase().includeLowercase().includeNumbers().includeSymbols();
+        }
+
+        public PasswordGenerator build() {
+            return new PasswordGenerator(this);
+        }
+    }
 }
