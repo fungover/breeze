@@ -160,4 +160,20 @@ public class PasswordGenerator {
             return new PasswordGenerator(this);
         }
     }
+
+    /**
+     * Estimates password strength based on length and character diversity.
+     *
+     * @param password The password to analyze.
+     * @return Strength score from 1 (weak) to 5 (very strong).
+     */
+    public static int estimateStrength(String password) {
+        int score = 1;
+        if (password.length() >= 8) score++;
+        if (password.length() >= 12) score++;
+        if (password.chars().anyMatch(Character::isUpperCase)) score++;
+        if (password.chars().anyMatch(Character::isDigit)) score++;
+        if (password.chars().anyMatch(ch -> SYMBOLS.indexOf(ch) >= 0)) score++;
+        return score;
+    }
 }
