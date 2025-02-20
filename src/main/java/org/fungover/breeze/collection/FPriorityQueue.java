@@ -31,7 +31,7 @@ public final class FPriorityQueue<T>{
      * @param heap The heap to be used for this priority queue.
      */
     private FPriorityQueue(List<Node<T>> heap) {
-        this.heap = heap;
+        this.heap = List.copyOf(heap);
     }
 
     /**
@@ -50,6 +50,36 @@ public final class FPriorityQueue<T>{
         return new FPriorityQueue<>(newHeap);
     }
 
+    public FPriorityQueue<T> dequeue() {
+        if(heap.isEmpty()) return this;
+        List<Node<T>> newHeap = new ArrayList<>(heap);
+        Collections.swap(newHeap, 0, heap.size() - 1);
+        newHeap.remove(newHeap.size() - 1);
+        return new FPriorityQueue<>(heapifyDown(newHeap, 0));
+    }
+
+    private List<Node<T>> heapifyDown(List<Node<T>> heap, int index) {
+        int size = heap.size();
+        while (true){
+            int left = 2 * index + 1;
+            int right = 2 * index + 2;
+            int smallest = index;
+
+            if(left<size && heap.get(left).priority > heap.get(smallest).priority){
+                smallest = left;
+            }
+            if(right<size && heap.get(right).priority > heap.get(smallest).priority){
+                smallest = right;
+            }
+            if(smallest == index)
+                break;
+
+            Collections.swap(heap, index, smallest);
+            index = smallest;
+        }
+        return heap;
+    }
+
     /**
      * Restores the heap property by moving the element at the given index up the heap.
      * This is done by repeatedly swapping the element with its parent until the heap property is satisfied.
@@ -60,7 +90,7 @@ public final class FPriorityQueue<T>{
      * @param index The index of the newly added element that may violate the heap property.
      */
     private void heapifyUp(List<Node<T>> heap, int index) {
-        while (index>0) {
+        while (index > 0) {
             int parentIndex = (index - 1) / 2;
             if (heap.get(index).priority >= heap.get(parentIndex).priority) {
                 break;
@@ -69,6 +99,10 @@ public final class FPriorityQueue<T>{
             index = parentIndex;
         }
     }
+
+
+
+
 
 
     /**
@@ -98,5 +132,6 @@ public final class FPriorityQueue<T>{
             this.priority = priority;
         }
     }
+
 
 }
