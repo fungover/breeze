@@ -30,6 +30,9 @@ public class VersionTest {
         assertThrows(IllegalArgumentException.class, () -> new Version("invalid"));
         assertThrows(IllegalArgumentException.class, () -> new Version("1.2"));
         assertThrows(IllegalArgumentException.class, () -> new Version("1.2.3.4"));
+        assertThrows(IllegalArgumentException.class, () -> new Version("-1.2.3"));
+        assertThrows(IllegalArgumentException.class, () -> new Version("1.-2.3"));
+        assertThrows(IllegalArgumentException.class, () -> new Version("1.2.-3"));
     }
 
     @Test
