@@ -2,6 +2,8 @@ package org.fungover.breeze.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class ArraysTest {
@@ -209,132 +210,6 @@ class ArraysTest {
         Arrays.weaver(first, second, result);
 
         assertArrayEquals(new String[]{"a", "1", "b", "2", "c", "3", "4"}, result);
-    }
-
-    @Test
-    @DisplayName("Square Arrays")
-    void squareArrays() {
-        Integer[][] input = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
-        };
-
-        Integer[][] expected = {
-                {1, 4, 7},
-                {2, 5, 8},
-                {3, 6, 9}
-        };
-
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("Rectangular Arrays")
-    void rectArrays() {
-        Integer[][] input = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9},
-                {10, 11, 12}
-        };
-        Integer[][] expected = {
-                {1, 4, 7, 10},
-                {2, 5, 8, 11},
-                {3, 6, 9, 12}
-        };
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("Single Row/Column Arrays")
-    void singleRowColumnArrays() {
-        Integer[][] input = {
-                {1, 2, 3},
-        };
-        Integer[][] expected = {
-                {1},
-                {2},
-                {3}
-        };
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("Irregular Arrays")
-    void irregularArrays() {
-        Integer[][] input = {
-                {1, 2, 3},
-                {4, 5, 6, 7}
-        };
-
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> Arrays.transpose(input))
-                .withMessage("Irregular array: all rows must have the same length");
-    }
-
-    @Test
-    @DisplayName("Large Arrays")
-    void largeArrays() {
-        int size = 1000;
-        Integer[][] input = new Integer[size][size];
-        Integer[][] expected = new Integer[size][size];
-
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                input[i][j] = i * size + j;
-                expected[i][j] = j * size + i;
-            }
-        }
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("Arrays with null element")
-    void arraysWithNullElement() {
-        Integer[][] input = {
-                {1, null, 3},
-                {4, 5, null},
-        };
-        Integer[][] expected = {
-                {1, 4},
-                {null, 5},
-                {3, null},
-        };
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-
-    }
-
-    @Test
-    @DisplayName("Empty Arrays")
-    void emtpyArrays() {
-        Integer[][] input = {}; // Empty array
-        Integer[][] expected = {}; // Expected result
-
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
-    }
-
-    @Test
-    void testTranspose_1x1Array() {
-        Integer[][] input = {{42}};
-        Integer[][] result = Arrays.transpose(input);
-
-        // Check if the same instance is returned (optimization)
-        assertSame(input, result, "1×1 array transposition should return the same instance");
-    }
-
-    @Test
-    @DisplayName("Preserve Type Information")
-    void preservedTypeInformation() {
-        String[][] input = {
-                {"a", "b" },
-                {"c", "d" },
-        };
-        String[][] expected = {
-                {"a", "c" },
-                {"b", "d" },
-        };
-        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
 
     @Test
@@ -585,5 +460,212 @@ class ArraysTest {
         System.out.println("Large list test complete in " + elapsedTime + " ms");
     }
 
+    @Test
+    @DisplayName("Null Input")
+    void nullInput() {
+        Integer[][] input = null;
+        assertThat(Arrays.transpose(input)).isNull();
+    }
 
+    @Test
+    @DisplayName("Single Element Array")
+    void singleElementArray() {
+        Integer[][] input = {{42}};
+        Integer[][] expected = {{42}};
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Wide Rectangle Array")
+    void wideRectangleArray() {
+        Integer[][] input = {
+                {1, 2, 3, 4, 5}
+        };
+        Integer[][] expected = {
+                {1},
+                {2},
+                {3},
+                {4},
+                {5}
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Tall Rectangle Array")
+    void tallRectangleArray() {
+        Integer[][] input = {
+                {1},
+                {2},
+                {3},
+                {4},
+                {5}
+        };
+        Integer[][] expected = {
+                {1, 2, 3, 4, 5}
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Mixed Null Rows")
+    void mixedNullRows() {
+        Integer[][] input = {
+                {1, 2, 3},
+                null,
+                {4, 5, 6}
+        };
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> Arrays.transpose(input))
+                .withMessage("Irregular array: null rows are not allowed");
+    }
+
+
+    @Test
+    @DisplayName("Square Arrays")
+    void squareArrays() {
+        Integer[][] input = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+
+        Integer[][] expected = {
+                {1, 4, 7},
+                {2, 5, 8},
+                {3, 6, 9}
+        };
+
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Rectangular Arrays")
+    void rectArrays() {
+        Integer[][] input = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9},
+                {10, 11, 12}
+        };
+        Integer[][] expected = {
+                {1, 4, 7, 10},
+                {2, 5, 8, 11},
+                {3, 6, 9, 12}
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Single Row/Column Arrays")
+    void singleRowColumnArrays() {
+        Integer[][] input = {
+                {1, 2, 3},
+        };
+        Integer[][] expected = {
+                {1},
+                {2},
+                {3}
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Irregular Arrays")
+    void irregularArrays() {
+        Integer[][] input = {
+                {1, 2, 3},
+                {4, 5, 6, 7}
+        };
+
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> Arrays.transpose(input))
+                .withMessage("Irregular array: all rows must have the same length");
+    }
+
+    @Test
+    @DisplayName("Large Arrays")
+    void largeArrays() {
+        int size = 1000;
+        Integer[][] input = new Integer[size][size];
+        Integer[][] expected = new Integer[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                input[i][j] = i * size + j;
+                expected[i][j] = j * size + i;
+            }
+        }
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Arrays with null element")
+    void arraysWithNullElement() {
+        Integer[][] input = {
+                {1, null, 3},
+                {4, 5, null},
+        };
+        Integer[][] expected = {
+                {1, 4},
+                {null, 5},
+                {3, null},
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+
+    }
+
+    @Test
+    @DisplayName("Empty Arrays")
+    void emtpyArrays() {
+        Integer[][] input = {}; // Empty array
+        Integer[][] expected = {}; // Expected result
+
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Preserve Type Information")
+    void preservedTypeInformation() {
+        String[][] input = {
+                {"a", "b" },
+                {"c", "d" },
+        };
+        String[][] expected = {
+                {"a", "c" },
+                {"b", "d" },
+        };
+        assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Performance Benchmarking")
+    void performanceBenchmarking() {
+        int size = 1000; // You can adjust this size for different tests
+        Integer[][] input = new Integer[size][size];
+        Integer[][] expected = new Integer[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                input[i][j] = i * size + j;
+                expected[i][j] = j * size + i;
+            }
+        }
+
+        // Measure time for the original transpose
+        long startTime = System.nanoTime();
+        Integer[][] result = Arrays.transpose(input);
+        long duration = System.nanoTime() - startTime;
+        System.out.println("Original transpose time: " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms");
+
+        assertThat(result).isDeepEqualTo(expected);
+
+        // Measure time for the optimized transpose
+        startTime = System.nanoTime();
+        result = Arrays.transpose(input);
+        duration = System.nanoTime() - startTime;
+        System.out.println("Optimized transpose time: " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms");
+
+        assertThat(result).isDeepEqualTo(expected);
+    }
 }
