@@ -168,11 +168,13 @@ class SQLTest {
     String likeStart = SQL.select().allColumns().from("users").where().column("name").like("John%").build();
     String likeEnd = SQL.select().allColumns().from("users").where().column("name").like("%Doe").build();
     String likeMiddle = SQL.select().allColumns().from("users").where().column("name").like("%mid%").build();
+    String likeInjection = SQL.select().allColumns().from("users").where().column("name").like("'; DROP TABLE users; --").build();
 
     assertAll(
             () -> assertThat(likeStart).isEqualTo("SELECT * FROM users WHERE name LIKE 'John%'"),
             () -> assertThat(likeEnd).isEqualTo("SELECT * FROM users WHERE name LIKE '%Doe'"),
-            () -> assertThat(likeMiddle).isEqualTo("SELECT * FROM users WHERE name LIKE '%mid%'")
+            () -> assertThat(likeMiddle).isEqualTo("SELECT * FROM users WHERE name LIKE '%mid%'"),
+            () -> assertThat(likeInjection).isEqualTo("SELECT * FROM users WHERE name LIKE '''; DROP TABLE users; --'")
     );
   }
 
