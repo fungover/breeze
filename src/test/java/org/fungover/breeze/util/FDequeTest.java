@@ -88,4 +88,30 @@ class FDequeTest {
         deque = deque.dequeBack();
         assertThat(deque.isEmpty()).isTrue();
     }
+
+    @Test
+    void testMultipleEnqueuesFront() {
+        FDeque<String> deque = FDeque.create();
+        deque = deque.enqueFront("A").enqueFront("C");
+        assertThat(deque.peekFront()).isEqualTo("C");
+        assertThat(deque.peekBack()).isEqualTo("A");
+    }
+
+    @Test
+    void testMultipleEnqueuesBack() {
+        FDeque<String> deque = FDeque.create();
+        deque = deque.enqueBack("A").enqueBack("B");
+        assertThat(deque.peekFront()).isEqualTo("A");
+        assertThat(deque.peekBack()).isEqualTo("B");
+    }
+
+    @Test
+    void testMixedOperations() {
+        FDeque<String> deque = FDeque.create();
+        deque = deque.enqueFront("A")
+                .enqueBack("B")
+                .dequeFront()
+                .dequeBack();
+        assertThat(deque.isEmpty()).isTrue();
+    }
 }
