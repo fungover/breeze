@@ -3,6 +3,8 @@ package collection;
 import org.fungover.breeze.collection.FPriorityQueue;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,5 +74,22 @@ class FPriorityQueueTest {
         queue = queue.dequeue();
         assertEquals("Item2", queue.peek(), "After removing the highest priority element, the second highest priority should be at the top");
 
+    }
+    @Test
+    void testHeapifyDownWithMultipleElements(){
+        List<FPriorityQueue.Node<String>> heap = new ArrayList<>();
+
+        heap.add(new FPriorityQueue.Node<>("C", 3)); //Root
+        heap.add(new FPriorityQueue.Node<>("A", 1)); //Left child
+        heap.add(new FPriorityQueue.Node<>("B", 2)); // Right child
+
+        List<FPriorityQueue.Node<String>> newHeap = FPriorityQueue.heapifyDown(heap,0);
+
+        assertEquals("A", newHeap.get(0).element);
+        assertEquals(1, newHeap.get(0).priority);
+        assertEquals("C", newHeap.get(1).element);
+        assertEquals(3, newHeap.get(1).priority );
+        assertEquals("B", newHeap.get(2).element);
+        assertEquals(2, newHeap.get(2).priority );
     }
 }

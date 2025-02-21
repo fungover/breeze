@@ -74,7 +74,7 @@ public final class FPriorityQueue<T>{
         return heap.size();
     }
 
-    private static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
+    public static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
         if(index>= originalHeap.size()) return originalHeap;
 
         List<Node<T>> heap = new ArrayList<>(originalHeap);
@@ -127,15 +127,15 @@ public final class FPriorityQueue<T>{
      ** @param <T> The type of element stored in the node.
      *
      */
-    private static class Node<T> {
+    public static class Node<T> {
         /**
          * The element contained in the node.
          */
-        final T element;
+        public final T element;
         /**
          * The priority of the element (lower value indicates higher priority).
          */
-        final int priority;
+        public final int priority;
 
         /**
          * Constructs a new node with the given element and priority.
@@ -143,7 +143,7 @@ public final class FPriorityQueue<T>{
          * @param element  The element to be stored in the node.
          * @param priority The priority associated with the element.
          */
-        Node(T element, int priority) {
+        public Node(T element, int priority) {
             this.element = element;
             this.priority = priority;
         }
