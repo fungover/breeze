@@ -83,4 +83,24 @@ class OptionTryIntegrationTest {
         assertThat(result.get()).isSameAs(value);
     }
 
+    @Test
+    void noneToTryWithThrowingSupplierShouldReturnFailure() {
+        Option<Integer> none = Option.none();
+
+        assertThatThrownBy(() -> none.toTry(() -> {
+            throw new RuntimeException("Supplier failed");
+        }).get()).isInstanceOf(RuntimeException.class)
+                .hasMessage("Supplier failed");
+    }
+
+    @Test
+    void noneToTryShouldWrapCheckedExceptionCorrectly() {
+        Option<Integer> none = Option.none();
+        Try<Integer> result = none.toTry(() -> new Exception("Checked Exception"));
+
+        assertThat(result).isInstanceOf(Try.Failure.class);
+        assertThatThrownBy(result::get)
+                .isInstanceOf(Exception.class)
+                .hasMessage("Checked Exception");
+    }
 }
