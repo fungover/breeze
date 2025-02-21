@@ -253,6 +253,109 @@ class Tuple3Test {
                     () -> assertThat(list.get(2)).isEqualTo(o3)
             );
         }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple3Test#validArgumentsForCreationOfTuple3")
+        @DisplayName("Call to append should return a new Tuple4 with specified E element as forth element")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable>
+        void callToAppendShouldReturnATuple4(T1 o1, T2 o2, T3 o3) {
+
+            var element = "NEW ELEMENT";
+            var tuple3 = Tuple3.of(o1, o2, o3);
+            var tuple4 = tuple3.append(element);
+
+            assertAll(
+                    () -> assertThat(tuple4.first()).isEqualTo(o1),
+                    () -> assertThat(tuple4.second()).isEqualTo(o2),
+                    () -> assertThat(tuple4.third()).isEqualTo(o3),
+                    () -> assertThat(tuple4.fourth()).isEqualTo(element)
+            );
+        }
+
+        @Test
+        @DisplayName("Call to append should throw IllegalArgumentException for null argument")
+        void callToAppendShouldThrowIllegalArgumentExceptionForNullArgument() {
+
+            var tuple = Tuple3.of(1, "two", 3);
+
+            assertThatThrownBy(() -> tuple.append(null))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Cannot append a null element");
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple3Test#validArgumentsForCreationOfTuple3")
+        @DisplayName("Call to prepend should return a new Tuple4 with specified E element as first element")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable>
+        void callToPrependShouldReturnATuple4(T1 o1, T2 o2, T3 o3) {
+
+            var element = "NEW ELEMENT";
+            var tuple3 = Tuple3.of(o1, o2, o3);
+            var tuple4 = tuple3.prepend(element);
+
+            assertAll(
+                    () -> assertThat(tuple4.first()).isEqualTo(element),
+                    () -> assertThat(tuple4.second()).isEqualTo(o1),
+                    () -> assertThat(tuple4.third()).isEqualTo(o2),
+                    () -> assertThat(tuple4.fourth()).isEqualTo(o3)
+            );
+        }
+
+        @Test
+        @DisplayName("Call to prepend should throw IllegalArgumentException for null argument")
+        void callToPrependShouldThrowIllegalArgumentExceptionForNullArgument() {
+
+            var tuple = Tuple3.of(1, "two", 3);
+
+            assertThatThrownBy(() -> tuple.prepend(null))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Cannot prepend a null element");
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple3Test#validArgumentsForCreationOfTuple3")
+        @DisplayName("Call to dropFirst should return a new Tuple2 with this.second as first and this.third as second.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable>
+        void callToDropFirstShouldReturnATuple2(T1 o1, T2 o2, T3 o3) {
+
+            var tuple3 = Tuple3.of(o1, o2, o3);
+            var tuple2 = tuple3.dropFirst();
+
+            assertAll(
+                    () -> assertThat(tuple2.first()).isEqualTo(o2),
+                    () -> assertThat(tuple2.second()).isEqualTo(o3)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple3Test#validArgumentsForCreationOfTuple3")
+        @DisplayName("Call to dropSecond should return a new Tuple2 with this.first as first and this.third as second.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable>
+        void callToDropSecondShouldReturnATuple2(T1 o1, T2 o2, T3 o3) {
+
+            var tuple3 = Tuple3.of(o1, o2, o3);
+            var tuple2 = tuple3.dropSecond();
+
+            assertAll(
+                    () -> assertThat(tuple2.first()).isEqualTo(o1),
+                    () -> assertThat(tuple2.second()).isEqualTo(o3)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple3Test#validArgumentsForCreationOfTuple3")
+        @DisplayName("Call to dropThird should return a new Tuple2 with this.first as first and this.second as second.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable>
+        void callToDropThirdShouldReturnATuple2(T1 o1, T2 o2, T3 o3) {
+
+            var tuple3 = Tuple3.of(o1, o2, o3);
+            var tuple2 = tuple3.dropThird();
+
+            assertAll(
+                    () -> assertThat(tuple2.first()).isEqualTo(o1),
+                    () -> assertThat(tuple2.second()).isEqualTo(o2)
+            );
+        }
     }
 
     @Nested
@@ -326,6 +429,15 @@ class Tuple3Test {
             var tuple = Tuple3.of(1, 2, 3);
 
             assertThat(tuple.equals(null)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Call to equals should return true for comparison with itself")
+        void callToEqualsShouldReturnTrueForComparisonWithItself() {
+
+            var tuple = Tuple3.of(1, 2, 3);
+
+            assertThat(tuple.equals(tuple)).isTrue();
         }
 
         @Test
