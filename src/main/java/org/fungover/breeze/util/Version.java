@@ -25,8 +25,7 @@ import java.util.regex.Pattern;
  *   <li>-1.0.0 (negative component)</li>
  *   <li>1.0.0.0 (extra component)</li>
  * </ul>
- * </p>
- */
+  */
 public class Version implements Comparable<Version> {
     private final int major;
     private final int minor;
