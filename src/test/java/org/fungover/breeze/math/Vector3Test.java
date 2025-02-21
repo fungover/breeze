@@ -28,6 +28,51 @@ public class Vector3Test {
     }
 
     @Test
+    void testValidMultiplication() {
+        Vector3 vector = new Vector3(2.0f, -3.0f, 4.0f);
+        Vector3 result = vector.multiply(2.0f);
+
+        assertEquals(4.0f, result.x);
+        assertEquals(-6.0f, result.y);
+        assertEquals(8.0f, result.z);
+    }
+
+    @Test
+    void testMultiplicationWithZero() {
+        Vector3 vector = new Vector3(1.0f, 2.0f, 3.0f);
+        Vector3 result = vector.multiply(0.0f);
+
+        assertEquals(0.0f, result.x);
+        assertEquals(0.0f, result.y);
+        assertEquals(0.0f, result.z);
+    }
+
+    @Test
+    void testMultiplicationWithNegativeNumber() {
+        Vector3 vector = new Vector3(1.0f, -2.0f, 3.0f);
+        Vector3 result = vector.multiply(-2.0f);
+
+        assertEquals(-2.0f, result.x);
+        assertEquals(4.0f, result.y);
+        assertEquals(-6.0f, result.z);
+    }
+
+    @Test
+    void testMultiplicationWithNaNShouldThrowException() {
+        Vector3 vector = new Vector3(1.0f, 2.0f, 3.0f);
+        assertThrows(IllegalArgumentException.class, () -> vector.multiply(Float.NaN));
+    }
+
+    @Test
+    void testMultiplicationWithInfinityShouldThrowException() {
+        Vector3 vector = new Vector3(1.0f, 2.0f, 3.0f);
+
+        assertThrows(IllegalArgumentException.class, () -> vector.multiply(Float.POSITIVE_INFINITY));
+        assertThrows(IllegalArgumentException.class, () -> vector.multiply(Float.NEGATIVE_INFINITY));
+    }
+
+
+    @Test
     void testDotProduct() {
         Vector3 v1 = new Vector3(1, 2, 3);
         Vector3 v2 = new Vector3(4, 5, 6);
@@ -73,5 +118,61 @@ public class Vector3Test {
         assertEquals(0/Math.sqrt(3), normalized.getX(), 1e-6);
         assertEquals(0/Math.sqrt(3), normalized.getY(), 1e-6);
         assertEquals(0/Math.sqrt(3), normalized.getZ(), 1e-6);
+    }
+
+    @Test
+    void testValidVectorCreation() {
+        // Test with valid numbers
+        Vector3 vector = new Vector3(1.0f, 2.0f, 3.0f);
+        assertNotNull(vector); // Ensure object is created
+    }
+
+    @Test
+    void testNaNValuesShouldThrowException() {
+        // x is NaN
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(Float.NaN, 1.0f, 1.0f));
+        // y is NaN
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, Float.NaN, 1.0f));
+        // z is NaN
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, 1.0f, Float.NaN));
+    }
+
+    @Test
+    void testInfiniteValuesShouldThrowException() {
+        // x is infinite
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(Float.POSITIVE_INFINITY, 1.0f, 1.0f));
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(Float.NEGATIVE_INFINITY, 1.0f, 1.0f));
+
+        // y is infinite
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, Float.POSITIVE_INFINITY, 1.0f));
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, Float.NEGATIVE_INFINITY, 1.0f));
+
+        // z is infinite
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, 1.0f, Float.POSITIVE_INFINITY));
+        assertThrows(IllegalArgumentException.class, () -> new Vector3(1.0f, 1.0f, Float.NEGATIVE_INFINITY));
+    }
+
+    @Test
+    void testToStringWithWholeNumbers() {
+        Vector3 vector = new Vector3(1.0f, 2.0f, 3.0f);
+        assertEquals("Vector3(x: 1,000000, y: 2,000000, z: 3,000000)", vector.toString());
+    }
+
+    @Test
+    void testToStringWithDecimals() {
+        Vector3 vector = new Vector3(1.5f, 2.75f, 3.125f);
+        assertEquals("Vector3(x: 1,500000, y: 2,750000, z: 3,125000)", vector.toString());
+    }
+
+    @Test
+    void testToStringWithNegativeNumbers() {
+        Vector3 vector = new Vector3(-1.5f, -2.75f, -3.125f);
+        assertEquals("Vector3(x: -1,500000, y: -2,750000, z: -3,125000)", vector.toString());
+    }
+
+    @Test
+    void testToStringWithZero() {
+        Vector3 vector = new Vector3(0.0f, 0.0f, 0.0f);
+        assertEquals("Vector3(x: 0,000000, y: 0,000000, z: 0,000000)", vector.toString());
     }
 }

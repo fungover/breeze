@@ -1,5 +1,7 @@
 package org.fungover.breeze.math;
 
+import java.util.Locale;
+
 /**
  * Represents a 3D vector with floating-point components (x, y, z).
  * Provides common vector operations such as addition, subtraction, scaling, dot product, cross product, and normalization.
@@ -154,6 +156,6 @@ public class Vector3 {
      */
     @Override
     public String toString() {
-        return String.format("Vector3(x: %f, y: %f, z: %f)", x, y, z);
+        return String.format(Locale.FRANCE, "Vector3(x: %f, y: %f, z: %f)", x, y, z);
     }
 }
