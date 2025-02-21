@@ -88,9 +88,9 @@ class SQLTest {
   @Test
   @DisplayName("Handles empty table name gracefully")
   void handlesEmptyTableName() {
-    String emptyTable = SQL.select().columns("id").from("").build();
+    var emptyTable = SQL.select().columns("id").from("");
 
-    assertThat(emptyTable).isEqualTo("SELECT id FROM ");
+    assertThatThrownBy(emptyTable::build).isInstanceOf(IllegalArgumentException.class).hasMessage("Table name is required");
   }
 
   @Test

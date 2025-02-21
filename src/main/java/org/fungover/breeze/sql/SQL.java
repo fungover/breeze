@@ -383,6 +383,12 @@ public final class SQL {
   }
 
   private static class SQLBuilder implements SelectStep, SelectAfterStep, FromStep, WhereStep, ConditionStep, EqualStep, GroupByStep, OrderByStep, LimitStep, OffsetStep, JoinStep, HavingStep {
+    private void validateRequiredFields() {
+      if (table == null || table.isEmpty()) {
+        throw new IllegalArgumentException("Table name is required");
+      }
+    }
+
     private String table;
     private final List<String> columns = new ArrayList<>();
     private boolean distinct = false;
@@ -547,6 +553,7 @@ public final class SQL {
 
     @Override
     public String build() {
+      validateRequiredFields();
       StringBuilder output = new StringBuilder("SELECT ");
 
       if (distinct) {
