@@ -63,7 +63,7 @@ public final class FPriorityQueue<T>{
     public T peek(){
        if(isEmpty())
         throw new NoSuchElementException("Priority queue is empty");
-       return heap.getFirst().element;
+       return heap.get(0).element;
     }
 
     public boolean isEmpty(){
