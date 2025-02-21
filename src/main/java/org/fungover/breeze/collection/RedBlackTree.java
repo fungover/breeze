@@ -58,6 +58,17 @@ final class RedBlackTree<T extends Comparable<T>> {
         root = null;
     }
 
+    /**
+     * Constructor that copies the elements from another RedBlackTree into the current tree.
+     *
+     * @param anotherTree The tree whose elements should be copied into this one.
+     */
+    public RedBlackTree(RedBlackTree<T> anotherTree) {
+        this();
+        insertFromAnotherTree(anotherTree);
+    }
+
+
 
     /**
      * Inserts a new value into the Red-Black Tree. If the value already exists,
@@ -437,8 +448,12 @@ final class RedBlackTree<T extends Comparable<T>> {
         insert(node.getValue());
 
         // Recurse to insert left and right children
-        insertFromAnotherTreeHelper(node.left);
-        insertFromAnotherTreeHelper(node.right);
+        if (node.left != null) {
+            insertFromAnotherTreeHelper(node.left);
+        }
+        if (node.right != null) {
+            insertFromAnotherTreeHelper(node.right);
+        }
     }
 
 

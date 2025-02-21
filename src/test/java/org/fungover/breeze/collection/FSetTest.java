@@ -135,15 +135,17 @@ class FSetTest {
         @Test
         @DisplayName("FSet symmetric difference test")
         void fSetSymmetricDifferenceTest() {
-            FSet<Integer> fSet3 = new FSet<>();
-            FSet<Integer> fSet4 = new FSet<>();
-            fSet3 = fSet3.add(1).add(15).add(20).add(5);
-            fSet4= fSet4.add(1).add(15).add(20).add(9);
+            fSet = new FSet<>();
+            fSet2 = new FSet<>();
+            fSet = fSet.add(1).add(15).add(20).add(100);
+            fSet2 = fSet2.add(1).add(10).add(20);
+            var fSymmetricDifference = fSet.symmetricDifference(fSet2);
+            assertThat(fSymmetricDifference.size()).isEqualTo(3);
+            assertThat(fSymmetricDifference.contains(15)).isTrue();
+            assertThat(fSymmetricDifference.contains(20)).isFalse();
 
-            var fsymmdiff = fSet3.symmetricDifference(fSet4);
-            assertThat(fsymmdiff.size()).isEqualTo(2);
-            assertThat(fsymmdiff.contains(9)).isTrue();
-            assertThat(fsymmdiff.contains(5)).isTrue();
+
+
         }
 
 

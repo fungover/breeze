@@ -9,6 +9,7 @@ import java.util.Objects;
  * @param <T> The type of elements in the set, must be Comparable.
  */
 public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
+
     private final RedBlackTree<T> tree;
 
 
@@ -26,7 +27,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
      * @param tree The RedBlackTree to initialize the FSet with.
      */
     public FSet(RedBlackTree<T> tree) {
-        this.tree = tree;
+        this.tree = new RedBlackTree<>(tree);
     }
 
 
