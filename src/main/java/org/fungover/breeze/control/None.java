@@ -61,7 +61,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return {@code true} if {@code obj} is an instance of {@code None}, otherwise {@code false}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         return obj instanceof None; // Ensures correct behavior even if different instances exist due to serialization issues.
     }
 

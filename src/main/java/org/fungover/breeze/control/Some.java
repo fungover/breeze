@@ -13,7 +13,16 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
+/**
+ * Represents a non-empty {@code Option} containing a value.
+ * <p>
+ * This class is part of the {@code Option} type, which is used to express
+ * the presence or absence of a value in a safe and functional way. Unlike
+ * {@code None}, which signifies the absence of a value, {@code Some} always
+ * contains a non-null value.
+ *
+ * @param <T> the type of the value stored in this {@code Some}
+ */
 public final class Some<T extends Serializable> extends Option<T> {
 
     @Serial
@@ -21,22 +30,57 @@ public final class Some<T extends Serializable> extends Option<T> {
 
     private final T value;
 
+
+    /**
+     * Constructs a {@code Some} instance containing the given non-null value.
+     *
+     * @param value the non-null value to be wrapped in {@code Some}
+     * @throws NullPointerException if the provided value is {@code null}
+     * @implNote If a {@code null} value is passed, an exception is thrown.
+     *           To represent the absence of a value, use {@code None} instead.
+     */
     public Some(final T value) {
         this.value = Objects.requireNonNull(value, "Cannot create Some with null value. Use None instead.");
     }
 
+
+    /**
+     * Checks if this {@code Some} instance is equal to another object.
+     * <p>
+     * Two {@code Some} instances are considered equal if they contain
+     * the same value, as determined by {@link Objects#equals(Object, Object)}.
+     *
+     * @param obj the object to compare with this instance
+     * @return {@code true} if the given object is a {@code Some} instance containing
+     *         the same value; {@code false} otherwise
+     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Some<?> other)) return false;
-        return Objects.equals(value, other.value);
+    public boolean equals(final Object obj) {
+        if (this == obj) { return true; }
+        if (!(obj instanceof Some<?> other)) { return false; }
+        return Objects.equals(this.value, other.value);
     }
 
+    /**
+     * Computes the hash code for this {@code Some} instance.
+     * <p>
+     * The hash code is based on the contained value's hash code.
+     *
+     * @return the computed hash code for this instance
+     */
     @Override
     public int hashCode() {
         return Objects.hash(value);
     }
 
+    /**
+     * Returns a string representation of this {@code Some} instance.
+     * <p>
+     * The string format includes the stored value and its type.
+     *
+     * @return a string representation of this {@code Some} instance, including
+     *         the contained value and its class name
+     */
     @Override
     public String toString() {
         return "Some(value=" + value + ", type= " + value.getClass().getSimpleName() + ")";
@@ -70,7 +114,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @return the contained value.
      */
     @Override
-    public T getOrElse(T other) {
+    public T getOrElse(final T other) {
         return value;
     }
 
@@ -82,7 +126,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public T getOrElseGet(Supplier<? extends T> supplier) {
+    public T getOrElseGet(final Supplier<? extends T> supplier) {
         Objects.requireNonNull(supplier, "Supplier must not be null");
         return value;
     }
@@ -106,7 +150,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> T orElseThrow(final Supplier<? extends X> exceptionSupplier) throws X {
         Objects.requireNonNull(exceptionSupplier, "Exception supplier must not be null");
         return value;
     }
@@ -125,7 +169,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @throws NullPointerException if the mapping function is {@code null}
      */
     @Override
-    public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
+    public <U extends Serializable> Option<U> map(final Function<? super T, ? extends U> mapper) {
         U result = mapper.apply(value);
 
         return result == value ? (Option<U>) this : Option.ofNullable(result);
@@ -143,7 +187,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+    public <U extends Serializable> Option<U> flatMap(final Function<? super T, Option<U>> mapper) {
         return Objects.requireNonNullElse(mapper.apply(value), None.getInstance());
     }
 
@@ -156,7 +200,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public Option<T> filter(Predicate<? super T> predicate) {
+    public Option<T> filter(final Predicate<? super T> predicate) {
         return Option.ofNullable(predicate.test(value) ? value : null);
     }
 
@@ -167,7 +211,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public void forEach(Consumer<? super T> action) {
+    public void forEach(final Consumer<? super T> action) {
         Objects.requireNonNull(action, "Action must not be null");
         action.accept(value);
     }
@@ -180,7 +224,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public Option<T> peek(Consumer<? super T> action) {
+    public Option<T> peek(final Consumer<? super T> action) {
         Objects.requireNonNull(action, "Action must not be null");
         action.accept(value);
 
@@ -198,7 +242,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+    public <U> U fold(final Supplier<U> ifNone, final Function<? super T, ? extends U> ifPresent) {
         Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
         Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
         return ifPresent.apply(value);
@@ -242,7 +286,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @return an {@code Either.Right} containing the value.
      */
     @Override
-    public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
+    public <L extends Serializable> Either<L, T> toEither(final Supplier<? extends L> leftSupplier) {
         return Either.right(value);
     }
 
@@ -263,7 +307,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @return A {@code Try} instance containing the stored value as a success.
      */
     @Override
-    public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
+    public Try<T> toTry(final Supplier<Exception> exceptionSupplier) {
         return Try.success(value);
     }
 
