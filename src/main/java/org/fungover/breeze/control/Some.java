@@ -57,17 +57,17 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @return the contained value
      * @throws UnsupportedOperationException if called on None
      */
-
     @Override
     public T get() {
         return value;
     }
 
     /**
-     * @param other
-     * @return
+     * Returns the contained value since `Some<T>` always has a value.
+     *
+     * @param other ignored, as `Some<T>` does not use a fallback value.
+     * @return the contained value.
      */
-
     @Override
     public T getOrElse(T other) {
         return value;
@@ -167,9 +167,8 @@ public final class Some<T extends Serializable> extends Option<T> {
 
     @Override
     public void forEach(Consumer<? super T> action) {
-
+        Objects.requireNonNull(action, "Action must not be null");
         action.accept(value);
-
     }
 
     /**
