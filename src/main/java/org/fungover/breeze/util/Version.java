@@ -8,6 +8,24 @@ import java.util.regex.Pattern;
  * The Version class is a tool for interpreting, comparing, and managing version numbers.
  * It supports standard version numbers and versions with pre-release identifiers,
  * following semantic versioning principles.
+ * <p>
+ * The version format is MAJOR.MINOR.PATCH[-PRE-RELEASE], where each component is a non-negative integer,
+ * and the optional pre-release identifier is a string composed of alphanumeric characters, hyphens, and dots.
+ * </p>
+ * <p>
+ * Valid version examples:
+ * <ul>
+ *   <li>1.0.0</li>
+ *   <li>2.3.4-beta</li>
+ *   <li>5.6.7-alpha.1</li>
+ * </ul>
+ * Invalid version examples:
+ * <ul>
+ *   <li>1.0 (missing components)</li>
+ *   <li>-1.0.0 (negative component)</li>
+ *   <li>1.0.0.0 (extra component)</li>
+ * </ul>
+ * </p>
  */
 public class Version implements Comparable<Version> {
     private final int major;
@@ -57,7 +75,9 @@ public class Version implements Comparable<Version> {
      *
      * Pre-release versions have lower precedence than normal versions. When comparing pre-release
      * versions with the same major, minor, and patch versions, lexicographical ASCII comparison
-     * is used for the pre-release identifiers.
+     * is used for the pre-release identifiers. Note that this comparison treats identifiers as
+     * strings, which may not handle numeric identifiers as specified by SemVer (e.g., "alpha.11"
+     * is considered greater than "alpha.2" lexicographically, even though 11 > 2 numerically).
      * <p>
      * Examples:
      * <ul>
@@ -67,6 +87,8 @@ public class Version implements Comparable<Version> {
      *       returns negative value (alpha &lt; beta)</li>
      *   <li>{@code new Version("1.2.3").compareTo(new Version("1.2.3"))}
      *       returns 0 (equal)</li>
+     *   <li>{@code new Version("1.0.0-alpha.11").compareTo(new Version("1.0.0-alpha.2"))}
+     *       returns positive value ("alpha.11" is lexicographically greater than "alpha.2")</li>
      * </ul>
      *
      * @param other The other version to compare to
