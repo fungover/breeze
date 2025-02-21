@@ -19,7 +19,7 @@ public class Circle implements Shape {
      * @return
      */
     @Override
-    public Point2D.Double getCenter() {
+    public Point getCenter() {
         return null;
     }
 

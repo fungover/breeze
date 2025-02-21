@@ -1,7 +1,6 @@
 package org.fungover.breeze.geometric_shapes;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.Objects;
 
 public class Rectangle implements Shape {
@@ -77,9 +76,17 @@ public class Rectangle implements Shape {
         return new Rectangle(new Point(topLeft.x, topLeft.y), width, height);
     }
 
+//    @Override
+//    public Point2D.Double getCenter() {
+//        return new Point2D.Double(topLeft.getX() + width / 2, topLeft.getY() + height / 2);
+//    }
+
     @Override
-    public Point2D.Double getCenter() {
-        return new Point2D.Double(topLeft.getX() + width / 2, topLeft.getY() + height / 2);
+    public Point getCenter() {
+        // Return the center of the rectangle as an integer-based Point
+        int centerX = (int) (topLeft.getX() + width / 2);
+        int centerY = (int) (topLeft.getY() + height / 2);
+        return new Point(centerX, centerY);
     }
 
     @Override
