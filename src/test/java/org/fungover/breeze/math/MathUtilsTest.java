@@ -123,4 +123,18 @@ class MathUtilsTest {
             assertTrue(value >= -10.0f && value <= -5.0f, "Negative ranges should work");
         }
     }
+
+    @Test
+    void testSinCosTan() {
+        assertEquals(0.0, MathUtils.sin(0), 1e-6);
+        assertEquals(1.0, MathUtils.cos(0), 1e-6);
+        assertEquals(0.0, MathUtils.tan(0), 1e-6);
+    }
+
+    @Test
+    void testAtan2() {
+        assertEquals(Math.PI / 4, MathUtils.atan2(1, 1), 1e-6);
+    }
+
+
 }

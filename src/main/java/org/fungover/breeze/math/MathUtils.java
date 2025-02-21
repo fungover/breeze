@@ -27,11 +27,30 @@ public class MathUtils {
         return t * t * (3 - 2 * t);
     }
 
-
 //    Generates a random floating-point number in the range
     public static float randomFloat(float min, float max) {
         return min + RANDOM.nextFloat() * (max - min);
     }
+
+
+// Trigonometric functions sin, cos, tan, atan2
+    public static float sin(float angle) {
+        return (float) Math.sin(angle);
+    }
+
+    public static float cos(float angle) {
+        return (float) Math.cos(angle);
+    }
+
+    public static float tan(float angle) {
+        return (float) Math.tan(angle);
+    }
+
+    public static float atan2(float y, float x) {
+        return (float) Math.atan2(y, x);
+    }
+
+
 }
 
 
