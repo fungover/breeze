@@ -122,7 +122,6 @@ public final class FPriorityQueue<T>{
         }
     }
 
-
     /**
      * Inner class representing an element in the priority queue with its associated priority.
      * Each node contains an element and its priority value.
