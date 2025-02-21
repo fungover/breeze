@@ -301,6 +301,70 @@ class Tuple4Test {
                     () -> assertThat(list.get(3)).isEqualTo(o4)
             );
         }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple4Test#validArgumentsForCreationOfTuple4")
+        @DisplayName("Call to dropFirst should return a new Tuple3 with this.second as first, this.third as second and this.fourth as third.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable, T4 extends Comparable<? super T4> & Serializable>
+        void callToDropFirstShouldReturnATuple3(T1 o1, T2 o2, T3 o3, T4 o4) {
+
+            var tuple4 = Tuple4.of(o1, o2, o3, o4);
+            var tuple3 = tuple4.dropFirst();
+
+            assertAll(
+                    () -> assertThat(tuple3.first()).isEqualTo(o2),
+                    () -> assertThat(tuple3.second()).isEqualTo(o3),
+                    () -> assertThat(tuple3.third()).isEqualTo(o4)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple4Test#validArgumentsForCreationOfTuple4")
+        @DisplayName("Call to dropSecond should return a new Tuple3 with this.first as first, this.third as second and this.fourth as third.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable, T4 extends Comparable<? super T4> & Serializable>
+        void callToDropSecondShouldReturnATuple3(T1 o1, T2 o2, T3 o3, T4 o4) {
+
+            var tuple4 = Tuple4.of(o1, o2, o3, o4);
+            var tuple3 = tuple4.dropSecond();
+
+            assertAll(
+                    () -> assertThat(tuple3.first()).isEqualTo(o1),
+                    () -> assertThat(tuple3.second()).isEqualTo(o3),
+                    () -> assertThat(tuple3.third()).isEqualTo(o4)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple4Test#validArgumentsForCreationOfTuple4")
+        @DisplayName("Call to dropThird should return a new Tuple3 with this.first as first, this.second as second and this.fourth as third.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable, T4 extends Comparable<? super T4> & Serializable>
+        void callToDropThirdShouldReturnATuple3(T1 o1, T2 o2, T3 o3, T4 o4) {
+
+            var tuple4 = Tuple4.of(o1, o2, o3, o4);
+            var tuple3 = tuple4.dropThird();
+
+            assertAll(
+                    () -> assertThat(tuple3.first()).isEqualTo(o1),
+                    () -> assertThat(tuple3.second()).isEqualTo(o2),
+                    () -> assertThat(tuple3.third()).isEqualTo(o4)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("org.fungover.breeze.control.Tuple4Test#validArgumentsForCreationOfTuple4")
+        @DisplayName("Call to dropFourth should return a new Tuple3 with this.first as first, this.second as second and this.third as third.")
+        <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable, T4 extends Comparable<? super T4> & Serializable>
+        void callToDropFourthShouldReturnATuple3(T1 o1, T2 o2, T3 o3, T4 o4) {
+
+            var tuple4 = Tuple4.of(o1, o2, o3, o4);
+            var tuple3 = tuple4.dropFourth();
+
+            assertAll(
+                    () -> assertThat(tuple3.first()).isEqualTo(o1),
+                    () -> assertThat(tuple3.second()).isEqualTo(o2),
+                    () -> assertThat(tuple3.third()).isEqualTo(o3)
+            );
+        }
     }
 
     @Nested
@@ -378,6 +442,15 @@ class Tuple4Test {
             var tuple = Tuple4.of(1, 1, 1, 1);
 
             assertThat(tuple.equals(null)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Call to equals should return true for comparison with itself")
+        void callToEqualsShouldReturnTrueForComparisonWithItself() {
+
+            var tuple = Tuple4.of(1, 2, 3, 4);
+
+            assertThat(tuple.equals(tuple)).isTrue();
         }
 
         @Test
