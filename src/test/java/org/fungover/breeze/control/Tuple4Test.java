@@ -187,13 +187,13 @@ class Tuple4Test {
         <T1 extends Comparable<? super T1> & Serializable, T2 extends Comparable<? super T2> & Serializable, T3 extends Comparable<? super T3> & Serializable, T4 extends Comparable<? super T4> & Serializable>
         void callToMap4ShouldReturnNewTuple4WithFunctionResultAsFourth(T1 o1, T2 o2, T3 o3, T4 o4) {
 
-            var map3 = Tuple4.of(o1, o2, o3, o4).map4(e -> 1);
+            var map4 = Tuple4.of(o1, o2, o3, o4).map4(e -> 1);
 
             assertAll(
-                    () -> assertThat(map3.first()).isEqualTo(o1),
-                    () -> assertThat(map3.second()).isEqualTo(o2),
-                    () -> assertThat(map3.third()).isEqualTo(o3),
-                    () -> assertThat(map3.fourth()).isEqualTo(1)
+                    () -> assertThat(map4.first()).isEqualTo(o1),
+                    () -> assertThat(map4.second()).isEqualTo(o2),
+                    () -> assertThat(map4.third()).isEqualTo(o3),
+                    () -> assertThat(map4.fourth()).isEqualTo(1)
             );
         }
 

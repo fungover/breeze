@@ -15,7 +15,6 @@ import java.util.function.Function;
  * All fields are set as private and final.
  * Factory method of() to initialize new instance.
  * Methods that produce a change in any element returns a new instance.
- * Any call to methods in this class with a null object will result in a NullPointerException.
  *
  * @param <T1> class type of first element where class must implement serializable and class (or superclass) must implement comparable.
  * @param <T2> class type of second element where class must implement serializable and class (or superclass) must implement comparable.
@@ -120,7 +119,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
     /**
      * Returns the third element of this tuple
      *
-     * @return second
+     * @return third
      */
     public T3 third() {
         return third;
