@@ -1,3 +1,4 @@
+
 package org.fungover.breeze.control;
 
 import org.fungover.breeze.funclib.control.Either;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 /**
  * Represents a non-empty {@code Option} containing a value.
  * <p>
@@ -25,9 +27,17 @@ import java.util.stream.Stream;
  */
 public final class Some<T extends Serializable> extends Option<T> {
 
+    /**
+     * Serial version UID for ensuring serialization compatibility.
+     * This is required as {@code Some} implements {@code Serializable}.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The non-null value contained within this {@code Some} instance.
+     * This value is immutable and cannot be {@code null}.
+     */
     private final T value;
 
 
@@ -56,8 +66,12 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) { return true; }
-        if (!(obj instanceof Some<?> other)) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Some<?> other)) {
+            return false;
+        }
         return Objects.equals(this.value, other.value);
     }
 

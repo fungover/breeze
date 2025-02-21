@@ -1,3 +1,4 @@
+
 package org.fungover.breeze.control;
 
 import org.fungover.breeze.funclib.control.Either;
@@ -313,7 +314,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return The computed value from either {@code ifNone} or {@code ifPresent}.
      * @throws NullPointerException if {@code ifNone} or {@code ifPresent} is null.
      */
-    public abstract <U> U fold(final Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
+    public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
     /**
      * Creates an {@link Option} instance based on the given value.
@@ -324,7 +325,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @param value the value to wrap in an {@link Option}
      * @return a {@link Some} containing the value if non-null, otherwise {@link None}
      */
-    public static <T extends Serializable> Option<T> ofNullable(T value) {
+    public static <T extends Serializable> Option<T> ofNullable(final T value) {
         return value != null ? new Some<>(value) : None.getInstance();
     }
 
