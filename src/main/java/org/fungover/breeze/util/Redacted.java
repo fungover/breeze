@@ -1,12 +1,31 @@
 package org.fungover.breeze.util;
 
 import java.util.Objects;
-
+/**
+ * The {@code Redacted} class is used to securely store and manage sensitive information.
+ * It implements {@link CharSequence} to support polymorphism with {@link String},
+ * {@link StringBuilder}, {@link StringBuffer}, and other implementations.
+ * <p>
+ * The value stored in a {@code Redacted} instance can be redacted (displayed as {@code <redacted>})
+ * or wiped (displayed as {@code <wiped>}). Once wiped, the original value cannot be retrieved.
+ * </p>
+ * <p>
+ * Example usage:
+ * <pre>
+ * Redacted redacted = Redacted.make("MySecretPassword");
+ * System.out.println(redacted); // Output: {@code <redacted>}
+ * String originalValue = redacted.getValue(); // Retrieves the original value
+ * redacted.wipe();
+ * System.out.println(redacted); // Output: {@code <wiped>}
+ * redacted.getValue(); // Throws IllegalStateException
+ * </pre>
+ * </p>
+ */
 public class Redacted implements CharSequence {
     private final CharSequence value;
     private boolean isWiped;
-    private final String wiped = "<wiped>";
-    private final String redacted = "<redacted>";
+    private static final String wipedMarker = "<wiped>";
+    private static final String redactedMarker = "<redacted>";
 
     /**
      * Private Constructor
@@ -39,7 +58,7 @@ public class Redacted implements CharSequence {
      * @throws IllegalStateException if value has been wiped.
      */
     public CharSequence getValue() {
-        return isWiped ? wiped : value;
+        return isWiped ? wipedMarker : value;
     }
 
     /**
@@ -56,25 +75,38 @@ public class Redacted implements CharSequence {
      */
     @Override
     public String toString() {
-        return isWiped ? wiped : redacted;
+        return isWiped ? wipedMarker : redactedMarker;
     }
 
-    // CharSequence Implementation.
-    // Value is redacted or wiped and therefor should not return information about value.
+
+    /**
+     *
+     * @return Value is redacted or wiped and therefor does not return information about value.
+     */
     @Override
     public int length() {
         return 0;
     }
 
+    /**
+     *
+     * @return Value is redacted or wiped and therefor does not return information about value.
+     */
     @Override
     public char charAt(int index) {
         return 0;
     }
 
+    /**
+     *
+     * @return Value is redacted or wiped and therefor does not return information about value.
+     */
     @Override
     public CharSequence subSequence(int start, int end) {
-        return isWiped ? wiped : redacted;
+        return isWiped ? wipedMarker : redactedMarker;
     }
+
+
 
     // HashCode and equals
     @Override
