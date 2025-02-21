@@ -471,6 +471,9 @@ public final class SQL {
 
     @Override
     public ConditionStep between(int start, int end) {
+      if (start > end) {
+        throw new IllegalArgumentException("Start value must be less than or equal to end value");
+      }
       this.where += " BETWEEN " + start + " AND " + end;
       this.hasCondition = true;
       return this;
