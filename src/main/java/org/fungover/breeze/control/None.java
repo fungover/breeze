@@ -111,7 +111,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return The provided {@code other} value.
      */
     @Override
-    public T getOrElse(T other) {
+    public T getOrElse(final T other) {
         return other;
     }
 
@@ -122,7 +122,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return The computed default value.
      */
     @Override
-    public T getOrElseGet(Supplier<? extends T> supplier) {
+    public T getOrElseGet(final Supplier<? extends T> supplier) {
         Objects.requireNonNull(supplier, "Supplier must not be null");
         return supplier.get();
     }
@@ -146,7 +146,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @throws X the provided exception.
      */
     @Override
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> T orElseThrow(final Supplier<? extends X> exceptionSupplier) throws X {
         throw exceptionSupplier.get(); // Throw the provided exception
     }
 
@@ -158,7 +158,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return {@code None<U>}.
      */
     @Override
-    public <U extends Serializable> Option<U> map(Function<? super T, ? extends U> mapper) {
+    public <U extends Serializable> Option<U> map(final Function<? super T, ? extends U> mapper) {
         Objects.requireNonNull(mapper, "Mapper function cannot be null");
         return None.getInstance();
     }
@@ -172,7 +172,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return {@code None<U>}.
      */
     @Override
-    public <U extends Serializable> Option<U> flatMap(Function<? super T, Option<U>> mapper) {
+    public <U extends Serializable> Option<U> flatMap(final Function<? super T, Option<U>> mapper) {
         Objects.requireNonNull(mapper, "Mapper function cannot be null");
         return None.getInstance();
     }
@@ -184,7 +184,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return This {@code None} instance.
      */
     @Override
-    public Option<T> filter(Predicate<? super T> predicate) {
+    public Option<T> filter(final Predicate<? super T> predicate) {
         return this;
     }
 
@@ -194,7 +194,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @param action The action to perform (ignored).
      */
     @Override
-    public void forEach(Consumer<? super T> action) {
+    public void forEach(final Consumer<? super T> action) {
 
     }
 
@@ -205,7 +205,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return This {@code None} instance.
      */
     @Override
-    public Option<T> peek(Consumer<? super T> action) {
+    public Option<T> peek(final Consumer<? super T> action) {
         return this;
     }
 
@@ -218,7 +218,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @return The default value from {@code ifNone}.
      */
     @Override
-    public <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent) {
+    public <U> U fold(final Supplier<U> ifNone, final Function<? super T, ? extends U> ifPresent) {
 
         Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
         Objects.requireNonNull(ifPresent, "ifPresent supplier cannot be null");
@@ -269,7 +269,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * @throws NullPointerException if {@code leftSupplier} is null or if it returns null.
      */
     @Override
-    public <L extends Serializable> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
+    public <L extends Serializable> Either<L, T> toEither(final Supplier<? extends L> leftSupplier) {
         if (leftSupplier == null) {
             throw new NullPointerException("Left supplier must not be null");
         }
@@ -318,7 +318,7 @@ public final class None<T extends Serializable> extends Option<T> {
      *                          if {@code null} or returns {@code null}, a {@code NoSuchElementException} is used.
      * @return a {@code Try<T>} instance representing failure with the provided or default exception
      */
-    public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
+    public Try<T> toTry(final Supplier<Exception> exceptionSupplier) {
         if (exceptionSupplier == null) {
             return Try.failure(new NoSuchElementException("No value present"));
         }
