@@ -17,28 +17,19 @@ import java.util.stream.Stream;
 
 
 /**
- * Represents the absence of a value in the {@link Option} type.
- * <p>
- * This is a singleton class that represents an empty state, similar to {@code Optional.empty()} in Java.
- * Any operations performed on this instance will result in a no-op or return a default value.
- * </p>
+ * Represents an empty {@link Option} instance, indicating the absence of a value.
+ * This class is a singleton and is used to represent the "None" case in an optional value context.
  *
- * @param <T> The type of the non-existent value.
+ * @param <T> the type of the value that this {@code None} represents (though it holds no value).
  */
 public final class None<T extends Serializable> extends Option<T> {
 
 
-    /**
-     * Serial version UID for ensuring compatibility during serialization.
-     * This identifier helps to verify that the sender and receiver of a
-     * serialized object have compatible class definitions.
-     */
+
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Singleton instance of {@code None}.
-     */
+
     private static final None<?> INSTANCE = new None<>();
 
     /**
@@ -50,8 +41,8 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Returns the singleton instance of {@code None}.
      *
-     * @param <T> The type parameter.
-     * @return The singleton instance of {@code None}.
+     * @param <T> the type parameter for the {@code None} instance.
+     * @return the singleton instance of {@code None}.
      */
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> None<T> getInstance() {
@@ -59,12 +50,11 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Checks whether the given object is an instance of {@code None}.
-     * This ensures that all instances of {@code None} are considered equal,
-     * even if multiple instances exist due to serialization or other mechanisms.
+     * Compares this {@code None} instance with another object for equality.
+     * All instances of {@code None} are considered equal.
      *
-     * @param obj the object to compare with this instance
-     * @return {@code true} if {@code obj} is an instance of {@code None}, otherwise {@code false}
+     * @param obj the object to compare with.
+     * @return {@code true} if the object is an instance of {@code None}, otherwise {@code false}.
      */
     @Override
     public boolean equals(final Object obj) {
@@ -72,22 +62,20 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Returns a constant hash code for all instances of {@code None}.
-     * Since {@code None} represents a singleton-like concept, all instances
-     * share the same hash code to ensure consistent behavior in hash-based collections.
+     * Returns the hash code for this {@code None} instance.
+     * All instances of {@code None} have the same hash code.
      *
-     * @return the hash code value (always {@code 0})
+     * @return the hash code, which is always 0.
      */
     @Override
     public int hashCode() {
         return 0; // All instances of None have the same hash code since they are the same instance.
     }
 
-
     /**
      * Returns a string representation of this {@code None} instance.
      *
-     * @return the string {@code "None()"} to indicate the absence of a value.
+     * @return the string "None()".
      */
     @Override
     public String toString() {
@@ -95,9 +83,9 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Always returns {@code true} as this represents an empty Option.
+     * Indicates whether this {@code Option} is empty.
      *
-     * @return {@code true} since this is {@code None}.
+     * @return {@code true} since {@code None} represents an empty value.
      */
     @Override
     public boolean isEmpty() {
@@ -106,10 +94,10 @@ public final class None<T extends Serializable> extends Option<T> {
 
 
     /**
-     * Throws an exception since {@code None} does not contain a value.
+     * Throws an {@link UnsupportedOperationException} since {@code None} does not contain a value.
      *
-     * @return never returns a value.
-     * @throws UnsupportedOperationException always.
+     * @return never returns, always throws an exception.
+     * @throws UnsupportedOperationException always thrown when called.
      */
     @Override
     public T get() {
@@ -117,10 +105,10 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Returns the provided alternative value since {@code None} has no value.
+     * Returns the provided alternative value since {@code None} does not contain a value.
      *
-     * @param other The alternative value to return.
-     * @return The provided {@code other} value.
+     * @param other the alternative value to return.
+     * @return the provided alternative value.
      */
     @Override
     public T getOrElse(final T other) {
@@ -128,10 +116,11 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Returns a computed default value since {@code None} has no value.
+     * Returns the result of invoking the provided supplier since {@code None} does not contain a value.
      *
-     * @param supplier The supplier function that provides a default value.
-     * @return The computed default value.
+     * @param supplier the supplier to invoke.
+     * @return the result of the supplier.
+     * @throws NullPointerException if the supplier is {@code null}.
      */
     @Override
     public T getOrElseGet(final Supplier<? extends T> supplier) {
@@ -140,7 +129,7 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Returns {@code null} since {@code None} has no value.
+     * Returns {@code null} since {@code None} does not contain a value.
      *
      * @return {@code null}.
      */
@@ -151,11 +140,13 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Throws an exception provided by the supplier since {@code None} has no value.
+     * Throws the exception provided by the supplier since {@code None} does not contain a value.
      *
-     * @param <X>               The type of the exception to be thrown.
-     * @param exceptionSupplier The supplier function that provides the exception.
-     * @throws X the provided exception.
+     * @param <X> the type of the exception to throw.
+     * @param exceptionSupplier the supplier of the exception to throw.
+     * @return never returns, always throws an exception.
+     * @throws X the exception provided by the supplier.
+     * @throws NullPointerException if the exception supplier is {@code null}.
      */
     @Override
     public <X extends Throwable> T orElseThrow(final Supplier<? extends X> exceptionSupplier) throws X {
@@ -163,11 +154,12 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Returns {@code None} since there is no value to transform.
+     * Returns a {@code None} instance since mapping over an empty value results in no value.
      *
-     * @param <U>    The type of the would-be transformed value.
-     * @param mapper A function to apply (ignored).
-     * @return {@code None<U>}.
+     * @param mapper the mapping function (ignored).
+     * @param <U> the type of the mapped value.
+     * @return a {@code None} instance.
+     * @throws NullPointerException if the mapper is {@code null}.
      */
     @Override
     public <U extends Serializable> Option<U> map(final Function<? super T, ? extends U> mapper) {
@@ -177,11 +169,12 @@ public final class None<T extends Serializable> extends Option<T> {
 
 
     /**
-     * Returns {@code None} since there is no value to transform.
+     * Returns a {@code None} instance since flat-mapping over an empty value results in no value.
      *
-     * @param <U>    The type of the resulting Option.
-     * @param mapper A function that returns an {@code Option<U>} (ignored).
-     * @return {@code None<U>}.
+     * @param mapper the flat-mapping function (ignored).
+     * @param <U> the type of the mapped value.
+     * @return a {@code None} instance.
+     * @throws NullPointerException if the mapper is {@code null}.
      */
     @Override
     public <U extends Serializable> Option<U> flatMap(final Function<? super T, Option<U>> mapper) {
@@ -190,10 +183,10 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Always returns {@code None} since there is no value to filter.
+     * Returns this {@code None} instance since filtering an empty value results in no value.
      *
-     * @param predicate The condition to test (ignored).
-     * @return This {@code None} instance.
+     * @param predicate the predicate to apply (ignored).
+     * @return this {@code None} instance.
      */
     @Override
     public Option<T> filter(final Predicate<? super T> predicate) {
@@ -201,9 +194,9 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Does nothing since there is no value.
+     * Does nothing since {@code None} does not contain a value to consume.
      *
-     * @param action The action to perform (ignored).
+     * @param action the action to perform (ignored).
      */
     @Override
     public void forEach(final Consumer<? super T> action) {
@@ -211,10 +204,10 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Does nothing and returns this {@code None} instance.
+     * Returns this {@code None} instance since peeking into an empty value results in no value.
      *
-     * @param action The action to perform (ignored).
-     * @return This {@code None} instance.
+     * @param action the action to perform (ignored).
+     * @return this {@code None} instance.
      */
     @Override
     public Option<T> peek(final Consumer<? super T> action) {
@@ -222,12 +215,13 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Folds the Option, returning a default value since {@code None} contains no value.
+     * Returns the result of invoking the {@code ifNone} supplier since {@code None} does not contain a value.
      *
-     * @param <U>       The return type.
-     * @param ifNone    Supplier for the default value.
-     * @param ifPresent Function applied to the value if present (ignored).
-     * @return The default value from {@code ifNone}.
+     * @param ifNone the supplier to invoke if this is {@code None}.
+     * @param ifPresent the function to apply if this is {@code Some} (ignored).
+     * @param <U> the type of the result.
+     * @return the result of the {@code ifNone} supplier.
+     * @throws NullPointerException if either {@code ifNone} or {@code ifPresent} is {@code null}.
      */
     @Override
     public <U> U fold(final Supplier<U> ifNone, final Function<? super T, ? extends U> ifPresent) {
@@ -239,9 +233,9 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Converts this {@code None} to an empty {@link List}.
+     * Returns an empty list since {@code None} does not contain a value.
      *
-     * @return an empty list, as {@code None} contains no value.
+     * @return an empty list.
      */
     @Override
     public List<T> toList() {
@@ -249,9 +243,9 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Converts this {@code None} to an empty {@link Stream}.
+     * Returns an empty stream since {@code None} does not contain a value.
      *
-     * @return an empty stream, as {@code None} contains no value.
+     * @return an empty stream.
      */
     @Override
     public Stream<T> toStream() {
@@ -259,9 +253,9 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Converts this {@code None} to an empty {@link Optional}.
+     * Returns an empty {@link Optional} since {@code None} does not contain a value.
      *
-     * @return {@code Optional.empty()}, as {@code None} represents the absence of a value.
+     * @return an empty {@link Optional}.
      */
     @Override
     public Optional<T> toOptional() {
@@ -269,16 +263,12 @@ public final class None<T extends Serializable> extends Option<T> {
     }
 
     /**
-     * Converts this {@code None} into a left-biased {@link Either}.
-     * <p>
-     * Since {@code None} has no value, it calls the provided supplier to generate a left value.
-     * The supplier must not return {@code null}.
-     * </p>
+     * Returns a {@link Either} instance representing the left side since {@code None} does not contain a value.
      *
-     * @param leftSupplier a supplier providing the left value if this is {@code None}.
-     * @param <L>          the type of the left value, extending {@link Serializable}.
-     * @return an {@code Either.Left} containing the supplied value.
-     * @throws NullPointerException if {@code leftSupplier} is null or if it returns null.
+     * @param leftSupplier the supplier to provide the left value.
+     * @param <L> the type of the left value.
+     * @return a {@link Either} instance representing the left side.
+     * @throws NullPointerException if the left supplier is {@code null} or provides a {@code null} value.
      */
     @Override
     public <L extends Serializable> Either<L, T> toEither(final Supplier<? extends L> leftSupplier) {
@@ -293,26 +283,16 @@ public final class None<T extends Serializable> extends Option<T> {
         return Either.left(leftValue);
     }
 
-    /**
-     * Ensures that deserialization of {@code None} always returns the singleton instance.
-     * <p>
-     * This method is called automatically during deserialization.
-     * Instead of creating a new instance, it ensures that {@code Option.none()} is used,
-     * maintaining the singleton property of {@code None}.
-     *
-     * @return The singleton instance of {@code None}.
-     * @see java.io.Serializable
-     */
+
     @Serial
     private Object readResolve() {
         return INSTANCE; // Ensure deserialized None is the same singleton instance
     }
 
     /**
-     * Throws an {@link UnsupportedOperationException} when attempting to retrieve a value.
-     * This method should only be called on {@link Some<T>}, as {@link None<T>} does not contain a value.
+     * Throws an {@link UnsupportedOperationException} since {@code None} does not contain a value.
      *
-     * @throws UnsupportedOperationException always, since there is no value to retrieve.
+     * @throws UnsupportedOperationException always thrown when called.
      */
     @Override
     public void orElseThrow() {
@@ -321,14 +301,11 @@ public final class None<T extends Serializable> extends Option<T> {
 
 
     /**
-     * Converts this {@code None} instance into a {@code Try<T>} failure.
-     * If an exception supplier is provided, it is used to generate the failure exception.
-     * If the supplier is {@code null} or returns {@code null}, a {@link NoSuchElementException}
-     * with the message "No value present" is used as the failure.
+     * Returns a {@link Try} instance representing a failure since {@code None} does not contain a value.
      *
-     * @param exceptionSupplier a supplier providing the exception to be used for failure;
-     *                          if {@code null} or returns {@code null}, a {@code NoSuchElementException} is used.
-     * @return a {@code Try<T>} instance representing failure with the provided or default exception
+     * @param exceptionSupplier the supplier to provide the exception.
+     * @return a {@link Try} instance representing a failure.
+     * @throws NullPointerException if the exception supplier is {@code null}.
      */
     public Try<T> toTry(final Supplier<Exception> exceptionSupplier) {
         if (exceptionSupplier == null) {
