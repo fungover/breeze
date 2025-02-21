@@ -569,16 +569,50 @@ public final class SQL {
     public String build() {
       validateRequiredFields();
       StringBuilder output = new StringBuilder("SELECT ");
+      appendSelectClause(output);
+      appendFromClause(output);
+      appendJoinClause(output);
+      appendWhereClause(output);
+      appendGroupByClause(output);
+      appendHavingClause(output);
+      appendOrderByClause(output);
+      appendLimitClause(output);
+      appendOffsetClause(output);
 
-      if (distinct) {
-        output.append("DISTINCT ");
+      return output.toString();
+    }
+
+    private void appendOffsetClause(StringBuilder output) {
+      if (offset != null) {
+        output.append(" OFFSET ").append(offset);
       }
-      output.append(String.join(", ", columns)).append(" FROM ").append(table);
+    }
 
-      if (join != null) {
-        output.append(join);
+    private void appendLimitClause(StringBuilder output) {
+      if (limit != null) {
+        output.append(" LIMIT ").append(limit);
       }
+    }
 
+    private void appendOrderByClause(StringBuilder output) {
+      if (!orderBy.isEmpty()) {
+        output.append(" ORDER BY ").append(String.join(", ", orderBy));
+      }
+    }
+
+    private void appendHavingClause(StringBuilder output) {
+      if (having != null) {
+        output.append(" HAVING ").append(having);
+      }
+    }
+
+    private void appendGroupByClause(StringBuilder output) {
+      if (groupBy != null) {
+        output.append(" GROUP BY ").append(groupBy);
+      }
+    }
+
+    private void appendWhereClause(StringBuilder output) {
       if (where != null && !where.isEmpty()) {
         output.append(" WHERE ").append(where);
 
@@ -588,28 +622,24 @@ public final class SQL {
           output.delete(output.length() - where.length() - 7, output.length());
         }
       }
+    }
 
-      if (groupBy != null) {
-        output.append(" GROUP BY ").append(groupBy);
+    private void appendJoinClause(StringBuilder output) {
+      if (join != null) {
+        output.append(join);
+      }
+    }
+
+    private void appendFromClause(StringBuilder output) {
+      output.append(" FROM ").append(table);
+    }
+
+    private void appendSelectClause(StringBuilder output) {
+      if (distinct) {
+        output.append("DISTINCT ");
       }
 
-      if (having != null) {
-        output.append(" HAVING ").append(having);
-      }
-
-      if (!orderBy.isEmpty()) {
-        output.append(" ORDER BY ").append(String.join(", ", orderBy));
-      }
-
-      if (limit != null) {
-        output.append(" LIMIT ").append(limit);
-      }
-
-      if (offset != null) {
-        output.append(" OFFSET ").append(offset);
-      }
-
-      return output.toString();
+      output.append(String.join(", ", columns));
     }
   }
 }
