@@ -10,9 +10,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Locale;
 
+/**
+ * Utility class for formatting and converting sizes and rates.
+ * This class provides methods to format byte sizes and bit rates,
+ * convert between different size units, and parse size strings.
+ */
 public class SizeFormatter {
 
+    // Regex pattern to match size strings like "1.5GB", "1024KiB", etc.
+    private static final Pattern SIZE_PATTERN = Pattern.compile(
+            "^([-+]?(?:\\d{1,19}(?:\\.\\d{1,6})?|\\.\\d{1,6}))(\\s*)([a-zA-Z]+)$",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    // Private constructor to prevent instantiation of this utility class
+    private SizeFormatter() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
+    /**
+     * Formats a byte size into a human-readable string with appropriate units.
+     *
+     * @param bytes         the size in bytes
+     * @param useBinaryBase whether to use binary (KiB, MiB) or decimal (KB, MB) units
+     * @param decimalPlaces the number of decimal places to display
+     * @return a formatted string representing the size
+     */
     public static String autoFormat(long bytes, boolean useBinaryBase, int decimalPlaces) {
+        if (decimalPlaces < 0) {
+            throw new IllegalArgumentException(String.format("Decimal places must be non-negative: %d", decimalPlaces));
+        }
+
         List<SizeUnit> units = useBinaryBase ? getBinaryByteUnits() : getDecimalByteUnits();
         BigDecimal size = BigDecimal.valueOf(bytes);
 
@@ -25,33 +53,54 @@ public class SizeFormatter {
         return format(size, SizeUnit.BYTES, decimalPlaces);
     }
 
+    /**
+     * Formats a byte size into a human-readable string with default settings.
+     *
+     * @param bytes the size in bytes
+     * @return a formatted string representing the size
+     */
     public static String autoFormat(long bytes) {
         return autoFormat(bytes, false, 2);
     }
 
+    /**
+     * Converts a size from one unit to another.
+     *
+     * @param value     the size value to convert
+     * @param fromUnit the unit of the input value
+     * @param toUnit   the unit to convert to
+     * @return the converted size value
+     */
     public static double convert(long value, SizeUnit fromUnit, SizeUnit toUnit) {
+        if (fromUnit == null || toUnit == null) {
+            throw new IllegalArgumentException("Units cannot be null");
+        }
+
         BigDecimal bytes = fromUnit.toBytes(BigDecimal.valueOf(value));
         return toUnit.fromBytes(bytes).setScale(4, RoundingMode.HALF_UP).doubleValue();
     }
 
+    /**
+     * Parses a size string into a byte value.
+     *
+     * @param sizeString the size string to parse
+     * @return the size in bytes
+     */
     public static long parse(String sizeString) {
         if (sizeString == null || sizeString.trim().isEmpty()) {
             throw new IllegalArgumentException("Input string cannot be null or empty");
         }
 
-        // Optimized regex to prevent invalid decimal formats
-        Matcher matcher = Pattern.compile("^([-+]?(?:\\d+\\.\\d+|\\d+|\\.\\d+))(\\s*)([a-zA-Z]+)$", Pattern.CASE_INSENSITIVE)
-                .matcher(sizeString.trim());
-
+        Matcher matcher = SIZE_PATTERN.matcher(sizeString.trim());
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Invalid size format: " + sizeString);
+            throw new IllegalArgumentException(String.format("Invalid size format: %s", sizeString));
         }
 
         BigDecimal number;
         try {
             number = new BigDecimal(matcher.group(1));
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid numeric value: " + matcher.group(1), e);
+            throw new IllegalArgumentException(String.format("Invalid numeric value: %s", matcher.group(1)), e);
         }
 
         SizeUnit unit = parseUnit(matcher.group(3));
@@ -60,11 +109,29 @@ public class SizeFormatter {
         if (bytes.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0) {
             throw new ArithmeticException("Size exceeds maximum Long value");
         }
+        if (bytes.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) < 0) {
+            throw new ArithmeticException("Size exceeds minimum Long value");
+        }
 
         return bytes.longValueExact();
     }
 
+    /**
+     * Formats a bit rate into a human-readable string with appropriate units.
+     *
+     * @param bits         the bit rate in bits per second
+     * @param timeUnit     the time unit for the rate
+     * @param decimalPlaces the number of decimal places to display
+     * @return a formatted string representing the bit rate
+     */
     public static String formatRate(long bits, TimeUnit timeUnit, int decimalPlaces) {
+        if (timeUnit == null) {
+            throw new IllegalArgumentException("Time unit cannot be null");
+        }
+        if (decimalPlaces < 0) {
+            throw new IllegalArgumentException(String.format("Decimal places must be non-negative: %d", decimalPlaces));
+        }
+
         BigDecimal seconds = BigDecimal.valueOf(timeUnit.toSeconds(1));
         BigDecimal bitsPerSecond = BigDecimal.valueOf(bits).divide(seconds, MathContext.DECIMAL128);
 
@@ -80,17 +147,19 @@ public class SizeFormatter {
             BigDecimal divisor = BigDecimal.valueOf(unit.getBase()).pow(unit.getExponent());
             BigDecimal converted = bitsPerSecond.divide(divisor, MathContext.DECIMAL128);
             if (converted.compareTo(BigDecimal.ONE) >= 0) {
-                return String.format(Locale.US,
-                        "%." + decimalPlaces + "f %sps",
-                        converted.setScale(decimalPlaces, RoundingMode.HALF_UP),
-                        unit.getSuffix());
+                return String.format(Locale.US, "%." + decimalPlaces + "f %sps",
+                        converted.setScale(decimalPlaces, RoundingMode.HALF_UP), unit.getSuffix());
             }
         }
-        return String.format(Locale.US,
-                "%." + decimalPlaces + "f bps",
+        return String.format(Locale.US, "%." + decimalPlaces + "f bps",
                 bitsPerSecond.setScale(decimalPlaces, RoundingMode.HALF_UP));
     }
 
+    /**
+     * Returns a list of decimal byte units (e.g., KB, MB, GB).
+     *
+     * @return list of decimal byte units
+     */
     private static List<SizeUnit> getDecimalByteUnits() {
         return Arrays.asList(
                 SizeUnit.TERABYTES,
@@ -101,6 +170,11 @@ public class SizeFormatter {
         );
     }
 
+    /**
+     * Returns a list of binary byte units (e.g., KiB, MiB, GiB).
+     *
+     * @return list of binary byte units
+     */
     private static List<SizeUnit> getBinaryByteUnits() {
         return Arrays.asList(
                 SizeUnit.TEBIBYTES,
@@ -111,18 +185,32 @@ public class SizeFormatter {
         );
     }
 
+    /**
+     * Formats a BigDecimal value with a specified number of decimal places and unit suffix.
+     *
+     * @param value          the value to format
+     * @param unit          the unit of the value
+     * @param decimalPlaces the number of decimal places
+     * @return the formatted string
+     */
     private static String format(BigDecimal value, SizeUnit unit, int decimalPlaces) {
-        return value.setScale(decimalPlaces, RoundingMode.HALF_UP)
-                .toString()
-                .replace(",", ".") + " " + unit.getSuffix();
+        return String.format(Locale.US, "%." + decimalPlaces + "f %s",
+                value.setScale(decimalPlaces, RoundingMode.HALF_UP), unit.getSuffix());
     }
 
+    /**
+     * Parses a unit suffix and returns the corresponding SizeUnit.
+     *
+     * @param unitPart the unit suffix to parse
+     * @return the corresponding SizeUnit
+     * @throws IllegalArgumentException if the unit suffix is unrecognized
+     */
     private static SizeUnit parseUnit(String unitPart) {
         for (SizeUnit unit : SizeUnit.values()) {
             if (unit.getSuffix().equalsIgnoreCase(unitPart)) {
                 return unit;
             }
         }
-        throw new IllegalArgumentException("Unrecognized unit: " + unitPart);
+        throw new IllegalArgumentException(String.format("Unrecognized unit: %s", unitPart));
     }
 }
