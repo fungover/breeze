@@ -22,6 +22,10 @@ public final class SQL {
   private SQL() {
   }
 
+  public enum SortOrder {
+    ASC, DESC
+  }
+
   /**
    * Starting point for the API
    *
@@ -109,11 +113,11 @@ public final class SQL {
     /**
      * Adds support for ordering the result based on a column and which order
      *
-     * @param column    The column to order by
-     * @param ascending If the order should be ascending or not
+     * @param column The column to order by
+     * @param order  The direction to sort by
      * @return The supported functions following DQL SQL
      */
-    OrderByStep orderBy(String column, boolean ascending);
+    OrderByStep orderBy(String column, SortOrder order);
 
     /**
      * Adds support for limiting the amount returned
@@ -283,11 +287,11 @@ public final class SQL {
     /**
      * Adds support for ordering the result based on a column and which order
      *
-     * @param column    The column to order by
-     * @param ascending If the order should be ascending or not
+     * @param column The column to order by
+     * @param order  The direction to sort by
      * @return The supported functions following DQL SQL
      */
-    OrderByStep orderBy(String column, boolean ascending);
+    OrderByStep orderBy(String column, SortOrder order);
 
     /**
      * Adds support for limiting the amount returned
@@ -318,11 +322,11 @@ public final class SQL {
     /**
      * Adds support for ordering the result based on a column and which order
      *
-     * @param column    The column to order by
-     * @param ascending If the order should be ascending or not
+     * @param column The column to order by
+     * @param order  The direction to sort by
      * @return The supported functions following DQL SQL
      */
-    OrderByStep orderBy(String column, boolean ascending);
+    OrderByStep orderBy(String column, SortOrder order);
 
     /**
      * Adds support for the having clause
@@ -353,11 +357,11 @@ public final class SQL {
     /**
      * Adds support for ordering the result based on a column and which order
      *
-     * @param column    The column to order by
-     * @param ascending If the order should be ascending or not
+     * @param column The column to order by
+     * @param order  The direction to sort by
      * @return The supported functions following DQL SQL
      */
-    OrderByStep thenOrderBy(String column, boolean ascending);
+    OrderByStep thenOrderBy(String column, SortOrder order);
   }
 
   /**
@@ -549,14 +553,14 @@ public final class SQL {
     }
 
     @Override
-    public OrderByStep orderBy(String column, boolean ascending) {
-      this.orderBy.add(column + (ascending ? " ASC" : " DESC"));
+    public OrderByStep orderBy(String column, SortOrder order) {
+      this.orderBy.add(column + " " + order.toString());
       return this;
     }
 
     @Override
-    public OrderByStep thenOrderBy(String column, boolean ascending) {
-      this.orderBy(column, ascending);
+    public OrderByStep thenOrderBy(String column, SortOrder order) {
+      this.orderBy(column, order);
       return this;
     }
 

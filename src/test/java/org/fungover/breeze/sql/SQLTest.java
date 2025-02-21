@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.fungover.breeze.sql.SQL.SortOrder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SQLTest {
@@ -63,7 +64,7 @@ class SQLTest {
   @Test
   @DisplayName("Can add ORDER BY with multiple columns")
   void canOrderByMultipleColumns() {
-    String orderByMultiple = SQL.select().columns("name", "age").from("users").orderBy("age", false).thenOrderBy("name", true).build();
+    String orderByMultiple = SQL.select().columns("name", "age").from("users").orderBy("age", DESC).thenOrderBy("name", ASC).build();
 
     assertThat(orderByMultiple).isEqualTo("SELECT name, age FROM users ORDER BY age DESC, name ASC");
   }
@@ -157,7 +158,7 @@ class SQLTest {
   @Test
   @DisplayName("Handles ORDER BY without WHERE")
   void handlesOrderByWithoutWhere() {
-    String orderByOnly = SQL.select().columns("name").from("users").orderBy("name", true).build();
+    String orderByOnly = SQL.select().columns("name").from("users").orderBy("name", ASC).build();
     assertThat(orderByOnly).isEqualTo("SELECT name FROM users ORDER BY name ASC");
   }
 
@@ -249,7 +250,7 @@ class SQLTest {
             .columns("department", "COUNT(*)")
             .from("employees")
             .groupBy("department")
-            .orderBy("COUNT(*)", false)
+            .orderBy("COUNT(*)", DESC)
             .build();
 
     assertThat(groupByOrderBy).isEqualTo("SELECT department, COUNT(*) FROM employees GROUP BY department ORDER BY COUNT(*) DESC");
@@ -276,7 +277,7 @@ class SQLTest {
     String orderByLimit = SQL.select()
             .columns("name", "age")
             .from("users")
-            .orderBy("age", true)
+            .orderBy("age", ASC)
             .limit(3)
             .build();
 
@@ -336,7 +337,7 @@ class SQLTest {
             .where()
             .column("first_name")
             .isEqualTo("Steve")
-            .orderBy("last_name", true)
+            .orderBy("last_name", ASC)
             .build();
 
     assertThat(query).isEqualTo("SELECT * FROM my_table WHERE first_name = 'Steve' ORDER BY last_name ASC");
