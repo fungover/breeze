@@ -1,5 +1,7 @@
 package org.fungover.breeze.math;
 
+import java.util.Locale;
+
 public class Quaternion {
     private final float w;
     private final float x;
@@ -124,7 +126,7 @@ public class Quaternion {
     // To String (for debugging)
     @Override
     public String toString() {
-        return String.format("Quaternion(w: %f, x: %f, y: %f, z: %f)", w, x, y, z);
+        return String.format(Locale.FRANCE, "Quaternion(w: %f, x: %f, y: %f, z: %f)", w, x, y, z);
     }
 
 }
