@@ -11,9 +11,9 @@ import java.io.Serializable;
 // STUB CLASS //
 
 public abstract class Try<T> implements Serializable {
-
+    @SuppressWarnings("unused")
     public abstract boolean isSuccess();
-
+    @SuppressWarnings("unused")
     public abstract boolean isFailure();
 
     public abstract T get() throws Exception;
