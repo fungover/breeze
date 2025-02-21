@@ -32,6 +32,11 @@ public class CsvReader {
         this.quoteChar = builder.quoteChar;
     }
 
+    /**
+     * Creates a new builder instance for configuring and constructing a CsvReader.
+     *
+     * @return a new {@link Builder} instance
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -46,46 +51,108 @@ public class CsvReader {
             // private constructor
         }
 
+        /**
+         * Sets the delimiter character for parsing CSV data.
+         *
+         * @param delimiter the delimiter character
+         * @return this builder instance
+         */
         public Builder withDelimiter(char delimiter) {
             this.delimiter = delimiter;
             return this;
         }
+
+        /**
+         * Specifies whether empty lines should be skipped.
+         *
+         * @param skipEmptyLines true to skip empty lines, false otherwise
+         * @return this builder instance
+         */
 
         public Builder skipEmptyLines(boolean skipEmptyLines) {
             this.skipEmptyLines = skipEmptyLines;
             return this;
         }
 
+        /**
+         * Sets the quote character used for enclosing values.
+         *
+         * @param quoteChar the quote character
+         * @return this builder instance
+         */
+
         public Builder withQuoteChar(char quoteChar) {
             this.quoteChar = quoteChar;
             return this;
         }
+
+        /**
+         * Specifies whether the csv file contains a header row.
+         *
+         *  @param hasHeader true if the CSV contains a header row, false otherwise
+         * @return this builder instance
+         */
 
         public Builder hasHeader(boolean hasHeader) {
             this.hasHeader = hasHeader;
             return this;
         }
 
+        /**
+         * Builds a new CsvReader instance with the config settings
+         *
+         * @return a new {@link CsvReader} instance
+         */
+
         public CsvReader build() {
             return new CsvReader(this);
         }
     }
+
+    /**
+     * Sets the CSV source from a string.
+     *
+     * @param csvSource the CSV content as a string
+     * @return this {@link CsvReader} instance
+     */
 
     public CsvReader withSource(String csvSource) {
         bufferedReader = new BufferedReader(new StringReader(csvSource));
         return this;
     }
 
+    /**
+     * Sets the CSV source from an input stream.
+     *
+     * @param csvSource the input stream containing CSV data
+     * @param charsetName the character set of the input stream
+     * @return this {@link CsvReader} instance
+     */
     public CsvReader withSource(InputStream csvSource, String charsetName) {
         bufferedReader = new BufferedReader(new InputStreamReader(csvSource, Charset.forName(charsetName)));
         return this;
     }
 
+    /**
+     * Sets the CSV source from a file.
+     *
+     * @param csvSource the CSV file
+     * @param charsetName the character set of the file
+     * @return this {@link CsvReader} instance
+     * @throws FileNotFoundException if the file is not found
+     */
     public CsvReader withSource(File csvSource, String charsetName) throws FileNotFoundException {
         bufferedReader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(csvSource), Charset.forName(charsetName)));
         return this;
     }
+
+    /**
+     * Reads all rows from the CSV source.
+     *
+     * @return a list of string arrays, where each array represents a row
+     * @throws IOException if an I/O error occurs
+     */
 
     public List<String[]> readAll() throws IOException {
 
@@ -143,6 +210,12 @@ public class CsvReader {
         return tokens;
     }
 
+    /**
+     * Reads the next row from the CSV source.
+     *
+     * @return an array of strings representing the next row, or an empty array if the end is reached
+     * @throws IOException if an I/O error occurs
+     */
     public String[] readNext() throws IOException {
         String line = bufferedReader.readLine();
         if (line == null) {
@@ -154,6 +227,12 @@ public class CsvReader {
         return parseLine(line).toArray(new String[0]);
     }
 
+    /**
+     * Reads the next row from the CSV source as a map.
+     *
+     * @return a map where keys are header values and values are row values, or an empty map if the end is reached
+     * @throws IOException if an I/O error occurs
+     */
     public Map<String, String> readNextAsMap() throws IOException {
         if (headers == null && hasHeader) {
             String headerLine = bufferedReader.readLine();
