@@ -1,4 +1,5 @@
 package org.fungover.breeze.control;
+
 import org.fungover.breeze.funclib.control.Either;
 import org.fungover.breeze.funclib.control.Try;
 
@@ -38,7 +39,7 @@ public final class Some<T extends Serializable> extends Option<T> {
 
     @Override
     public String toString() {
-        return "Some(value=" + value + ", type= "+ value.getClass().getSimpleName() + ")";
+        return "Some(value=" + value + ", type= " + value.getClass().getSimpleName() + ")";
     }
 
     /**
@@ -120,7 +121,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @param <U>    the type of the transformed value
      * @param mapper a function to apply to the contained value
      * @return the same {@code Some<T>} instance if the mapping function returns the original value;
-     *         otherwise, a new {@code Some<U>} or {@code None} if the result is {@code null}.
+     * otherwise, a new {@code Some<U>} or {@code None} if the result is {@code null}.
      * @throws NullPointerException if the mapping function is {@code null}
      */
     @Override
@@ -190,8 +191,8 @@ public final class Some<T extends Serializable> extends Option<T> {
      * Folds the Option by applying a function to the value if present,
      * or returning a default computed by a Supplier.
      *
-     * @param <U> The return type.
-     * @param ifNone Supplier for default value if Option is None.
+     * @param <U>       The return type.
+     * @param ifNone    Supplier for default value if Option is None.
      * @param ifPresent Function applied to the value if present.
      * @return The computed value.
      */

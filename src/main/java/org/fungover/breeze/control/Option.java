@@ -129,7 +129,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @param <T> the type of the (non-existent) value, restricted to {@link Serializable}
      * @return the singleton {@code None<T>} instance
      */
-    public static<T extends Serializable> Option<T> none() {
+    public static <T extends Serializable> Option<T> none() {
         return None.getInstance();
     }
 
@@ -151,7 +151,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return {@code true} if this is Some, otherwise {@code false}.
      */
 
-    public final boolean isDefined(){
+    public final boolean isDefined() {
         return !isEmpty();
 
     }
@@ -185,6 +185,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
 
     /**
      * Returns the contained value or null if None.
+     *
      * @return the contained value or null
      */
 
@@ -252,47 +253,47 @@ public abstract class Option<T extends Serializable> implements Serializable {
 
     public abstract Option<T> filter(Predicate<? super T> predicate);
 
-        /**
-         * Performs the given action if a value is present in this Option.
-         * <p>
-         * If this is a {@code Some}, the action is executed with the contained value.
-         * If this is {@code None}, no action is performed.
-         *
-         * <p>Example usage:
-         * <pre>{@code
-         * Option<String> name = Option.some("Alice");
-         * name.forEach(System.out::println); // Prints "Alice"
-         *
-         * Option<String> empty = Option.of(null);
-         * empty.forEach(System.out::println); // Does nothing
-         * }</pre>
-         *
-         * @param action The action to perform on the contained value.
-         * @throws NullPointerException if {@code action} is null.
-         */
+    /**
+     * Performs the given action if a value is present in this Option.
+     * <p>
+     * If this is a {@code Some}, the action is executed with the contained value.
+     * If this is {@code None}, no action is performed.
+     *
+     * <p>Example usage:
+     * <pre>{@code
+     * Option<String> name = Option.some("Alice");
+     * name.forEach(System.out::println); // Prints "Alice"
+     *
+     * Option<String> empty = Option.of(null);
+     * empty.forEach(System.out::println); // Does nothing
+     * }</pre>
+     *
+     * @param action The action to perform on the contained value.
+     * @throws NullPointerException if {@code action} is null.
+     */
 
     public abstract void forEach(Consumer<? super T> action);
 
-        /**
-         * Applies the given action to the value if present, and returns the same Option.
-         * <p>
-         * This method is useful for debugging or logging without modifying the Option itself.
-         * If this is {@code None}, the action is not executed, and the Option remains unchanged.
-         *
-         * <p>Example usage:
-         * <pre>{@code
-         * Option<String> name = Option.some("Alice");
-         * name.peek(value -> System.out.println("Debug: " + value));
-         * // Output: Debug: Alice
-         *
-         * Option<String> empty = Option.none();
-         * empty.peek(value -> System.out.println("This won't be printed"));
-         * }</pre>
-         *
-         * @param action The action to perform on the contained value.
-         * @return This Option instance, unchanged.
-         * @throws NullPointerException if {@code action} is null.
-         */
+    /**
+     * Applies the given action to the value if present, and returns the same Option.
+     * <p>
+     * This method is useful for debugging or logging without modifying the Option itself.
+     * If this is {@code None}, the action is not executed, and the Option remains unchanged.
+     *
+     * <p>Example usage:
+     * <pre>{@code
+     * Option<String> name = Option.some("Alice");
+     * name.peek(value -> System.out.println("Debug: " + value));
+     * // Output: Debug: Alice
+     *
+     * Option<String> empty = Option.none();
+     * empty.peek(value -> System.out.println("This won't be printed"));
+     * }</pre>
+     *
+     * @param action The action to perform on the contained value.
+     * @return This Option instance, unchanged.
+     * @throws NullPointerException if {@code action} is null.
+     */
 
     public abstract Option<T> peek(Consumer<? super T> action);
 
@@ -306,8 +307,8 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *   <li>If this is {@code None}, returns the result of {@code ifNone.get()}.</li>
      * </ul>
      *
-     * @param <U> The return type.
-     * @param ifNone A {@link Supplier} providing a default value if this is None.
+     * @param <U>       The return type.
+     * @param ifNone    A {@link Supplier} providing a default value if this is None.
      * @param ifPresent A {@link Function} applied to the value if this is Some.
      * @return The computed value from either {@code ifNone} or {@code ifPresent}.
      * @throws NullPointerException if {@code ifNone} or {@code ifPresent} is null.
@@ -315,9 +316,9 @@ public abstract class Option<T extends Serializable> implements Serializable {
     public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
 
-        public static <T extends Serializable> Option<T> ofNullable(T value) {
-            return value != null ? new Some<>(value) : None.getInstance();
-        }
+    public static <T extends Serializable> Option<T> ofNullable(T value) {
+        return value != null ? new Some<>(value) : None.getInstance();
+    }
 
     /**
      * Converts this {@code Option<T>} into a {@code List<T>}.
@@ -328,7 +329,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @return a list containing the value if present, otherwise an empty list
      */
-        public abstract List<T> toList();
+    public abstract List<T> toList();
 
     /**
      * Converts this {@code Option<T>} into a {@code Stream<T>}.
@@ -339,7 +340,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @return a stream containing the value if present, otherwise an empty stream
      */
-        public abstract Stream<T> toStream();
+    public abstract Stream<T> toStream();
 
     /**
      * Converts this {@code Option<T>} into a {@code java.util.Optional<T>}.
@@ -350,7 +351,8 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @return an {@code Optional} containing the value if present, otherwise an empty {@code Optional}
      */
-        public abstract Optional<T> toOptional();
+    public abstract Optional<T> toOptional();
+
     /**
      * Converts this {@code Option<T>} into an {@code Either<L, T>}.
      * <ul>
@@ -360,7 +362,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * </ul>
      *
      * @param leftSupplier a supplier function that provides a {@code Left<L>} value when this is {@code None}
-     * @param <L> the type of the left value, which must be serializable
+     * @param <L>          the type of the left value, which must be serializable
      * @return an {@code Either<L, T>} with {@code Right<T>} if value is present, otherwise {@code Left<L>}
      * @throws NullPointerException if {@code leftSupplier} is null or returns null
      */
@@ -376,7 +378,9 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @return This {@code Option<T>} instance.
      */
-    public Option<T> toOption() { return this; }
+    public Option<T> toOption() {
+        return this;
+    }
 
 
     /**
@@ -388,7 +392,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      *
      * @param exceptionSupplier A supplier providing the exception in case of absence.
      * @return A successful {@code Try<T>} if this instance contains a value,
-     *         otherwise a failed {@code Try} with the supplied exception.
+     * otherwise a failed {@code Try} with the supplied exception.
      * @throws NullPointerException if {@code exceptionSupplier} is null or produces a null exception.
      */
     public abstract Try<T> toTry(Supplier<Exception> exceptionSupplier);
