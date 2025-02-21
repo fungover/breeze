@@ -16,7 +16,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -28,11 +27,7 @@
             <artifactId>assertj-core</artifactId>
             <version>3.27.3</version>
         </dependency>
-
-
     </dependencies>
-
-
     <profiles>
         <profile>
             <id>coverage</id>
