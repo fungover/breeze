@@ -57,7 +57,7 @@ public final class FPriorityQueue<T>{
         Collections.swap(newHeap, 0, heap.size() - 1);
         newHeap.remove(newHeap.size() - 1);
 
-        return new FPriorityQueue<>(heapifyDown(new ArrayList<>(newHeap),0));
+        return new FPriorityQueue<>(heapifyDown(newHeap, 0));
     }
 
     public T peek(){
