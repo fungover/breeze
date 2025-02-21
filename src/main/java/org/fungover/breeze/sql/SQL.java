@@ -494,8 +494,20 @@ public final class SQL {
       if (values == null || values.length == 0) {
         throw new IllegalArgumentException("Values cannot be null or empty");
       }
+
+      for (String value : values) {
+        if (value == null) {
+          throw new IllegalArgumentException("Values cannot contain null");
+        }
+        if (value.contains(";") || value.contains("--") || value.contains("/*")) {
+          throw new IllegalArgumentException("Invalid characters in value");
+        }
+      }
+
       List<String> escapedValues = Arrays.stream(values)
-              .map(value -> value.replace("'", "''"))
+              .map(value -> value.replace("'", "''")
+                      .replace("\\", "\\\\")
+                      .replace("\u0000", ""))
               .toList();
 
       this.where += " IN ('" + String.join("', '", escapedValues) + "')";
