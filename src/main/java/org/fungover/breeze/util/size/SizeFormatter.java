@@ -17,9 +17,8 @@ import java.util.Locale;
  */
 public class SizeFormatter {
 
-    // Regex pattern to match size strings like "1.5GB", "1024KiB", etc.
     private static final Pattern SIZE_PATTERN = Pattern.compile(
-            "^([-+]?(?:\\d{1,19}(?:\\.\\d{1,6})?|\\.\\d{1,6}))(\\s*)([a-zA-Z]+)$",
+            "^([-+]?(?:\\d+\\.\\d+|\\.\\d+|\\d+))(\\s*)([a-zA-Z]+)$",
             Pattern.CASE_INSENSITIVE
     );
 
@@ -129,7 +128,7 @@ public class SizeFormatter {
             throw new IllegalArgumentException("Time unit cannot be null");
         }
         if (decimalPlaces < 0) {
-            throw new IllegalArgumentException(String.format("Decimal places must be non-negative: %d", decimalPlaces));
+            throw new IllegalArgumentException("Decimal places must be non-negative");
         }
 
         BigDecimal seconds = BigDecimal.valueOf(timeUnit.toSeconds(1));
@@ -212,5 +211,39 @@ public class SizeFormatter {
             }
         }
         throw new IllegalArgumentException(String.format("Unrecognized unit: %s", unitPart));
+    }
+
+    /**
+     * Chooses the appropriate size unit based on the size and whether to use binary units.
+     *
+     * @param size           the size in bytes
+     * @param useBinaryUnits whether to use binary units
+     * @return the appropriate SizeUnit
+     */
+    public static SizeUnit chooseUnit(long size, boolean useBinaryUnits) {
+        if (useBinaryUnits) {
+            if (size < 1024) return SizeUnit.BYTES;
+            if (size < 1024L * 1024L) return SizeUnit.KIBIBYTES;
+            if (size < 1024L * 1024L * 1024L) return SizeUnit.MEBIBYTES;
+            return SizeUnit.GIBIBYTES;
+        } else {
+            if (size < 1_000) return SizeUnit.BYTES;
+            if (size < 1_000_000L) return SizeUnit.KILOBYTES;
+            if (size < 1_000_000_000L) return SizeUnit.MEGABYTES;
+            return SizeUnit.GIGABYTES;
+        }
+    }
+
+    /**
+     * Chooses the appropriate rate unit based on the bit rate.
+     *
+     * @param bitsPerSecond the bit rate in bits per second
+     * @return the appropriate SizeUnit
+     */
+    public static SizeUnit chooseRateUnit(long bitsPerSecond) {
+        if (bitsPerSecond < 1_000) return SizeUnit.BITS;
+        if (bitsPerSecond < 1_000_000L) return SizeUnit.KILOBITS;
+        if (bitsPerSecond < 1_000_000_000L) return SizeUnit.MEGABITS;
+        return SizeUnit.GIGABITS;
     }
 }

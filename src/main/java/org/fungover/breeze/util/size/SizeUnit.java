@@ -128,11 +128,15 @@ public enum SizeUnit {
             if (size < 1024) return BYTES;
             if (size < 1024 * 1024) return KIBIBYTES;
             if (size < 1024L * 1024 * 1024) return MEBIBYTES;
+            if (size < 1024L * 1024L) return KIBIBYTES;
+            if (size < 1024L * 1024L * 1024L) return MEBIBYTES;
             return GIBIBYTES;
         } else {
             if (size < 1_000) return BYTES;
             if (size < 1_000_000) return KILOBYTES;
             if (size < 1_000_000_000) return MEGABYTES;
+            if (size < 1_000_000L) return KILOBYTES;
+            if (size < 1_000_000_000L) return MEGABYTES;
             return GIGABYTES;
         }
     }
@@ -147,6 +151,8 @@ public enum SizeUnit {
         if (bitsPerSecond < 1_000) return BITS;
         if (bitsPerSecond < 1_000_000) return KILOBITS;
         if (bitsPerSecond < 1_000_000_000) return MEGABITS;
+        if (bitsPerSecond < 1_000_000L) return KILOBITS;
+        if (bitsPerSecond < 1_000_000_000L) return MEGABITS;
         return GIGABITS;
     }
 }
