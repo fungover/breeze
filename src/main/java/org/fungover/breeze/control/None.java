@@ -27,6 +27,12 @@ import java.util.stream.Stream;
  */
 public final class None<T extends Serializable> extends Option<T> {
 
+
+    /**
+     * Serial version UID for ensuring compatibility during serialization.
+     * This identifier helps to verify that the sender and receiver of a
+     * serialized object have compatible class definitions.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -77,6 +83,12 @@ public final class None<T extends Serializable> extends Option<T> {
         return 0; // All instances of None have the same hash code since they are the same instance.
     }
 
+
+    /**
+     * Returns a string representation of this {@code None} instance.
+     *
+     * @return the string {@code "None()"} to indicate the absence of a value.
+     */
     @Override
     public String toString() {
         return "None()";
