@@ -7,13 +7,13 @@ import java.util.Objects;
 
 /**
  * Utility class for converting between UTF-8 emoticons and ASCII emoticons.
- * Supports transformations similar to ASCIImoji.
+ * Supports transformations similar to ASCIIEmoji.
  * <p>
  * Thread-safe and immutable.
  * </p>
  *
  * <pre>
- *     String utf = "(shrug)";
+ *     String utf = "(yay)";
  *     String ascii = "\\( ﾟヮﾟ)/";
  *
  *     EmojiConverter.toAscii(utf);  // "¯\\_(ツ)_/¯"
