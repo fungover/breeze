@@ -162,6 +162,7 @@ public final class None<T extends Serializable> extends Option<T> {
         return None.getInstance();
     }
 
+
     /**
      * Returns {@code None} since there is no value to transform.
      *
@@ -258,10 +259,11 @@ public final class None<T extends Serializable> extends Option<T> {
      * Converts this {@code None} into a left-biased {@link Either}.
      * <p>
      * Since {@code None} has no value, it calls the provided supplier to generate a left value.
+     * The supplier must not return {@code null}.
      * </p>
      *
      * @param leftSupplier a supplier providing the left value if this is {@code None}.
-     * @param <L>          the type of the left value, extending {@link Serializable}.
+     * @param <L> the type of the left value, extending {@link Serializable}.
      * @return an {@code Either.Left} containing the supplied value.
      * @throws NullPointerException if {@code leftSupplier} is null or if it returns null.
      */
