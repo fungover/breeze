@@ -209,6 +209,29 @@ class FSetTest {
         }
 
 
+        @Test
+        @DisplayName("FSet add operations return new instances")
+        void addOperationsReturnNewInstances() {
+            var originalSet = new FSet<Integer>();
+            var setWithOne = originalSet.add(1);
+            var setWithTwo = setWithOne.add(2);
+
+            assertThat(originalSet.size()).isZero();
+            assertThat(setWithOne.size()).isEqualTo(1);
+            assertThat(setWithOne.contains(1)).isTrue();
+            assertThat(setWithTwo.size()).isEqualTo(2);
+            assertThat(setWithTwo.contains(1)).isTrue();
+            assertThat(setWithTwo.contains(2)).isTrue();
+
+            // Trying to add new elements inline does not alter the originalSet
+
+            originalSet.add(1); // Immutable object is not changed
+            originalSet.add(2);
+            assertThat(originalSet.size()).isZero();
+            assertThat(originalSet.contains(1)).isFalse();
+        }
+
+
 
     }
 }

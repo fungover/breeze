@@ -408,9 +408,13 @@ final class RedBlackTree<T extends Comparable<T>> {
 
     /**
      * Prints the tree in a standard format (values only) single line.
+     *
+     * @return
      */
-    public void printStandard(){
-        printStandardSet(root);
+    public String stringSetBuilder(){
+        StringBuilder setStringBuilder  = new StringBuilder();
+        stringSetBuilderHelper(root, setStringBuilder);
+        return !setStringBuilder.isEmpty() ? setStringBuilder.substring(0, setStringBuilder.length() - 2) : "";
     }
 
     /**
@@ -418,12 +422,48 @@ final class RedBlackTree<T extends Comparable<T>> {
      *
      * @param node The current node.
      */
-    private void printStandardSet(Node<T> node) {
+    private void stringSetBuilderHelper(Node<T> node, StringBuilder setStringStandard) {
         if(node == null)
             return;
-        System.out.print(node.getValue() + ", ");
-        printStandardSet(node.left);
-        printStandardSet(node.right);
+        setStringStandard.append(node.getValue() + ", ");
+        stringSetBuilderHelper(node.left, setStringStandard);
+        stringSetBuilderHelper(node.right, setStringStandard);
+    }
+
+
+    public String stringRedBlackTree() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("RedBlack Tree with Nodes and Values\n\n");
+        stringRedBlackTree(root, "", true, sb);
+        sb.append("\nTotal size: ").append(getSize());
+        return sb.toString();
+    }
+
+    /**
+     * Recursively generates a string representation of the Red-Black Tree.
+     *
+     * @param node The current node.
+     * @param indent The indentation for the current level.
+     * @param isLeft {@code true} if the current node is the left child, {@code false} otherwise.
+     * @param sb The StringBuilder used to accumulate the string.
+     */
+    private void stringRedBlackTree(Node<T> node, String indent, boolean isLeft, StringBuilder sb) {
+        if (node == null) {
+            return;
+        }
+
+        // Add the current node to the StringBuilder
+        sb.append(indent);
+        if (isLeft) {
+            sb.append(" /-- ");
+        } else {
+            sb.append(" \\-- ");
+        }
+        sb.append(node.getValue()).append(node.color == RED ? "R" : "B").append("\n");
+
+        // Recurse for the left and right children
+        stringRedBlackTree(node.left, indent + "     ", true, sb);
+        stringRedBlackTree(node.right, indent + "     ", false, sb);
     }
 
 
@@ -529,30 +569,31 @@ final class RedBlackTree<T extends Comparable<T>> {
      * @param other The RedBlackTree to compute the symmetric difference with.
      * @param newTree The RedBlackTree where the resulting values will be inserted.
      */
-    public void symmetricDifferenceWithOtherTree(FSet<T> tree, RedBlackTree<T> other, RedBlackTree<T> newTree) {
+    public void symmetricDifferenceWithOtherTree(RedBlackTree<T> tree, RedBlackTree<T> other, RedBlackTree<T> newTree) {
 
-        symmetricDifferenceWithOtherTreeHelper(tree, other.root, newTree);
+        symmetricDifferenceWithOtherTreeHelper(tree.root, other, newTree);
+        symmetricDifferenceWithOtherTreeHelper(other.root, tree, newTree);
     }
 
     /**
      * Helper method to recursively compute the symmetric difference between two trees and insert
      * the resulting nodes into the new tree.
      *
-     * @param tree The set that provides the values to compare with.
+     * @param node The set that provides the values to compare with.
      * @param other The current node in the other tree.
      * @param newTree The RedBlackTree where the resulting values will be inserted.
      */
-    private void symmetricDifferenceWithOtherTreeHelper(FSet<T> tree, Node<T> other, RedBlackTree<T> newTree) {
+    private void symmetricDifferenceWithOtherTreeHelper(Node<T> node, RedBlackTree<T> other, RedBlackTree<T> newTree) {
 
-        if (other == null) {
+        if (node == null) {
             return;
         }
 
-        if (!tree.contains(other.getValue())) {
-            newTree.insert(other.getValue());
+        if (!(other.isNodeWithValueFound(node.getValue()) )) {
+            newTree.insert(node.getValue());
         }
-        symmetricDifferenceWithOtherTreeHelper(tree, other.left, newTree);
-        symmetricDifferenceWithOtherTreeHelper(tree, other.right, newTree);
+        symmetricDifferenceWithOtherTreeHelper(node.left, other, newTree);
+        symmetricDifferenceWithOtherTreeHelper(node.right, other, newTree);
     }
 
     /**
@@ -576,4 +617,11 @@ final class RedBlackTree<T extends Comparable<T>> {
     public int hashCode() {
         return Objects.hashCode(root);
     }
+
+    @Override
+    public String toString() {
+        return stringRedBlackTree();
+    }
+
+
 }

@@ -126,9 +126,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
     @Override
     public FSet<T> symmetricDifference(FSet<T> other) {
         RedBlackTree<T> newTree = new RedBlackTree<>();
-        RedBlackTree<T> tmpTree = new RedBlackTree<>();
-        tmpTree.symmetricDifferenceWithOtherTree(this, other.tree, newTree);
-        tmpTree.symmetricDifferenceWithOtherTree(other, this.tree, newTree);
+        tree.symmetricDifferenceWithOtherTree(tree, other.tree, newTree);
         return new FSet<>(newTree);
 
 
@@ -177,8 +175,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
      */
     @Override
     public String toString() {
-        tree.printStandard();
-        return "\nSet And Done";
+        return "FSet {"+ tree.stringSetBuilder()+" }";
     }
 
     /**

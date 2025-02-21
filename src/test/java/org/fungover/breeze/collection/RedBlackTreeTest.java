@@ -28,6 +28,25 @@ class RedBlackTreeTest {
 
         }
 
+        @Test
+        @DisplayName("Set representation of Tree is Empty id node is null test")
+        void setRepresentationOfTreeIsEmptyIdNodeIsNullTest() {
+           assertThat(treeEmpty.stringSetBuilder()).isEmpty();
+
+        }
+
+
+    }
+
+    @Test
+    @DisplayName("Set representation of Tree is predictable Test")
+    void setRepresentationOfTreeIsPredictableTest() {
+
+        tree.insert(1);
+        tree.insert(2);
+        tree.insert(3);
+
+        assertThat(tree.stringSetBuilder()).isEqualTo("2, 1, 3");
 
     }
 
@@ -137,6 +156,39 @@ class RedBlackTreeTest {
 
         // Compare the captured output to the expected output
         assertThat(outputStream.toString().trim()).isEqualTo(expectedTreeStructure.trim());
+    }
+
+    @Test
+    @DisplayName("Red-Black Tree structure confirms with predicted Test")
+    void redBlackTreeStructureConfirmsWithPredictedTest() {
+
+        // Expected tree structure
+        var expectedTreeStructure = """
+                RedBlack Tree with Nodes and Values
+                
+                 /-- 20B
+                      /-- 10R
+                           /-- 5B
+                                /-- 1R
+                           \\-- 15B
+                                /-- 12R
+                      \\-- 30B
+                           /-- 25R
+                
+                Total size: 8
+                """;
+
+        // Insert values into the tree to get the desired structure
+        values = new int[]{10, 20, 30, 15, 25, 5, 1, 12};
+        for (int value : values) {
+            tree.insert(value);
+        }
+
+        assertThat(tree.toString().trim()).isEqualTo(expectedTreeStructure.trim());
+
+
+
+
     }
 
     @Test
@@ -318,7 +370,6 @@ class RedBlackTreeTest {
         bigTree.insertFromAnotherTree(smallTree);
 
         assertThat(bigTree.getSize()).isEqualTo(10);
-        bigTree.printRedBlackTree();
         assertThat(bigTree.isNodeWithValueFound(1)).isTrue();
 
 
@@ -340,6 +391,7 @@ class RedBlackTreeTest {
         assertThat(bigTree).isEqualTo(bigTree2);
         assertThat(bigTree.hashCode()).hasSameHashCodeAs(bigTree2.hashCode());
 
+        System.out.println(bigTree2);
 
 
     }
