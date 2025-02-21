@@ -195,4 +195,119 @@ public class RayMathTest {
         assertEquals(0, closestPoint.y, 1e-6);
         assertEquals(0, closestPoint.z, 1e-6);
     }
+
+    @Test
+    void testNullRayShouldThrowException() {
+        Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+        float radius = 1.0f;
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsSphere(null, center, radius));
+    }
+
+    @Test
+    void testNullCenterShouldThrowException() {
+        Ray ray = new Ray(new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f));
+        float radius = 1.0f;
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsSphere(ray, null, radius));
+    }
+
+    @Test
+    void testNegativeRadiusShouldThrowException() {
+        Ray ray = new Ray(new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f));
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsSphere(ray, new Vector3(0.0f, 0.0f, 0.0f), -1.0f));
+    }
+
+    @Test
+    void testZeroDirectionRayShouldThrowException() {
+        Ray ray = new Ray(new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 0.0f, 0.0f));
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsSphere(ray, new Vector3(0.0f, 0.0f, 0.0f), 1.0f));
+    }
+
+    @Test
+    void testRayIntersectsSphere() {
+        Ray ray = new Ray(new Vector3(0.0f, 0.0f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f));
+        Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+        float radius = 2.0f;
+
+        boolean result = RayMath.rayIntersectsSphere(ray, center, radius);
+        assertTrue(result, "The ray should intersect the sphere.");
+    }
+
+    @Test
+    void testRayMissesSphere() {
+        Ray ray = new Ray(new Vector3(5.0f, 5.0f, 5.0f), new Vector3(1.0f, 0.0f, 0.0f));
+        Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+        float radius = 2.0f;
+        boolean result = RayMath.rayIntersectsSphere(ray, center, radius);
+
+        assertFalse(result, "The ray should not intersect the sphere.");
+    }
+
+    @Test
+    void testNullBoxMaxShouldThrowException() {
+        Ray ray = new Ray(new Vector3(0.0f, 0.0f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f));
+        Vector3 boxMin = new Vector3(0.0f, 0.0f, 0.0f);
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsBox(ray, boxMin, null));
+    }
+
+    @Test
+    void testNullBoxMinShouldThrowException() {
+        Ray ray = new Ray(new Vector3(0.0f, 0.0f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f));
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsBox(ray, null, boxMax));
+    }
+
+    @Test
+    void testInvalidBoxBoundsShouldThrowException() {
+        Ray ray = new Ray(new Vector3(0.0f, 0.0f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f));
+        Vector3 boxMin = new Vector3(2.0f, 2.0f, 2.0f);
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+        assertThrows(IllegalArgumentException.class, () ->
+                RayMath.rayIntersectsBox(ray, boxMin, boxMax));
+    }
+
+    @Test
+    void testRayIntersectsBox() {
+        Ray ray = new Ray(new Vector3(0.5f, 0.5f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f)); // Normalized
+        Vector3 boxMin = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+
+        boolean result = RayMath.rayIntersectsBox(ray, boxMin, boxMax);
+        assertTrue(result, "The ray should intersect the box.");
+    }
+
+    @Test
+    void testRayMissesBox() {
+        Ray ray = new Ray(new Vector3(2.0f, 2.0f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f)); // Outside box
+        Vector3 boxMin = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+
+        boolean result = RayMath.rayIntersectsBox(ray, boxMin, boxMax);
+        assertFalse(result, "The ray should miss the box.");
+    }
+
+    @Test
+    void testRayJustTouchesBoxEdge() {
+        Ray ray = new Ray(new Vector3(1.0f, 0.5f, -5.0f), new Vector3(0.0f, 0.0f, 1.0f)); // Touching the edge
+        Vector3 boxMin = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+
+        boolean result = RayMath.rayIntersectsBox(ray, boxMin, boxMax);
+        assertTrue(result, "The ray should touch the edge of the box.");
+    }
+
+    @Test
+    void testRayInsideBoxShouldReturnTrue() {
+        Ray ray = new Ray(new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.0f, 0.0f, 1.0f)); // Inside the box
+        Vector3 boxMin = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 boxMax = new Vector3(1.0f, 1.0f, 1.0f);
+
+        boolean result = RayMath.rayIntersectsBox(ray, boxMin, boxMax);
+        assertTrue(result, "The ray starts inside the box and should return true.");
+    }
 }
