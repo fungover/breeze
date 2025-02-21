@@ -295,7 +295,6 @@ public abstract class FList<T> {
             return result.reverse();
         }
 
-
         /**
          * Checks if the list is empty.
          *

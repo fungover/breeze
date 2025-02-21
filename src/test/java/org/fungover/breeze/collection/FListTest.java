@@ -20,7 +20,7 @@ class FListTest {
 
     @Test
     @DisplayName("Test Prepend")
-    public void testPrepend() {
+    void testPrepend() {
         FList<Integer> list = FList.empty();
         list = list.prepend(1);
         assertFalse(list.isEmpty());
@@ -30,7 +30,7 @@ class FListTest {
 
     @Test
     @DisplayName("Test Append")
-    public void testAppend() {
+    void testAppend() {
         FList<Integer> list = FList.empty();
         list = list.append(1);
         assertFalse(list.isEmpty());
@@ -90,7 +90,7 @@ class FListTest {
 
     @Test
     @DisplayName("Test Size")
-    public void testSize() {
+    void testSize() {
         FList<Integer> list = FList.empty();
         list = list.prepend(1).prepend(2).prepend(3);
         assertEquals(3, list.size());
@@ -98,7 +98,7 @@ class FListTest {
 
     @Test
     @DisplayName("Test Reverse")
-    public void testReverse() {
+    void testReverse() {
         FList<Integer> list = FList.empty();
         list = list.prepend(1).prepend(2).prepend(3);
         FList<Integer> reversedList = list.reverse();
@@ -109,7 +109,7 @@ class FListTest {
 
     @Test
     @DisplayName("Test Cached FList")
-    public void testCachedFList() {
+    void testCachedFList() {
         FList<Integer> list = FList.empty();
         list = list.prepend(1).prepend(2).prepend(3);
         FList<Integer> cachedList = new FList.CachedFList<>(list);
