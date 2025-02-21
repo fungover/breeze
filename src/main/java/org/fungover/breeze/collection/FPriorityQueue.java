@@ -75,29 +75,31 @@ public final class FPriorityQueue<T>{
     }
 
     public static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
-        if(index>= originalHeap.size()) return originalHeap;
+        if (index >= originalHeap.size()) return originalHeap;
 
         List<Node<T>> heap = new ArrayList<>(originalHeap);
         int size = heap.size();
+        boolean swapped = false;
 
-        while (true){
+        while (true) {
             int left = 2 * index + 1;
             int right = 2 * index + 2;
             int smallest = index;
 
-            if(left<size && heap.get(left).priority < heap.get(smallest).priority){
+            if (left < size && heap.get(left).priority < heap.get(smallest).priority) {
                 smallest = left;
             }
-            if(right<size && heap.get(right).priority < heap.get(smallest).priority){
+            if (right < size && heap.get(right).priority < heap.get(smallest).priority) {
                 smallest = right;
             }
-            if(smallest == index)
+            if (smallest == index)
                 break;
 
             Collections.swap(heap, index, smallest);
+            swapped = true;
             index = smallest;
         }
-        return heap;
+        return swapped ? heap : originalHeap;
     }
 
     /**
