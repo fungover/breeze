@@ -82,7 +82,7 @@ class SQLTest {
   void handlesEmptyColumns() {
     String emptyColumns = SQL.select().columns().from("users").build();
 
-    assertThat(emptyColumns).isEqualTo("SELECT  FROM users");
+    assertThat(emptyColumns).isEqualTo("SELECT * FROM users");
   }
 
   @Test

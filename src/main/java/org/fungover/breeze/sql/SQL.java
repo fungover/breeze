@@ -411,7 +411,11 @@ public final class SQL {
     @Override
     public SelectAfterStep columns(String... columns) {
       this.columns.clear();
-      this.columns.addAll(List.of(columns));
+      if (columns.length > 0) {
+        this.columns.addAll(List.of(columns));
+      } else {
+        this.columns.add("*");
+      }
       return this;
     }
 
