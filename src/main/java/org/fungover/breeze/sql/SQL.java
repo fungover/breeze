@@ -1,6 +1,7 @@
 package org.fungover.breeze.sql;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -468,22 +469,35 @@ public final class SQL {
 
     @Override
     public ConditionStep like(String pattern) {
-      this.where += " LIKE '" + pattern + "'";
+      if (pattern == null) {
+        throw new IllegalArgumentException("Pattern cannot be null");
+      }
+      this.where += " LIKE '" + pattern.replace("'", "''") + "'";
       this.hasCondition = true;
       return this;
     }
 
     @Override
     public ConditionStep in(String... values) {
-      this.where += " IN ('" + String.join("', '", values) + "')";
+      if (values == null || values.length == 0) {
+        throw new IllegalArgumentException("Values cannot be null or empty");
+      }
+      List<String> escapedValues = Arrays.stream(values)
+              .map(value -> value.replace("'", "''"))
+              .toList();
+
+      this.where += " IN ('" + String.join("', '", escapedValues) + "')";
       this.hasCondition = true;
       return this;
     }
 
     @Override
     public <T> EqualStep isEqualTo(T query) {
-      if (query instanceof String) {
-        this.equal = "'" + query + "'";
+      if (query == null) {
+        throw new IllegalArgumentException("Query cannot be null");
+      }
+      if (query instanceof String str) {
+        this.equal = "'" + str.replace("'", "''") + "'";
       } else {
         this.equal = query.toString();
       }
