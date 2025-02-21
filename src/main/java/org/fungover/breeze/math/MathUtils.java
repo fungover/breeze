@@ -1,4 +1,4 @@
-package org.fungover.breeze.util;
+package org.fungover.breeze.math;
 
 import java.util.Random;
 
