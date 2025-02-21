@@ -150,6 +150,9 @@ public sealed interface Either<L extends Serializable, R extends Serializable> e
    * @param <R> The type of the right value (unused in this case)
    */
   final class Left<L extends Serializable, R extends Serializable> implements Either<L, R> {
+    /**
+     * It represents the value inside the {@code Left}'s instance
+     */
     private final L value;
 
     /**
@@ -313,6 +316,9 @@ public sealed interface Either<L extends Serializable, R extends Serializable> e
    * @param <R> The type of the right value (typically a success type)
    */
   final class Right<L extends Serializable, R extends Serializable> implements Either<L, R> {
+    /**
+     * It represents the value inside the {@code Right}'s instance
+     */
     private final R value;
 
     /**
