@@ -153,7 +153,6 @@ class FSetTest {
             fSet = new FSet<>();
             fSet =  fSet.add(1).add(15).add(20).add(100);
             var removeSet = fSet.remove(15);
-            System.out.println(removeSet);
 
             assertThat(removeSet.contains(15)).isFalse();
             assertThat(removeSet.size()).isEqualTo(3);
@@ -181,7 +180,6 @@ class FSetTest {
         void fSetWithDifferentDataTypeIsFalse() {
             fSet = new FSet<>();
             String fSetString = "";
-            assertThat(fSet).isNotSameAs(fSetString);
             var expected = fSet.equals(fSetString);
             assertThat(expected).isFalse();
 

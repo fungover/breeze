@@ -75,7 +75,6 @@ class RedBlackTreeTest {
         assertThat(expectedly.color).isFalse();
         assertThat(expectedly2.color).isTrue();
         assertThat(expectedly3.color).isFalse();
-        tree.printRedBlackTree();
 
     }
 
