@@ -1,10 +1,17 @@
 package org.fungover.breeze.collection;
 
+import java.util.Objects;
+
 public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
     private final RedBlackTree<T> tree;
 
 
 
+    public FSet() {
+        this.tree = new RedBlackTree<>();
+    }
+
+    // Constructor for initializing with a RedBlackTree
     public FSet(RedBlackTree<T> tree) {
         this.tree = tree;
     }
@@ -17,7 +24,6 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
         }
 
         RedBlackTree<T> newTree = new RedBlackTree<>();
-
         newTree.insertFromAnotherTree(this.tree);
         newTree.insert(element);
 
@@ -25,33 +31,87 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
     }
 
     @Override
-    public FSet remove(T element) {
-        return null;
+    public FSet<T> remove(T element) {
+        if (element == null) {
+            throw new NullPointerException("Cannot remove null element from FSet");
+        }
+
+        RedBlackTree<T> newTree = new RedBlackTree<>();
+        newTree.removalBySkip(this.tree, element);
+
+        return new FSet<>(newTree);
     }
 
     @Override
     public boolean contains(T element) {
-        return false;
+        return this.tree.isNodeWithValueFound(element);
     }
 
     @Override
-    public FSet union(T other) {
-        return null;
+    public FSet<T> union(FSet<T> other) {
+
+        RedBlackTree<T> newTree = new RedBlackTree<>();
+        newTree.insertFromAnotherTree(this.tree);
+        newTree.insertFromAnotherTree(other.tree);
+
+        return new FSet<>(newTree);
+    }
+
+
+    @Override
+    public FSet<T> intersection(FSet<T> other) {
+        RedBlackTree<T> newTree = new RedBlackTree<>();
+        RedBlackTree<T> tmpTree = new RedBlackTree<>();
+        tmpTree.intersectWithOtherTree(this, other.tree, newTree);
+        return new FSet<>(newTree);
+
+
     }
 
     @Override
-    public FSet intersection(T other) {
-        return null;
-    }
+    public FSet<T> symmetricDifference(FSet<T> other) {
+        RedBlackTree<T> newTree = new RedBlackTree<>();
+        RedBlackTree<T> tmpTree = new RedBlackTree<>();
+        tmpTree.symmetricDifferenceWithOtherTree(this, other.tree, newTree);
+        tmpTree.symmetricDifferenceWithOtherTree(other, this.tree, newTree);
+        return new FSet<>(newTree);
 
-    @Override
-    public FSet difference(T other) {
-        return null;
+
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.tree.getSize() == 0 ;
+    }
+
+    public void printSet(){
+        tree.printRedBlackTree();
+    }
+
+    public void printInOrder(){
+        tree.inorder();
+    }
+
+    public int size() {
+       return tree.getSize();
+    }
+
+
+    @Override
+    public String toString() {
+        tree.printStandard();
+        return "\nSet And Done";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FSet<?> fSet)) return false;
+        return Objects.equals(tree, fSet.tree);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(tree);
     }
 }
 
@@ -61,7 +121,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
  * @param <T> placeholder for any datatype.
  */
 
- sealed interface SetProcedural<T> permits FSet {
+ sealed interface SetProcedural<T extends Comparable<T>> permits FSet {
 
         /**
          * Add new element to immutable FSet.
@@ -69,7 +129,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
          * @param element to be added to immutable FSet.
          * @return A new immutable set object of type FSet.
          */
-        FSet add(T element);
+        FSet<T> add(T element);
 
         /**
          * Removes an element from FSet
@@ -77,7 +137,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
          * @param element to be removed
          * @return A new immutable FSet object without element.
          */
-        FSet remove(T element);
+        FSet<T> remove(T element);
 
         /**
          * Check if element is present in FSet Object.
@@ -93,7 +153,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
          * @param other FSet with elements to be added.
          * @return A new FSet with the combine elements of FSet and other
          */
-        FSet union(T other);
+        FSet<T> union(FSet<T> other);
 
         /**
          * Adds all unique elements that are present in both FSets.
@@ -101,7 +161,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
          * @param other FSet with elements to be added
          * @return A new FSet object with the values present in both FSet and other.
          */
-        FSet intersection(T other);
+        FSet<T> intersection(FSet<T> other);
 
         /**
          * Adds all unique elements that are not present between two FSets.
@@ -109,7 +169,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
          * @param other FSet with elements to be excluded
          * @return A new FSet object with the symmetric difference between FSet and other.
          */
-        FSet difference(T other);
+        FSet<T> symmetricDifference(FSet<T> other);
 
         /**
          * Check if FSet object is empty or without any elements.

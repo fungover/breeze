@@ -51,9 +51,8 @@ class HashCodeWrapperTest {
         @Test
         @DisplayName("Node has predictable hash value test")
         void nodeHasPredictableHashValueTest() {
-            var expectedValue = hash(20);
-            System.out.println(bigValueNode.hashCode());
-            assertThat(bigValueNode.hashCode()).isEqualTo(expectedValue);
+            var expectedValue = 20;
+            assertThat(bigValueNode.hashCode()).hasSameHashCodeAs(expectedValue);
 
         }
 

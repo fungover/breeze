@@ -90,7 +90,7 @@ class Node<T> {
 
         public HashCodeWrapper(T value) {
             this.value =  value;
-            this.hashCode = value != null ? value.hashCode() : 0;
+            this.hashCode = value != null ? value.hashCode() : 1;
         }
 
 
@@ -126,7 +126,7 @@ class Node<T> {
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.value);
+            return hashCode;
         }
 
 

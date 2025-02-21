@@ -11,19 +11,19 @@ import java.io.PrintStream;
 import static org.assertj.core.api.Assertions.*;
 
 class RedBlackTreeTest {
-    int [] values;
+    int[] values;
 
     RedBlackTree<Integer> tree = new RedBlackTree<>();
 
     @Nested
-    class TreeIsEmptyTests{
+    class TreeIsEmptyTests {
         RedBlackTree<Integer> treeEmpty = new RedBlackTree<>();
 
         @Test
         @DisplayName("Tree without values has value null and color Red test")
         void treeWithoutValuesHasValueNullAndColorRedTest() {
 
-           var emptyNode = treeEmpty.findValue(null);
+            var emptyNode = treeEmpty.findValue(null);
             assertThat(emptyNode).isNull();
 
         }
@@ -49,7 +49,6 @@ class RedBlackTreeTest {
         assertThat(rootNode).isNotNull();
         assertThat(rootNode.color).isTrue(); // Root node should be black
     }
-
 
 
     @Test
@@ -81,7 +80,6 @@ class RedBlackTreeTest {
     }
 
 
-
     @Test
     @DisplayName("Adding forth node to tree that is in between 10 and 20 Test")
     void addingForthNodeToTreeThatIsInBetween10And20Test() {
@@ -99,7 +97,6 @@ class RedBlackTreeTest {
         assertThat(expectedly4.color).isFalse();
 
     }
-
 
 
     @Test
@@ -126,7 +123,7 @@ class RedBlackTreeTest {
         // Expected tree structure
         var expectedTreeStructure = """
                 RedBlack Tree with Nodes and Values
-
+                
                  /-- 20B
                       /-- 10R
                            /-- 5B
@@ -135,7 +132,7 @@ class RedBlackTreeTest {
                                 /-- 12R
                       \\-- 30B
                            /-- 25R
-
+                
                 Total size: 8
                 """;
 
@@ -187,7 +184,7 @@ class RedBlackTreeTest {
     @Test
     @DisplayName("Insert Null as value to  a tree node causes exception Test")
     void insertNullAsValueToTreeNodeCausesExceptionTest() {
-        assertThatThrownBy( () -> tree.insert(null))
+        assertThatThrownBy(() -> tree.insert(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cannot insert null value");
 
@@ -311,12 +308,12 @@ class RedBlackTreeTest {
         var bigTreeValues = new int[]{10, 30, 50, 70, 90, 110};
         var smallTreeValues = new int[]{1, 3, 5, 7};
 
-        for(int bigval : bigTreeValues) {
-            bigTree.insert(bigval);
+        for (int bigVal : bigTreeValues) {
+            bigTree.insert(bigVal);
 
         }
-        for(int smallval : smallTreeValues) {
-            smallTree.insert(smallval);
+        for (int smallVal : smallTreeValues) {
+            smallTree.insert(smallVal);
         }
 
         bigTree.insertFromAnotherTree(smallTree);
@@ -327,6 +324,27 @@ class RedBlackTreeTest {
 
 
     }
+
+
+    @Test
+    @DisplayName("RedBlack Tree equality tests")
+    void redBlackTreeEqualityTests() {
+        RedBlackTree<Integer> bigTree = new RedBlackTree<>();
+        RedBlackTree<Integer> bigTree2 = new RedBlackTree<>();
+
+        var bigTreeValues = new int[]{10, 30, 50, 70, 90, 110};
+        for (int bigVal : bigTreeValues) {
+            bigTree.insert(bigVal);
+            bigTree2.insert(bigVal);
+        }
+
+        assertThat(bigTree).isEqualTo(bigTree2);
+        assertThat(bigTree.hashCode()).hasSameHashCodeAs(bigTree2.hashCode());
+
+
+
+    }
+
 
 
 

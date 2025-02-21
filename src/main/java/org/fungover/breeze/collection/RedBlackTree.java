@@ -1,7 +1,9 @@
 package org.fungover.breeze.collection;
 
 
-class RedBlackTree<T extends Comparable<T>> {
+import java.util.Objects;
+
+final class RedBlackTree<T extends Comparable<T>> {
 
     private Node<T> root;
     private static final boolean RED = false;
@@ -60,6 +62,7 @@ class RedBlackTree<T extends Comparable<T>> {
         }
         // Ensures that root always is black.
         root.color = BLACK;
+
     }
 
     private Node<T> balanceRightChild(Node<T> current, Node<T> uncle, Node<T> grandParent, Node<T> parent) {
@@ -106,7 +109,6 @@ class RedBlackTree<T extends Comparable<T>> {
     }
 
 
-
     // Left rotation for Red-Black Tree rebalancing
     private void leftRotate(Node<T> node) {
         Node<T> rightChild = node.right;
@@ -126,7 +128,7 @@ class RedBlackTree<T extends Comparable<T>> {
         node.parent = rightChild;
     }
 
-    // Right rotation for Red-Black Tree rebalancing
+    // Right rotation for Red-Black Tree balancing
     private void rightRotate(Node<T> node) {
         Node<T> leftChild = node.left;
         node.left = leftChild.right;
@@ -144,8 +146,6 @@ class RedBlackTree<T extends Comparable<T>> {
         leftChild.right = node;
         node.parent = leftChild;
     }
-
-
 
 
     private Node<T> insertNode(Node<T> root, Node<T> newNode) {
@@ -223,6 +223,10 @@ class RedBlackTree<T extends Comparable<T>> {
         this.size++;
     }
 
+    private void decreaseSize() {
+        this.size--;
+    }
+
     public int getSize() {
         return size;
     }
@@ -255,6 +259,18 @@ class RedBlackTree<T extends Comparable<T>> {
 
     }
 
+    public void printStandard(){
+        printStandardSet(root);
+    };
+
+    private void printStandardSet(Node<T> node) {
+        if(node == null)
+            return;
+        System.out.print(node.getValue() + ", ");
+        printStandardSet(node.left);
+        printStandardSet(node.right);
+    }
+
     // In the RedBlackTree class, add this method
     public void insertFromAnotherTree(RedBlackTree<T> anotherTree) {
         insertFromAnotherTreeHelper(anotherTree.root);
@@ -272,4 +288,69 @@ class RedBlackTree<T extends Comparable<T>> {
         insertFromAnotherTreeHelper(node.right);
     }
 
+
+    public void removalBySkip(RedBlackTree<T> anotherTree, T value) {
+        removalBySkipHelper(anotherTree.root, value);
+    }
+
+    private void removalBySkipHelper(Node<T> root, T value) {
+        if (root == null) return;
+
+        if (!root.getValue().equals(value)) {
+            insert(root.getValue());
+        }
+        removalBySkipHelper(root.left, value);
+        removalBySkipHelper(root.right, value);
+
+    }
+
+
+    public void intersectWithOtherTree(FSet<T> tree, RedBlackTree<T> other, RedBlackTree<T> newTree) {
+
+        intersectWithOtherTreeHelper(tree, other.root, newTree);
+
+    }
+
+    private void intersectWithOtherTreeHelper(FSet<T> tree, Node<T> other, RedBlackTree<T> newTree) {
+
+        if (other == null) {
+            return;
+        }
+
+        if (tree.contains(other.getValue())) {
+            newTree.insert(other.getValue());
+        }
+        intersectWithOtherTreeHelper(tree, other.left, newTree);
+        intersectWithOtherTreeHelper(tree, other.right, newTree);
+    }
+
+
+    public void symmetricDifferenceWithOtherTree(FSet<T> tree, RedBlackTree<T> other, RedBlackTree<T> newTree) {
+
+        symmetricDifferenceWithOtherTreeHelper(tree, other.root, newTree);
+    }
+
+    private void symmetricDifferenceWithOtherTreeHelper(FSet<T> tree, Node<T> other, RedBlackTree<T> newTree) {
+
+        if (other == null) {
+            return;
+        }
+
+        if (!tree.contains(other.getValue())) {
+            newTree.insert(other.getValue());
+        }
+        symmetricDifferenceWithOtherTreeHelper(tree, other.left, newTree);
+        symmetricDifferenceWithOtherTreeHelper(tree, other.right, newTree);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof RedBlackTree<?> that)) return false;
+        return Objects.equals(root, that.root);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(root);
+    }
 }

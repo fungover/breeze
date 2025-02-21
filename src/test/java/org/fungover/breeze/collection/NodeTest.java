@@ -140,8 +140,8 @@ class NodeTest {
         void hashcodeForNodeValuesIsPredictableTest() {
 
             Node edgeNode = new Node(1);
-            var expected = hash(1);
-            assertThat(edgeNode.hashCode()).isEqualTo(expected);
+            var expected = Integer.valueOf(1);
+            assertThat(edgeNode.hashCode()).hasSameHashCodeAs(expected);
 
         }
 
