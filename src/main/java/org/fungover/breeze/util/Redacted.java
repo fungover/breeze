@@ -9,7 +9,7 @@ import java.util.Objects;
  * The value stored in a {@code Redacted} instance can be redacted (displayed as {@code <redacted>})
  * or wiped (displayed as {@code <wiped>}). Once wiped, the original value cannot be retrieved.
  * </p>
- * <p>
+ *
  * Example usage:
  * <pre>
  * Redacted redacted = Redacted.make("MySecretPassword");
@@ -17,12 +17,12 @@ import java.util.Objects;
  * String originalValue = redacted.getValue(); // Retrieves the original value
  * redacted.wipe();
  * System.out.println(redacted); // Output: {@code <wiped>}
- * redacted.getValue(); // Throws IllegalStateException
+ * redacted.getValue(); // Output: {@code <wiped>}
  * </pre>
- * </p>
+ *
  */
 public class Redacted implements CharSequence {
-    private final CharSequence value;
+    private CharSequence value;
     private boolean isWiped;
     private static final String wipedMarker = "<wiped>";
     private static final String redactedMarker = "<redacted>";
@@ -55,10 +55,9 @@ public class Redacted implements CharSequence {
      * Method for retrieving the original value.
      *
      * @return Saved {@code CharSequence}.
-     * @throws IllegalStateException if value has been wiped.
      */
     public CharSequence getValue() {
-        return isWiped ? wipedMarker : value;
+        return value;
     }
 
     /**
@@ -66,6 +65,7 @@ public class Redacted implements CharSequence {
      */
     public void wipe (){
         this.isWiped = true;
+        this.value = wipedMarker;
     }
 
     /**
@@ -108,13 +108,22 @@ public class Redacted implements CharSequence {
 
 
 
-    // HashCode and equals
+    /**
+     * Compares this Redacted object to another object for equality.
+     * Two Redacted objects are considered equal if they are instances of the same class,
+     * their {@code isWiped} flags are the same, and their {@code value} fields are equal
+     *
+     * @param  o The object to compare with this Redacted object.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Redacted secret)) return false;
         return isWiped == secret.isWiped && Objects.equals(value, secret.value);
     }
-
+    /**
+     * @return The hash code for this Redacted object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(value, isWiped);
