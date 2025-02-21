@@ -200,39 +200,7 @@ public final class SQL {
      * @param query The query to equal a column by
      * @return The supported functions following DQL SQL
      */
-    EqualStep isEqualTo(String query);
-
-    /**
-     * Adds the query to select on
-     *
-     * @param query The query to equal a column by
-     * @return The supported functions following DQL SQL
-     */
-    EqualStep isEqualTo(boolean query);
-
-    /**
-     * Adds the query to select on
-     *
-     * @param query The query to equal a column by
-     * @return The supported functions following DQL SQL
-     */
-    EqualStep isEqualTo(int query);
-
-    /**
-     * Adds the query to select on
-     *
-     * @param query The query to equal a column by
-     * @return The supported functions following DQL SQL
-     */
-    EqualStep isEqualTo(double query);
-
-    /**
-     * Adds the query to select on
-     *
-     * @param query The query to equal a column by
-     * @return The supported functions following DQL SQL
-     */
-    EqualStep isEqualTo(float query);
+    <T> EqualStep isEqualTo(T query);
 
     /**
      * Adds support for the between operator
@@ -273,12 +241,14 @@ public final class SQL {
   public interface EqualStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
 
     /**
      * Adds support for grouping by a specific column
+     *
      * @param column The column to group by
      * @return The supported functions following DQL SQL
      */
@@ -303,6 +273,7 @@ public final class SQL {
 
     /**
      * Adds support for the having clause
+     *
      * @param condition The condition to apply the HAVING clause on
      * @return The supported functions following DQL SQL
      */
@@ -315,6 +286,7 @@ public final class SQL {
   public interface GroupByStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
@@ -330,6 +302,7 @@ public final class SQL {
 
     /**
      * Adds support for the having clause
+     *
      * @param condition The condition to apply the HAVING clause on
      * @return The supported functions following DQL SQL
      */
@@ -342,6 +315,7 @@ public final class SQL {
   public interface OrderByStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
@@ -370,12 +344,14 @@ public final class SQL {
   public interface LimitStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
 
     /**
      * Adds support for the offset operator
+     *
      * @param offset The amount to offset by
      * @return The supported functions following DQL SQL
      */
@@ -388,6 +364,7 @@ public final class SQL {
   public interface OffsetStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
@@ -399,6 +376,7 @@ public final class SQL {
   public interface HavingStep {
     /**
      * Builds the SQL query in to a {@code String}
+     *
      * @return The entire SQL statement
      */
     String build();
@@ -493,32 +471,12 @@ public final class SQL {
     }
 
     @Override
-    public EqualStep isEqualTo(String query) {
-      this.equal = "'" + query + "'";
-      return this;
-    }
-
-    @Override
-    public EqualStep isEqualTo(boolean query) {
-      this.equal = String.valueOf(query);
-      return this;
-    }
-
-    @Override
-    public EqualStep isEqualTo(int query) {
-      this.equal = String.valueOf(query);
-      return this;
-    }
-
-    @Override
-    public EqualStep isEqualTo(double query) {
-      this.equal = String.valueOf(query);
-      return this;
-    }
-
-    @Override
-    public EqualStep isEqualTo(float query) {
-      this.equal = String.valueOf(query);
+    public <T> EqualStep isEqualTo(T query) {
+      if (query instanceof String) {
+        this.equal = "'" + query + "'";
+      } else {
+        this.equal = query.toString();
+      }
       return this;
     }
 
