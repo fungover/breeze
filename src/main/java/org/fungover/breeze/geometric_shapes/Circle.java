@@ -15,10 +15,12 @@ public class Circle implements Shape {
         this.radius = radius;
     }
 
+    /**
+     * @return
+     */
     @Override
-    public Point getCenter() {
-        // Convert Point2D to Point
-        return new Point((int) center.getX(), (int) center.getY());
+    public Point2D.Double getCenter() {
+        return null;
     }
 
 
@@ -82,7 +84,6 @@ public class Circle implements Shape {
         return new Rectangle(new Point((int) x, (int) y), width, height);
     }
 
-
     @Override
     public Shape rotate(double angle, Point center) {
         // Rotation does not change the shape of a circle, but if needed, adjust its center
@@ -109,7 +110,8 @@ public class Circle implements Shape {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Circle circle = (Circle) obj;
-        return Double.compare(circle.radius, radius) == 0 && center.equals(circle.center);
+        return Double.compare(circle.radius, radius) == 0 &&
+                center.distance(circle.center) < 0.0001;
     }
 
     @Override

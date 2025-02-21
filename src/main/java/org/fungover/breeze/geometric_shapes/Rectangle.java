@@ -1,6 +1,7 @@
 package org.fungover.breeze.geometric_shapes;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.Objects;
 
 public class Rectangle implements Shape {
@@ -42,13 +43,22 @@ public class Rectangle implements Shape {
 
     @Override
     public boolean intersects(Shape other) {
-        // Implement intersection logic (can be extended to other shapes)
-        return false;
+        if (other instanceof Rectangle) {
+            Rectangle r = (Rectangle) other;
+            return this.getBoundingBox().intersects(r.getBoundingBox());
+        }
+        return false; // Other shapes need specific implementation
     }
 
     @Override
     public boolean containsShape(Shape other) {
-        // Implement logic for checking if one shape is contained within the rectangle
+        if (other instanceof Rectangle) {
+            Rectangle r = (Rectangle) other;
+            return this.contains(r.topLeft) &&
+                    this.contains(new Point((int) (r.topLeft.getX() + r.width), (int) r.topLeft.getY())) &&
+                    this.contains(new Point((int) r.topLeft.getX(), (int) (r.topLeft.getY() + r.height))) &&
+                    this.contains(new Point((int) (r.topLeft.getX() + r.width), (int) (r.topLeft.getY() + r.height)));
+        }
         return false;
     }
 
@@ -64,21 +74,36 @@ public class Rectangle implements Shape {
 
     @Override
     public Rectangle getBoundingBox() {
-        return this;  // A rectangle's bounding box is the rectangle itself
+        return new Rectangle(new Point(topLeft.x, topLeft.y), width, height);
     }
 
     @Override
-    public Point getCenter() {
-        // Return the center of the rectangle
-        double centerX = topLeft.getX() + width / 2;
-        double centerY = topLeft.getY() + height / 2;
-        return new Point((int) centerX, (int) centerY);
+    public Point2D.Double getCenter() {
+        return new Point2D.Double(topLeft.getX() + width / 2, topLeft.getY() + height / 2);
     }
 
     @Override
     public Shape rotate(double angle, Point center) {
-        // Implement rotation logic (if needed)
-        return this;  // For simplicity, returning the same rectangle here
+        // Rotate the four corners around the center
+        Point topLeftRotated = rotatePoint(topLeft, angle, center);
+        Point topRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), (int) topLeft.getY()), angle, center);
+        Point bottomLeftRotated = rotatePoint(new Point((int) topLeft.getX(), (int) (topLeft.getY() + height)), angle, center);
+        Point bottomRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), (int) (topLeft.getY() + height)), angle, center);
+
+        // Determine new bounding box
+        int minX = (int) Math.min(Math.min(topLeftRotated.getX(), topRightRotated.getX()), Math.min(bottomLeftRotated.getX(), bottomRightRotated.getX()));
+        int minY = (int) Math.min(Math.min(topLeftRotated.getY(), topRightRotated.getY()), Math.min(bottomLeftRotated.getY(), bottomRightRotated.getY()));
+        int maxX = (int) Math.max(Math.max(topLeftRotated.getX(), topRightRotated.getX()), Math.max(bottomLeftRotated.getX(), bottomRightRotated.getX()));
+        int maxY = (int) Math.max(Math.max(topLeftRotated.getY(), topRightRotated.getY()), Math.max(bottomLeftRotated.getY(), bottomRightRotated.getY()));
+
+        return new Rectangle(new Point(minX, minY), maxX - minX, maxY - minY);
+    }
+
+    private Point rotatePoint(Point p, double angle, Point center) {
+        double radians = Math.toRadians(angle);
+        int x = (int) (Math.cos(radians) * (p.getX() - center.getX()) - Math.sin(radians) * (p.getY() - center.getY()) + center.getX());
+        int y = (int) (Math.sin(radians) * (p.getX() - center.getX()) + Math.cos(radians) * (p.getY() - center.getY()) + center.getY());
+        return new Point(x, y);
     }
 
     @Override
