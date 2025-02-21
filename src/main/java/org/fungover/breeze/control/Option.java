@@ -89,7 +89,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return an {@code Option<T>} containing the value, or {@code None<T>} if the value is null
      */
 
-    public static <T extends Serializable> Option<T> of(T value) {
+    public static <T extends Serializable> Option<T> of(final T value) {
         return value != null ? new Some<>(value) : None.getInstance();
     }
 
@@ -106,7 +106,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @throws NullPointerException if {@code value} is {@code null}
      */
 
-    public static <T extends Serializable> Option<T> some(T value) {
+    public static <T extends Serializable> Option<T> some(final T value) {
         if (value == null) {
             throw new NullPointerException("Cannot create 'Some' with null");
         }
@@ -192,7 +192,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
     public abstract T getOrNull();
 
     /**
-     * Returns the contained value if present, otherwise throws an exception provided by the supplier.
+     * @return the contained value if present, otherwise throws an exception provided by the supplier.
      *
      * @param <X>               the type of the exception to be thrown
      * @param exceptionSupplier a supplier function that provides the exception to throw
@@ -313,9 +313,17 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @return The computed value from either {@code ifNone} or {@code ifPresent}.
      * @throws NullPointerException if {@code ifNone} or {@code ifPresent} is null.
      */
-    public abstract <U> U fold(Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
+    public abstract <U> U fold(final Supplier<U> ifNone, Function<? super T, ? extends U> ifPresent);
 
-
+    /**
+     * Creates an {@link Option} instance based on the given value.
+     * If the value is non-null, returns a {@link Some} instance containing the value.
+     * Otherwise, returns the singleton {@link None} instance.
+     *
+     * @param <T> the type of the value, which must be {@link Serializable}
+     * @param value the value to wrap in an {@link Option}
+     * @return a {@link Some} containing the value if non-null, otherwise {@link None}
+     */
     public static <T extends Serializable> Option<T> ofNullable(T value) {
         return value != null ? new Some<>(value) : None.getInstance();
     }
@@ -422,7 +430,7 @@ public abstract class Option<T extends Serializable> implements Serializable {
      * @param <R>    the type of the right value (must be {@link Serializable})
      * @return an {@code Option<R>} containing the right value if present, otherwise {@code None}
      */
-    public static <L extends Serializable, R extends Serializable> Option<R> fromEither(Either<L, R> either) {
+    public static <L extends Serializable, R extends Serializable> Option<R> fromEither(final Either<L, R> either) {
         return either.isRight() ? Option.some(either.getRight()) : Option.none();
     }
 }
