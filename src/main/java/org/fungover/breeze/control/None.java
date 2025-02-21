@@ -38,7 +38,8 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Private constructor to enforce singleton pattern.
      */
-    private None() {}
+    private None() {
+    }
 
     /**
      * Returns the singleton instance of {@code None}.
@@ -48,7 +49,7 @@ public final class None<T extends Serializable> extends Option<T> {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> None<T> getInstance() {
-    return (None<T>) INSTANCE;
+        return (None<T>) INSTANCE;
     }
 
     /**
@@ -152,7 +153,7 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Returns {@code None} since there is no value to transform.
      *
-     * @param <U> The type of the would-be transformed value.
+     * @param <U>    The type of the would-be transformed value.
      * @param mapper A function to apply (ignored).
      * @return {@code None<U>}.
      */
@@ -166,7 +167,7 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Returns {@code None} since there is no value to transform.
      *
-     * @param <U> The type of the resulting Option.
+     * @param <U>    The type of the resulting Option.
      * @param mapper A function that returns an {@code Option<U>} (ignored).
      * @return {@code None<U>}.
      */
@@ -211,8 +212,8 @@ public final class None<T extends Serializable> extends Option<T> {
     /**
      * Folds the Option, returning a default value since {@code None} contains no value.
      *
-     * @param <U> The return type.
-     * @param ifNone Supplier for the default value.
+     * @param <U>       The return type.
+     * @param ifNone    Supplier for the default value.
      * @param ifPresent Function applied to the value if present (ignored).
      * @return The default value from {@code ifNone}.
      */
@@ -263,7 +264,7 @@ public final class None<T extends Serializable> extends Option<T> {
      * </p>
      *
      * @param leftSupplier a supplier providing the left value if this is {@code None}.
-     * @param <L> the type of the left value, extending {@link Serializable}.
+     * @param <L>          the type of the left value, extending {@link Serializable}.
      * @return an {@code Either.Left} containing the supplied value.
      * @throws NullPointerException if {@code leftSupplier} is null or if it returns null.
      */

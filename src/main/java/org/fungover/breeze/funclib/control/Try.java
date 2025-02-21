@@ -14,7 +14,9 @@ import java.util.function.Function;
 public abstract class Try<T> implements Serializable {
 
     public abstract boolean isSuccess();
+
     public abstract boolean isFailure();
+
     public abstract T get() throws Exception;
 
     public static <T> Try<T> success(T value) {
