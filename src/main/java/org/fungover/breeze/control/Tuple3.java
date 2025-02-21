@@ -134,7 +134,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
      * @param function the function that should be applied on this objects first element
      * @param <R>      class type of the element that results from the function where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple3 with R first, T2 second and T3 third as values.
-     * @throws IllegalArgumentException if result of the function (R) is null
+     * @throws IllegalArgumentException if R result of the function is null
      */
     public <R extends Comparable<? super R> & Serializable> Tuple3<R, T2, T3> map1(Function<T1, R> function) {
 
@@ -151,7 +151,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
      * @param function the function that should be applied on this objects second element
      * @param <R>      class type of the element that results from the function where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple3 with T1 first, R second and T3 third as values.
-     * @throws IllegalArgumentException if result of the function (R) is null
+     * @throws IllegalArgumentException if R result of the function is null
      */
     public <R extends Comparable<? super R> & Serializable> Tuple3<T1, R, T3> map2(Function<T2, R> function) {
 
@@ -168,7 +168,7 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
      * @param function the function that should be applied on this objects third element
      * @param <R>      class type of the element that results from the function where class must implement serializable and class (or superclass) must implement comparable.
      * @return a new Tuple3 with T1 first, T2 second and R third as values.
-     * @throws IllegalArgumentException if result of the function (R) is null
+     * @throws IllegalArgumentException if R result of the function is null
      */
     public <R extends Comparable<? super R> & Serializable> Tuple3<T1, T2, R> map3(Function<T3, R> function) {
 
@@ -199,6 +199,70 @@ public final class Tuple3<T1 extends Comparable<? super T1> & Serializable, T2 e
         R3 thirdFunctionResult = checkForNullFunctionResult(function3.apply(third));
 
         return Tuple3.of(firstFunctionResult, secondFunctionResult, thirdFunctionResult);
+    }
+
+    /**
+     * Appends the specified element as the last element of the tuple, which converts it into a larger Tuple size.
+     * Returns a new Tuple4 object with:
+     * this.first as first, this.second as second, this.third as third and E element as fourth.
+     *
+     * @param element the element that should be appended
+     * @param <E>     class type of the element to append where class must implement serializable and class (or superclass) must implement comparable
+     * @return a new Tuple4 object
+     * @throws IllegalArgumentException if E element is null
+     */
+    public <E extends Comparable<? super E> & Serializable> Tuple4<T1, T2, T3, E> append(E element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Cannot append a null element");
+        }
+        return Tuple4.of(first, second, third, element);
+    }
+
+    /**
+     * Prepends the specified element as the first element of the tuple which converts it into a larger Tuple size.
+     * Returns a new Tuple4 object with:
+     * E element as first, this.first as second, this.second as third and this.third as fourth.
+     *
+     * @param element the element that should be appended
+     * @param <E>     class type of the element to prepend where class must implement serializable and class (or superclass) must implement comparable
+     * @return a new Tuple4 object
+     * @throws IllegalArgumentException if E element is null
+     */
+    public <E extends Comparable<? super E> & Serializable> Tuple4<E, T1, T2, T3> prepend(E element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Cannot prepend a null element");
+        }
+        return Tuple4.of(element, first, second, third);
+    }
+
+    /**
+     * Drops the first element and returns a new Tuple2 with:
+     * this.second as first and this.third as second.
+     *
+     * @return new Tuple2 object
+     */
+    public Tuple2<T2, T3> dropFirst() {
+        return Tuple2.of(second, third);
+    }
+
+    /**
+     * Drops the second element and returns a new Tuple2 with:
+     * this.first as first and this.third as second.
+     *
+     * @return new Tuple2 object
+     */
+    public Tuple2<T1, T3> dropSecond() {
+        return Tuple2.of(first, third);
+    }
+
+    /**
+     * Drops the third element and returns a new Tuple2 with:
+     * this.first as first and this.second as second.
+     *
+     * @return new Tuple2 object
+     */
+    public Tuple2<T1, T2> dropThird() {
+        return Tuple2.of(first, second);
     }
 
     /**
