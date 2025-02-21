@@ -205,13 +205,8 @@ public class SizeFormatter {
      * @throws IllegalArgumentException if the unit suffix is unrecognized
      */
     private static SizeUnit parseUnit(String unitPart) {
-        for (SizeUnit unit : SizeUnit.values()) {
-            if (unit.getSuffix().equalsIgnoreCase(unitPart)) {
-                return unit;
-            }
+    return SizeUnit.fromSuffix(unitPart);
         }
-        throw new IllegalArgumentException(String.format("Unrecognized unit: %s", unitPart));
-    }
 
     /**
      * Chooses the appropriate size unit based on the size and whether to use binary units.

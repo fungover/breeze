@@ -125,19 +125,17 @@ public enum SizeUnit {
      */
     public static SizeUnit chooseUnit(long size, boolean useBinaryUnits) {
         if (useBinaryUnits) {
-            if (size < 1024) return BYTES;
-            if (size < 1024 * 1024) return KIBIBYTES;
-            if (size < 1024L * 1024 * 1024) return MEBIBYTES;
-            if (size < 1024L * 1024L) return KIBIBYTES;
-            if (size < 1024L * 1024L * 1024L) return MEBIBYTES;
-            return GIBIBYTES;
+           if (size < 1024)                  return BYTES;
+           else if (size < 1024L * 1024L)    return KIBIBYTES;
+           else if (size < 1024L * 1024L * 1024L)        return MEBIBYTES;
+           else if (size < 1024L * 1024L * 1024L * 1024L) return GIBIBYTES;
+           return TEBIBYTES;
         } else {
-            if (size < 1_000) return BYTES;
-            if (size < 1_000_000) return KILOBYTES;
-            if (size < 1_000_000_000) return MEGABYTES;
-            if (size < 1_000_000L) return KILOBYTES;
-            if (size < 1_000_000_000L) return MEGABYTES;
-            return GIGABYTES;
+            if (size < 1_000)                    return BYTES;
+            else if (size < 1_000_000L)          return KILOBYTES;
+            else if (size < 1_000_000_000L)      return MEGABYTES;
+            else if (size < 1_000_000_000_000L)  return GIGABYTES;
+            return TERABYTES;
         }
     }
 
@@ -148,11 +146,10 @@ public enum SizeUnit {
      * @return the chosen SizeUnit
      */
     public static SizeUnit chooseRateUnit(long bitsPerSecond) {
-        if (bitsPerSecond < 1_000) return BITS;
-        if (bitsPerSecond < 1_000_000) return KILOBITS;
-        if (bitsPerSecond < 1_000_000_000) return MEGABITS;
-        if (bitsPerSecond < 1_000_000L) return KILOBITS;
-        if (bitsPerSecond < 1_000_000_000L) return MEGABITS;
-        return GIGABITS;
+        if (bitsPerSecond < 1_000)                  return BITS;
+        else if (bitsPerSecond < 1_000_000L)        return KILOBITS;
+        else if (bitsPerSecond < 1_000_000_000L)    return MEGABITS;
+        else if (bitsPerSecond < 1_000_000_000_000L) return GIGABITS;
+        return TERABITS;
     }
 }
