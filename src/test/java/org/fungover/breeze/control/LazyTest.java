@@ -1,6 +1,5 @@
-package org.fungover.breeze;
+package org.fungover.breeze.control;
 
-import org.fungover.breeze.control.Lazy;
 import org.fungover.breeze.funclib.control.Try;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
