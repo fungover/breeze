@@ -115,41 +115,4 @@ public enum SizeUnit {
         }
         throw new IllegalArgumentException("Unknown size unit: " + suffix);
     }
-
-    /**
-     * Chooses an appropriate SizeUnit for a given size.
-     *
-     * @param size           the size in bytes
-     * @param useBinaryUnits true to use binary units, false to use decimal units
-     * @return the chosen SizeUnit
-     */
-    public static SizeUnit chooseUnit(long size, boolean useBinaryUnits) {
-        if (useBinaryUnits) {
-           if (size < 1024)                  return BYTES;
-           else if (size < 1024L * 1024L)    return KIBIBYTES;
-           else if (size < 1024L * 1024L * 1024L)        return MEBIBYTES;
-           else if (size < 1024L * 1024L * 1024L * 1024L) return GIBIBYTES;
-           return TEBIBYTES;
-        } else {
-            if (size < 1_000)                    return BYTES;
-            else if (size < 1_000_000L)          return KILOBYTES;
-            else if (size < 1_000_000_000L)      return MEGABYTES;
-            else if (size < 1_000_000_000_000L)  return GIGABYTES;
-            return TERABYTES;
-        }
-    }
-
-    /**
-     * Chooses an appropriate SizeUnit for a given bit rate.
-     *
-     * @param bitsPerSecond the bit rate in bits per second
-     * @return the chosen SizeUnit
-     */
-    public static SizeUnit chooseRateUnit(long bitsPerSecond) {
-        if (bitsPerSecond < 1_000)                  return BITS;
-        else if (bitsPerSecond < 1_000_000L)        return KILOBITS;
-        else if (bitsPerSecond < 1_000_000_000L)    return MEGABITS;
-        else if (bitsPerSecond < 1_000_000_000_000L) return GIGABITS;
-        return TERABITS;
-    }
 }

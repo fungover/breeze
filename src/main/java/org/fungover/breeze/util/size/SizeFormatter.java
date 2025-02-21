@@ -18,8 +18,8 @@ import java.util.Locale;
 public class SizeFormatter {
 
     private static final Pattern SIZE_PATTERN = Pattern.compile(
-            "^([-+]?(?:\\d+\\.\\d+|\\.\\d+|\\d+))(\\s*)([a-zA-Z]+)$",
-            Pattern.CASE_INSENSITIVE
+            "^([-+]?(?:\\d+\\.\\d+|\\.\\d+|\\d+))(\\s*)([a-z]+)$", // Simplified to [a-z]
+            Pattern.CASE_INSENSITIVE // Flag handles case insensitivity
     );
 
     // Private constructor to prevent instantiation of this utility class
@@ -52,17 +52,7 @@ public class SizeFormatter {
         return format(size, SizeUnit.BYTES, decimalPlaces);
     }
 
-    /**
-     * Formats a byte size into a human-readable string with default settings.
-     *
-     * @param bytes the size in bytes
-     * @return a formatted string representing the size
-     */
-    public static String autoFormat(long bytes) {
-        return autoFormat(bytes, false, 2);
-    }
-
-    /**
+       /**
      * Converts a size from one unit to another.
      *
      * @param value     the size value to convert
@@ -106,10 +96,14 @@ public class SizeFormatter {
         BigDecimal bytes = unit.toBytes(number);
 
         if (bytes.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0) {
-            throw new ArithmeticException("Size exceeds maximum Long value");
+            throw new ArithmeticException(
+                    "Parsed size exceeds maximum Long value: " + bytes + ". Ensure the size is within [-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807]"
+            );
         }
         if (bytes.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) < 0) {
-            throw new ArithmeticException("Size exceeds minimum Long value");
+            throw new ArithmeticException(
+                    "Parsed size exceeds minimum Long value: " + bytes + ". Ensure the size is within [-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807]"
+            );
         }
 
         return bytes.longValueExact();
@@ -146,11 +140,13 @@ public class SizeFormatter {
             BigDecimal divisor = BigDecimal.valueOf(unit.getBase()).pow(unit.getExponent());
             BigDecimal converted = bitsPerSecond.divide(divisor, MathContext.DECIMAL128);
             if (converted.compareTo(BigDecimal.ONE) >= 0) {
-                return String.format(Locale.US, "%." + decimalPlaces + "f %sps",
+                String format = String.format(Locale.US, "%%.%df %%sps", decimalPlaces);
+                return String.format(Locale.US, format,
                         converted.setScale(decimalPlaces, RoundingMode.HALF_UP), unit.getSuffix());
             }
         }
-        return String.format(Locale.US, "%." + decimalPlaces + "f bps",
+        String formatBps = String.format(Locale.US, "%%.%df bps", decimalPlaces);
+        return String.format(Locale.US, formatBps,
                 bitsPerSecond.setScale(decimalPlaces, RoundingMode.HALF_UP));
     }
 
@@ -193,7 +189,8 @@ public class SizeFormatter {
      * @return the formatted string
      */
     private static String format(BigDecimal value, SizeUnit unit, int decimalPlaces) {
-        return String.format(Locale.US, "%." + decimalPlaces + "f %s",
+        String format = String.format(Locale.US, "%%.%df %%s", decimalPlaces);
+        return String.format(Locale.US, format,
                 value.setScale(decimalPlaces, RoundingMode.HALF_UP), unit.getSuffix());
     }
 
@@ -208,37 +205,7 @@ public class SizeFormatter {
     return SizeUnit.fromSuffix(unitPart);
         }
 
-    /**
-     * Chooses the appropriate size unit based on the size and whether to use binary units.
-     *
-     * @param size           the size in bytes
-     * @param useBinaryUnits whether to use binary units
-     * @return the appropriate SizeUnit
-     */
-    public static SizeUnit chooseUnit(long size, boolean useBinaryUnits) {
-        if (useBinaryUnits) {
-            if (size < 1024) return SizeUnit.BYTES;
-            if (size < 1024L * 1024L) return SizeUnit.KIBIBYTES;
-            if (size < 1024L * 1024L * 1024L) return SizeUnit.MEBIBYTES;
-            return SizeUnit.GIBIBYTES;
-        } else {
-            if (size < 1_000) return SizeUnit.BYTES;
-            if (size < 1_000_000L) return SizeUnit.KILOBYTES;
-            if (size < 1_000_000_000L) return SizeUnit.MEGABYTES;
-            return SizeUnit.GIGABYTES;
         }
-    }
 
-    /**
-     * Chooses the appropriate rate unit based on the bit rate.
-     *
-     * @param bitsPerSecond the bit rate in bits per second
-     * @return the appropriate SizeUnit
-     */
-    public static SizeUnit chooseRateUnit(long bitsPerSecond) {
-        if (bitsPerSecond < 1_000) return SizeUnit.BITS;
-        if (bitsPerSecond < 1_000_000L) return SizeUnit.KILOBITS;
-        if (bitsPerSecond < 1_000_000_000L) return SizeUnit.MEGABITS;
-        return SizeUnit.GIGABITS;
-    }
-}
+
+

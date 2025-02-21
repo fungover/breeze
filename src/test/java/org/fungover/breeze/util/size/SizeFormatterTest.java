@@ -128,4 +128,19 @@ class SizeFormatterTest {
         assertThrows(IllegalArgumentException.class, () ->
                 SizeFormatter.formatRate(1000, null, 2));
     }
+
+@Test
+void testLargeSizes() {
+    assertEquals("1.50 TB", SizeFormatter.autoFormat(1_500_000_000_000L, false, 2));
+    assertEquals("1.00 TiB", SizeFormatter.autoFormat(1_099_511_627_776L, true, 2));
+}
+
+@Test
+void testExactUnitThresholds() {
+    // Test exactly 1 GB (1,000,000,000 bytes)
+    assertEquals("1.00 GB", SizeFormatter.autoFormat(1_000_000_000L, false, 2));
+
+    // Test exactly 1 GiB (1,073,741,824 bytes)
+    assertEquals("1.00 GiB", SizeFormatter.autoFormat(1_073_741_824L, true, 2));
+}
 }
