@@ -385,8 +385,17 @@ public final class SQL {
 
   private static class SQLBuilder implements SelectStep, SelectAfterStep, FromStep, WhereStep, ConditionStep, EqualStep, GroupByStep, OrderByStep, LimitStep, OffsetStep, JoinStep, HavingStep {
     private void validateRequiredFields() {
+      if (columns.isEmpty()) {
+        throw new IllegalArgumentException("At least one column is required");
+      }
       if (table == null || table.isEmpty()) {
         throw new IllegalArgumentException("Table name is required");
+      }
+      if (limit != null && limit < 0) {
+        throw new IllegalArgumentException("Limit cannot be negative");
+      }
+      if (offset != null && offset < 0) {
+        throw new IllegalArgumentException("Offset cannot be negative");
       }
     }
 
