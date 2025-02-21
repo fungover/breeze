@@ -296,4 +296,19 @@ class CsvReaderTest {
                 new String[]{"Good bye", "have a nice \"flight\"!"}
         );
     }
+
+    @Test
+    @DisplayName("Customed header should be set")
+    void customedHeaderShouldBeSet() throws IOException {
+        String csvData = "Thing,30,3\nAlice,25,Los Angeles\nBob,35,Chicago";
+        CsvReader reader = CsvReader.builder()
+                .hasHeader(true)
+                .build()
+                .withSource(csvData);
+
+        reader.setCustomHeaders(new String[]{"Title", "Price", "Amount"});
+
+        Map<String, String> firstRow = reader.readNextAsMap();
+        assertEquals("Thing", firstRow.get("Title"));
+    }
 }

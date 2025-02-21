@@ -228,6 +228,15 @@ public class CsvReader {
     }
 
     /**
+     * Allows the user make a customed header
+     *
+     * @param customHeaders the customed header the user can choose
+     */
+    public void setCustomHeaders(String[] customHeaders) {
+        this.headers = customHeaders;
+    }
+
+    /**
      * Reads the next row from the CSV source as a map.
      *
      * @return a map where keys are header values and values are row values, or an empty map if the end is reached
