@@ -164,7 +164,7 @@ public final class Some<T extends Serializable> extends Option<T> {
      */
 
     @Override
-    public <X extends Throwable> T orElseThrow(final Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> T orElseThrow(final Supplier<? extends X> exceptionSupplier) {
         Objects.requireNonNull(exceptionSupplier, "Exception supplier must not be null");
         return value;
     }
@@ -172,16 +172,23 @@ public final class Some<T extends Serializable> extends Option<T> {
     /**
      * Applies the given mapping function to the contained value and returns a transformed {@code Option<U>}.
      * <p>
-     * If the mapping function returns the same instance as the original value, the existing {@code Some<T>}
-     * instance is returned to avoid unnecessary object creation. Otherwise, the result is wrapped in a new
-     * {@code Some<U>} or {@code None} if the mapping function returns {@code null}.
+     * If the mapping function returns the same instance as the original value and the types are compatible,
+     * the existing {@code Some<T>} instance is safely reused to avoid unnecessary object creation.
+     * Otherwise, the result is wrapped in a new {@code Some<U>} or {@code None} if the mapping function returns {@code null}.
+     * </p>
      *
-     * @param <U>    the type of the transformed value
-     * @param mapper a function to apply to the contained value
-     * @return the same {@code Some<T>} instance if the mapping function returns the original value;
+     * <p><b>Type Safety:</b> If the mapping function returns the exact same object reference,
+     * an unchecked cast is used to preserve immutability and avoid redundant object creation.
+     * However, this relies on the assumption that the original value is safely castable to {@code U}.</p>
+     *
+     * @param <U>    the type of the transformed value, which must be {@link Serializable}
+     * @param mapper a non-null function to apply to the contained value
+     * @return the same {@code Some<T>} instance if the mapping function returns the original value (and types are compatible);
      * otherwise, a new {@code Some<U>} or {@code None} if the result is {@code null}.
      * @throws NullPointerException if the mapping function is {@code null}
+     * @throws ClassCastException   if the original value cannot be safely cast to {@code U} when reused
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <U extends Serializable> Option<U> map(final Function<? super T, ? extends U> mapper) {
         U result = mapper.apply(value);
@@ -199,7 +206,6 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @param mapper a function that takes the contained value and returns an Option<U>
      * @return the mapped Option<U> resulting from applying the function
      */
-
     @Override
     public <U extends Serializable> Option<U> flatMap(final Function<? super T, Option<U>> mapper) {
         return Objects.requireNonNullElse(mapper.apply(value), None.getInstance());
@@ -254,7 +260,6 @@ public final class Some<T extends Serializable> extends Option<T> {
      * @param ifPresent Function applied to the value if present.
      * @return The computed value.
      */
-
     @Override
     public <U> U fold(final Supplier<U> ifNone, final Function<? super T, ? extends U> ifPresent) {
         Objects.requireNonNull(ifNone, "ifNone supplier cannot be null");
