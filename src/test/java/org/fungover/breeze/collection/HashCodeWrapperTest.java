@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static java.util.Objects.hash;
 import static org.assertj.core.api.Assertions.*;
 
 class HashCodeWrapperTest {
-    Node.HashCodeWrapper smallValueNode;
-    Node.HashCodeWrapper bigValueNode;
-    Node.HashCodeWrapper nullValueNode;
-    Node.HashCodeWrapper nullValueNode2;
+    Node.HashCodeWrapper<Integer> smallValueNode;
+    Node.HashCodeWrapper<Integer> bigValueNode;
+    Node.HashCodeWrapper<Integer> nullValueNode;
+    Node.HashCodeWrapper<Integer> nullValueNode2;
 
     @Nested
     class HashCodeWrapperNodeAllocationWithValueTests {
@@ -60,7 +59,8 @@ class HashCodeWrapperTest {
         @Test
         @DisplayName("Node with the same value returns is zero when node are compared Test")
         void nodeWithTheSameValueReturnsIsZeroWhenNodeAreComparedTest() {
-            var intValue = smallValueNode.compareTo(smallValueNode);
+            Node.HashCodeWrapper<Integer> small = new Node.HashCodeWrapper<>(10);
+            var intValue = smallValueNode.compareTo(small);
             assertThat(intValue).isZero();
 
         }
@@ -71,8 +71,9 @@ class HashCodeWrapperTest {
         void nodesWithTheSameValuesAreEqualReturnIsAlwaysTrueTest() {
             var expectedValue = new Node.HashCodeWrapper<>(10);
             var actualBoolean = smallValueNode.equals(expectedValue);
+            var expectedValue2 = new Node.HashCodeWrapper<>(20);
 
-            var actualBoolean2 = bigValueNode.equals(bigValueNode);
+            var actualBoolean2 = bigValueNode.equals(expectedValue2);
             assertThat(actualBoolean).isTrue();
             assertThat(actualBoolean2).isTrue();
 
@@ -151,9 +152,7 @@ class HashCodeWrapperTest {
         @DisplayName("Nodes with null values is True test")
         void nodesWithNullValuesIsTrueTest() {
             var expectedNullNode = new Node.HashCodeWrapper<>(null);
-            var isBoolean = nullValueNode.equals(nullValueNode);
             var isBoolean2 = nullValueNode.equals(expectedNullNode);
-            assertThat(isBoolean).isTrue();
             assertThat(isBoolean2).isTrue();
 
         }

@@ -3,27 +3,26 @@ package org.fungover.breeze.collection;
 import org.junit.jupiter.api.*;
 
 
-import static java.util.Objects.hash;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NodeTest {
-    Node nullNode;
-    Node nullNode2;
+    Node<?> nullNode;
+    Node<?> nullNode2;
 
-    Node node = new Node(1);
-    Node node2 = new Node("a");
+    Node<Integer> node = new Node<>(1);
+    Node<String> node2 = new Node<>("a");
 
     @Nested
     class NodeValueTest {
         @Test
         @DisplayName("Node value test")
         void nodeValueTest() {
-            Node node3 = new Node(1.0);
-            Node node4 = new Node(true);
-            Node node5 = new Node(false);
+            Node<Double> node3 = new Node<>(1.0);
+            Node<Boolean> node4 = new Node<>(true);
+            Node<Boolean> node5 = new Node<>(false);
             assertAll(
                     () -> assertEquals(1, node.getValue()),
                     () -> assertEquals("a", node2.getValue()),
@@ -35,7 +34,7 @@ class NodeTest {
 
         @Test
         @DisplayName("Node Color is initially False test")
-        void nodeColorisinitiallyFalseTest() {
+        void nodeColorIsInitiallyFalseTest() {
             assertThat(node.color).isFalse();
 
         }
@@ -53,7 +52,7 @@ class NodeTest {
         @Test
         @DisplayName("Nodes with the same values are equal Test")
         void nodesWithTheSameValuesAreEqualTest() {
-            var expectedNode = new Node(1);
+            var expectedNode = new Node<>(1);
             var expected = node.equals(expectedNode);
             assertThat(expected).isTrue();
 
@@ -62,8 +61,9 @@ class NodeTest {
         @Test
         @DisplayName("Node and not datatype node comparison is False Test")
         void nodeAndNotDatatypeNodeComparisonIsFalseTest() {
-            var otherType = String.valueOf("1");
-            assertThat(node.equals(otherType)).isFalse();
+            var otherType = "1";
+            var expected = node.equals(otherType);
+            assertThat(expected).isFalse();
 
         }
 
@@ -79,8 +79,8 @@ class NodeTest {
         @BeforeEach
         void setUp() {
 
-            nullNode = new Node();
-            nullNode2 = new Node(null);
+            nullNode = new Node<>();
+            nullNode2 = new Node<>(null);
         }
 
 
@@ -118,8 +118,8 @@ class NodeTest {
         @Test
         @DisplayName("Nodes that have equal value is True Test")
         void nodesThatHaveEqualValueIsTrueTest() {
-            Node edgeNode = new Node(1);
-            Node edgeNode2 = new Node(1);
+            Node<Integer> edgeNode = new Node<>(1);
+            Node<Integer> edgeNode2 = new Node<>(1);
             assertThat(edgeNode.equals(edgeNode2)).isTrue();
 
         }
@@ -128,8 +128,8 @@ class NodeTest {
         @Test
         @DisplayName("Null typed node and Node with other data type is False Test")
         void nullTypedNodeAndNodeWithOtherDataTypeIsFalseTest() {
-            Node edgeNode = new Node();
-            Node edgeNode2 = new Node(1);
+            Node<?> edgeNode = new Node<>();
+            Node<Integer> edgeNode2 = new Node<>(1);
             assertThat(edgeNode).isNotEqualTo(edgeNode2);
 
 
@@ -139,7 +139,7 @@ class NodeTest {
         @DisplayName("Hashcode for node values is predictable test")
         void hashcodeForNodeValuesIsPredictableTest() {
 
-            Node edgeNode = new Node(1);
+            Node<Integer> edgeNode = new Node<>(1);
             var expected = Integer.valueOf(1);
             assertThat(edgeNode.hashCode()).hasSameHashCodeAs(expected);
 
