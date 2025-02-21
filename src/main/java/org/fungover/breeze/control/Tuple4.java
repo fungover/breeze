@@ -250,6 +250,46 @@ public final class Tuple4<T1 extends Comparable<? super T1> & Serializable, T2 e
     }
 
     /**
+     * Drops the first element and returns a new Tuple3 with:
+     * this.second as first, this.third as second and this.fourth as third.
+     *
+     * @return new Tuple3 object
+     */
+    public Tuple3<T2, T3, T4> dropFirst() {
+        return Tuple3.of(second, third, fourth);
+    }
+
+    /**
+     * Drops the second element and returns a new Tuple3 with:
+     * this.first as first, this.third as second and this.fourth as third.
+     *
+     * @return new Tuple3 object
+     */
+    public Tuple3<T1, T3, T4> dropSecond() {
+        return Tuple3.of(first, third, fourth);
+    }
+
+    /**
+     * Drops the third element and returns a new Tuple3 with:
+     * this.first as first, this.second as second and this.fourth as third.
+     *
+     * @return new Tuple3 object
+     */
+    public Tuple3<T1, T2, T4> dropThird() {
+        return Tuple3.of(first, second, fourth);
+    }
+
+    /**
+     * Drops the fourth element and returns a new Tuple3 with:
+     * this.first as first, this.second as second and this.third as third.
+     *
+     * @return new Tuple3 object
+     */
+    public Tuple3<T1, T2, T3> dropFourth() {
+        return Tuple3.of(first, second, third);
+    }
+
+    /**
      * Converts this tuple objects elements into an Object[] array.
      * The order of the elements in this object will transpose to the Object[] array order,
      * meaning that this.first will be at index 0 of the array, this.second will be at index 1,
