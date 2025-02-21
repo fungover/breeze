@@ -63,9 +63,9 @@ public class RayMathTest {
 
         Vector3 hitPoint = RayMath.rayIntersectsPlane(ray, planePoint, planeNormal);
         assertNotNull(hitPoint, "Ray should hit the plane!");
-        assertEquals(0, hitPoint.getX(), 1e-6);
-        assertEquals(-5, hitPoint.getY(), 1e-6);
-        assertEquals(0, hitPoint.getZ(), 1e-6);
+        assertEquals(0, hitPoint.x, 1e-6);
+        assertEquals(-5, hitPoint.y, 1e-6);
+        assertEquals(0, hitPoint.z, 1e-6);
 }
 
     @Test
@@ -76,9 +76,9 @@ public class RayMathTest {
 
         Vector3 hitPoint = RayMath.rayIntersectsPlane(ray, planePoint, planeNormal);
         assertNotNull(hitPoint, "Ray should hit the plane!");
-        assertEquals(0, hitPoint.getX(), EPSILON);
-        assertEquals(0, hitPoint.getY(), EPSILON);
-        assertEquals(0, hitPoint.getZ(), EPSILON);
+        assertEquals(0, hitPoint.x, EPSILON);
+        assertEquals(0, hitPoint.y, EPSILON);
+        assertEquals(0, hitPoint.z, EPSILON);
     }
 
     @Test
@@ -179,9 +179,9 @@ public class RayMathTest {
 
         Vector3 closestPoint = RayMath.closestPointOnRay(ray, point);
 
-        assertEquals(3, closestPoint.getX(), 1e-6);
-        assertEquals(0, closestPoint.getY(), 1e-6);
-        assertEquals(0, closestPoint.getZ(), 1e-6);
+        assertEquals(3, closestPoint.x, 1e-6);
+        assertEquals(0, closestPoint.y, 1e-6);
+        assertEquals(0, closestPoint.z, 1e-6);
     }
 
     @Test
@@ -191,8 +191,8 @@ public class RayMathTest {
 
         Vector3 closestPoint = RayMath.closestPointOnRay(ray, point);
 
-        assertEquals(0, closestPoint.getX(), 1e-6); // Should return the ray origin
-        assertEquals(0, closestPoint.getY(), 1e-6);
-        assertEquals(0, closestPoint.getZ(), 1e-6);
+        assertEquals(0, closestPoint.x, 1e-6); // Should return the ray origin
+        assertEquals(0, closestPoint.y, 1e-6);
+        assertEquals(0, closestPoint.z, 1e-6);
     }
 }

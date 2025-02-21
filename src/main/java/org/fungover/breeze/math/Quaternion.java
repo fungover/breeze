@@ -1,7 +1,10 @@
 package org.fungover.breeze.math;
 
 public class Quaternion {
-    private final float w, x, y, z;
+    private final float w;
+    private final float x;
+    private final float y;
+    private final float z;
 
     // Constructor
     public Quaternion(float w, float x, float y, float z) {
@@ -22,10 +25,6 @@ public class Quaternion {
     public final float getY() { return y; }
     public final float getZ() { return z; }
 
-//    public void setW(float w) { this.w = w; }
-//    public void setX(float x) { this.x = x; }
-//    public void setY(float y) { this.y = y; }
-//    public void setZ(float z) { this.z = z; }
 
     // Normalize a quaternion
     public Quaternion normalize() {
@@ -113,21 +112,13 @@ public class Quaternion {
     public Vector3 rotate(Vector3 v) {
         // Convert the vector to a quaternion with w = 0 (since it's purely a vector, not a rotation)
         Quaternion qv = new Quaternion(0, v.getX(), v.getY(), v.getZ());
-        System.out.println("Original Vector as Quaternion: " + qv);
 
         // Apply the rotation: q * v * q^-1
         Quaternion qInv = this.inverse(); // Inverse of the quaternion for the rotation
-        System.out.println("Inverse Quaternion: " + qInv);
-
-//        Quaternion qResult = this.multiply(qv).multiply(qInv);
         Quaternion rotated = this.multiply(qv).multiply(qInv);
-        System.out.println("Rotated Quaternion: " + rotated);
 
         // The rotated vector is stored in the result quaternion's vector part (x, y, z)
-//        return new Vector3(qResult.getX(), qResult.getY(), qResult.getZ());
         return new Vector3(rotated.getX(), rotated.getY(), rotated.getZ());
-
-//        return qResult;
     }
 
     // To String (for debugging)

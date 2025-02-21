@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 public class MathUtils {
 
     //Secure random generator for generating random values
-    static SecureRandom random = new SecureRandom();
+    static SecureRandom RANDOM = new SecureRandom();
 
     /**
      * Clamps a value between a minimum and maximum value.
@@ -76,7 +76,7 @@ public class MathUtils {
      * @return A random float between min and max.
      */
     public static float randomFloat(float min, float max) {
-        return min + random.nextFloat() * (max - min);
+        return min + RANDOM.nextFloat() * (max - min);
     }
 
     /**

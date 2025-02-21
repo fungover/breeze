@@ -82,13 +82,10 @@ public class QuaternionTest {
 
     @Test
     public void testRotateVector() {
+        // Test identity rotation
         Vector3 v = new Vector3(1, 0, 0);
-        Quaternion q = new Quaternion(0, 1, 0, 0);  // No rotation (identity)
-
-        // Rotating a vector by the identity quaternion should result in the same vector
-//        Quaternion rotated = q;
+        Quaternion q = new Quaternion(1, 0, 0, 0);  // No rotation (identity)
         Vector3 rotated = q.rotate(v);
-
         assertEquals(v.getX(), rotated.getX(), 1e-6);
         assertEquals(v.getY(), rotated.getY(), 1e-6);
         assertEquals(v.getZ(), rotated.getZ(), 1e-6);

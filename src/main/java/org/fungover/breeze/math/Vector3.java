@@ -5,7 +5,9 @@ package org.fungover.breeze.math;
  * Provides common vector operations such as addition, subtraction, scaling, dot product, cross product, and normalization.
  */
 public class Vector3 {
-    private final float x, y, z;
+    float x;
+    float y;
+    float z;
 
     /**
      * Constructs a new Vector3 with the given components.
@@ -15,6 +17,14 @@ public class Vector3 {
      * @param z The z-component of the vector.
      */
     public Vector3(float x, float y, float z) {
+
+        if (Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)) {
+            throw new IllegalArgumentException("Vector components cannot be NaN");
+        }
+        if (Float.isInfinite(x) || Float.isInfinite(y) || Float.isInfinite(z)) {
+            throw new IllegalArgumentException("Vector components cannot be infinite");
+        }
+
         this.x = x;
         this.y = y;
         this.z = z;
@@ -55,32 +65,6 @@ public class Vector3 {
         return z;
     }
 
-//    /**
-//     * Sets the x-component of the vector.
-//     *
-//     * @param x The new value for the x-component.
-//     */
-//    public void setX(float x) {
-//        this.x = x;
-//    }
-//
-//    /**
-//     * Sets the y-component of the vector.
-//     *
-//     * @param y The new value for the y-component.
-//     */
-//    public void setY(float y) {
-//        this.y = y;
-//    }
-//
-//    /**
-//     * Sets the z-component of the vector.
-//     *
-//     * @param z The new value for the z-component.
-//     */
-//    public void setZ(float z) {
-//        this.z = z;
-//    }
 
     /**
      * Adds another vector to this vector and returns the result.
@@ -102,15 +86,19 @@ public class Vector3 {
         return new Vector3(x - v.getX(), y - v.getY(), z - v.getZ());
     }
 
-//    /**
-//     * Multiplies the vector by a scalar and returns the result.
-//     *
-//     * @param scalar The scalar value to multiply the vector by.
-//     * @return A new Vector3 representing the scaled vector.
-//     */
-//    public Vector3 multiply(float scalar) {
-//        return new Vector3(x * scalar, y * scalar, z * scalar);
-//    }
+    /**
+     * Multiplies the vector by a scalar and returns the result.
+     *
+     * @param scalar The scalar value to multiply the vector by.
+     * @return A new Vector3 representing the scaled vector.
+     * @throws IllegalArgumentException if scalar is NaN or infinite
+     */
+    public Vector3 multiply(float scalar) {
+        if (Float.isNaN(scalar) || Float.isInfinite(scalar)) {
+            throw new IllegalArgumentException("Scalar must be a finite number");
+        }
+        return new Vector3(x * scalar, y * scalar, z * scalar);
+    }
 
     /**
      * Calculates the dot product of this vector and another vector.

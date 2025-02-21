@@ -26,7 +26,7 @@ public class RayMath {
             throw new IllegalArgumentException("Radius must be positive");
         }
 
-        if (ray.getDirection().getX() == 0 && ray.getDirection().getY() == 0 && ray.getDirection().getZ() == 0) {
+        if (ray.getDirection().x == 0 && ray.getDirection().y == 0 && ray.getDirection().z == 0) {
             throw new IllegalArgumentException("Ray direction must be non-zero and normalized");
         }
 
@@ -158,9 +158,9 @@ public class RayMath {
         }
 
         return new Vector3(
-            ray.getOrigin().getX() + ray.getDirection().getX() * t,
-            ray.getOrigin().getY() + ray.getDirection().getY() * t,
-            ray.getOrigin().getZ() + ray.getDirection().getZ() * t
+            ray.getOrigin().x + ray.getDirection().x * t,
+            ray.getOrigin().y + ray.getDirection().y * t,
+            ray.getOrigin().z + ray.getDirection().z * t
         );
     }
 }
