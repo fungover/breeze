@@ -1,8 +1,9 @@
 package org.fungover.breeze.util;
+import org.fungover.breeze.control.Tuple2;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.function.BiFunction;
-import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,93 +21,21 @@ public class Arrays {
     }
 
     /**
-     * Helper class to represent a tuple (pair) of two elements.
+     * Combines corresponding elements from two arrays into an array of Tuple2 objects.
+     * <p>
+     * Each element from the first array is paired with the corresponding element from the second array
+     * to form a Tuple2. The resulting array will have the same length as the input arrays.
+     * </p>
      *
-     * @param <T> Type of the first element.
-     * @param <U> Type of the second element.
+     * @param <T> The type of elements in the first array.
+     * @param <U> The type of elements in the second array.
+     * @param first The first input array.
+     * @param second The second input array.
+     * @return An array of {@code Tuple2<T, U>} where each tuple contains one element from each input array.
+     * @throws IllegalArgumentException If either input array is null or if they have different lengths.
      */
-
-    /**
-     * A generic immutable pair class that holds two values of different types.
-     *
-     * @param <T> the type of the first element
-     * @param <U> the type of the second element
-     */
-
-    public static class Pair<T, U> {
-        private final T first;
-        private final U second;
-
-        /**
-         * Constructs a new pair with the given values.
-         *
-         * @param first  the first value of the pair
-         * @param second the second value of the pair
-         */
-        public Pair(T first, U second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        /**
-         * Returns the first element of the pair.
-         *
-         * @return the first value of the pair
-         */
-        public T getFirst() {
-            return first;
-        }
-
-        /**
-         * Returns the second element of the pair.
-         *
-         * @return the second value of the pair
-         */
-        public U getSecond() {
-            return second;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(first, second);
-        }
-
-        /**
-         * Checks whether this pair is equal to another object.
-         * Two pairs are considered equal if they have the same class and their elements are equal.
-         *
-         * @param obj the object to compare with this pair
-         * @return true if the objects are equal, false otherwise
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-
-            Pair<?, ?> pair = (Pair<?, ?>) obj;
-            return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
-        }
-
-        /**
-         * Computes a hash code for this pair.
-         * The hash code is computed based on the hash codes of the two elements.
-         *
-         * @return the hash code of this pair
-         */
-
-        /**
-         * Pairs corresponding elements of two arrays into an array of Pairs.
-         *
-         * @param <T>    The type of the first array.
-         * @param <U>    The type of the second array.
-         * @param first  The first input array.
-         * @param second The second input array.
-         * @return An array of Pairs where each element contains one element from each input array.
-         * @throws IllegalArgumentException If the input arrays are null or have different lengths.
-         */
-    }
-
-    public static <T, U> Pair<T, U>[] zip(T[] first, U[] second) {
+    public static <T extends Comparable<? super T> & Serializable,
+            U extends Comparable<? super U> & Serializable> Tuple2<T, U>[] zip(T[] first, U[] second) {
         if (first == null || second == null) {
             throw new IllegalArgumentException("Input arrays cannot be null.");
         }
@@ -114,13 +43,13 @@ public class Arrays {
             throw new IllegalArgumentException("Arrays must have the same length.");
         }
 
+        // Creating a generic array using reflection
         @SuppressWarnings("unchecked")
-        Pair<T, U>[] result = new Pair[first.length];
+        Tuple2<T, U>[] result = (Tuple2<T, U>[]) Array.newInstance(Tuple2.class, first.length);
 
         for (int i = 0; i < first.length; i++) {
-            result[i] = new Pair<>(first[i], second[i]);
+            result[i] = Tuple2.of(first[i], second[i]); // Creating a tuple for each pair of elements
         }
-
         return result;
     }
 
@@ -148,11 +77,9 @@ public class Arrays {
         if (resultArray.length < first.length) {
             throw new IllegalArgumentException("Result array must be at least as long as input arrays.");
         }
-
         for (int i = 0; i < first.length; i++) {
             resultArray[i] = combiner.apply(first[i], second[i]);
         }
-
         return resultArray;
     }
 
@@ -164,7 +91,7 @@ public class Arrays {
      * @param first       The first input array.
      * @param second      The second input array.
      * @param resultArray The pre-allocated result array where interleaved values will be stored.
-     * @return The result array containing interleaved values.
+     * @return resultArray The result array containing interleaved values.
      * @throws IllegalArgumentException If any of the parameters are null.
      */
 
@@ -178,10 +105,7 @@ public class Arrays {
             throw new IllegalArgumentException("Result array must be large enough to hold all elements.");
         }
 
-
-        int i = 0;
-        int j = 0;
-        int k = 0;
+        int i = 0, j = 0, k = 0;
         while (i < first.length || j < second.length) {
             if (i < first.length) resultArray[k++] = first[i++];
             if (j < second.length) resultArray[k++] = second[j++];
