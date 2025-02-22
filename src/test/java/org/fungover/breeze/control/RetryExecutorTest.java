@@ -1,3 +1,5 @@
+package org.fungover.breeze.control;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -54,5 +56,25 @@ class RetryExecutorTest {
                 throw new IOException("Failed");
             });
         });
+    }
+
+    // Test for retry logic with ServerBusyException
+    @Test
+    void testServerBusyRetry() {
+        assertThrows(RetryExecutor.RetryExhaustedException.class, () -> {
+            RetryExecutor.executeWithRetry(() -> {
+                throw new ServerBusyException();
+            });
+        });
+    }
+    // New test case
+    @Test
+    void testSuccessfulRetry() throws Exception {
+        final int[] attempts = {0};
+        String result = RetryExecutor.executeWithRetry(() -> {
+            if (attempts[0]++ < 2) throw new ServerBusyException();
+            return "Success after " + attempts[0] + " tries";
+        });
+        assertTrue(result.contains("Success after 3"));
     }
 }

@@ -1,14 +1,16 @@
+package org.fungover.breeze.control;
+
 import java.util.function.Function;
 
 /**
  * A utility class for executing operations with retry logic.
  * <p>
  * This class allows execution of a risky operation (e.g., network calls, file I/O)
- * with configurable retry behavior, including exponential backoff and custom failure handling.
+ * with configurable retry behavior, including exponential backoff with jitter and custom failure handling.
  * </p>
  * Example usage:
  * <pre>{@code
- * RetryExecutor executor = RetryExecutor.builder()
+ * org.fungover.breeze.control.RetryExecutor executor = org.fungover.breeze.control.RetryExecutor.builder()
  *     .maxAttempts(5)
  *     .exponentialBackoff(100, 1000)
  *     .retryOn(IOException.class)
@@ -78,7 +80,7 @@ public class RetryExecutor {
                     throw new RetryExhaustedException("Max retry attempts reached", ex); // Throw if retries are exhausted
                 }
                 Thread.sleep(delay); // Wait before retrying
-                delay = Math.min(maxDelay, delay >= maxDelay/2 ? maxDelay : delay * 2);  // Exponential backoff with overflow protection  // Exponential backoff
+                delay = Math.min(maxDelay, (long) (delay * 1.5 + Math.random() * 500));  // Exponential backoff with jitter
             }
         }
         return null;
@@ -108,6 +110,13 @@ public class RetryExecutor {
             return this;
         }
 
+        /**
+         * Configures exponential backoff with initial and maximum delays.
+         *
+         * @param initialDelay The initial delay in milliseconds.
+         * @param maxDelay     The maximum delay in milliseconds.
+         * @return The updated builder instance.
+         */
         public Builder exponentialBackoff(long initialDelay, long maxDelay) {
             if (initialDelay <= 0 || maxDelay <= 0) {
                 throw new IllegalArgumentException("delays must be positive");
@@ -180,5 +189,26 @@ public class RetryExecutor {
         public RetryExhaustedException(String message, Throwable cause) {
             super(message, cause);
         }
+    }
+
+    /**
+     * Static helper method for executing an operation with predefined retry logic.
+     *
+     * @param <T>       The type of the return value from the operation.
+     * @param operation The operation to execute.
+     * @return The result of the operation if successful.
+     * @throws Exception If the operation fails after all retry attempts.
+     */
+    public static <T> T executeWithRetry(RiskyOperation<T> operation) throws Exception {
+        return builder()
+                .maxAttempts(5)
+                .exponentialBackoff(1000, 16000) // 1s, 2s, 4s, 8s, 16s
+                .retryOn(ServerBusyException.class)
+                .onExhaustion(ex -> {
+                    System.out.println("Final attempt failed after exponential backoff");
+                    return true;
+                })
+                .build()
+                .execute(operation);
     }
 }
