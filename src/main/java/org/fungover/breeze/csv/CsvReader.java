@@ -15,12 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ */
 public class CsvReader {
 
     private final char delimiter;
     private final boolean skipEmptyLines;
     private final boolean hasHeader;
     private final char quoteChar;
+    private final boolean trimTokens;
 
     private BufferedReader bufferedReader;
     private String[] headers;
@@ -30,6 +34,7 @@ public class CsvReader {
         this.skipEmptyLines = builder.skipEmptyLines;
         this.hasHeader = builder.hasHeader;
         this.quoteChar = builder.quoteChar;
+        this.trimTokens = builder.trimTokens;
     }
 
     /**
@@ -41,11 +46,15 @@ public class CsvReader {
         return new Builder();
     }
 
+    /**
+     * Builder for CsvReader.
+     */
     public static class Builder {
         private char delimiter = ','; // Default value
         private boolean skipEmptyLines = true; // Default value
         private boolean hasHeader = false;
         private char quoteChar = '\"';
+        private boolean trimTokens = false;
 
         private Builder() {
             // private constructor
@@ -68,7 +77,6 @@ public class CsvReader {
          * @param skipEmptyLines true to skip empty lines, false otherwise
          * @return this builder instance
          */
-
         public Builder skipEmptyLines(boolean skipEmptyLines) {
             this.skipEmptyLines = skipEmptyLines;
             return this;
@@ -80,7 +88,6 @@ public class CsvReader {
          * @param quoteChar the quote character
          * @return this builder instance
          */
-
         public Builder withQuoteChar(char quoteChar) {
             this.quoteChar = quoteChar;
             return this;
@@ -89,12 +96,22 @@ public class CsvReader {
         /**
          * Specifies whether the csv file contains a header row.
          *
-         *  @param hasHeader true if the CSV contains a header row, false otherwise
+         * @param hasHeader true if the CSV contains a header row, false otherwise
          * @return this builder instance
          */
-
         public Builder hasHeader(boolean hasHeader) {
             this.hasHeader = hasHeader;
+            return this;
+        }
+
+        /**
+         * Specifies whether tokens should be trimmed or not.
+         *
+         * @param trimTokens true if tokens should be trimmed, false otherwise
+         * @return this builder instance
+         */
+        public Builder trimTokens(boolean trimTokens) {
+            this.trimTokens = trimTokens;
             return this;
         }
 
@@ -103,7 +120,6 @@ public class CsvReader {
          *
          * @return a new {@link CsvReader} instance
          */
-
         public CsvReader build() {
             return new CsvReader(this);
         }
@@ -124,7 +140,7 @@ public class CsvReader {
     /**
      * Sets the CSV source from an input stream.
      *
-     * @param csvSource the input stream containing CSV data
+     * @param csvSource   the input stream containing CSV data
      * @param charsetName the character set of the input stream
      * @return this {@link CsvReader} instance
      */
@@ -136,7 +152,7 @@ public class CsvReader {
     /**
      * Sets the CSV source from a file.
      *
-     * @param csvSource the CSV file
+     * @param csvSource   the CSV file
      * @param charsetName the character set of the file
      * @return this {@link CsvReader} instance
      * @throws FileNotFoundException if the file is not found
@@ -186,9 +202,9 @@ public class CsvReader {
         boolean inQuotes = false;
         int length = line.length();
         for (int i = 0; i < length; i++) {
-            char c = line.charAt(i);
+            char currentChar = line.charAt(i);
 
-            if (c == quoteChar) {
+            if (currentChar == quoteChar) {
                 if (inQuotesAndNextCharIsAlsoAQuote(line, inQuotes, i, length)) {
                     // The csv contains an escaped quoteChar, i.e. double quotChars inside a quote
                     // E.g. "Some text with ""a quote"" inside the quoted value". Ad a single quoteChar
@@ -197,17 +213,27 @@ public class CsvReader {
                 } else {
                     inQuotes = !inQuotes;
                 }
-            } else if (c == delimiter && !inQuotes) {
-                String token = sb.toString();
-                tokens.add(token);
-                sb.setLength(0);
+            } else if (isTrueDelimiter(currentChar, inQuotes)) {
+                addTokenToCollection(sb, tokens);
             } else {
-                sb.append(c);
+                sb.append(currentChar);
             }
         }
-        String token = sb.toString();
-        tokens.add(token);
+        addTokenToCollection(sb, tokens);
         return tokens;
+    }
+
+    private void addTokenToCollection(StringBuilder sb, List<String> tokens) {
+        String token = sb.toString();
+        if (trimTokens) {
+            token = token.trim();
+        }
+        tokens.add(token);
+        sb.setLength(0);
+    }
+
+    private boolean isTrueDelimiter(char currentChar, boolean inQuotes) {
+        return currentChar == delimiter && !inQuotes;
     }
 
     /**
