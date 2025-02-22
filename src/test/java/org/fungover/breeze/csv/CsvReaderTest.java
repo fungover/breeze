@@ -204,9 +204,9 @@ class CsvReaderTest {
 
         List<String[]> rows = reader.readAll();
         assertEquals(3, rows.size());
-        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
-        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
-        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
+        assertArrayEquals(new String[]{"name", "age", "city"}, rows.get(0));
+        assertArrayEquals(new String[]{"Steve", "55", "London"}, rows.get(1));
+        assertArrayEquals(new String[]{"Janet", "25", "Los Angeles"}, rows.get(2));
     }
 
     @Test
@@ -230,8 +230,8 @@ class CsvReaderTest {
     }
 
     @Test
-    @DisplayName("Customed delimiter should work as input")
-    void customedDelimiterShouldWorkAsInput() throws IOException {
+    @DisplayName("Custom delimiter should work as input")
+    void customDelimiterShouldWorkAsInput() throws IOException {
         // Test med anpassad delimiter
         String csvSource = "Alice|30|Stockholm\nBob|25|Gothenburg\n";
         CsvReader csvReader = CsvReader.builder()
@@ -308,7 +308,6 @@ class CsvReaderTest {
 
         reader.setCustomHeaders(new String[]{"Title", "Price", "Amount"});
 
-
         Map<String, String> firstRow = reader.readNextAsMap();
         assertEquals("Thing", firstRow.get("Title"));
         assertEquals("30", firstRow.get("Price"));
@@ -336,5 +335,61 @@ class CsvReaderTest {
         assertEquals(2, rows.size(), "Should read 2 rows");
         assertArrayEquals(new String[]{"Alice", "30"}, rows.get(0), "First row should be 'Alice, 30'");
         assertArrayEquals(new String[]{"Bob", "25"}, rows.get(1), "Second row should be 'Bob, 25'");
+    }
+
+    @ParameterizedTest(name = "Return CSV as stream, with header: {1}")
+    @MethodSource("provideArgumentsFor_stream")
+    void stream(String csvContent, boolean hasHeader) {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder()
+                .trimTokens(true)
+                .hasHeader(hasHeader)
+                .withDelimiter(',')
+                .withQuoteChar('"')
+                .skipEmptyLines(true)
+                .build();
+
+        // Act
+        Stream<String[]> actual = classUnderTest.withSource(csvContent).stream();
+
+        // Assert
+        assertThat(actual.toList())
+                .containsExactly(
+                        new String[]{"Steve Peters", "55", "Rome"},
+                        new String[]{"Cathy \"Kitty\" Carpenter", "31", "New York"}
+                );
+    }
+
+    private static Stream<Arguments> provideArgumentsFor_stream() {
+        return Stream.of(
+                Arguments.of("""
+                        name,age,city
+                        Steve Peters, 55, Rome
+                        
+                        "Cathy ""Kitty"" Carpenter",31,New York
+                        """, true),
+                Arguments.of("""
+                        Steve Peters, 55, Rome
+                        
+                        "Cathy ""Kitty"" Carpenter",31,New York
+                        """, false)
+        );
+    }
+
+    @Test
+    @DisplayName("Throw exception if BufferedReader is null when calling stream")
+    void stream_whenBufferedReaderIsNull_throwException() {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder().build();
+
+        // Act
+        Throwable actual = catchThrowable(classUnderTest::stream);
+
+        // Assert
+        assertThat(actual)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("withSource(..) must be called before stream()");
     }
 }

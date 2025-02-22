@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 /**
@@ -170,7 +171,6 @@ public class CsvReader {
      * @return a list of string arrays, where each array represents a row
      * @throws IOException if an I/O error occurs
      */
-
     public List<String[]> readAll() throws IOException {
 
         if (bufferedReader == null) {
@@ -178,7 +178,7 @@ public class CsvReader {
         }
 
         List<String[]> rows = new ArrayList<>();
-
+//TODO: skip headerline
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
@@ -190,6 +190,32 @@ public class CsvReader {
             rows.add(parsed.toArray(String[]::new));
         }
         return rows;
+    }
+
+    public Stream<String[]> stream() {
+
+        if (bufferedReader == null) {
+            throw new IllegalStateException("withSource(..) must be called before stream()");
+        }
+
+        AtomicBoolean skipped = new AtomicBoolean(!hasHeader);
+
+        return bufferedReader.lines()
+                .filter(_ -> skipped.getAndSet(true)) // skips first element if hasHeader == true
+                .filter(this::handleEmptyLines)
+                .map(this::parseLine)
+                .map(list -> list.toArray(String[]::new));
+    }
+
+    /**
+     * This predicate checks to see whether a line should be allowed to pass the filter or not,
+     * by looking at the configuration from the user (skipEmptyLine) and the line itself.
+     *
+     * @param line the line to test
+     * @return true of the line should be allowed to pass, false otherwise
+     */
+    private boolean handleEmptyLines(String line) {
+        return !skipEmptyLines || !line.trim().isEmpty();
     }
 
     private List<String> parseLine(String line) {
@@ -299,27 +325,6 @@ public class CsvReader {
 
     private boolean inQuotesAndNextCharIsAlsoAQuote(String line, boolean inQuotes, int i, int len) {
         return inQuotes && i + 1 < len && line.charAt(i + 1) == quoteChar;
-    }
-
-    /**
-     * Reads the CSV file as a stream of rows, where each row is an array of strings.
-     * Empty lines are skipped if {@code skipEmptyLines} is {@code true}.
-     *
-     * @return a stream of string arrays representing the CSV rows.
-     * @throws IllegalStateException if no CSV source has been set before calling this method.
-     */
-    public Stream<String[]> stream() {
-        Stream<String[]> stream = bufferedReader.lines()
-                .filter(line -> !skipEmptyLines || !line.trim().isEmpty())
-                .map(this::parseLine)
-                .map(tokens -> tokens.toArray(new String[0]));
-
-        if (hasHeader && headers == null) {
-            if (headers == null) {
-                stream = stream.skip(1);
-            }
-        }
-        return stream;
     }
 
 }
