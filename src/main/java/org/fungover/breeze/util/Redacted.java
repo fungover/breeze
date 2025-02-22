@@ -22,8 +22,8 @@ import java.util.Objects;
  *
  */
 public class Redacted implements CharSequence {
-    private CharSequence value;
-    private boolean isWiped;
+    private static CharSequence value;
+    private static boolean isWiped;
     private static final String wipedMarker = "<wiped>";
     private static final String redactedMarker = "<redacted>";
 
@@ -33,8 +33,8 @@ public class Redacted implements CharSequence {
      * @param value The value to be redacted
      */
     private Redacted(CharSequence value) {
-        this.value = value;
-        this.isWiped = false;
+        Redacted.value = value;
+        isWiped = false;
     }
 
     /**
@@ -56,16 +56,16 @@ public class Redacted implements CharSequence {
      *
      * @return Saved {@code CharSequence}.
      */
-    public CharSequence getValue() {
+    public static CharSequence getValue() {
         return value;
     }
 
     /**
      * Marks the value as wiped, preventing further access to the original value.
      */
-    public void wipe (){
-        this.isWiped = true;
-        this.value = wipedMarker;
+    public static void wipe (){
+        isWiped = true;
+        value = wipedMarker;
     }
 
     /**
