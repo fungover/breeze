@@ -43,8 +43,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
             throw new NullPointerException("Cannot add null element to FSet");
         }
 
-        RedBlackTree<T> newTree = new RedBlackTree<>();
-        newTree.insertFromAnotherTree(this.tree);
+        RedBlackTree<T> newTree = new RedBlackTree<>(this.tree);
         newTree.insert(element);
 
         return new FSet<>(newTree);
