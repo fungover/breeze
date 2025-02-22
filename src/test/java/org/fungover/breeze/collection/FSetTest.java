@@ -140,9 +140,14 @@ class FSetTest {
             fSet = fSet.add(1).add(15).add(20).add(100);
             fSet2 = fSet2.add(1).add(10).add(20);
             var fSymmetricDifference = fSet.symmetricDifference(fSet2);
+
+            // Done to show that regardless of orientation the results is the same.
+            var fSymmetricDifference2 = fSet2.symmetricDifference(fSet);
+
             assertThat(fSymmetricDifference.size()).isEqualTo(3);
             assertThat(fSymmetricDifference.contains(15)).isTrue();
             assertThat(fSymmetricDifference.contains(20)).isFalse();
+            assertThat(fSymmetricDifference).isEqualTo(fSymmetricDifference2);
 
 
 
@@ -150,17 +155,25 @@ class FSetTest {
 
 
         @Test
-        @DisplayName("Removal by skip test")
-        void removalBySkipTest() {
+        @DisplayName("FSet difference test")
+        void fSetDifferenceTest() {
             fSet = new FSet<>();
-            fSet =  fSet.add(1).add(15).add(20).add(100);
-            var removeSet = fSet.remove(15);
+            fSet2 = new FSet<>();
+            fSet = fSet.add(1).add(15).add(20).add(100);
+            fSet2 = fSet2.add(1).add(10).add(20);
+            var fSetDifference = fSet.difference(fSet2);
+            var fSetDifference2 = fSet2.difference(fSet);
 
-            assertThat(removeSet.contains(15)).isFalse();
-            assertThat(removeSet.size()).isEqualTo(3);
-
-
+            FSet<Integer> expectedFSet = new FSet<>();
+            FSet<Integer> expectedFSet2 = new FSet<>();
+            expectedFSet2 = expectedFSet2.add(10);
+            expectedFSet = expectedFSet.add(15).add(100);
+            assertThat(fSetDifference).isEqualTo(expectedFSet);
+            assertThat(fSetDifference2).isEqualTo(expectedFSet2);
         }
+
+
+
 
         @Test
         @DisplayName("FSet equals and hashcode test ")
@@ -232,6 +245,37 @@ class FSetTest {
         }
 
 
+
+    }
+
+    @Nested
+    class FSetTestRemovalTest{
+        FSet<Integer> fSet;
+
+        @Test
+        @DisplayName("Removal by skip test")
+        void removalBySkipTest() {
+            fSet = new FSet<>();
+            fSet =  fSet.add(1).add(15).add(20).add(100);
+            var removeSet = fSet.remove(15);
+
+            assertThat(removeSet.contains(15)).isFalse();
+            assertThat(removeSet.size()).isEqualTo(3);
+
+        }
+
+        @Test
+        @DisplayName("Removal of all elements in a FSet object isTrue Test")
+        void removalOfAllElementsInAFSetObjectIsTrueTest() {
+            fSet = new FSet<>();
+            fSet =  fSet.add(1).add(2).add(3);
+            var removeSet = fSet.remove(3).remove(2).remove(1);
+            assertThat(removeSet.contains(3)).isFalse();
+            assertThat(removeSet.contains(2)).isFalse();
+            assertThat(removeSet.contains(1)).isFalse();
+            assertThat(removeSet.isEmpty()).isTrue();
+
+        }
 
     }
 }

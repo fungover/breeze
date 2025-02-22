@@ -596,6 +596,10 @@ final class RedBlackTree<T extends Comparable<T>> {
         symmetricDifferenceWithOtherTreeHelper(node.right, other, newTree);
     }
 
+    public void differenceWithOtherTree(RedBlackTree<T> tree, RedBlackTree<T> tree1, RedBlackTree<T> newTree) {
+        symmetricDifferenceWithOtherTreeHelper(tree.root, tree1, newTree);
+    }
+
     /**
      * Checks whether two RedBlackTrees are equal.
      *
@@ -622,6 +626,7 @@ final class RedBlackTree<T extends Comparable<T>> {
     public String toString() {
         return stringRedBlackTree();
     }
+
 
 
 }

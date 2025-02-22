@@ -13,7 +13,6 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
     private final RedBlackTree<T> tree;
 
 
-
     /**
      * Default constructor that initializes an empty RedBlackTree for the set.
      */
@@ -132,6 +131,13 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
 
     }
 
+    public FSet<T> difference(FSet<T> other) {
+        RedBlackTree<T> newTree = new RedBlackTree<>();
+        tree.differenceWithOtherTree(tree, other.tree, newTree);
+        return new FSet<>(newTree);
+
+    }
+
     /**
      * Checks if the FSet is empty (contains no elements).
      *
@@ -139,20 +145,20 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
      */
     @Override
     public boolean isEmpty() {
-        return this.tree.getSize() == 0 ;
+        return this.tree.getSize() == 0;
     }
 
     /**
      * Prints the RedBlackTree structure of the FSet.
      */
-    public void printTree(){
+    public void printTree() {
         tree.printRedBlackTree();
     }
 
     /**
      * Prints the elements of the FSet in order.
      */
-    public void printInOrder(){
+    public void printInOrder() {
         tree.inorder();
     }
 
@@ -162,20 +168,20 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
      * @return The number of elements in the FSet.
      */
     public int size() {
-       return tree.getSize();
+        return tree.getSize();
     }
 
 
     /**
      * Returns a string and prompts a representation of the FSet.
-     *
+     * <p>
      * Important values are prompted out.
      *
      * @return A string "Set And Done".
      */
     @Override
     public String toString() {
-        return "FSet {"+ tree.stringSetBuilder()+" }";
+        return "FSet {" + tree.stringSetBuilder() + " }";
     }
 
     /**
@@ -199,6 +205,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
     public int hashCode() {
         return Objects.hashCode(tree);
     }
+
 }
 
 /**
@@ -207,63 +214,80 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
  * @param <T> placeholder for any datatype.
  */
 
- sealed interface SetProcedural<T extends Comparable<T>> permits FSet {
+sealed interface SetProcedural<T extends Comparable<T>> permits FSet {
 
-        /**
-         * Add new element to immutable FSet.
-         *
-         * @param element to be added to immutable FSet.
-         * @return A new immutable set object of type FSet.
-         */
-        FSet<T> add(T element);
+    /**
+     * Add new element to immutable FSet.
+     *
+     * @param element to be added to immutable FSet.
+     * @return A new immutable set object of type FSet.
+     */
+    FSet<T> add(T element);
 
-        /**
-         * Removes an element from FSet
-         *
-         * @param element to be removed
-         * @return A new immutable FSet object without element.
-         */
-        FSet<T> remove(T element);
+    /**
+     * Removes an element from FSet
+     *
+     * @param element to be removed
+     * @return A new immutable FSet object without element.
+     */
+    FSet<T> remove(T element);
 
-        /**
-         * Check if element is present in FSet Object.
-         *
-         * @param element target to be found in FSet.
-         * @return true if element present in FSet otherwise false.
-         */
-        boolean contains(T element);
+    /**
+     * Check if element is present in FSet Object.
+     *
+     * @param element target to be found in FSet.
+     * @return true if element present in FSet otherwise false.
+     */
+    boolean contains(T element);
 
-        /**
-         * Adds all unique elements from two FSets to a new FSet object
-         *
-         * @param other FSet with elements to be added.
-         * @return A new FSet with the combine elements of FSet and other
-         */
-        FSet<T> union(FSet<T> other);
+    /**
+     * Adds all unique elements from two FSets to a new FSet object
+     *
+     * @param other FSet with elements to be added.
+     * @return A new FSet with the combine elements of FSet and other
+     */
+    FSet<T> union(FSet<T> other);
 
-        /**
-         * Adds all unique elements that are present in both FSets.
-         *
-         * @param other FSet with elements to be added
-         * @return A new FSet object with the values present in both FSet and other.
-         */
-        FSet<T> intersection(FSet<T> other);
+    /**
+     * Adds all unique elements that are present in both FSets.
+     *
+     * @param other FSet with elements to be added
+     * @return A new FSet object with the values present in both FSet and other.
+     */
+    FSet<T> intersection(FSet<T> other);
 
-        /**
-         * Adds all unique elements that are not present between two FSets.
-         *
-         * @param other FSet with elements to be excluded
-         * @return A new FSet object with the symmetric difference between FSet and other.
-         */
-        FSet<T> symmetricDifference(FSet<T> other);
+    /**
+     * Adds all unique elements that are not present between two FSets.
+     *
+     * @param other FSet with elements to be excluded
+     * @return A new FSet object with the symmetric difference between FSet and other.
+     */
+    FSet<T> symmetricDifference(FSet<T> other);
 
-        /**
-         * Check if FSet object is empty or without any elements.
-         * FSet objects instantiated with null will be false
-         *
-         * @return A true if FSet only contains null or empty otherwise false.
-         */
-        boolean isEmpty();
+    /**
+     * Computes the difference between two FSet objects.
+     * The difference contains elements that are present in this FSet but not in the given FSet.
+     *
+     * @param other The FSet to compare against.
+     * @return A new FSet object containing elements in this FSet but not in the other FSet.
+     * @example <pre>
+     *     fSet = new FSet<>();
+     *     fSet2 = new FSet<>();
+     *     fSet = fSet.add(1).add(15).add(20).add(100);
+     *     fSet2 = fSet2.add(1).add(10).add(20);
+     *     FSet<Integer> fSetDifference = fSet.difference(fSet2);
+     *     fSetDifference // Elements in fSetDifference: {15, 100}
+     * </pre>
+     */
+    FSet<T> difference(FSet<T> other);
+
+    /**
+     * Check if FSet object is empty or without any elements.
+     * FSet objects instantiated with null will be false
+     *
+     * @return A true if FSet only contains null or empty otherwise false.
+     */
+    boolean isEmpty();
 
 
 }
