@@ -319,4 +319,22 @@ class CsvReaderTest {
         assertEquals("25", secondRow.get("Price"));
         assertEquals("4", secondRow.get("Amount"));
     }
+
+    @Test
+    void testStreamWithValidSource() {
+        String csvContent = "name,age\nAlice,30\nBob,25";
+
+        CsvReader reader = CsvReader.builder()
+                .withDelimiter(',')
+                .hasHeader(true)
+                .build();
+
+        reader.withSource(new ByteArrayInputStream(csvContent.getBytes()), "UTF-8");
+        List<String[]> rows = reader.stream()
+                .toList();
+
+        assertEquals(2, rows.size(), "Should read 2 rows");
+        assertArrayEquals(new String[]{"Alice", "30"}, rows.get(0), "First row should be 'Alice, 30'");
+        assertArrayEquals(new String[]{"Bob", "25"}, rows.get(1), "Second row should be 'Bob, 25'");
+    }
 }

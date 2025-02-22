@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
@@ -298,6 +299,25 @@ public class CsvReader {
 
     private boolean inQuotesAndNextCharIsAlsoAQuote(String line, boolean inQuotes, int i, int len) {
         return inQuotes && i + 1 < len && line.charAt(i + 1) == quoteChar;
+    }
+
+    /**
+     * Reads the CSV file as a stream of rows, where each row is an array of strings.
+     * Empty lines are skipped if {@code skipEmptyLines} is {@code true}.
+     *
+     * @return a stream of string arrays representing the CSV rows.
+     * @throws IllegalStateException if no CSV source has been set before calling this method.
+     */
+    public Stream<String[]> stream() {
+        Stream<String[]> stream = bufferedReader.lines()
+                .filter(line -> !skipEmptyLines || !line.trim().isEmpty())
+                .map(this::parseLine)
+                .map(tokens -> tokens.toArray(new String[0]));
+
+        if (hasHeader && headers == null) {
+            stream = stream.skip(1);
+        }
+        return stream;
     }
 
 }
