@@ -193,21 +193,21 @@ class CsvReaderTest {
         assertArrayEquals(new String[]{"Mr Anderson", "30", "New York"}, rows.getFirst());
     }
 
-// Doesn't work yet
-//    @Test
-//    @DisplayName("ShouldTrimWhitespaceAroundTokens")
-//    void shouldTrimWhitespaceAroundTokens() throws IOException {
-//        String csvData = "name,age,city\nSteve ,55 , London \nJanet, 25, Los Angeles";
-//        CsvReader reader = CsvReader.builder()
-//                .build()
-//                .withSource(csvData);
-//
-//        List<String[]> rows = reader.readAll();
-//        assertEquals(3, rows.size());
-//        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
-//        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
-//        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
-//    }
+    @Test
+    @DisplayName("ShouldTrimWhitespaceAroundTokens")
+    void shouldTrimWhitespaceAroundTokens() throws IOException {
+        String csvData = "name,age,city\nSteve ,55 , London \nJanet, 25, Los Angeles";
+        CsvReader reader = CsvReader.builder()
+                .trimTokens(true)
+                .build()
+                .withSource(csvData);
+
+        List<String[]> rows = reader.readAll();
+        assertEquals(3, rows.size());
+        assertArrayEquals(new String[] {"name", "age", "city"}, rows.get(0));
+        assertArrayEquals(new String[] {"Steve", "55", "London"}, rows.get(1));
+        assertArrayEquals(new String[] {"Janet", "25", "Los Angeles"}, rows.get(2));
+    }
 
     @Test
     @DisplayName("Read next should work on not empty lines")
