@@ -315,7 +315,9 @@ public class CsvReader {
                 .map(tokens -> tokens.toArray(new String[0]));
 
         if (hasHeader && headers == null) {
-            stream = stream.skip(1);
+            if (headers == null) {
+                stream = stream.skip(1);
+            }
         }
         return stream;
     }
