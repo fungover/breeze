@@ -217,7 +217,6 @@ class CsvReaderTest {
                 .build()
                 .withSource(csvData);
 
-        // Läs första icke-tomma raden
         String[] result = reader.readNext();
         assertNotNull(result);
         assertEquals(3, result.length);
@@ -232,7 +231,6 @@ class CsvReaderTest {
     @Test
     @DisplayName("Customed delimiter should work as input")
     void customedDelimiterShouldWorkAsInput() throws IOException {
-        // Test med anpassad delimiter
         String csvSource = "Alice|30|Stockholm\nBob|25|Gothenburg\n";
         CsvReader csvReader = CsvReader.builder()
                 .withDelimiter('|')
@@ -298,9 +296,9 @@ class CsvReaderTest {
     }
 
     @Test
-    @DisplayName("Customed header should be set")
-    void customedHeaderShouldBeSet() throws IOException {
-        String csvData = "Thing,30,3\nAlice,25,Los Angeles\nBob,35,Chicago";
+    @DisplayName("Custom header should be set")
+    void customHeaderShouldBeSet() throws IOException {
+        String csvData = "Thing,30,3\nStuff,25,4";
         CsvReader reader = CsvReader.builder()
                 .hasHeader(true)
                 .build()
@@ -308,7 +306,15 @@ class CsvReaderTest {
 
         reader.setCustomHeaders(new String[]{"Title", "Price", "Amount"});
 
+
         Map<String, String> firstRow = reader.readNextAsMap();
         assertEquals("Thing", firstRow.get("Title"));
+        assertEquals("30", firstRow.get("Price"));
+        assertEquals("3", firstRow.get("Amount"));
+
+        Map<String, String> secondRow = reader.readNextAsMap();
+        assertEquals("Stuff", secondRow.get("Title"));
+        assertEquals("25", secondRow.get("Price"));
+        assertEquals("4", secondRow.get("Amount"));
     }
 }
