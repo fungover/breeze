@@ -14,10 +14,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -416,4 +418,49 @@ class CsvReaderTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("withSource(..) must be called before stream()");
     }
+
+    public static class Person {
+        public String name;
+        public int age;
+        public double weight;
+        public boolean married;
+
+        public Person(String name, int age, double weight, boolean married) {
+            this.name = name;
+            this.age = age;
+            this.weight = weight;
+            this.married = married;
+        }
+    }
+
+    @Test
+    void readALl_customObjects() {
+
+        // Arrange
+        String csvContent = """
+                "Cathy ""Kitty"" Carpenter",31,65.5,false
+                Steve Peters,55,85.7,true
+                """;
+
+        Function<String[], Person> mapper = values ->
+                new Person(
+                        values[0],
+                        Integer.parseInt(values[1]),
+                        Double.parseDouble(values[2]),
+                        Boolean.parseBoolean(values[3]));
+
+        CsvReader classUnderTest = CsvReader.builder().build();
+
+        // Act
+        List<Person> actual = classUnderTest.withSource(csvContent).readAll(mapper);
+
+        // Assert
+        assertThat(actual).hasSize(2)
+                .extracting("name", "age", "weight", "married")
+                .containsExactly(
+                        tuple("Cathy \"Kitty\" Carpenter",31,65.5,false),
+                        tuple("Steve Peters", 55, 85.7,true)
+                );
+    }
+
 }

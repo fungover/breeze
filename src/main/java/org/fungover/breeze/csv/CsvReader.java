@@ -15,10 +15,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
+ * A flexible and configurable CSV reader that supports various parsing options, including:
+ * <ul>
+ *     <li>Customizable delimiters (default: comma)</li>
+ *     <li>Handling of quoted values</li>
+ *     <li>Skipping empty lines</li>
+ *     <li>Custom header support</li>
+ *     <li>Reading CSV from a {@link String}, {@link InputStream}, or {@link File}</li>
+ *     <li>Parsing rows into {@code Stream<String[]>} streams, {@code String[]} arrays or custom objects</li>
+ * </ul>
+ * <p>
+ * The reader is built using the Builder pattern via the {@link CsvReader.Builder} and ensures efficient
+ * resource management with buffered reading.
+ * </p>
+ * <p>
+ * Example usage:
+ * </p>
+ * <pre>{@code
+ * CsvReader reader = CsvReader.builder()
+ *     .withDelimiter(';')
+ *     .hasHeader(true)
+ *     .build()
+ *     .withSource(new File("data.csv"), "UTF-8");
  *
+ * List<String[]> rows = reader.readAll();
+ * }</pre>
  */
 public class CsvReader {
 
@@ -195,6 +220,30 @@ public class CsvReader {
         return rows;
     }
 
+    /**
+     * Reads all CSV rows from the source and maps each row using the provided mapper function.
+     * <p>
+     * This method processes the CSV data by streaming it, applying the given {@code mapper} function to each row,
+     * and collecting the results into a {@link List}. It ensures that all rows are parsed before returning the list.
+     * </p>
+     *
+     * @param <T>    The type of objects to map the CSV rows into.
+     * @param mapper A function that converts each row (represented as a {@code String[]} array)
+     *               into an object of type {@code T}.
+     * @return A {@link List} of objects of type {@code T}, mapped from the CSV rows.
+     * @throws IllegalStateException If no source has been set before calling this method.
+     */
+    public <T> List<T> readAll(Function<String[], T> mapper) {
+        return stream().map(mapper).toList();
+    }
+
+    /**
+     * Returns a {@link Stream} of parsed CSV rows, where each row is represented as
+     * a {@code String[]} (array of fields).
+     *
+     * @return A {@link Stream} of {@code String[]} where each array represents a parsed CSV row.
+     * @throws IllegalStateException If no source has been set before calling this method.
+     */
     public Stream<String[]> stream() {
 
         if (bufferedReader == null) {
