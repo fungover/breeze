@@ -152,6 +152,30 @@ class CsvReaderTest {
     }
 
     @Test
+    void readAll_csvHasHeader() throws IOException {
+
+        // Arrange
+        String csvContent = """
+                A,B,C
+                4534346,5,77
+                243,23,6767
+                """;
+
+        CsvReader classUnderTest = CsvReader.builder()
+                .hasHeader(true)
+                .build();
+
+        // Act
+        List<String[]> actual = classUnderTest.withSource(csvContent).readAll();
+
+        // Assert
+        assertThat(actual).containsExactly(
+                new String[]{"4534346", "5", "77"},
+                new String[]{"243", "23", "6767"});
+
+    }
+
+    @Test
     @DisplayName("Should not read empty lines")
     void shouldNotReadEmptyLines() throws IOException {
         String csvData = "name,age,city\n\nBert,30,Karlskrona\n\nSigmund,25,Gothenburg\n";

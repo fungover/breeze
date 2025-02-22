@@ -177,10 +177,13 @@ public class CsvReader {
             throw new IllegalStateException("withSource(..) must be called before readAll()");
         }
 
-        List<String[]> rows = new ArrayList<>();
-//TODO: skip headerline
-        String line;
+        if(hasHeader) {
+            @SuppressWarnings("unused")
+            String ignore = bufferedReader.readLine();
+        }
 
+        List<String[]> rows = new ArrayList<>();
+        String line;
         while ((line = bufferedReader.readLine()) != null) {
             if (skipEmptyLines && line.trim().isEmpty()) { // Skip empty line
                 continue;
@@ -236,7 +239,7 @@ public class CsvReader {
                     // The csv contains an escaped quoteChar, i.e. double quotChars inside a quote
                     // E.g. "Some text with ""a quote"" inside the quoted value". Ad a single quoteChar
                     sb.append(quoteChar);
-                    i++; // Skip the second quote char
+                    i++; // NOSONAR - Intentionally modifying loop index: Skip the second quote char
                 } else {
                     inQuotes = !inQuotes;
                 }
@@ -281,9 +284,9 @@ public class CsvReader {
     }
 
     /**
-     * Allows the user make a customed header
+     * Allows the user make a custom header
      *
-     * @param customHeaders the customed header the user can choose
+     * @param customHeaders the custom header the user can choose
      */
     public void setCustomHeaders(String[] customHeaders) {
         this.headers = customHeaders;
