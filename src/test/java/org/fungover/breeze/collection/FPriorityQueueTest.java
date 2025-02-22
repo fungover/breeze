@@ -1,6 +1,5 @@
-package collection;
+package org.fungover.breeze.collection;
 
-import org.fungover.breeze.collection.FPriorityQueue;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;

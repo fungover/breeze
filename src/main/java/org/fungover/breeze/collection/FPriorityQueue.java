@@ -31,7 +31,7 @@ public final class FPriorityQueue<T>{
      * @param heap The heap to be used for this priority queue.
      */
     private FPriorityQueue(List<Node<T>> heap) {
-        this.heap = List.copyOf(heap);
+        this.heap = heap;
     }
 
     /**
@@ -51,7 +51,8 @@ public final class FPriorityQueue<T>{
     }
 
     public FPriorityQueue<T> dequeue() {
-        if(heap.isEmpty()) return this;
+        if(heap.isEmpty()) return
+                new FPriorityQueue<>();
 
         List<Node<T>> newHeap = new ArrayList<>(heap);
         Collections.swap(newHeap, 0, heap.size() - 1);
