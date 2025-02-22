@@ -274,8 +274,18 @@ class FSetTest {
             assertThat(removeSet.contains(2)).isFalse();
             assertThat(removeSet.contains(1)).isFalse();
             assertThat(removeSet.isEmpty()).isTrue();
+            assertThat(removeSet.size()).isZero();
 
         }
+
+    }
+
+    @Test
+    @DisplayName("FSet toString method test")
+    void fSetToStringMethodTest() {
+        FSet<Integer> fSet = new FSet<>();
+        fSet =  fSet.add(1).add(2).add(3);
+        assertThat(fSet.toString()).matches("FSet \\{\\d+, \\d+, \\d+}");
 
     }
 }

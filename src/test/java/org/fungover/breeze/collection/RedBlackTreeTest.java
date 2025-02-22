@@ -47,6 +47,7 @@ class RedBlackTreeTest {
         tree.insert(3);
 
         assertThat(tree.stringSetBuilder()).isEqualTo("2, 1, 3");
+        System.out.println(tree);
 
     }
 

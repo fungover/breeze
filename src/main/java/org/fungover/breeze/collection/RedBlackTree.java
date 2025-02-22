@@ -596,6 +596,21 @@ final class RedBlackTree<T extends Comparable<T>> {
         symmetricDifferenceWithOtherTreeHelper(node.right, other, newTree);
     }
 
+    /**
+     * Computes the difference between two Red-Black trees and stores the result in a new tree.
+     *
+     * This method compares the elements of the given Red-Black trees (`tree` and `tree1`) and finds the elements
+     * that are present in `tree` but not in `tree1`, adding those elements to the `newTree`. It delegates the
+     * actual operation to the `symmetricDifferenceWithOtherTreeHelper` method, which handles the logic
+     * for traversing and comparing the trees.
+     *
+     * @param tree The first Red-Black tree to compare.
+     * @param tree1 The second Red-Black tree to compare.
+     * @param newTree The Red-Black tree where the result (difference) will be stored.
+     *
+     * @throws NullPointerException If any of the provided trees are null.
+     * @throws IllegalArgumentException If the trees contain incompatible data types.
+     */
     public void differenceWithOtherTree(RedBlackTree<T> tree, RedBlackTree<T> tree1, RedBlackTree<T> newTree) {
         symmetricDifferenceWithOtherTreeHelper(tree.root, tree1, newTree);
     }
@@ -622,6 +637,33 @@ final class RedBlackTree<T extends Comparable<T>> {
         return Objects.hashCode(root);
     }
 
+    /**
+     * Returns a human-readable string representation of the Red-Black Tree.
+     * <p>
+     * This method generates a string that represents the structure of the Red-Black Tree in a readable format.
+     * The string typically includes the nodes of the tree, and may include additional details like the color
+     * of the nodes if applicable, making it easier for developers to understand the structure of the tree.
+     *
+     * @return A string representing the Red-Black Tree in a human-readable format.
+     *
+     * @example
+     * <pre>
+     *  tree.insert(1);
+     *  tree.insert(2);
+     *  tree.insert(3);
+     *  System.out.println(tree);
+     *  </pre>
+     *
+     * <pre>
+     * RedBlack Tree with Nodes and Values
+     *
+     *  /-- 2B
+     *       /-- 1R
+     *       \-- 3R
+     *
+     * Total size: 3
+     * </pre>
+     */
     @Override
     public String toString() {
         return stringRedBlackTree();

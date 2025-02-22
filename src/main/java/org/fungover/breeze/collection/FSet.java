@@ -181,7 +181,7 @@ public final class FSet<T extends Comparable<T>> implements SetProcedural<T> {
      */
     @Override
     public String toString() {
-        return "FSet {" + tree.stringSetBuilder() + " }";
+        return "FSet {" + tree.stringSetBuilder() + "}";
     }
 
     /**
