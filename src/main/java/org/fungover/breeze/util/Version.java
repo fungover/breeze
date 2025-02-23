@@ -1,53 +1,65 @@
 package org.fungover.breeze.util;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Represents a Semantic Versioning 2.0.0 compatible version number
- * with support for pre-release identifiers and build metadata.
+ * Represents a Semantic Versioning 2.0.0 (SemVer) compatible version number.
+ * <p>
+ * This class provides immutable version objects that support parsing, validation,
+ * and comparison of version strings according to the SemVer 2.0.0 specification.
  *
- * <p>Implements natural version ordering with the following precedence rules:
- * <ol>
- *   <li>Major, minor, and patch versions compared numerically</li>
- *   <li>Pre-release versions have lower precedence than normal versions</li>
- *   <li>Pre-release identifiers compare with ASCII ordering except for numeric values</li>
- * </ol>
+ * <h3>Key Features:</h3>
+ * <ul>
+ *   <li>Strict validation of version format</li>
+ *   <li>Case-sensitive comparison operations</li>
+ *   <li>Support for pre-release identifiers</li>
+ *   <li>Proper handling of numeric vs. alphanumeric identifiers</li>
+ * </ul>
  *
- * @see <a href="https://semver.org">Semantic Versioning 2.0.0</a>
+ * <h3>Version Format:</h3>
+ * <pre>
+ * [major].[minor].[patch][-preRelease]
+ * </pre>
+ *
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * // Create version instances
+ * Version release = new Version("2.4.0");
+ * Version prerelease = new Version("2.4.0-rc.1");
+ *
+ * // Compare versions
+ * if (prerelease.isLessThan(release)) {
+ *     System.out.println("Prerelease version is older");
+ * }
+ * }</pre>
  */
 public final class Version implements Comparable<Version> {
-
-    /**
-     * Core version components (major.minor.patch)
-     */
     private final int major;
     private final int minor;
     private final int patch;
-
-    /**
-     * Optional pre-release identifiers (hyphen-separated)
-     */
     private final String preRelease;
 
-    /**
-     * Pattern for valid semantic versions:
-     * - Major, minor, patch as non-negative integers
-     * - Optional pre-release identifiers containing [0-9A-Za-z-]
-     * - No leading zeros in numeric identifiers
-     */
     private static final Pattern VERSION_PATTERN = Pattern.compile(
-            "^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)" +
-                    "(?:-(?<prerelease>[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+            "^(?<major>0|[1-9]\\d*+)\\.(?<minor>0|[1-9]\\d*+)\\.(?<patch>0|[1-9]\\d*+)" +
+                    "(?:-(?<prerelease>[a-zA-Z0-9-]++(?:\\.[a-zA-Z0-9-]++)*+))?$"
     );
 
     /**
-     * Constructs a Version instance from a semantic version string
+     * Constructs a new Version instance from a SemVer-compliant string.
      *
      * @param version The version string to parse
-     * @throws IllegalArgumentException If version format is invalid
-     * @throws NullPointerException If version is null
+     * @throws IllegalArgumentException If:
+     * <ul>
+     *   <li>Input is null or empty</li>
+     *   <li>Format doesn't match SemVer specifications</li>
+     *   <li>Contains negative numbers</li>
+     *   <li>Has numeric identifiers with leading zeros</li>
+     *   <li>Contains invalid characters</li>
+     *   <li>Has improper hyphen placement</li>
+     * </ul>
      */
     public Version(String version) {
         validateInput(version);
@@ -57,46 +69,83 @@ public final class Version implements Comparable<Version> {
             throw new IllegalArgumentException("Invalid version format: " + version);
         }
 
-        this.major = parseComponent(matcher.group("major"), "major");
-        this.minor = parseComponent(matcher.group("minor"), "minor");
-        this.patch = parseComponent(matcher.group("patch"), "patch");
-        this.preRelease = matcher.group("prerelease");
+        try {
+            this.major = Integer.parseInt(matcher.group("major"));
+            this.minor = Integer.parseInt(matcher.group("minor"));
+            this.patch = Integer.parseInt(matcher.group("patch"));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Version component too large", e);
+        }
 
-        validatePreRelease();
+        this.preRelease = matcher.group("prerelease");
+        validatePreReleaseStructure();
     }
 
-    /**
-     * Core version comparison algorithm following SemVer 2.0.0 rules
-     *
-     * @param other The version to compare against
-     * @return Negative, zero, or positive if this version is less than,
-     *         equal to, or greater than the specified version
-     */
+    private void validateInput(String version) {
+        if (version == null || version.isBlank()) {
+            throw new IllegalArgumentException("Version string must not be null or empty");
+        }
+    }
+
+    private void validatePreReleaseStructure() {
+        if (preRelease == null) return;
+        Arrays.stream(preRelease.split("\\.")).forEach(this::validatePreReleasePart);
+    }
+
+    private void validatePreReleasePart(String part) {
+        if (part.isEmpty()) {
+            throw new IllegalArgumentException("Empty pre-release identifier");
+        }
+        if (part.startsWith("-") || part.endsWith("-")) {
+            throw new IllegalArgumentException("Invalid hyphen placement in: " + part);
+        }
+        if (isNumeric(part)) {
+            validateNumericIdentifier(part);
+        } else {
+            validateAlphanumericIdentifier(part);
+        }
+    }
+
+    private void validateNumericIdentifier(String part) {
+        if (part.length() > 1 && part.charAt(0) == '0') {
+            throw new IllegalArgumentException("Numeric identifier has leading zero: " + part);
+        }
+    }
+
+    private void validateAlphanumericIdentifier(String part) {
+        if (!part.matches("^[a-zA-Z0-9-]*$")) {
+            throw new IllegalArgumentException("Invalid characters in: " + part);
+        }
+        if (!containsLetter(part)) {
+            throw new IllegalArgumentException("Non-numeric identifier requires letter: " + part);
+        }
+    }
+
+    private boolean isNumeric(String s) {
+        return s.matches("\\d+");
+    }
+
+    private boolean containsLetter(String s) {
+        return s.chars().anyMatch(Character::isLetter);
+    }
+
     @Override
     public int compareTo(Version other) {
         if (other == null) throw new NullPointerException("Cannot compare with null version");
 
-        int comparison = Integer.compare(major, other.major);
-        if (comparison != 0) return comparison;
+        int result = Integer.compare(major, other.major);
+        if (result != 0) return result;
 
-        comparison = Integer.compare(minor, other.minor);
-        if (comparison != 0) return comparison;
+        result = Integer.compare(minor, other.minor);
+        if (result != 0) return result;
 
-        comparison = Integer.compare(patch, other.patch);
-        if (comparison != 0) return comparison;
+        result = Integer.compare(patch, other.patch);
+        if (result != 0) return result;
 
-        return comparePreReleases(this.preRelease, other.preRelease);
+        return comparePreReleaseIdentifiers(this.preRelease, other.preRelease);
     }
 
-    // Region: Comparison helper methods
-    // ================================
-
-    /**
-     * Compares pre-release identifiers according to SemVer 2.0.0 rules
-     *
-     * @return Comparison result based on identifier precedence rules
-     */
-    private int comparePreReleases(String a, String b) {
+    private int comparePreReleaseIdentifiers(String a, String b) {
         if (a == null) return b == null ? 0 : 1;
         if (b == null) return -1;
 
@@ -105,112 +154,25 @@ public final class Version implements Comparable<Version> {
         int minLength = Math.min(partsA.length, partsB.length);
 
         for (int i = 0; i < minLength; i++) {
-            int result = compareIdentifierParts(partsA[i], partsB[i]);
-            if (result != 0) return result;
+            int comparison = compareIdentifier(partsA[i], partsB[i]);
+            if (comparison != 0) return comparison;
         }
 
         return Integer.compare(partsA.length, partsB.length);
     }
 
-    /**
-     * Compares individual pre-release identifier parts with
-     * numeric/non-numeric handling rules
-     */
-    private int compareIdentifierParts(String a, String b) {
+    private int compareIdentifier(String a, String b) {
         boolean aNumeric = isNumeric(a);
         boolean bNumeric = isNumeric(b);
 
         if (aNumeric && bNumeric) {
-            return compareNumeric(a, b);
+            return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
         }
 
-        // Numeric identifiers have lower precedence than non-numeric
         if (aNumeric) return -1;
         if (bNumeric) return 1;
         return a.compareTo(b);
     }
-    // End region
-
-    // Region: Validation and parsing
-    // ==============================
-
-    /**
-     * Validates version string basic requirements
-     */
-    private void validateInput(String version) {
-        if (version == null || version.isEmpty()) {
-            throw new IllegalArgumentException("Version string must not be null or empty");
-        }
-    }
-
-    /**
-     * Parses and validates version number components
-     *
-     * @throws IllegalArgumentException For invalid numeric formats
-     */
-    private int parseComponent(String value, String componentName) {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid " + componentName + " format: " + value);
-        }
-    }
-
-    /**
-     * Validates pre-release identifier rules
-     * - No empty identifiers
-     * - No leading/trailing hyphens
-     * - No leading zeros in numeric identifiers
-     */
-    private void validatePreRelease() {
-        if (preRelease == null) return;
-
-        String[] parts = preRelease.split("\\.");
-        for (String part : parts) {
-            if (part.isEmpty()) {
-                throw new IllegalArgumentException("Empty pre-release part");
-            }
-            if (part.startsWith("-") || part.endsWith("-")) {
-                throw new IllegalArgumentException("Invalid hyphen placement: " + part);
-            }
-            if (isNumeric(part) && part.length() > 1 && part.charAt(0) == '0') {
-                throw new IllegalArgumentException("Numeric identifier with leading zero: " + part);
-            }
-        }
-    }
-    // End region
-
-    // Region: Utility methods
-    // ======================
-
-    /**
-     * Checks if a string represents a numeric identifier
-     */
-    private boolean isNumeric(String s) {
-        if (s.isEmpty()) return false;
-        for (int i = 0; i < s.length(); i++) {
-            if (!Character.isDigit(s.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Compares numeric identifiers as zero-prefixed strings
-     */
-    private int compareNumeric(String a, String b) {
-        // Direct length comparison for different digit counts
-        if (a.length() != b.length()) {
-            return a.length() - b.length();
-        }
-        // Lexicographical compare for same length numbers
-        return a.compareTo(b);
-    }
-    // End region
-
-    // Region: Standard Java methods
-    // =============================
 
     @Override
     public boolean equals(Object o) {
@@ -228,9 +190,6 @@ public final class Version implements Comparable<Version> {
         return Objects.hash(major, minor, patch, preRelease);
     }
 
-    /**
-     * Returns the string representation in SemVer 2.0.0 format
-     */
     @Override
     public String toString() {
         return preRelease == null ?
@@ -238,23 +197,14 @@ public final class Version implements Comparable<Version> {
                 String.format("%d.%d.%d-%s", major, minor, patch, preRelease);
     }
 
-    /**
-     * @return true if this version is newer than the other version
-     */
     public boolean isGreaterThan(Version other) {
         return compareTo(other) > 0;
     }
 
-    /**
-     * @return true if this version is older than the other version
-     */
     public boolean isLessThan(Version other) {
         return compareTo(other) < 0;
     }
 
-    /**
-     * @return true if both versions have identical version components
-     */
     public boolean isEqualTo(Version other) {
         return compareTo(other) == 0;
     }
