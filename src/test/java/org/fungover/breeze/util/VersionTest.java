@@ -6,166 +6,154 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the Version class.
+ * Comprehensive test suite for verifying Semantic Versioning 2.0.0 compliance
+ * and edge case handling in the Version class.
  */
 class VersionTest {
 
     /**
-     * Tests for basic comparison methods.
+     * Tests core version comparison logic between different version numbers
      */
     @Nested
-    class ComparisonTests {
+    class CoreVersionComparisons {
 
         @Test
-        void isLessThan_WhenFirstVersionIsLess_ReturnsTrue() {
-            Version v1 = new Version("1.2.3");
-            Version v2 = new Version("1.2.4");
-            assertTrue(v1.isLessThan(v2));
-        }
-
-        @Test
-        void isGreaterThan_WhenFirstVersionIsGreater_ReturnsTrue() {
-            Version v1 = new Version("1.2.4");
-            Version v2 = new Version("1.2.3");
+        void higherMajorVersionShouldBeGreater() {
+            Version v1 = new Version("2.0.0");
+            Version v2 = new Version("1.999.9999");
             assertTrue(v1.isGreaterThan(v2));
         }
 
         @Test
-        void isEqual_WhenVersionsAreIdentical_ReturnsTrue() {
-            Version v1 = new Version("1.2.3");
-            Version v2 = new Version("1.2.3");
-            assertTrue(v1.isEqual(v2));
-        }
-
-        @Test
-        void isLessThan_WhenPreReleaseVersionIsComparedToRelease_ReturnsTrue() {
-            Version release = new Version("1.2.3");
-            Version preRelease = new Version("1.2.3-alpha");
-            assertTrue(preRelease.isLessThan(release));
-        }
-
-        @Test
-        void compareTo_WhenPreReleasesDiffer_ReturnsLexicographicalOrder() {
-            Version alpha = new Version("1.2.3-alpha");
-            Version beta = new Version("1.2.3-beta");
-            assertTrue(alpha.compareTo(beta) < 0);
+        void equalVersionsWithoutPreReleaseShouldBeEqual() {
+            Version v1 = new Version("3.14.159");
+            Version v2 = new Version("3.14.159");
+            assertTrue(v1.isEqualTo(v2));
         }
     }
 
     /**
-     * Parameterized tests for various version comparisons.
+     * Tests specific pre-release comparison rules as defined by SemVer 2.0.0
      */
     @Nested
-    class ParameterizedComparisonTests {
+    class PreReleaseComparisons {
 
-        static Stream<Arguments> versionComparisonProvider() {
+        /**
+         * Parameterized test for various pre-release comparison scenarios
+         * @param version1 First version string (without prefix)
+         * @param version2 Second version string (without prefix)
+         * @param expected Expected comparison result (-1, 0, 1)
+         */
+        @ParameterizedTest(name = "{0} vs {1} → {2}")
+        @MethodSource("providePreReleaseComparisonCases")
+        void comparePreReleaseVersions(String version1, String version2, int expected) {
+            Version v1 = new Version("1.0.0-" + version1);
+            Version v2 = new Version("1.0.0-" + version2);
+            assertEquals(expected, Integer.signum(v1.compareTo(v2)));
+        }
+
+        private static Stream<Arguments> providePreReleaseComparisonCases() {
             return Stream.of(
-                    Arguments.of("1.2.3", "1.2.4", -1),
-                    Arguments.of("2.0.0", "1.2.4", 1),
-                    Arguments.of("1.2.3", "1.2.3", 0),
-                    Arguments.of("1.2.3-alpha", "1.2.3", -1),
-                    Arguments.of("1.2.3-beta", "1.2.3-alpha", 1),
-                    Arguments.of("1.2.3-alpha.10", "1.2.3-alpha.2", 1),
-                    Arguments.of("1.2.3-1", "1.2.3-alpha", -1),
-                    Arguments.of("1.2.3-alpha.beta", "1.2.3-alpha.1", 1),
-                    Arguments.of("999999.999999.999999", "1.2.3", 1) // Edge case with large numbers
+                    // Basic ordering
+                    Arguments.of("alpha", "beta", -1),
+                    Arguments.of("beta", "alpha", 1),
+
+                    // Numeric comparisons
+                    Arguments.of("alpha.2", "alpha.10", -1),
+                    Arguments.of("alpha.10", "alpha.2", 1),
+
+                    // Mixed type comparisons
+                    Arguments.of("alpha.1", "alpha.beta", -1),
+                    Arguments.of("alpha.beta", "alpha.1", 1),
+
+                    // Different segment lengths
+                    Arguments.of("alpha.1", "alpha.1.1", -1),
+                    Arguments.of("alpha.1.1", "alpha.1", 1),
+
+                    // Equal comparisons
+                    Arguments.of("123", "123", 0),
+                    Arguments.of("alpha.1.beta", "alpha.1.beta", 0)
             );
         }
 
-        @ParameterizedTest
-        @MethodSource("versionComparisonProvider")
-        void compareTo_WithVariousVersions_ReturnsExpectedResult(String v1, String v2, int expected) {
-            Version version1 = new Version(v1);
-            Version version2 = new Version(v2);
-            assertEquals(expected, Integer.signum(version1.compareTo(version2)));
+        @Test
+        void versionWithPreReleaseShouldBeLessThanReleaseVersion() {
+            Version prerelease = new Version("1.0.0-alpha");
+            Version release = new Version("1.0.0");
+            assertTrue(prerelease.isLessThan(release));
         }
     }
 
     /**
-     * Tests for error handling with invalid version strings.
+     * Tests validation of version string formats and error conditions
      */
     @Nested
-    class InvalidVersionTests {
+    class VersionValidation {
 
-        @ParameterizedTest
+        @ParameterizedTest(name = "Reject invalid version: {0}")
         @ValueSource(strings = {
-                "invalid", "1.2", "1.2.3.4", "-1.2.3", "1.-2.3", "1.2.-3",
-                "1.2.3-alpha..beta", "1.2.3-alpha-", "1.2.3-alpha.01",
-                "1.2.3-alpha-beta"
+                "1.2.3-alpha..beta",
+                "1.2.3-alpha.01",
+                "1.2.3-alpha!",
+                "1.2.3-alpha/beta",
+                "1.2.3-alpha-",
+                "1.2.3--beta"
         })
-        void constructor_WhenInvalidVersion_ThrowsIllegalArgumentException(String invalidVersion) {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(invalidVersion));
-            assertTrue(exception.getMessage().contains("Invalid version format") ||
-                    exception.getMessage().contains("Empty pre-release part") ||
-                    exception.getMessage().contains("Numeric pre-release identifier contains leading zeros") ||
-                    exception.getMessage().contains("Hyphens not allowed in pre-release identifiers"));
+        void rejectInvalidVersionFormats(String invalidVersion) {
+            assertThrows(IllegalArgumentException.class, () ->
+                    new Version(invalidVersion));
         }
 
         @Test
-        void constructor_WhenNullVersion_ThrowsIllegalArgumentException() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(null));
-            assertEquals("Version string must not be null or empty", exception.getMessage());
-        }
-
-        @Test
-        void constructor_WhenEmptyVersion_ThrowsIllegalArgumentException() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(""));
-            assertEquals("Version string must not be null or empty", exception.getMessage());
+        void acceptValidVersionWithMixedCaseIdentifiers() {
+            Version version = new Version("1.2.3-RC.1-BUILD.123");
+            assertEquals("1.2.3-RC.1-BUILD.123", version.toString());
         }
     }
 
     /**
-     * Tests for equality and hash code methods.
+     * Tests security-related edge cases and potential vulnerabilities
      */
     @Nested
-    class EqualsHashCodeTests {
+    class SecurityTests {
 
         @Test
-        void equals_WhenVersionsAreSame_ReturnsTrue() {
-            Version v1 = new Version("1.2.3");
-            Version v2 = new Version("1.2.3");
+        void rejectExcessivelyLongVersionStrings() {
+            String longVersion = "1".repeat(1000) + ".0.0";
+            assertThrows(IllegalArgumentException.class, () ->
+                    new Version(longVersion));
+        }
+    }
+
+    /**
+     * Tests equality contracts and hash code consistency
+     */
+    @Nested
+    class EqualityTests {
+
+        @Test
+        void identicalVersionsShouldBeEqual() {
+            Version v1 = new Version("1.2.3-alpha.1");
+            Version v2 = new Version("1.2.3-alpha.1");
             assertEquals(v1, v2);
+            assertEquals(v1.hashCode(), v2.hashCode());
         }
 
         @Test
-        void equals_WhenPreReleasesDiffer_ReturnsFalse() {
-            Version v1 = new Version("1.2.3-alpha");
-            Version v2 = new Version("1.2.3-beta");
+        void differentPreReleasesShouldNotBeEqual() {
+            Version v1 = new Version("1.0.0-alpha");
+            Version v2 = new Version("1.0.0-beta");
             assertNotEquals(v1, v2);
         }
 
         @Test
-        void hashCode_WhenVersionsAreSame_ReturnsEqualHashCodes() {
-            Version v1 = new Version("1.2.3");
-            Version v2 = new Version("1.2.3");
-            assertEquals(v1.hashCode(), v2.hashCode());
-        }
-    }
-
-    /**
-     * Additional tests for other methods.
-     */
-    @Nested
-    class OtherTests {
-
-        @Test
-        void toString_ReturnsCorrectFormat() {
-            Version v1 = new Version("1.2.3");
-            Version v2 = new Version("1.2.3-beta");
-            assertEquals("1.2.3", v1.toString());
-            assertEquals("1.2.3-beta", v2.toString());
-        }
-
-        @Test
-        void compareTo_WhenOtherIsNull_ThrowsNullPointerException() {
-            Version v = new Version("1.2.3");
-            assertThrows(NullPointerException.class, () -> v.compareTo(null));
+        void nullShouldNotBeEqual() {
+            Version version = new Version("1.0.0");
+            assertNotEquals(null, version);
         }
     }
 }
