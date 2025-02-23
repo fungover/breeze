@@ -2,6 +2,7 @@ package org.fungover.breeze.geometric_shapes;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Circle implements Shape {
@@ -104,7 +105,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Circle [center=%s, radius=%f]", center.toString(), radius);
+        return String.format(Locale.FRANCE, "Circle [center=%s, radius=%f]", center.toString(), radius);
     }
 
     @Override
