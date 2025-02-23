@@ -245,7 +245,6 @@ class CsvReaderTest {
                 .build()
                 .withSource(csvData);
 
-        // Läs första icke-tomma raden
         String[] result = reader.readNext();
         assertNotNull(result);
         assertEquals(3, result.length);
@@ -260,7 +259,6 @@ class CsvReaderTest {
     @Test
     @DisplayName("Custom delimiter should work as input")
     void customDelimiterShouldWorkAsInput() throws IOException {
-        // Test med anpassad delimiter
         String csvSource = "Alice|30|Stockholm\nBob|25|Gothenburg\n";
         CsvReader csvReader = CsvReader.builder()
                 .withDelimiter('|')
