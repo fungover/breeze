@@ -8,4 +8,5 @@ module org.fungover.breeze {
     exports org.fungover.breeze.stringInterpolation;
     exports org.fungover.breeze.vector;
     exports org.fungover.breeze.collection;
+    requires java.desktop;
 }
