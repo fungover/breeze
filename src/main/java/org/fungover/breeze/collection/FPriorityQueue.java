@@ -50,6 +50,15 @@ public final class FPriorityQueue<T>{
         return new FPriorityQueue<>(newHeap);
     }
 
+    /**
+     * Removes the element with the highest priority (root of the heap) from the priority queue.
+     *
+     * This method swaps the root element with the last element, removes the last element,
+     * and then performs a heapify-down operation to restore the heap property.
+     *
+     * @return a new {@link FPriorityQueue} instance containing the elements after the removal of the highest-priority element.
+     *         If the priority queue is empty, an empty priority queue is returned.
+     */
     public FPriorityQueue<T> dequeue() {
         if(heap.isEmpty()) return
                 new FPriorityQueue<>();
@@ -61,20 +70,55 @@ public final class FPriorityQueue<T>{
         return new FPriorityQueue<>(heapifyDown(newHeap, 0));
     }
 
+    /**
+     * Retrieves, but does not remove, the element with the highest priority (root of the heap) from the priority queue.
+     *
+     * This method returns the element at the root of the heap, which is the element with the highest priority.
+     * If the priority queue is empty, it throws a {@link NoSuchElementException}.
+     *
+     * @return the element with the highest priority in the priority queue.
+     * @throws NoSuchElementException if the priority queue is empty.
+     */
     public T peek(){
        if(isEmpty())
         throw new NoSuchElementException("Priority queue is empty");
        return heap.get(0).element;
     }
 
+    /**
+     * Checks if the priority queue is empty.
+     *
+     * This method returns {@code true} if the priority queue contains no elements,
+     * otherwise it returns {@code false}.
+     *
+     * @return {@code true} if the priority queue is empty, {@code false} otherwise.
+     */
     public boolean isEmpty(){
         return heap.isEmpty();
     }
 
+    /**
+     * Returns the number of elements in the priority queue.
+     *
+     * This method returns the total number of elements currently in the priority queue.
+     *
+     * @return the number of elements in the priority queue.
+     */
     public int size() {
         return heap.size();
     }
 
+    /**
+     * Restores the heap property by "heapifying down" the element at the specified index.
+     *
+     * This method ensures that the element at the given index is placed correctly in the heap,
+     * by comparing it with its children and swapping it with the smallest child if necessary.
+     * It continues the process until the heap property is satisfied or no further swaps are needed.
+     *
+     * @param originalHeap the list representing the original heap.
+     * @param index the index of the element to be heapified down.
+     * @return a new heap where the heap property is restored, or the original heap if no swaps were made.
+     */
     public static <T> List<Node<T>> heapifyDown(List<Node<T>> originalHeap, int index) {
         if (index >= originalHeap.size()) return originalHeap;
 
