@@ -42,10 +42,10 @@ public class RectangleTest {
     @Test
     public void testGetCenter() {
         Point topLeft = new Point(0, 0);
-        Rectangle rectangle = new Rectangle(topLeft, 10, 5);
+        Rectangle rectangle = new Rectangle(topLeft, 10.0, 5.0);
 
         // The center should be at (5, 2.5) for a 10x5 rectangle
-        Point2D expectedCenter = new Point2D.Double(5.0, 2.0);  // Integer center for simplicity
+        Point2D expectedCenter = new Point2D.Double(5.0, 2.5);  // Integer center for simplicity
         assertEquals(expectedCenter, rectangle.getCenter());
     }
 

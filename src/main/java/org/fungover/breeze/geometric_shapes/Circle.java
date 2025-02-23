@@ -16,11 +16,13 @@ public class Circle implements Shape {
     }
 
     /**
-     * @return
+     * Returns the center point of the circle.
+     *
+     * @return the center point as a Point object
      */
     @Override
-    public Point getCenter() {
-        return null;
+    public Point2D.Double getCenter() {
+        return new Point2D.Double((int)center.getX(), (int)center.getY());
     }
 
 

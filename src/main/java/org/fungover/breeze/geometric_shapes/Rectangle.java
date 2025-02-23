@@ -1,6 +1,8 @@
 package org.fungover.breeze.geometric_shapes;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Rectangle implements Shape {
@@ -11,14 +13,18 @@ public class Rectangle implements Shape {
 
     // Constructor for Rectangle
     public Rectangle(Point topLeft, double width, double height) {
-        this.topLeft = topLeft;
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Width and height must be non-negative");
+        }
+
+        this.topLeft = new Point(topLeft); // Defensive copy
         this.width = width;
         this.height = height;
     }
 
     // Getter for top-left corner
     public Point getTopLeft() {
-        return topLeft;
+        return new Point(topLeft); // Defensive copy
     }
 
     // Getter for width
@@ -81,12 +87,19 @@ public class Rectangle implements Shape {
 //        return new Point2D.Double(topLeft.getX() + width / 2, topLeft.getY() + height / 2);
 //    }
 
+//    @Override
+//    public Point getCenter() {
+//        // Return the center of the rectangle as an integer-based Point
+//        int centerX = (int) (topLeft.getX() + width / 2);
+//        int centerY = (int) (topLeft.getY() + height / 2);
+//        return new Point(centerX, centerY);
+//    }
+
     @Override
-    public Point getCenter() {
-        // Return the center of the rectangle as an integer-based Point
-        int centerX = (int) (topLeft.getX() + width / 2);
-        int centerY = (int) (topLeft.getY() + height / 2);
-        return new Point(centerX, centerY);
+    public Point2D.Double getCenter() {
+        double centerX = topLeft.getX() + width / 2.0;
+        double centerY = topLeft.getY() + height / 2.0;
+        return new Point2D.Double(centerX, centerY);
     }
 
     @Override
@@ -121,7 +134,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, width, height);
+        return String.format(Locale.FRANCE, "Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, width, height);
     }
 
     @Override
