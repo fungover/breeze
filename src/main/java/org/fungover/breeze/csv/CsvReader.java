@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -250,10 +249,8 @@ public class CsvReader implements AutoCloseable {
             throw new IllegalStateException("withSource(..) must be called before stream()");
         }
 
-        AtomicBoolean skipped = new AtomicBoolean(!hasHeader);
-
         return bufferedReader.lines()
-                .filter(_ -> skipped.getAndSet(true)) // skips first element if hasHeader == true
+                .skip(hasHeader ? 1 : 0) // skips first line if hasHeader == true
                 .filter(this::handleEmptyLines)
                 .map(this::parseLine)
                 .map(list -> list.toArray(String[]::new));
