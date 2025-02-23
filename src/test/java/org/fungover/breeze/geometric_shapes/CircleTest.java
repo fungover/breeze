@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-public class CircleTest {
+class CircleTest {
 
     @Test
-    public void testContainsPoint() {
+    void testContainsPoint() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
@@ -23,7 +23,7 @@ public class CircleTest {
     }
 
     @Test
-    public void testGetArea() {
+    void testGetArea() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
@@ -32,7 +32,7 @@ public class CircleTest {
     }
 
     @Test
-    public void testGetPerimeter() {
+    void testGetPerimeter() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
@@ -41,16 +41,16 @@ public class CircleTest {
     }
 
     @Test
-    public void testGetBoundingBox() {
+    void testGetBoundingBox() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // The bounding box should have width and height equal to the diameter of the circle
-        assertEquals(new Rectangle(new Point(-5, -5), 10, 10), circle.getBoundingBox());
+        assertEquals(new RectangleShape(new Point(-5, -5), 10, 10), circle.getBoundingBox());
     }
 
     @Test
-    public void testRotate() {
+    void testRotate() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
         Point rotationPoint = new Point(0, 0);
@@ -61,7 +61,7 @@ public class CircleTest {
     }
 
     @Test
-    public void testScale() {
+    void testScale() {
         Point2D center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 

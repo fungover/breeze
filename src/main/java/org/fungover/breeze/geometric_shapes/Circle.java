@@ -76,14 +76,14 @@ public class Circle implements Shape {
     }
 
     @Override
-    public Rectangle getBoundingBox() {
+    public Shape getBoundingBox() {
         double x = center.getX() - radius;
         double y = center.getY() - radius;
         double width = 2 * radius;
         double height = 2 * radius;
 
         // Return a new Rectangle instance using the custom Rectangle class
-        return new Rectangle(new Point((int) x, (int) y), width, height);
+        return (Shape) new RectangleShape(new Point((int) x, (int) y), width, height);
     }
 
     @Override
@@ -93,13 +93,13 @@ public class Circle implements Shape {
         double radianAngle = Math.toRadians(angle);
         double newX = center.getX() + (this.center.getX() - center.getX()) * Math.cos(radianAngle) - (this.center.getY() - center.getY()) * Math.sin(radianAngle);
         double newY = center.getY() + (this.center.getX() - center.getX()) * Math.sin(radianAngle) + (this.center.getY() - center.getY()) * Math.cos(radianAngle);
-        return new Circle(new Point2D.Double(newX, newY), radius);
+        return (Shape) new Circle(new Point2D.Double(newX, newY), radius);
     }
 
     @Override
     public Shape scale(double factor) {
         // Scaling the circle simply multiplies the radius by the factor
-        return new Circle(center, radius * factor);
+        return (Shape) new Circle(center, radius * factor);
     }
 
     @Override

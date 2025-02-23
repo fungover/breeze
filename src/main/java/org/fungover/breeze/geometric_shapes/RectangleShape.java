@@ -5,14 +5,15 @@ import java.awt.geom.Point2D;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Rectangle implements Shape {
+public class RectangleShape implements Shape {
 
     private final Point topLeft;  // The top-left corner of the rectangle
     private final double width;
     private final double height;
+    private final RectangleContainmentStrategy containmentStrategy;
 
     // Constructor for Rectangle
-    public Rectangle(Point topLeft, double width, double height) {
+    public RectangleShape(Point topLeft, double width, double height) {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Width and height must be non-negative");
         }
@@ -20,6 +21,7 @@ public class Rectangle implements Shape {
         this.topLeft = new Point(topLeft); // Defensive copy
         this.width = width;
         this.height = height;
+        this.containmentStrategy = new RectangleContainmentStrategy(this);
     }
 
     // Getter for top-left corner
@@ -48,8 +50,8 @@ public class Rectangle implements Shape {
 
     @Override
     public boolean intersects(Shape other) {
-        if (other instanceof Rectangle) {
-            Rectangle r = (Rectangle) other;
+        if (other instanceof RectangleShape) {
+            RectangleShape r = (RectangleShape) other;
             return this.getBoundingBox().intersects(r.getBoundingBox());
         }
         return false; // Other shapes need specific implementation
@@ -57,14 +59,7 @@ public class Rectangle implements Shape {
 
     @Override
     public boolean containsShape(Shape other) {
-        if (other instanceof Rectangle) {
-            Rectangle r = (Rectangle) other;
-            return this.contains(r.topLeft) &&
-                    this.contains(new Point((int) (r.topLeft.getX() + r.width), (int) r.topLeft.getY())) &&
-                    this.contains(new Point((int) r.topLeft.getX(), (int) (r.topLeft.getY() + r.height))) &&
-                    this.contains(new Point((int) (r.topLeft.getX() + r.width), (int) (r.topLeft.getY() + r.height)));
-        }
-        return false;
+        return containmentStrategy.containsShape(other);
     }
 
     @Override
@@ -78,22 +73,16 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public Rectangle getBoundingBox() {
-        return new Rectangle(new Point(topLeft.x, topLeft.y), width, height);
+    public Shape getBoundingBox() {
+        // For a rectangle, the bounding box is itself.
+        return (Shape) new BoundingBox(
+                topLeft,
+                new Point((int) (topLeft.x + width), topLeft.y),
+                new Point(topLeft.x, (int) (topLeft.y + height)),
+                new Point((int) (topLeft.x + width), (int) (topLeft.y + height))
+        ).toRectangle();
     }
 
-//    @Override
-//    public Point2D.Double getCenter() {
-//        return new Point2D.Double(topLeft.getX() + width / 2, topLeft.getY() + height / 2);
-//    }
-
-//    @Override
-//    public Point getCenter() {
-//        // Return the center of the rectangle as an integer-based Point
-//        int centerX = (int) (topLeft.getX() + width / 2);
-//        int centerY = (int) (topLeft.getY() + height / 2);
-//        return new Point(centerX, centerY);
-//    }
 
     @Override
     public Point2D.Double getCenter() {
@@ -104,19 +93,14 @@ public class Rectangle implements Shape {
 
     @Override
     public Shape rotate(double angle, Point center) {
-        // Rotate the four corners around the center
         Point topLeftRotated = rotatePoint(topLeft, angle, center);
-        Point topRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), (int) topLeft.getY()), angle, center);
-        Point bottomLeftRotated = rotatePoint(new Point((int) topLeft.getX(), (int) (topLeft.getY() + height)), angle, center);
+        Point topRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), topLeft.y), angle, center);
+        Point bottomLeftRotated = rotatePoint(new Point(topLeft.x, (int) (topLeft.getY() + height)), angle, center);
         Point bottomRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), (int) (topLeft.getY() + height)), angle, center);
 
-        // Determine new bounding box
-        int minX = (int) Math.min(Math.min(topLeftRotated.getX(), topRightRotated.getX()), Math.min(bottomLeftRotated.getX(), bottomRightRotated.getX()));
-        int minY = (int) Math.min(Math.min(topLeftRotated.getY(), topRightRotated.getY()), Math.min(bottomLeftRotated.getY(), bottomRightRotated.getY()));
-        int maxX = (int) Math.max(Math.max(topLeftRotated.getX(), topRightRotated.getX()), Math.max(bottomLeftRotated.getX(), bottomRightRotated.getX()));
-        int maxY = (int) Math.max(Math.max(topLeftRotated.getY(), topRightRotated.getY()), Math.max(bottomLeftRotated.getY(), bottomRightRotated.getY()));
-
-        return new Rectangle(new Point(minX, minY), maxX - minX, maxY - minY);
+        // Use the BoundingBox class to compute the minimal enclosing rectangle
+        BoundingBox newBoundingBox = new BoundingBox(topLeftRotated, topRightRotated, bottomLeftRotated, bottomRightRotated);
+        return (Shape) new RectangleShape(newBoundingBox.getTopLeft(), newBoundingBox.getWidth(), newBoundingBox.getHeight());
     }
 
     private Point rotatePoint(Point p, double angle, Point center) {
@@ -129,7 +113,7 @@ public class Rectangle implements Shape {
     @Override
     public Shape scale(double factor) {
         // Scale the rectangle by a given factor (scales width and height)
-        return new Rectangle(topLeft, width * factor, height * factor);
+        return (Shape) new RectangleShape(topLeft, width * factor, height * factor);
     }
 
     @Override
@@ -141,7 +125,7 @@ public class Rectangle implements Shape {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Rectangle rectangle = (Rectangle) obj;
+        RectangleShape rectangle = (RectangleShape) obj;
         return Double.compare(rectangle.width, width) == 0 &&
                 Double.compare(rectangle.height, height) == 0 &&
                 topLeft.equals(rectangle.topLeft);
