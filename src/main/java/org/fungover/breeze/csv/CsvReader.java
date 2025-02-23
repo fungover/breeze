@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  * List<String[]> rows = reader.readAll();
  * }</pre>
  */
-public class CsvReader {
+public class CsvReader implements AutoCloseable {
 
     private final char delimiter;
     private final boolean skipEmptyLines;
@@ -377,6 +377,17 @@ public class CsvReader {
 
     private boolean inQuotesAndNextCharIsAlsoAQuote(String line, boolean inQuotes, int i, int len) {
         return inQuotes && i + 1 < len && line.charAt(i + 1) == quoteChar;
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+        } finally {
+            bufferedReader = null;
+        }
     }
 
 }

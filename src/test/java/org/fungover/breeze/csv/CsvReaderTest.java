@@ -18,8 +18,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -463,4 +465,52 @@ class CsvReaderTest {
                 );
     }
 
+    @Test
+    @DisplayName("AutoClosable.close closes and sets resource to null")
+    void close() throws IOException {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder().build().withSource("a,b,c\n1,2,3");
+
+        // Act
+        classUnderTest.close();
+
+        // Assert
+        assertThatThrownBy(classUnderTest::readAll)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("withSource(..) must be called before readAll()");
+    }
+
+    @Test
+    @DisplayName("AutoClosable works when used with try-with-resources")
+    void close_tryWithResources() throws IOException {
+
+        // arrange
+        CsvReader classUnderTest;
+        try (CsvReader tempReader = CsvReader.builder().build().withSource("a,b,c\n1,2,3")) {
+            classUnderTest = tempReader;
+        }
+
+        // Act
+        Throwable actual = catchThrowable(classUnderTest::readAll);
+
+        // Assert
+        assertThat(actual)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("withSource(..) must be called before readAll()");
+    }
+
+    @Test
+    @DisplayName("Calling close multiple times should not throw an exception")
+    void shouldNotThrowExceptionIfClosedTwice() throws Exception {
+
+        // Arrange
+        CsvReader classUnderTest = CsvReader.builder().build().withSource("a,b,c\n1,2,3");
+
+        // Act
+        classUnderTest.close();
+
+        // Assert
+        assertThatCode(classUnderTest::close).doesNotThrowAnyException();
+    }
 }
