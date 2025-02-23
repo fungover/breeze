@@ -3,6 +3,7 @@ package org.fungover.breeze.control;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +31,7 @@ class RetryExecutorTest {
                 .retryOn(IOException.class)
                 .build();
 
-        // Vi förväntar oss att ett undantag kastas eftersom alla retries misslyckas
+        // We expect an exception to be thrown because all retries fail
         assertThrows(RetryExecutor.RetryExhaustedException.class, () -> {
             executor.execute(() -> {
                 throw new IOException("Failed");
@@ -67,13 +68,14 @@ class RetryExecutorTest {
             });
         });
     }
+
     // New test case
     @Test
     void testSuccessfulRetry() throws Exception {
-        final int[] attempts = {0};
+        final AtomicInteger attempts = new AtomicInteger(0);
         String result = RetryExecutor.executeWithRetry(() -> {
-            if (attempts[0]++ < 2) throw new ServerBusyException();
-            return "Success after " + attempts[0] + " tries";
+            if (attempts.getAndIncrement() < 2) throw new ServerBusyException();
+            return "Success after " + attempts.get() + " tries";
         });
         assertTrue(result.contains("Success after 3"));
     }
