@@ -11,12 +11,16 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Version class.
+ */
 class VersionTest {
 
+    /**
+     * Tests for basic comparison methods.
+     */
     @Nested
     class ComparisonTests {
-
-        // ----------- Comparison Tests -----------
 
         @Test
         void isLessThan_WhenFirstVersionIsLess_ReturnsTrue() {
@@ -54,10 +58,11 @@ class VersionTest {
         }
     }
 
+    /**
+     * Parameterized tests for various version comparisons.
+     */
     @Nested
     class ParameterizedComparisonTests {
-
-        // ----------- Parameterized Comparison Tests -----------
 
         static Stream<Arguments> versionComparisonProvider() {
             return Stream.of(
@@ -65,7 +70,11 @@ class VersionTest {
                     Arguments.of("2.0.0", "1.2.4", 1),
                     Arguments.of("1.2.3", "1.2.3", 0),
                     Arguments.of("1.2.3-alpha", "1.2.3", -1),
-                    Arguments.of("1.2.3-beta", "1.2.3-alpha", 1)
+                    Arguments.of("1.2.3-beta", "1.2.3-alpha", 1),
+                    Arguments.of("1.2.3-alpha.10", "1.2.3-alpha.2", 1),
+                    Arguments.of("1.2.3-1", "1.2.3-alpha", -1),
+                    Arguments.of("1.2.3-alpha.beta", "1.2.3-alpha.1", 1),
+                    Arguments.of("999999.999999.999999", "1.2.3", 1) // Edge case with large numbers
             );
         }
 
@@ -78,32 +87,44 @@ class VersionTest {
         }
     }
 
+    /**
+     * Tests for error handling with invalid version strings.
+     */
     @Nested
     class InvalidVersionTests {
 
-        // ----------- Invalid Version Tests -----------
-
         @ParameterizedTest
-        @ValueSource(strings = {"invalid", "1.2", "1.2.3.4", "-1.2.3", "1.-2.3", "1.2.-3"})
+        @ValueSource(strings = {
+                "invalid", "1.2", "1.2.3.4", "-1.2.3", "1.-2.3", "1.2.-3",
+                "1.2.3-alpha..beta", "1.2.3-alpha-", "1.2.3-alpha.01",
+                "1.2.3-alpha-beta"
+        })
         void constructor_WhenInvalidVersion_ThrowsIllegalArgumentException(String invalidVersion) {
-            assertThrows(IllegalArgumentException.class, () -> new Version(invalidVersion));
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(invalidVersion));
+            assertTrue(exception.getMessage().contains("Invalid version format") ||
+                    exception.getMessage().contains("Empty pre-release part") ||
+                    exception.getMessage().contains("Numeric pre-release identifier contains leading zeros") ||
+                    exception.getMessage().contains("Hyphens not allowed in pre-release identifiers"));
         }
 
         @Test
         void constructor_WhenNullVersion_ThrowsIllegalArgumentException() {
-            assertThrows(IllegalArgumentException.class, () -> new Version(null));
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(null));
+            assertEquals("Version string must not be null or empty", exception.getMessage());
         }
 
         @Test
         void constructor_WhenEmptyVersion_ThrowsIllegalArgumentException() {
-            assertThrows(IllegalArgumentException.class, () -> new Version(""));
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Version(""));
+            assertEquals("Version string must not be null or empty", exception.getMessage());
         }
     }
 
+    /**
+     * Tests for equality and hash code methods.
+     */
     @Nested
     class EqualsHashCodeTests {
-
-        // ----------- Equals & HashCode Tests -----------
 
         @Test
         void equals_WhenVersionsAreSame_ReturnsTrue() {
@@ -127,10 +148,11 @@ class VersionTest {
         }
     }
 
+    /**
+     * Additional tests for other methods.
+     */
     @Nested
     class OtherTests {
-
-        // ----------- Other Tests -----------
 
         @Test
         void toString_ReturnsCorrectFormat() {
