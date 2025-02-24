@@ -17,7 +17,7 @@ public final class Version implements Comparable<Version> {
                     "(?<minor>0|[1-9]\\d*+)\\." +
                     "(?<patch>0|[1-9]\\d*+)" +
                     "(?:-(?<prerelease>[a-zA-Z0-9-]++(?:\\.[a-zA-Z0-9-]++)*+))?" +
-                    "(?:\\+(?<build>[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*(?:\\.[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)*))?$"
+                    "(?:\\+(?<build>[0-9A-Za-z-]++(?:\\.[0-9A-Za-z-]++)*+))?$"
     );
 
     public Version(String version) {
@@ -89,7 +89,10 @@ public final class Version implements Comparable<Version> {
         if (identifier.isEmpty()) {
             throw new IllegalArgumentException("Empty build metadata identifier");
         }
-        if (!identifier.matches("[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*")) {
+        if (identifier.startsWith("-") || identifier.endsWith("-")) {
+            throw new IllegalArgumentException("Invalid hyphen placement in build metadata: " + identifier);
+        }
+        if (!identifier.matches("[0-9A-Za-z-]+")) {
             throw new IllegalArgumentException("Invalid build metadata format: " + identifier);
         }
     }
