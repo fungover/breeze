@@ -1,11 +1,14 @@
 package org.fungover.breeze.control;
 
+import com.sun.net.httpserver.Authenticator;
 import org.fungover.breeze.funclib.control.Either;
+import org.fungover.breeze.funclib.control.Try;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;

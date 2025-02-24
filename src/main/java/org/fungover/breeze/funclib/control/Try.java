@@ -202,8 +202,8 @@ public abstract class Try<T> implements Serializable {
             try {
                 Exception cause = ((Failure<T>) this).exception;
 
-                    T recoveredValue = recoverFunction.apply((cause));
-                    return success(recoveredValue);
+                T recoveredValue = recoverFunction.apply((cause));
+                return success(recoveredValue);
             } catch (Exception e) {
                 return failure(e);
             }
@@ -386,7 +386,7 @@ public abstract class Try<T> implements Serializable {
      *
      * @param <T> the type of the successful value
      */
-     static final class Success<T> extends Try<T> implements Serializable {
+    static final class Success<T> extends Try<T> implements Serializable {
         private final T value;
 
         public Success(T value) {
