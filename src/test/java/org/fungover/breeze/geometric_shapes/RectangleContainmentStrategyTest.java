@@ -34,4 +34,49 @@ class RectangleContainmentStrategyTest {
 
         assertTrue(strategy.containsShape(rect), "A rectangle should contain itself.");
     }
+
+    @Test
+    public void testContainsShapeWhenContained() {
+        // Create a large rectangle (outer rectangle)
+        RectangleShape largeRect = new RectangleShape(new Point(0, 0), 10.0, 10.0);
+
+        // Create a smaller rectangle (inner rectangle)
+        RectangleShape smallRect = new RectangleShape(new Point(2, 2), 4.0, 4.0);
+
+        // Rectangle containment strategy for the large rectangle
+        RectangleContainmentStrategy containmentStrategy = new RectangleContainmentStrategy(largeRect);
+
+        // Check if the large rectangle contains the small rectangle
+        assertTrue(containmentStrategy.containsShape(smallRect)); // Small rectangle should be contained in large rectangle
+    }
+
+    @Test
+    public void testContainsShapeWhenNotContained() {
+        // Create a large rectangle (outer rectangle)
+        RectangleShape largeRect = new RectangleShape(new Point(0, 0), 10.0, 10.0);
+
+        // Create a smaller rectangle that partially exceeds the boundaries of the large rectangle
+        RectangleShape smallRect = new RectangleShape(new Point(8, 8), 4.0, 4.0); // Exceeds the large rectangle on the top-right corner
+
+        // Rectangle containment strategy for the large rectangle
+        RectangleContainmentStrategy containmentStrategy = new RectangleContainmentStrategy(largeRect);
+
+        // Check if the large rectangle contains the small rectangle
+        assertFalse(containmentStrategy.containsShape(smallRect)); // Small rectangle should not be contained in large rectangle
+    }
+
+    @Test
+    public void testContainsShapeWhenExactlyFitting() {
+        // Create a large rectangle (outer rectangle)
+        RectangleShape largeRect = new RectangleShape(new Point(0, 0), 10.0, 10.0);
+
+        // Create a rectangle that fits exactly inside the large rectangle, touching edges but not exceeding
+        RectangleShape exactFitRect = new RectangleShape(new Point(0, 0), 10.0, 10.0);
+
+        // Rectangle containment strategy for the large rectangle
+        RectangleContainmentStrategy containmentStrategy = new RectangleContainmentStrategy(largeRect);
+
+        // Check if the large rectangle contains the exact fit rectangle
+        assertTrue(containmentStrategy.containsShape(exactFitRect)); // Should return true because it is an exact fit
+    }
 }

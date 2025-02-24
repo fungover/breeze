@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-class RectangleTest {
+class RectangleShapeTest {
 
     @Test
     void testContainsPoint() {
@@ -67,5 +67,59 @@ class RectangleTest {
         RectangleShape scaledRectangle = (RectangleShape) rectangle.scale(2);
         assertEquals(20, scaledRectangle.getWidth(), 0.0001);
         assertEquals(10, scaledRectangle.getHeight(), 0.0001);
+    }
+
+    @Test
+    public void testConstructorWithValidValues() {
+        Point topLeft = new Point(0, 0);
+        RectangleShape rectangle = new RectangleShape(topLeft, 5.0, 10.0);
+
+        assertEquals(5.0, rectangle.getWidth());
+        assertEquals(10.0, rectangle.getHeight());
+        assertEquals(topLeft, rectangle.getTopLeft());
+    }
+
+    @Test
+    public void testConstructorWithInvalidWidth() {
+        Point topLeft = new Point(0, 0);
+        assertThrows(IllegalArgumentException.class, () -> new RectangleShape(topLeft, -5.0, 10.0));
+    }
+
+    @Test
+    public void testConstructorWithInvalidHeight() {
+        Point topLeft = new Point(0, 0);
+        assertThrows(IllegalArgumentException.class, () -> new RectangleShape(topLeft, 5.0, -10.0));
+    }
+
+    @Test
+    public void testContains() {
+        Point topLeft = new Point(0, 0);
+        RectangleShape rectangle = new RectangleShape(topLeft, 5.0, 10.0);
+
+        Point insidePoint = new Point(2, 3);
+        Point outsidePoint = new Point(6, 11);
+
+        assertTrue(rectangle.contains(insidePoint)); // Point inside rectangle
+        assertFalse(rectangle.contains(outsidePoint)); // Point outside rectangle
+    }
+
+    @Test
+    public void testContainsShape() {
+        RectangleShape bigRect = new RectangleShape(new Point(0, 0), 10.0, 10.0);
+        RectangleShape smallRect = new RectangleShape(new Point(2, 2), 5.0, 5.0);
+
+        assertTrue(bigRect.containsShape(smallRect)); // Big rectangle should contain small rectangle
+
+        RectangleShape outsideRect = new RectangleShape(new Point(6, 6), 5.0, 5.0);
+        assertFalse(bigRect.containsShape(outsideRect)); // Big rectangle should not contain outside rectangle
+    }
+
+    @Test
+    public void testToString() {
+        Point topLeft = new Point(0, 0);
+        RectangleShape rectangle = new RectangleShape(topLeft, 5.0, 10.0);
+
+        String expectedString = String.format("Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, 5.0, 10.0);
+        assertEquals(expectedString, rectangle.toString());
     }
 }

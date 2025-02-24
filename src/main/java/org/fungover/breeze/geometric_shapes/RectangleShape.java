@@ -52,7 +52,10 @@ public class RectangleShape implements Shape {
     public boolean intersects(Shape other) {
         if (other instanceof RectangleShape) {
             RectangleShape r = (RectangleShape) other;
-            return this.getBoundingBox().intersects(r.getBoundingBox());
+            // Ensure that this check uses the bounding box correctly without recursion
+            BoundingBox thisBoundingBox = (BoundingBox) this.getBoundingBox();
+            BoundingBox otherBoundingBox = (BoundingBox) r.getBoundingBox();
+            return thisBoundingBox.intersects(otherBoundingBox);
         }
         return false; // Other shapes need specific implementation
     }
@@ -74,13 +77,13 @@ public class RectangleShape implements Shape {
 
     @Override
     public Shape getBoundingBox() {
-        // For a rectangle, the bounding box is itself.
-        return (Shape) new BoundingBox(
+        // Directly return a new BoundingBox object without invoking other methods that could cause recursion
+        return new BoundingBox(
                 topLeft,
-                new Point((int) (topLeft.x + width), topLeft.y),
-                new Point(topLeft.x, (int) (topLeft.y + height)),
-                new Point((int) (topLeft.x + width), (int) (topLeft.y + height))
-        ).toRectangle();
+                new Point((int) (topLeft.getX() + width), topLeft.y),
+                new Point(topLeft.x, (int) (topLeft.getY() + height)),
+                new Point((int) (topLeft.getX() + width), (int) (topLeft.getY() + height))
+        ).toRectangle();  // Ensure toRectangle() is not recursively calling intersects or other methods
     }
 
 
