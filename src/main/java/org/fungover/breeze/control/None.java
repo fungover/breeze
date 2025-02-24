@@ -289,4 +289,9 @@ public final class None<T extends Serializable> extends Option<T> {
         throw new UnsupportedOperationException("Cannot get value from None");
     }
 
+
+
+    public Try<T> toTry(Supplier<Exception> exceptionSupplier) {
+        return Try.failure(exceptionSupplier != null ? exceptionSupplier.get() : new NoSuchElementException("No value present"));
+    }
 }
