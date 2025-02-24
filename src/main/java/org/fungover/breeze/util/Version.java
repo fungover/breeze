@@ -43,12 +43,11 @@ public final class Version implements Comparable<Version> {
         validateBuildMetadata();
     }
 
-    // Parsing and validation methods
     private int parseNumericComponent(String component) {
         try {
             int value = Integer.parseInt(component);
             if (value < 0) {
-                throw new IllegalArgumentException("Version components cannot be negative: " + component);
+                throw new IllegalArgumentException("Negative version component: " + component);
             }
             return value;
         } catch (NumberFormatException e) {
@@ -58,7 +57,7 @@ public final class Version implements Comparable<Version> {
 
     private void validateInput(String version) {
         if (version == null || version.isBlank()) {
-            throw new IllegalArgumentException("Version string must not be null or empty");
+            throw new IllegalArgumentException("Version cannot be null or empty");
         }
     }
 
@@ -71,10 +70,7 @@ public final class Version implements Comparable<Version> {
 
     private void validatePreReleasePart(String part) {
         if (part.isEmpty()) {
-            throw new IllegalArgumentException("Empty pre-release identifier");
-        }
-        if (part.startsWith("-") || part.endsWith("-")) {
-            throw new IllegalArgumentException("Invalid hyphen placement in: " + part);
+            throw new IllegalArgumentException("Empty pre-release component");
         }
         if (isNumeric(part)) {
             validateNumericIdentifier(part);
@@ -92,75 +88,19 @@ public final class Version implements Comparable<Version> {
 
     private void validateBuildIdentifier(String identifier) {
         if (identifier.isEmpty()) {
-            throw new IllegalArgumentException("Empty build metadata identifier");
+            throw new IllegalArgumentException("Empty build metadata component");
         }
-        if (identifier.startsWith("-") || identifier.endsWith("-")) {
-            throw new IllegalArgumentException("Invalid hyphen placement in build metadata: " + identifier);
-        }
-        for (int i = 0; i < identifier.length(); i++) {
-            char c = identifier.charAt(i);
+        for (char c : identifier.toCharArray()) {
             if (!Character.isLetterOrDigit(c) && c != '-') {
                 throw new IllegalArgumentException("Invalid build metadata character: " + c);
             }
         }
     }
 
-    // Core comparison logic
-    @Override
-    public int compareTo(Version other) {
-        if (other == null) throw new NullPointerException("Cannot compare with null version");
-
-        int result = Integer.compare(major, other.major);
-        if (result != 0) return result;
-
-        result = Integer.compare(minor, other.minor);
-        if (result != 0) return result;
-
-        result = Integer.compare(patch, other.patch);
-        if (result != 0) return result;
-
-        return comparePreRelease(this.preRelease, other.preRelease);
-    }
-
-    private int comparePreRelease(String a, String b) {
-        if (a == null && b == null) return 0;
-        if (a == null) return 1;  // Non-prerelease > prerelease
-        if (b == null) return -1; // Prerelease < non-prerelease
-
-        String[] partsA = a.split("\\.", -1);
-        String[] partsB = b.split("\\.", -1);
-        int minLength = Math.min(partsA.length, partsB.length);
-
-        for (int i = 0; i < minLength; i++) {
-            int cmp = compareIdentifier(partsA[i], partsB[i]);
-            if (cmp != 0) return cmp;
-        }
-
-        return Integer.compare(partsA.length, partsB.length);
-    }
-
-    private int compareIdentifier(String a, String b) {
-        boolean aNumeric = isNumeric(a);
-        boolean bNumeric = isNumeric(b);
-
-        if (aNumeric && bNumeric) {
-            return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
-        } else if (aNumeric) {
-            return -1;  // Numeric < non-numeric
-        } else if (bNumeric) {
-            return 1;   // Non-numeric > numeric
-        } else {
-            return a.compareTo(b);
-        }
-    }
-
-    // Helper validation methods
     private boolean isNumeric(String s) {
         if (s == null || s.isEmpty()) return false;
-        for (int i = 0; i < s.length(); i++) {
-            if (!Character.isDigit(s.charAt(i))) {
-                return false;
-            }
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c)) return false;
         }
         return true;
     }
@@ -178,16 +118,12 @@ public final class Version implements Comparable<Version> {
 
     private void validateAlphanumericIdentifier(String part) {
         if (!isValidAlphanumeric(part)) {
-            throw new IllegalArgumentException("Invalid characters in: " + part);
-        }
-        if (!hasAtLeastOneLetter(part)) {
-            throw new IllegalArgumentException("Non-numeric identifier requires at least one letter: " + part);
+            throw new IllegalArgumentException("Invalid characters in identifier: " + part);
         }
     }
 
     private boolean isValidAlphanumeric(String input) {
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
+        for (char c : input.toCharArray()) {
             if (!Character.isLetterOrDigit(c) && c != '-') {
                 return false;
             }
@@ -195,16 +131,54 @@ public final class Version implements Comparable<Version> {
         return true;
     }
 
-    private boolean hasAtLeastOneLetter(String input) {
-        for (int i = 0; i < input.length(); i++) {
-            if (Character.isLetter(input.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public int compareTo(Version other) {
+        if (other == null) throw new NullPointerException("Cannot compare to null version");
+
+        int result = Integer.compare(major, other.major);
+        if (result != 0) return result;
+
+        result = Integer.compare(minor, other.minor);
+        if (result != 0) return result;
+
+        result = Integer.compare(patch, other.patch);
+        if (result != 0) return result;
+
+        return comparePreRelease(this.preRelease, other.preRelease);
     }
 
-    // Core class methods
+    private int comparePreRelease(String a, String b) {
+        if (a == null && b == null) return 0;
+        if (a == null) return 1;
+        if (b == null) return -1;
+
+        String[] partsA = a.split("\\.");
+        String[] partsB = b.split("\\.");
+        int minLength = Math.min(partsA.length, partsB.length);
+
+        for (int i = 0; i < minLength; i++) {
+            int cmp = compareIdentifier(partsA[i], partsB[i]);
+            if (cmp != 0) return cmp;
+        }
+
+        return Integer.compare(partsA.length, partsB.length);
+    }
+
+    private int compareIdentifier(String a, String b) {
+        boolean aNumeric = isNumeric(a);
+        boolean bNumeric = isNumeric(b);
+
+        if (aNumeric && bNumeric) {
+            return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
+        } else if (aNumeric) {
+            return -1;
+        } else if (bNumeric) {
+            return 1;
+        } else {
+            return a.compareTo(b);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -231,15 +205,15 @@ public final class Version implements Comparable<Version> {
     }
 
     public boolean isGreaterThan(Version other) {
-        return this.compareTo(other) > 0;
+        return compareTo(other) > 0;
     }
 
     public boolean isLessThan(Version other) {
-        return this.compareTo(other) < 0;
+        return compareTo(other) < 0;
     }
 
     public boolean isEqualTo(Version other) {
-        return this.compareTo(other) == 0;
+        return compareTo(other) == 0;
     }
 
     public String getBuildMetadata() {
