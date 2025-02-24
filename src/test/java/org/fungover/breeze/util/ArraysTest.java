@@ -1,10 +1,13 @@
 package org.fungover.breeze.util;
 
+import org.fungover.breeze.control.Tuple2;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -16,11 +19,30 @@ import static org.assertj.core.api.Assertions.*;
 class ArraysTest {
 
     @Test
-    void testPairEquality() {
-        Arrays.Pair<String, String> pair1 = new Arrays.Pair<>("a1", "b1");
-        Arrays.Pair<String, String> pair2 = new Arrays.Pair<>("a1", "b1");
+    void testTupleEquality() {
+        Tuple2<String, String> tuple1 = Tuple2.of("a1", "b1");
+        Tuple2<String, String> tuple2 = Tuple2.of("a1", "b1");
 
-        assertEquals(pair1, pair2); // Ska vara true om equals() fungerar korrekt
+        assertEquals(tuple1, tuple2);
+    }
+    @Test
+    void testShouldPairElementsIntoTuples() {
+        String[] first = {"A", "B", "C"};
+        Integer[] second = {1, 2, 3};
+
+        Tuple2<String, Integer>[] result = Arrays.zip(first, second);
+
+        assertNotNull(result);
+        assertEquals(3, result.length);
+
+        assertEquals("A", result[0].first());
+        assertEquals(1, result[0].second());
+
+        assertEquals("B", result[1].first());
+        assertEquals(2, result[1].second());
+
+        assertEquals("C", result[2].first());
+        assertEquals(3, result[2].second());
     }
 
     @Test
@@ -30,26 +52,22 @@ class ArraysTest {
 
         assertThrows(IllegalArgumentException.class, () -> Arrays.zip(words, numbers));
     }
+
     @Test
     void testZip_EmptyArrays() {
         String[] empty1 = {};
         String[] empty2 = {};
 
-        Arrays.Pair<String, String>[] result = Arrays.zip(empty1, empty2);
+        Tuple2<String, String>[] result = Arrays.zip(empty1, empty2);
         assertEquals(0, result.length);
     }
+
     @Test
-    void testZip_NullElements() {
+    void testZip_NullElements_ShouldThrowException() {
         String[] first = {null, "b"};
         String[] second = {"a", null};
 
-        Arrays.Pair<String, String>[] result = Arrays.zip(first, second);
-
-        assertEquals(2, result.length);
-        assertNull(result[0].getFirst());
-        assertEquals("a", result[0].getSecond());
-        assertEquals("b", result[1].getFirst());
-        assertNull(result[1].getSecond());
+        assertThrows(IllegalArgumentException.class, () -> Arrays.zip(first, second));
     }
 
     @Test
@@ -85,10 +103,11 @@ class ArraysTest {
         Integer[] result = new Integer[first.length];
 
         BiFunction<Integer, Integer, Integer> sumFunction = Integer::sum;
-        Arrays.zipWith(first, second, sumFunction, result);
+        Integer[] actualResult = Arrays.zipWith(first, second, sumFunction, result);
 
-        assertArrayEquals(new Integer[]{11, 22, 33}, result);
+        assertArrayEquals(new Integer[]{11, 22, 33}, actualResult);
     }
+
     @Test
     void testZipWith_DifferentTypes() {
         Integer[] first = {1, 2, 3};
@@ -100,6 +119,7 @@ class ArraysTest {
 
         assertArrayEquals(new String[]{"1A", "2B", "3C"}, result);
     }
+
     @Test
     void testZipWith_DifferentLengths_ShouldThrowException() {
         Integer[] first = {1, 2};
@@ -126,8 +146,9 @@ class ArraysTest {
         String[] second = {"1", "2", "3"};
         String[] result = new String[first.length + second.length];
 
-        Arrays.weaver(first, second, result);
+        String[] x = Arrays.weaver(first, second, result);
 
+        assertArrayEquals(x, result);
         assertArrayEquals(new String[]{"x", "1", "y", "2", "z", "3"}, result);
     }
 
@@ -141,6 +162,7 @@ class ArraysTest {
 
         assertArrayEquals(new String[]{"a", "1", "b", "2", "3"}, result);
     }
+
     @Test
     void testWeaver_EmptyArrays() {
         String[] empty1 = {};
@@ -150,6 +172,7 @@ class ArraysTest {
         Arrays.weaver(empty1, empty2, result);
         assertArrayEquals(new String[]{}, result);
     }
+
     @Test
     void testWeaver_NullElements() {
         String[] first = {null, "b"};
@@ -215,7 +238,7 @@ class ArraysTest {
     @Test
     @DisplayName("Should throw exception when array is null")
     void shouldThrowExceptionWhenArrayIsNull() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(null,1));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(null, 1));
         assertThat(exception.getMessage()).isEqualTo("Input array must not be null");
     }
 
@@ -230,7 +253,7 @@ class ArraysTest {
     @Test
     @DisplayName("Should throw exception when array contains null elements")
     void shouldThrowExceptionWhenArrayContainsNullElements() {
-        Integer [] arrayWithNull = {1, 2, 3, null};
+        Integer[] arrayWithNull = {1, 2, 3, null};
         int size = 4;
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunk(arrayWithNull, size));
@@ -260,7 +283,7 @@ class ArraysTest {
     @Test
     @DisplayName("Should throw exception when list size is negative")
     void shouldThrowExceptionWhenListSizeIsNegative() {
-        List<String> stringList = List.of("A","B","C");
+        List<String> stringList = List.of("A", "B", "C");
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Arrays.chunkList(stringList, -1));
 
         assertThat(exception.getMessage()).isEqualTo("Size must be greater than 0");
@@ -288,9 +311,9 @@ class ArraysTest {
     @DisplayName("Should return empty array when input is empty")
     void shouldReturnEmptyArrayWhenInputIsEmpty() {
         String[] emptyArray = {};
-        String [][] result = Arrays.chunk(emptyArray, 5);
+        String[][] result = Arrays.chunk(emptyArray, 5);
 
-        assertThat(result).hasDimensions(0,0);
+        assertThat(result).hasDimensions(0, 0);
     }
 
     @Test
@@ -305,12 +328,12 @@ class ArraysTest {
     @Test
     @DisplayName("Should chunk array into equal sized parts")
     void shouldChunkArrayIntoEqualSizedParts() {
-        Integer [] evenIntegerArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Integer[] evenIntegerArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int size = 3;
 
-        Integer [][] result = Arrays.chunk(evenIntegerArray, size);
+        Integer[][] result = Arrays.chunk(evenIntegerArray, size);
 
-        assertThat(result).hasDimensions(3,size);
+        assertThat(result).hasDimensions(3, size);
     }
 
     @Test
@@ -331,7 +354,7 @@ class ArraysTest {
         int size = 3;
         int lastChunkSize = doubleArray.length % size;
 
-        Double [][] result = Arrays.chunk(doubleArray, size);
+        Double[][] result = Arrays.chunk(doubleArray, size);
 
         assertEquals(4, result.length);
         assertThat(result[0]).hasSize(size);
@@ -358,9 +381,9 @@ class ArraysTest {
         Boolean[] booleanArray = {true, false, true, false, true};
         int size = 6;
 
-        Boolean [][] result = Arrays.chunk(booleanArray, size);
+        Boolean[][] result = Arrays.chunk(booleanArray, size);
 
-        assertThat(result).hasDimensions(1,booleanArray.length);
+        assertThat(result).hasDimensions(1, booleanArray.length);
     }
 
     @Test
@@ -379,14 +402,14 @@ class ArraysTest {
         Integer[] integerArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         int size = 1;
 
-        Integer [][] result = Arrays.chunk(integerArray,size);
+        Integer[][] result = Arrays.chunk(integerArray, size);
         assertThat(result).hasDimensions(integerArray.length, 1);
     }
 
     @Test
     @DisplayName("Should create single element chunks for list when size is one")
     void shouldCreateSingleElementChunksForListWhenSizeIsOne() {
-        List<String> stringList = List.of("A", "B", "C", "D", "E", "F", "G", "I", "J" );
+        List<String> stringList = List.of("A", "B", "C", "D", "E", "F", "G", "I", "J");
         int size = 1;
 
         List<List<String>> result = Arrays.chunkList(stringList, size);
@@ -403,7 +426,7 @@ class ArraysTest {
 
         int size = 10000;
 
-        Integer [][] result = Arrays.chunk(bigIntegerArray, size);
+        Integer[][] result = Arrays.chunk(bigIntegerArray, size);
 
         assertThat(result[0]).hasSize(size);
     }
@@ -425,7 +448,7 @@ class ArraysTest {
     @Test
     @DisplayName("Should benchmark performance for large array")
     void shouldBenchmarkPerformanceForLargeArray() {
-        Integer [] benchmarkArray = new Integer[10_000_000];
+        Integer[] benchmarkArray = new Integer[10_000_000];
         for (int i = 0; i < benchmarkArray.length; i++) {
             benchmarkArray[i] = i + 1;
         }
@@ -433,7 +456,7 @@ class ArraysTest {
         int size = 10000;
 
         long startTime = System.nanoTime();
-        Integer [][] result = Arrays.chunk(benchmarkArray, size);
+        Integer[][] result = Arrays.chunk(benchmarkArray, size);
         long endTime = System.nanoTime();
         long elapsedTime = (endTime - startTime) / 1_000_000;
 
@@ -637,12 +660,12 @@ class ArraysTest {
     @DisplayName("Preserve Type Information")
     void preservedTypeInformation() {
         String[][] input = {
-                {"a", "b" },
-                {"c", "d" },
+                {"a", "b"},
+                {"c", "d"},
         };
         String[][] expected = {
-                {"a", "c" },
-                {"b", "d" },
+                {"a", "c"},
+                {"b", "d"},
         };
         assertThat(Arrays.transpose(input)).isDeepEqualTo(expected);
     }
