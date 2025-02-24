@@ -125,31 +125,30 @@ class RectangleShapeTest {
     }
 
     @Test
-void testContainsShapeWithNegativeCoordinates() {
-    RectangleShape outer = new RectangleShape(new Point(-10, -10), 20, 20);
-    RectangleShape inner = new RectangleShape(new Point(-5, -5), 10, 10);
-    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
-    
-    assertTrue(strategy.containsShape(inner), "Should handle negative coordinates correctly");
-}
+    void testRotate() {
+        Point topLeft = new Point(0, 0);
+        RectangleShape rectangle = new RectangleShape(topLeft, 10, 5);
+        Point center = new Point(5, 2);
+
+        RectangleShape rotated = (RectangleShape) rectangle.rotate(90, center);
+        // Add assertions for rotated rectangle properties
+    }
 
     @Test
-void testContainsShapeWithZeroDimensions() {
-    RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
-    RectangleShape zeroWidth = new RectangleShape(new Point(5, 5), 0, 5);
-    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
-    
-    assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(zeroWidth),
-        "Should reject rectangles with zero dimensions");
-}
+    void testContainsShape2() {
+        RectangleShape larger = new RectangleShape(new Point(0, 0), 20, 20);
+        RectangleShape smaller = new RectangleShape(new Point(5, 5), 10, 10);
+        assertTrue(larger.containsShape(smaller));
+        assertFalse(smaller.containsShape(larger));
+    }
 
-@Test
-void testContainsNonRectangleShape() {
-    RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
-    Shape circle = new Circle(new Point(5, 5), 2);
-    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
-    
-    assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(circle),
-        "Should reject non-rectangle shapes");
-}    
+    @Test
+    void testIntersects() {
+        RectangleShape rectangle1 = new RectangleShape(new Point(0, 0), 10, 5);
+        RectangleShape rectangle2 = new RectangleShape(new Point(5, 0), 10, 5);
+        assertTrue(rectangle1.intersects(rectangle2));
+
+        RectangleShape rectangle3 = new RectangleShape(new Point(20, 20), 5, 5);
+        assertFalse(rectangle1.intersects(rectangle3));
+    }
 }

@@ -1,6 +1,7 @@
 package org.fungover.breeze.geometric_shapes;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 
 /**
  * Represents a bounding box defined by its top-left corner, width, and height.

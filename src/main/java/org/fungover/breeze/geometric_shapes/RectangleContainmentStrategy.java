@@ -43,6 +43,11 @@ public class RectangleContainmentStrategy {
         if (other instanceof RectangleShape) {
             RectangleShape r = (RectangleShape) other;
 
+            // Check for zero width or height
+            if (r.getWidth() == 0 || r.getHeight() == 0) {
+                throw new IllegalArgumentException("Rectangle cannot have zero width or height.");
+            }
+
             // Handle the case where the rectangles are exactly the same
             if (r.getTopLeft().equals(rectangle.getTopLeft()) &&
                     Math.abs(r.getWidth() - rectangle.getWidth()) < 0.0001 &&
@@ -56,6 +61,6 @@ public class RectangleContainmentStrategy {
                     rectangle.contains(new Point((int) r.getTopLeft().getX(), (int) (r.getTopLeft().getY() + r.getHeight()))) &&
                     rectangle.contains(new Point((int) (r.getTopLeft().getX() + r.getWidth()), (int) (r.getTopLeft().getY() + r.getHeight())));
         }
-        return false;
+        throw new IllegalArgumentException("Non-rectangle shapes are not supported.");
     }
 }

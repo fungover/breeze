@@ -82,17 +82,34 @@ public class RectangleShape implements Shape {
      * @param other the shape to check for intersection
      * @return true if the rectangle intersects the other shape; false otherwise
      */
+//    @Override
+//    public boolean intersects(Shape other) {
+//        if (other instanceof RectangleShape) {
+//            RectangleShape r = (RectangleShape) other;
+//            // Ensure that this check uses the bounding box correctly without recursion
+//            BoundingBox thisBoundingBox = (BoundingBox) this.getBoundingBox();
+//            BoundingBox otherBoundingBox = (BoundingBox) r.getBoundingBox();
+//            return thisBoundingBox.intersects(otherBoundingBox);
+//        }
+//        return false; // Other shapes need specific implementation
+//    }
+
     @Override
     public boolean intersects(Shape other) {
         if (other instanceof RectangleShape) {
             RectangleShape r = (RectangleShape) other;
-            // Ensure that this check uses the bounding box correctly without recursion
-            BoundingBox thisBoundingBox = (BoundingBox) this.getBoundingBox();
-            BoundingBox otherBoundingBox = (BoundingBox) r.getBoundingBox();
-            return thisBoundingBox.intersects(otherBoundingBox);
+
+            // Check for overlap between the two rectangles
+            boolean horizontalOverlap = this.topLeft.getX() < r.getTopLeft().getX() + r.getWidth() &&
+                    this.topLeft.getX() + this.width > r.getTopLeft().getX();
+            boolean verticalOverlap = this.topLeft.getY() < r.getTopLeft().getY() + r.getHeight() &&
+                    this.topLeft.getY() + this.height > r.getTopLeft().getY();
+
+            return horizontalOverlap && verticalOverlap;
         }
-        return false; // Other shapes need specific implementation
+        return false; // Return false for non-RectangleShape types
     }
+
 
     /**
      * Determines whether this rectangle contains another shape.
