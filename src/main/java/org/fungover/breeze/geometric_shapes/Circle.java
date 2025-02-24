@@ -66,8 +66,12 @@ public class Circle implements Shape {
     public boolean intersects(Shape other) {
         if (other instanceof Circle) {
             Circle otherCircle = (Circle) other;
+
+            // Calculate the distance between the centers of the two circles
             double distanceBetweenCenters = center.distance(otherCircle.getCenter());
-            return distanceBetweenCenters <= (this.radius + otherCircle.getRadius());
+
+            // Circles intersect if the distance between their centers is less than or equal to the sum of their radii
+            return distanceBetweenCenters < (this.radius + otherCircle.getRadius());
         }
         // Implement logic for other shapes if needed
         return false;

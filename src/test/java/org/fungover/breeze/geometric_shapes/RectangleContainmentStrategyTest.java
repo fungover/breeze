@@ -108,4 +108,49 @@ class RectangleContainmentStrategyTest {
         assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(zeroWidth),
                 "Should reject rectangles with zero dimensions");
     }
+
+    @Test
+    void testContainsShapeWithNullShape() {
+        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+        RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+
+        assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(null),
+                "Should throw exception when passed a null shape");
+    }
+
+    @Test
+    void testContainsShapeAtBoundary() {
+        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+        RectangleShape atBoundary = new RectangleShape(new Point(0, 0), 10, 10); // Exact boundary match
+        RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+
+        assertTrue(strategy.containsShape(atBoundary), "Rectangle should contain the boundary-matching rectangle.");
+    }
+
+    @Test
+    void testContainsShapeWithEmptyRectangle() {
+        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+        RectangleShape emptyRectangle = new RectangleShape(new Point(5, 5), 0, 0); // Empty rectangle
+        RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+
+        assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(emptyRectangle),
+                "Should reject rectangles with zero width and height");
+    }
+
+    @Test
+    void testContainsShapeWithNegativeDimensions() {
+        // Outer rectangle (normal dimensions)
+        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+        // Rectangle with negative width (invalid)
+        assertThrows(IllegalArgumentException.class, () -> new RectangleShape(new Point(5, 5), -5, 5),
+                "Should reject rectangles with negative dimensions");
+
+        // Rectangle with negative height (invalid)
+        assertThrows(IllegalArgumentException.class, () -> new RectangleShape(new Point(5, 5), 5, -5),
+                "Should reject rectangles with negative dimensions");
+
+        // Rectangle with both negative width and height (invalid)
+        assertThrows(IllegalArgumentException.class, () -> new RectangleShape(new Point(5, 5), -5, -5),
+                "Should reject rectangles with negative dimensions");
+    }
 }

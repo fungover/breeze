@@ -15,6 +15,9 @@ public class RectangleContainmentStrategy {
      * @param rectangle the rectangle for which containment logic is defined
      */
     public RectangleContainmentStrategy(RectangleShape rectangle) {
+        if (rectangle == null) {
+            throw new IllegalArgumentException("Rectangle cannot be null");
+        }
         this.rectangle = rectangle;
     }
 
@@ -43,6 +46,10 @@ public class RectangleContainmentStrategy {
         if (other instanceof RectangleShape) {
             RectangleShape r = (RectangleShape) other;
 
+            if (r.getWidth() <= 0 || r.getHeight() <= 0) {
+                throw new IllegalArgumentException("Shape width and height must be greater than 0");
+            }
+
             // Check for zero width or height
             if (r.getWidth() == 0 || r.getHeight() == 0) {
                 throw new IllegalArgumentException("Rectangle cannot have zero width or height.");
@@ -56,6 +63,7 @@ public class RectangleContainmentStrategy {
             }
 
             // Check if all four corners of 'r' are strictly within the rectangle (excluding boundaries)
+
             return rectangle.contains(r.getTopLeft()) &&
                     rectangle.contains(new Point((int) (r.getTopLeft().getX() + r.getWidth()), (int) r.getTopLeft().getY())) &&
                     rectangle.contains(new Point((int) r.getTopLeft().getX(), (int) (r.getTopLeft().getY() + r.getHeight()))) &&

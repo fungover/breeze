@@ -69,4 +69,74 @@ class CircleTest {
         Circle scaledCircle = (Circle) circle.scale(2);
         assertEquals(10, scaledCircle.getRadius(), 0.0001);
     }
+
+    @Test
+    void testCircleContains() {
+        Circle circle = new Circle(new Point2D.Double(5, 5), 3);
+        Point insidePoint = new Point(5, 7); // Inside the circle
+        Point outsidePoint = new Point(10, 10); // Outside the circle
+
+        assertTrue(circle.contains(insidePoint)); // Should be inside
+        assertFalse(circle.contains(outsidePoint)); // Should be outside
+    }
+
+    @Test
+    void testContainsShape() {
+        Circle outerCircle = new Circle(new Point2D.Double(0, 0), 10);
+        Circle innerCircle = new Circle(new Point2D.Double(0, 0), 5);
+        Circle nonContainedCircle = new Circle(new Point2D.Double(10, 10), 3); // Not inside
+
+        assertTrue(outerCircle.containsShape(innerCircle), "The outer circle should contain the inner circle.");
+        assertFalse(outerCircle.containsShape(nonContainedCircle), "The outer circle should not contain the non-contained circle.");
+    }
+
+    @Test
+    void testGetCenter() {
+        Circle circle = new Circle(new Point2D.Double(5, 5), 3);
+
+        Point2D.Double expectedCenter = new Point2D.Double(5, 5);
+        Point2D.Double actualCenter = circle.getCenter();
+
+        assertEquals(expectedCenter, actualCenter, "The center should match the specified center.");
+    }
+
+    @Test
+    void testToString() {
+        Circle circle = new Circle(new Point2D.Double(5, 5), 3);
+
+        String expected = "Circle [center=Point2D.Double[5.0, 5.0], radius=3,000000]";
+        String actual = circle.toString();
+
+        assertEquals(expected, actual, "The string representation of the circle should match.");
+    }
+
+    @Test
+    void testEquals() {
+        Circle circle1 = new Circle(new Point2D.Double(5, 5), 3);
+        Circle circle2 = new Circle(new Point2D.Double(5, 5), 3);
+        Circle circle3 = new Circle(new Point2D.Double(0, 0), 3);
+
+        assertTrue(circle1.equals(circle2), "Circles with the same center and radius should be equal.");
+        assertFalse(circle1.equals(circle3), "Circles with different centers should not be equal.");
+    }
+
+    @Test
+    void testHashCode() {
+        Circle circle1 = new Circle(new Point2D.Double(5, 5), 3);
+        Circle circle2 = new Circle(new Point2D.Double(5, 5), 3);
+        Circle circle3 = new Circle(new Point2D.Double(0, 0), 3);
+
+        assertEquals(circle1.hashCode(), circle2.hashCode(), "Hash codes should be the same for equal circles.");
+        assertNotEquals(circle1.hashCode(), circle3.hashCode(), "Hash codes should be different for non-equal circles.");
+    }
+
+    @Test
+    void testIntersects() {
+        Circle circle1 = new Circle(new Point2D.Double(0, 0), 5);
+        Circle circle2 = new Circle(new Point2D.Double(4, 0), 5);  // Circles intersecting
+        Circle circle3 = new Circle(new Point2D.Double(10, 0), 5); // Circles not intersecting
+
+        assertTrue(circle1.intersects(circle2), "Circles should intersect.");
+        assertFalse(circle1.intersects(circle3), "Circles should not intersect.");
+    }
 }

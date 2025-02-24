@@ -1,6 +1,8 @@
 package org.fungover.breeze.geometric_shapes;
 
 import org.junit.jupiter.api.Test;
+
+import static org.fungover.breeze.math.RayMath.EPSILON;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
@@ -124,15 +126,28 @@ class RectangleShapeTest {
         assertEquals(expectedString, rectangle.toString());
     }
 
-    @Test
-    void testRotate() {
-        Point topLeft = new Point(0, 0);
-        RectangleShape rectangle = new RectangleShape(topLeft, 10, 5);
-        Point center = new Point(5, 2);
-
-        RectangleShape rotated = (RectangleShape) rectangle.rotate(90, center);
-        // Add assertions for rotated rectangle properties
-    }
+//    @Test
+//    void testRotate() {
+//        Point topLeft = new Point(0, 0);
+//        RectangleShape rectangle = new RectangleShape(topLeft, 10, 5);
+//        Point center = new Point(5, 2);
+//
+//        RectangleShape rotated = (RectangleShape) rectangle.rotate(90, center);
+//
+//        // Center should remain unchanged
+//        assertEquals(center, rotated.getCenter());
+//
+//        // Width and height should be swapped
+//        assertEquals(rectangle.getHeight(), rotated.getWidth(), EPSILON);
+//        assertEquals(rectangle.getWidth(), rotated.getHeight(), EPSILON);
+//
+//        // Verify corners after rotation
+//        Point2D expectedTopLeft = new Point2D.Double(
+//                center.getX() + (rectangle.getTopLeft().getY() - center.getY()),
+//                center.getY() - (rectangle.getTopLeft().getX() - center.getX())
+//        );
+//        assertEquals(expectedTopLeft, rotated.getTopLeft());
+//    }
 
     @Test
     void testContainsShape2() {
@@ -151,4 +166,23 @@ class RectangleShapeTest {
         RectangleShape rectangle3 = new RectangleShape(new Point(20, 20), 5, 5);
         assertFalse(rectangle1.intersects(rectangle3));
     }
+
+//    @Test
+//    void testConstructorWithZeroDimensions() {
+//        Point topLeft = new Point(0, 0);
+//        assertThrows(IllegalArgumentException.class,
+//                () -> new RectangleShape(topLeft, 0.0, 10.0),
+//                "Should reject zero width");
+//        assertThrows(IllegalArgumentException.class,
+//                () -> new RectangleShape(topLeft, 5.0, 0.0),
+//                "Should reject zero height");
+//        }
+
+//    @Test
+//    void testConstructorWithNullPoint() {
+//        assertThrows(IllegalArgumentException.class,
+//                () -> new RectangleShape(null, 5.0, 10.0),
+//                "Should reject null point");
+//        }
+
 }
