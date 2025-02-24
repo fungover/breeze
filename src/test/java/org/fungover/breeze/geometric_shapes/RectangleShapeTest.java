@@ -123,4 +123,33 @@ class RectangleShapeTest {
         String expectedString = String.format(Locale.FRANCE, "Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, 5.0, 10.0);
         assertEquals(expectedString, rectangle.toString());
     }
+
+    @Test
+void testContainsShapeWithNegativeCoordinates() {
+    RectangleShape outer = new RectangleShape(new Point(-10, -10), 20, 20);
+    RectangleShape inner = new RectangleShape(new Point(-5, -5), 10, 10);
+    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+    
+    assertTrue(strategy.containsShape(inner), "Should handle negative coordinates correctly");
+}
+
+    @Test
+void testContainsShapeWithZeroDimensions() {
+    RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+    RectangleShape zeroWidth = new RectangleShape(new Point(5, 5), 0, 5);
+    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+    
+    assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(zeroWidth),
+        "Should reject rectangles with zero dimensions");
+}
+
+@Test
+void testContainsNonRectangleShape() {
+    RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
+    Shape circle = new Circle(new Point(5, 5), 2);
+    RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
+    
+    assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(circle),
+        "Should reject non-rectangle shapes");
+}    
 }
