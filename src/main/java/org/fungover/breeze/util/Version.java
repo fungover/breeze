@@ -205,9 +205,25 @@ public final class Version implements Comparable<Version> {
         if (!part.matches("[a-zA-Z0-9-]++")) {
             throw new IllegalArgumentException("Invalid characters in: " + part);
         }
-        if (!part.matches(".*[a-zA-Z].*")) {
+        if (!hasAtLeastOneLetter(part)) {
             throw new IllegalArgumentException("Non-numeric identifier requires at least one letter: " + part);
         }
+    }
+
+    /**
+     * Checks if a string contains at least one letter.
+     *
+     * @param input The string to check.
+     * @return True if the string contains at least one letter, false otherwise.
+     */
+    private boolean hasAtLeastOneLetter(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (Character.isLetter(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
