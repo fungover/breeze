@@ -5,13 +5,39 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The Version class represents a semantic versioning system.
+ * It includes major, minor, patch, pre-release, and build metadata components.
+ */
 public final class Version implements Comparable<Version> {
+    /**
+     * The major version number.
+     */
     private final int major;
+
+    /**
+     * The minor version number.
+     */
     private final int minor;
+
+    /**
+     * The patch version number.
+     */
     private final int patch;
+
+    /**
+     * The pre-release version identifier.
+     */
     private final String preRelease;
+
+    /**
+     * The build metadata identifier.
+     */
     private final String buildMetadata;
 
+    /**
+     * The pattern used to validate and parse version strings.
+     */
     private static final Pattern VERSION_PATTERN = Pattern.compile(
             "^(?<major>0|[1-9]\\d*+)\\." +
                     "(?<minor>0|[1-9]\\d*+)\\." +
@@ -20,6 +46,12 @@ public final class Version implements Comparable<Version> {
                     "(?:\\+(?<build>[0-9A-Za-z-]++(?:\\.[0-9A-Za-z-]++)*+))?$"
     );
 
+    /**
+     * Constructs a Version object from a version string.
+     *
+     * @param version The version string to parse.
+     * @throws IllegalArgumentException If the version string is invalid.
+     */
     public Version(String version) {
         validateInput(version);
         Matcher matcher = VERSION_PATTERN.matcher(version);
@@ -43,20 +75,42 @@ public final class Version implements Comparable<Version> {
         validateBuildMetadata();
     }
 
+    /**
+     * Parses a numeric component from a string.
+     *
+     * @param component The numeric component as a string.
+     * @return The parsed integer value.
+     * @throws IllegalArgumentException If the component is not a valid integer or is negative.
+     */
     private int parseNumericComponent(String component) {
         try {
-            return Integer.parseInt(component);
+            int value = Integer.parseInt(component);
+            if (value < 0) {
+                throw new IllegalArgumentException("Version components cannot be negative: " + component);
+            }
+            return value;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid numeric component: " + component, e);
         }
     }
 
+    /**
+     * Validates the input version string.
+     *
+     * @param version The version string to validate.
+     * @throws IllegalArgumentException If the version string is null or blank.
+     */
     private void validateInput(String version) {
         if (version == null || version.isBlank()) {
             throw new IllegalArgumentException("Version string must not be null or empty");
         }
     }
 
+    /**
+     * Validates the structure of the pre-release identifier.
+     *
+     * @throws IllegalArgumentException If the pre-release identifier is invalid.
+     */
     private void validatePreReleaseStructure() {
         if (preRelease != null) {
             Arrays.stream(preRelease.split("\\.", -1))
@@ -64,6 +118,12 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Validates a part of the pre-release identifier.
+     *
+     * @param part The pre-release part to validate.
+     * @throws IllegalArgumentException If the pre-release part is invalid.
+     */
     private void validatePreReleasePart(String part) {
         if (part.isEmpty()) {
             throw new IllegalArgumentException("Empty pre-release identifier");
@@ -78,6 +138,11 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Validates the build metadata identifier.
+     *
+     * @throws IllegalArgumentException If the build metadata identifier is invalid.
+     */
     private void validateBuildMetadata() {
         if (buildMetadata != null) {
             Arrays.stream(buildMetadata.split("\\.", -1))
@@ -85,6 +150,12 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Validates a build metadata identifier part.
+     *
+     * @param identifier The build metadata identifier part to validate.
+     * @throws IllegalArgumentException If the build metadata identifier part is invalid.
+     */
     private void validateBuildIdentifier(String identifier) {
         if (identifier.isEmpty()) {
             throw new IllegalArgumentException("Empty build metadata identifier");
@@ -97,10 +168,22 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Checks if a string is numeric.
+     *
+     * @param s The string to check.
+     * @return True if the string is numeric, false otherwise.
+     */
     private boolean isNumeric(String s) {
         return s.matches("\\d++");
     }
 
+    /**
+     * Validates a numeric identifier part.
+     *
+     * @param part The numeric identifier part to validate.
+     * @throws IllegalArgumentException If the numeric identifier part is invalid.
+     */
     private void validateNumericIdentifier(String part) {
         try {
             Integer.parseInt(part);
@@ -112,6 +195,12 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Validates an alphanumeric identifier part.
+     *
+     * @param part The alphanumeric identifier part to validate.
+     * @throws IllegalArgumentException If the alphanumeric identifier part is invalid.
+     */
     private void validateAlphanumericIdentifier(String part) {
         if (!part.matches("[a-zA-Z0-9-]++")) {
             throw new IllegalArgumentException("Invalid characters in: " + part);
@@ -121,6 +210,13 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Compares this version with another version.
+     *
+     * @param other The other version to compare to.
+     * @return A negative integer, zero, or a positive integer as this version is less than, equal to, or greater than the specified version.
+     * @throws NullPointerException If the specified version is null.
+     */
     @Override
     public int compareTo(Version other) {
         if (other == null) throw new NullPointerException("Cannot compare with null version");
@@ -137,6 +233,13 @@ public final class Version implements Comparable<Version> {
         return comparePreRelease(this.preRelease, other.preRelease);
     }
 
+    /**
+     * Compares two pre-release identifiers.
+     *
+     * @param a The first pre-release identifier.
+     * @param b The second pre-release identifier.
+     * @return A negative integer, zero, or a positive integer as the first pre-release identifier is less than, equal to, or greater than the second pre-release identifier.
+     */
     private int comparePreRelease(String a, String b) {
         if (a == null && b == null) return 0;
         if (a == null) return 1;
@@ -154,9 +257,16 @@ public final class Version implements Comparable<Version> {
         return Integer.compare(partsA.length, partsB.length);
     }
 
+    /**
+     * Compares two identifier parts.
+     *
+     * @param a The first identifier part.
+     * @param b The second identifier part.
+     * @return A negative integer, zero, or a positive integer as the first identifier part is less than, equal to, or greater than the second identifier part.
+     */
     private int compareIdentifier(String a, String b) {
-        boolean aNumeric = a.matches("\\d++");
-        boolean bNumeric = b.matches("\\d++");
+        boolean aNumeric = isNumeric(a);
+        boolean bNumeric = isNumeric(b);
 
         if (aNumeric && bNumeric) {
             return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
@@ -169,6 +279,12 @@ public final class Version implements Comparable<Version> {
         }
     }
 
+    /**
+     * Checks if this version is equal to another version.
+     *
+     * @param o The other version to compare to.
+     * @return True if the versions are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -180,11 +296,21 @@ public final class Version implements Comparable<Version> {
                 Objects.equals(preRelease, version.preRelease);
     }
 
+    /**
+     * Returns the hash code of this version.
+     *
+     * @return The hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(major, minor, patch, preRelease);
     }
 
+    /**
+     * Returns the string representation of this version.
+     *
+     * @return The string representation.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -194,18 +320,41 @@ public final class Version implements Comparable<Version> {
         return sb.toString();
     }
 
+    /**
+     * Checks if this version is greater than another version.
+     *
+     * @param other The other version to compare to.
+     * @return True if this version is greater, false otherwise.
+     */
     public boolean isGreaterThan(Version other) {
         return this.compareTo(other) > 0;
     }
 
+    /**
+     * Checks if this version is less than another version.
+     *
+     * @param other The other version to compare to.
+     * @return True if this version is less, false otherwise.
+     */
     public boolean isLessThan(Version other) {
         return this.compareTo(other) < 0;
     }
 
+    /**
+     * Checks if this version is equal to another version.
+     *
+     * @param other The other version to compare to.
+     * @return True if the versions are equal, false otherwise.
+     */
     public boolean isEqualTo(Version other) {
         return this.compareTo(other) == 0;
     }
 
+    /**
+     * Returns the build metadata of this version.
+     *
+     * @return The build metadata.
+     */
     public String getBuildMetadata() {
         return buildMetadata;
     }
