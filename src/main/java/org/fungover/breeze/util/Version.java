@@ -20,6 +20,8 @@ public final class Version implements Comparable<Version> {
                     "(?:\\+(?<build>[0-9A-Za-z-]++(?:\\.[0-9A-Za-z-]++)*+))?$"
     );
 
+    private static final String NUMERIC_PATTERN = "\\d++";
+
     public Version(String version) {
         validateInput(version);
         Matcher matcher = VERSION_PATTERN.matcher(version);
@@ -98,7 +100,7 @@ public final class Version implements Comparable<Version> {
     }
 
     private boolean isNumeric(String s) {
-        return s.matches("\\d++");
+        return s.matches(NUMERIC_PATTERN);
     }
 
     private void validateNumericIdentifier(String part) {
@@ -155,8 +157,8 @@ public final class Version implements Comparable<Version> {
     }
 
     private int compareIdentifier(String a, String b) {
-        boolean aNumeric = a.matches("\\d++");
-        boolean bNumeric = b.matches("\\d++");
+        boolean aNumeric = a.matches(NUMERIC_PATTERN);
+        boolean bNumeric = b.matches(NUMERIC_PATTERN);
 
         if (aNumeric && bNumeric) {
             return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
