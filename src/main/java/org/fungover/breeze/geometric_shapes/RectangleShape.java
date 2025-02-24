@@ -24,8 +24,12 @@ public class RectangleShape implements Shape {
      * @throws IllegalArgumentException if width or height is negative
      */
     public RectangleShape(Point topLeft, double width, double height) {
-        if (width < 0 || height < 0) {
-            throw new IllegalArgumentException("Width and height must be non-negative");
+        if (topLeft == null) {
+            throw new IllegalArgumentException("Top-left point cannot be null.");
+        }
+
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Width and height must be positive, non-zero values.");
         }
 
         this.topLeft = new Point(topLeft); // Defensive copy
@@ -82,18 +86,6 @@ public class RectangleShape implements Shape {
      * @param other the shape to check for intersection
      * @return true if the rectangle intersects the other shape; false otherwise
      */
-//    @Override
-//    public boolean intersects(Shape other) {
-//        if (other instanceof RectangleShape) {
-//            RectangleShape r = (RectangleShape) other;
-//            // Ensure that this check uses the bounding box correctly without recursion
-//            BoundingBox thisBoundingBox = (BoundingBox) this.getBoundingBox();
-//            BoundingBox otherBoundingBox = (BoundingBox) r.getBoundingBox();
-//            return thisBoundingBox.intersects(otherBoundingBox);
-//        }
-//        return false; // Other shapes need specific implementation
-//    }
-
     @Override
     public boolean intersects(Shape other) {
         if (other instanceof RectangleShape) {
@@ -179,14 +171,17 @@ public class RectangleShape implements Shape {
      */
     @Override
     public Shape rotate(double angle, Point center) {
-        Point topLeftRotated = rotatePoint(topLeft, angle, center);
-        Point topRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), topLeft.y), angle, center);
-        Point bottomLeftRotated = rotatePoint(new Point(topLeft.x, (int) (topLeft.getY() + height)), angle, center);
-        Point bottomRightRotated = rotatePoint(new Point((int) (topLeft.getX() + width), (int) (topLeft.getY() + height)), angle, center);
+        double radianAngle = Math.toRadians(angle);
+
+        // Rotate the four corners of the rectangle around the center point
+        Point topLeftRotated = rotatePoint(this.topLeft, angle, center);
+        Point topRightRotated = rotatePoint(new Point((int) (this.topLeft.getX() + width), this.topLeft.y), angle, center);
+        Point bottomLeftRotated = rotatePoint(new Point(this.topLeft.x, (int) (this.topLeft.getY() + height)), angle, center);
+        Point bottomRightRotated = rotatePoint(new Point((int) (this.topLeft.getX() + width), (int) (this.topLeft.getY() + height)), angle, center);
 
         // Use the BoundingBox class to compute the minimal enclosing rectangle
         BoundingBox newBoundingBox = new BoundingBox(topLeftRotated, topRightRotated, bottomLeftRotated, bottomRightRotated);
-        return (Shape) new RectangleShape(newBoundingBox.getTopLeft(), newBoundingBox.getWidth(), newBoundingBox.getHeight());
+        return new RectangleShape(newBoundingBox.getTopLeft(), newBoundingBox.getWidth(), newBoundingBox.getHeight());
     }
 
     /**

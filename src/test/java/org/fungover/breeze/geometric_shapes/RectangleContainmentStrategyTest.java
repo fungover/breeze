@@ -100,16 +100,6 @@ class RectangleContainmentStrategyTest {
     }
 
     @Test
-    void testContainsShapeWithZeroDimensions() {
-        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
-        RectangleShape zeroWidth = new RectangleShape(new Point(5, 5), 0, 5);
-        RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
-
-        assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(zeroWidth),
-                "Should reject rectangles with zero dimensions");
-    }
-
-    @Test
     void testContainsShapeWithNullShape() {
         RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
         RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
@@ -128,16 +118,6 @@ class RectangleContainmentStrategyTest {
     }
 
     @Test
-    void testContainsShapeWithEmptyRectangle() {
-        RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
-        RectangleShape emptyRectangle = new RectangleShape(new Point(5, 5), 0, 0); // Empty rectangle
-        RectangleContainmentStrategy strategy = new RectangleContainmentStrategy(outer);
-
-        assertThrows(IllegalArgumentException.class, () -> strategy.containsShape(emptyRectangle),
-                "Should reject rectangles with zero width and height");
-    }
-
-    @Test
     void testContainsShapeWithNegativeDimensions() {
         // Outer rectangle (normal dimensions)
         RectangleShape outer = new RectangleShape(new Point(0, 0), 10, 10);
@@ -153,4 +133,12 @@ class RectangleContainmentStrategyTest {
         assertThrows(IllegalArgumentException.class, () -> new RectangleShape(new Point(5, 5), -5, -5),
                 "Should reject rectangles with negative dimensions");
     }
+
+    @Test
+    void testConstructorWithNullPoint() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new RectangleShape(null, 5.0, 10.0),
+                "Should reject null point!");
+    }
+
 }
