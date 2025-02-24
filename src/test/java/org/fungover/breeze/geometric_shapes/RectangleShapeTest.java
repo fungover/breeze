@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.Locale;
 
 class RectangleShapeTest {
 
@@ -119,7 +120,7 @@ class RectangleShapeTest {
         Point topLeft = new Point(0, 0);
         RectangleShape rectangle = new RectangleShape(topLeft, 5.0, 10.0);
 
-        String expectedString = String.format("Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, 5.0, 10.0);
+        String expectedString = String.format(Locale.FRANCE, "Rectangle [topLeft=%s, width=%f, height=%f]", topLeft, 5.0, 10.0);
         assertEquals(expectedString, rectangle.toString());
     }
 }
