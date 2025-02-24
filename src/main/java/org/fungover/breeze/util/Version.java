@@ -43,9 +43,14 @@ public final class Version implements Comparable<Version> {
         validateBuildMetadata();
     }
 
+    // Parsing and validation methods
     private int parseNumericComponent(String component) {
         try {
-            return Integer.parseInt(component);
+            int value = Integer.parseInt(component);
+            if (value < 0) {
+                throw new IllegalArgumentException("Version components cannot be negative: " + component);
+            }
+            return value;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid numeric component: " + component, e);
         }
@@ -92,35 +97,15 @@ public final class Version implements Comparable<Version> {
         if (identifier.startsWith("-") || identifier.endsWith("-")) {
             throw new IllegalArgumentException("Invalid hyphen placement in build metadata: " + identifier);
         }
-        if (!identifier.matches("[0-9A-Za-z-]+")) {
-            throw new IllegalArgumentException("Invalid build metadata format: " + identifier);
+        for (int i = 0; i < identifier.length(); i++) {
+            char c = identifier.charAt(i);
+            if (!Character.isLetterOrDigit(c) && c != '-') {
+                throw new IllegalArgumentException("Invalid build metadata character: " + c);
+            }
         }
     }
 
-    private boolean isNumeric(String s) {
-        return s.matches("\\d++");
-    }
-
-    private void validateNumericIdentifier(String part) {
-        try {
-            Integer.parseInt(part);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Numeric component too large: " + part, e);
-        }
-        if (part.length() > 1 && part.startsWith("0")) {
-            throw new IllegalArgumentException("Numeric identifier contains leading zeros: " + part);
-        }
-    }
-
-    private void validateAlphanumericIdentifier(String part) {
-        if (!part.matches("[a-zA-Z0-9-]++")) {
-            throw new IllegalArgumentException("Invalid characters in: " + part);
-        }
-        if (!part.matches(".*[a-zA-Z].*")) {
-            throw new IllegalArgumentException("Non-numeric identifier requires at least one letter: " + part);
-        }
-    }
-
+    // Core comparison logic
     @Override
     public int compareTo(Version other) {
         if (other == null) throw new NullPointerException("Cannot compare with null version");
@@ -139,8 +124,8 @@ public final class Version implements Comparable<Version> {
 
     private int comparePreRelease(String a, String b) {
         if (a == null && b == null) return 0;
-        if (a == null) return 1;
-        if (b == null) return -1;
+        if (a == null) return 1;  // Non-prerelease > prerelease
+        if (b == null) return -1; // Prerelease < non-prerelease
 
         String[] partsA = a.split("\\.", -1);
         String[] partsB = b.split("\\.", -1);
@@ -155,20 +140,71 @@ public final class Version implements Comparable<Version> {
     }
 
     private int compareIdentifier(String a, String b) {
-        boolean aNumeric = a.matches("\\d++");
-        boolean bNumeric = b.matches("\\d++");
+        boolean aNumeric = isNumeric(a);
+        boolean bNumeric = isNumeric(b);
 
         if (aNumeric && bNumeric) {
             return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
         } else if (aNumeric) {
-            return -1;
+            return -1;  // Numeric < non-numeric
         } else if (bNumeric) {
-            return 1;
+            return 1;   // Non-numeric > numeric
         } else {
             return a.compareTo(b);
         }
     }
 
+    // Helper validation methods
+    private boolean isNumeric(String s) {
+        if (s == null || s.isEmpty()) return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (!Character.isDigit(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void validateNumericIdentifier(String part) {
+        if (part.length() > 1 && part.startsWith("0")) {
+            throw new IllegalArgumentException("Numeric identifier contains leading zeros: " + part);
+        }
+        try {
+            Integer.parseInt(part);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Numeric component too large: " + part, e);
+        }
+    }
+
+    private void validateAlphanumericIdentifier(String part) {
+        if (!isValidAlphanumeric(part)) {
+            throw new IllegalArgumentException("Invalid characters in: " + part);
+        }
+        if (!hasAtLeastOneLetter(part)) {
+            throw new IllegalArgumentException("Non-numeric identifier requires at least one letter: " + part);
+        }
+    }
+
+    private boolean isValidAlphanumeric(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (!Character.isLetterOrDigit(c) && c != '-') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean hasAtLeastOneLetter(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (Character.isLetter(input.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Core class methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
