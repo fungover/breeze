@@ -1,182 +1,285 @@
 package org.fungover.breeze.vector;
 
+import java.util.Arrays;
+import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.VectorOperators;
+import jdk.incubator.vector.VectorSpecies;
+
 /**
- * A record that represents a 4D vector with basic arithmetic operations and vector calculations
- *
- * @param x the x - coordinate of the vector
- * @param y the y - coordinate of the vector
- * @param z the z - coordinate of the vector
- * @param w the w - coordinate of the vector
+ * This class represents a 4D vector with x, y, z, and w components.
  */
-public record Vector4(float x, float y, float z, float w) {
-
+public final class Vector4 {
     /**
-     * Error message used when vector parameter is null
+     * The components of the vector.
      */
-    public static final String ParameterNull = "Vector parameter cannot be null";
+    private final float[] components;
+    public static final String PARAMETER_NULL = "Vector parameter cannot be null";
 
     /**
-     * Adds the given vector to this vector
+     * Constructs a new Vector4 with the given components.
      *
-     * @param v the vector to add
-     * @return a new vector that is the sum of this vector and the given vector
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param x The x component.
+     * @param y The y component.
+     * @param z The z component.
+     * @param w The w component.
+     */
+    public Vector4(float x, float y, float z, float w) {
+        this.components = new float[]{x, y, z, w};
+    }
+
+    /**
+     * Gets the x component of the vector.
+     *
+     * @return The x component.
+     */
+    public float x() { return components[0]; }
+
+    /**
+     * Gets the y component of the vector.
+     *
+     * @return The y component.
+     */
+    public float y() { return components[1]; }
+
+    /**
+     * Gets the z component of the vector.
+     *
+     * @return The z component.
+     */
+    public float z() { return components[2]; }
+
+    /**
+     * Gets the w component of the vector.
+     *
+     * @return The w component.
+     */
+    public float w() { return components[3]; }
+
+    /**
+     * Adds the given vector to this vector.
+     *
+     * @param v The vector to add.
+     * @return A new Vector4 representing the sum.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public Vector4 add(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        return new Vector4(this.x + v.x, this.y + v.y, this.z + v.z, this.w + v.w);
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector resultVector = vector1.add(vector2);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Subtract the given vector from this vector
+     * Subtracts the given vector from this vector.
      *
-     * @param v the vector to subtract
-     * @return a new vector that is the difference between this vector and the given vector
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param v The vector to subtract.
+     * @return A new Vector4 representing the difference.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public Vector4 sub(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        return new Vector4(this.x - v.x, this.y - v.y, this.z - v.z, this.w - v.w);
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector resultVector = vector1.sub(vector2);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Multiplies this vector by the given scalar
+     * Multiplies this vector by the given scalar.
      *
-     * @param m the scalar to multiply by
-     * @return a new vector that is the product of the vector and the given scalar
+     * @param m The scalar to multiply by.
+     * @return A new Vector4 representing the product.
      */
     public Vector4 mul(float m) {
-        return new Vector4(this.x * m, this.y * m, this.z * m, this.w * m);
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector scalarVector = FloatVector.broadcast(SPECIES, m);
+        FloatVector resultVector = vector.mul(scalarVector);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Divides this vector by the given scalar
+     * Divides this vector by the given scalar.
      *
-     * @param d the scalar to divide by
-     * @return a new vector that is the quotient of this vector and the given scalar
-     * @throws IllegalArgumentException if the scalar is zero
+     * @param d The scalar to divide by.
+     * @return A new Vector4 representing the quotient.
+     * @throws IllegalArgumentException if the scalar is zero.
      */
     public Vector4 div(float d) {
-        if (d == 0)
+        if (Math.abs(d) < 1e-6f) {
             throw new IllegalArgumentException("Cannot divide by zero");
-        return new Vector4(this.x / d, this.y / d, this.z / d, this.w / d);
+        }
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector scalarVector = FloatVector.broadcast(SPECIES, d);
+        FloatVector resultVector = vector.div(scalarVector);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Calculates the dot product of the vector and the given vector
+     * Calculates the dot product of this vector and the given vector.
      *
-     * @param v the vector to calculate the dor product with
-     * @return the dot product of this vector and the given vector
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param v The vector to dot product with.
+     * @return The dot product of the two vectors.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public float dot(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector resultVector = vector1.mul(vector2);
+        return resultVector.reduceLanes(VectorOperators.ADD);
     }
 
     /**
-     * Calculates the length(magnitude) of this vector
+     * Calculates the length (magnitude) of this vector.
      *
-     * @return the length of this vector
+     * @return The length of the vector.
      */
     public float length() {
-        return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        return (float) Math.sqrt(this.dot(this));
     }
 
     /**
-     * Normalizes this vector (makes it unit length)
+     * Normalizes this vector (makes it unit length).
      *
-     * @return a new vector that is the normalized version of this vector
-     * @throws IllegalArgumentException if the vector has zero length
+     * @return A new Vector4 representing the normalized vector.
+     * @throws IllegalArgumentException if the vector length is zero.
      */
     public Vector4 normalize() {
         float length = length();
-        if (length == 0)
-            throw new IllegalArgumentException("Cannot normalize zero-length vector");
-        return new Vector4(this.x / length, this.y / length, this.z / length, this.w / length);
+        if (length < 1e-6f) throw new IllegalArgumentException("Cannot normalize zero-length vector");
+        return div(length);
     }
 
     /**
-     * Calculates the distance between this vector and the given vector
+     * Calculates the distance between this vector and the given vector.
      *
-     * @param v the vector to calculate the distance to
-     * @return the distance between this vector and the given vector
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param v The vector to measure distance to.
+     * @return The distance between the two vectors.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public float distance(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        float dx = v.x - this.x;
-        float dy = v.y - this.y;
-        float dz = v.z - this.z;
-        float dw = v.w - this.w;
-        return (float) Math.sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+        return sub(v).length();
     }
 
     /**
-     * Performs linear interpolation between this vector and the given vector
+     * Performs linear interpolation between this vector and the given vector.
      *
-     * @param v the vector to interpolate to
-     * @param t the interpolation factor (between 0 and 1)
-     * @return a new vector that is the result of linear interpolation
-     * @throws IllegalArgumentException if vector parameter is null
-     * @throws IllegalArgumentException if t is not in the range 0 - 1
+     * @param v The vector to interpolate with.
+     * @param t The interpolation factor (between 0 and 1).
+     * @return A new Vector4 representing the interpolated vector.
+     * @throws IllegalArgumentException if the vector parameter is null or if t is not between 0 and 1.
      */
     public Vector4 linear(Vector4 v, float t) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        if (t > 1)
-            throw new IllegalArgumentException("lerp can not be larger than 1");
-        if (t < 0)
-            throw new IllegalArgumentException("lerp can not be negative");
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+        if (t > 1 || t < 0) throw new IllegalArgumentException("Interpolation factor must be between 0 and 1");
 
-        return new Vector4(this.x + t * (v.x - this.x), this.y + t * (v.y - this.y), this.z + t * (v.z - this.z), this.w + t * (v.w - this.w));
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector tVector = FloatVector.broadcast(SPECIES, t);
+        FloatVector diffVector = vector2.sub(vector1);
+        FloatVector resultVector = vector1.add(tVector.mul(diffVector));
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Returns a vector with the minimum components of this vector and the given vector
+     * Returns a vector with the minimum components of this vector and the given vector.
      *
-     * @param v the vector to compare with
-     * @return a new vector with the minimum components
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param v The vector to compare with.
+     * @return A new Vector4 with the minimum components.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public Vector4 min(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        return new Vector4(Math.min(this.x, v.x), Math.min(this.y, v.y), Math.min(this.z, v.z), Math.min(this.w, v.w));
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector resultVector = vector1.min(vector2);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Returns a vector with the maximum components of this vector and the given vector
+     * Returns a vector with the maximum components of this vector and the given vector.
      *
-     * @param v the vector to compare with
-     * @return a new vector with the maximum components
-     * @throws IllegalArgumentException if vector parameter is null
+     * @param v The vector to compare with.
+     * @return A new Vector4 with the maximum components.
+     * @throws IllegalArgumentException if the vector parameter is null.
      */
     public Vector4 max(Vector4 v) {
-        if (v == null)
-            throw new IllegalArgumentException(ParameterNull);
-        return new Vector4(Math.max(this.x, v.x), Math.max(this.y, v.y), Math.max(this.z, v.z), Math.max(this.w, v.w));
+        if (v == null) throw new IllegalArgumentException(PARAMETER_NULL);
+
+        VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+        FloatVector vector1 = FloatVector.fromArray(SPECIES, this.components, 0);
+        FloatVector vector2 = FloatVector.fromArray(SPECIES, v.components, 0);
+        FloatVector resultVector = vector1.max(vector2);
+        float[] result = new float[4];
+        resultVector.intoArray(result, 0);
+
+        return new Vector4(result[0], result[1], result[2], result[3]);
     }
 
     /**
-     * Convert this vector to a 2D vector by excluding z and w component
+     * Converts this vector to a 2D vector by excluding the z and w components.
      *
-     * @return a new 2D vector
+     * @return A new Vector2 representing the 2D vector.
      */
     public Vector2 toVector2() {
-        return new Vector2(this.x, this.y);
+        return new Vector2(this.x(), this.y());
     }
 
     /**
-     * Convert this vector to a 3D vector by excluding w component
+     * Converts this vector to a 3D vector by excluding the w component.
      *
-     * @return a new 3D vector
+     * @return A new Vector3 representing the 3D vector.
      */
     public Vector3 toVector3() {
-        return new Vector3(this.x, this.y, this.z);
+        return new Vector3(this.x(), this.y(), this.z());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector4 v)) return false;
+        return Arrays.equals(components, v.components);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(components);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Vector4[%.2f, %.2f, %.2f, %.2f]", x(), y(), z(), w());
     }
 }
