@@ -19,7 +19,7 @@ class OptionTryIntegrationTest {
         Option<Integer> some = Option.some(42);
         Try<Integer> result = some.toTry(() -> new Exception("Value was None"));
 
-        assertThat(result).isInstanceOf(Try.Success.class);
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.get()).isEqualTo(42);
     }
 
@@ -28,7 +28,7 @@ class OptionTryIntegrationTest {
         Option<Integer> none = Option.none();
         Try<Integer> result = none.toTry(() -> new Exception("No value present"));
 
-        assertThat(result).isInstanceOf(Try.Failure.class);
+        assertThat(result.isFailure()).isTrue();
         assertThatExceptionOfType(Exception.class).isThrownBy(result::get)
                 .withMessage("No value present");
     }
@@ -39,7 +39,7 @@ class OptionTryIntegrationTest {
         Option<Integer> none = Option.none();
         Try<Integer> result = none.toTry(() -> customException);
 
-        assertThat(result).isInstanceOf(Try.Failure.class);
+        assertThat(result.isFailure()).isTrue();
         assertThatThrownBy(result::get).isInstanceOf(IllegalStateException.class)
                 .hasMessage("Custom Error");
     }
@@ -49,16 +49,17 @@ class OptionTryIntegrationTest {
         Option<Integer> some = Option.some(42);
         Try<Integer> result = some.toTry(() -> new Exception("This should not be used"));
 
-        assertThat(result).isInstanceOf(Try.Success.class);
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.get()).isEqualTo(42);
     }
+
 
     @Test
     void noneToTryWithNullSupplierShouldReturnDefaultException() {
         Option<Integer> none = Option.none();
         Try<Integer> result = none.toTry(null);
 
-        assertThat(result).isInstanceOf(Try.Failure.class);
+        assertThat(result.isFailure()).isTrue();
         assertThatThrownBy(result::get)
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("No value present");
@@ -79,8 +80,12 @@ class OptionTryIntegrationTest {
         Option<String> some = Option.some(value);
         Try<String> result = some.toTry(() -> new Exception("Unused"));
 
-        assertThat(result).isInstanceOf(Try.Success.class);
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.get()).isSameAs(value);
     }
+
+
+
+
 
 }

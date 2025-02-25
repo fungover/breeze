@@ -325,7 +325,7 @@ public abstract class Try<T> implements Serializable {
      *
      * @param <T> the type of the expected successful value
      */
-    public static final class Failure<T> extends Try<T> implements Serializable {
+    static final class Failure<T> extends Try<T> implements Serializable {
         final Exception exception;
 
         public Failure(Exception exception) {
@@ -386,7 +386,7 @@ public abstract class Try<T> implements Serializable {
      *
      * @param <T> the type of the successful value
      */
-    public static final class Success<T> extends Try<T> implements Serializable {
+    static final class Success<T> extends Try<T> implements Serializable {
         private final T value;
 
         public Success(T value) {
