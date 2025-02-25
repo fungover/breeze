@@ -34,6 +34,7 @@ public class SizeFormatter {
      * @param useBinaryBase whether to use binary (KiB, MiB) or decimal (KB, MB) units
      * @param decimalPlaces the number of decimal places to display
      * @return a formatted string representing the size
+     * @throws IllegalArgumentException if decimal places are negative
      */
     public static String autoFormat(long bytes, boolean useBinaryBase, int decimalPlaces) {
         if (decimalPlaces < 0) {
@@ -52,13 +53,14 @@ public class SizeFormatter {
         return format(size, SizeUnit.BYTES, decimalPlaces);
     }
 
-       /**
+    /**
      * Converts a size from one unit to another.
      *
      * @param value     the size value to convert
      * @param fromUnit the unit of the input value
      * @param toUnit   the unit to convert to
      * @return the converted size value
+     * @throws IllegalArgumentException if any unit is null
      */
     public static double convert(long value, SizeUnit fromUnit, SizeUnit toUnit) {
         if (fromUnit == null || toUnit == null) {
@@ -74,6 +76,8 @@ public class SizeFormatter {
      *
      * @param sizeString the size string to parse
      * @return the size in bytes
+     * @throws IllegalArgumentException if the input string is null, empty, or improperly formatted
+     * @throws ArithmeticException if the parsed size exceeds the maximum or minimum Long value
      */
     public static long parse(String sizeString) {
         if (sizeString == null || sizeString.trim().isEmpty()) {
@@ -116,6 +120,7 @@ public class SizeFormatter {
      * @param timeUnit     the time unit for the rate
      * @param decimalPlaces the number of decimal places to display
      * @return a formatted string representing the bit rate
+     * @throws IllegalArgumentException if the time unit is null or decimal places are negative
      */
     public static String formatRate(long bits, TimeUnit timeUnit, int decimalPlaces) {
         if (timeUnit == null) {
@@ -184,8 +189,8 @@ public class SizeFormatter {
      * Formats a BigDecimal value with a specified number of decimal places and unit suffix.
      *
      * @param value          the value to format
-     * @param unit          the unit of the value
-     * @param decimalPlaces the number of decimal places
+     * @param unit           the unit of the value
+     * @param decimalPlaces  the number of decimal places
      * @return the formatted string
      */
     private static String format(BigDecimal value, SizeUnit unit, int decimalPlaces) {
@@ -202,10 +207,6 @@ public class SizeFormatter {
      * @throws IllegalArgumentException if the unit suffix is unrecognized
      */
     private static SizeUnit parseUnit(String unitPart) {
-    return SizeUnit.fromSuffix(unitPart);
-        }
-
-        }
-
-
-
+        return SizeUnit.fromSuffix(unitPart);
+    }
+}

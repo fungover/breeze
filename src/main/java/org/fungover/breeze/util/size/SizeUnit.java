@@ -39,9 +39,9 @@ public enum SizeUnit {
      * Constructor for SizeUnit.
      *
      * @param suffix    the suffix representing the unit (e.g., "KB", "MiB")
-     * @param isBit    true if the unit is bit-based, false if byte-based
-     * @param base     the base of the unit (e.g., 1000 for decimal, 1024 for binary)
-     * @param exponent the exponent for the unit (e.g., 0 for bytes, 1 for kilobytes)
+     * @param isBit     true if the unit is bit-based, false if byte-based
+     * @param base      the base of the unit (e.g., 1000 for decimal, 1024 for binary)
+     * @param exponent  the exponent for the unit (e.g., 0 for bytes, 1 for kilobytes)
      */
     SizeUnit(String suffix, boolean isBit, int base, int exponent) {
         this.suffix = suffix;
