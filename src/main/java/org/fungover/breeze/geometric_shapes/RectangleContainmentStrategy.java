@@ -1,6 +1,6 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.Point;
+import java.awt.geom.Point2D;
 
 /**
  * This class provides logic for determining if one rectangle contains another.
@@ -27,7 +27,7 @@ public class RectangleContainmentStrategy {
      * @param p the point to check
      * @return true if the point is strictly inside the rectangle; false if the point is on the boundary or outside
      */
-    public boolean strictlyContains(Point p) {
+    public boolean strictlyContains(Point2D p) {
         return p.getX() > rectangle.getTopLeft().getX() &&
                 p.getX() < rectangle.getTopLeft().getX() + rectangle.getWidth() &&
                 p.getY() > rectangle.getTopLeft().getY() &&
@@ -50,24 +50,35 @@ public class RectangleContainmentStrategy {
                 throw new IllegalArgumentException("Shape width and height must be greater than 0");
             }
 
-            // Check for zero width or height
-            if (r.getWidth() == 0 || r.getHeight() == 0) {
-                throw new IllegalArgumentException("Rectangle cannot have zero width or height.");
-            }
-
             // Handle the case where the rectangles are exactly the same
-            if (r.getTopLeft().equals(rectangle.getTopLeft()) &&
+            else if (r.getTopLeft().equals(rectangle.getTopLeft()) &&
                     Math.abs(r.getWidth() - rectangle.getWidth()) < 0.0001 &&
                     Math.abs(r.getHeight() - rectangle.getHeight()) < 0.0001) {
                 return true; // The rectangles are exactly the same, so they contain each other
             }
 
             // Check if all four corners of 'r' are strictly within the rectangle (excluding boundaries)
-
             return rectangle.contains(r.getTopLeft()) &&
-                    rectangle.contains(new Point((int) (r.getTopLeft().getX() + r.getWidth()), (int) r.getTopLeft().getY())) &&
-                    rectangle.contains(new Point((int) r.getTopLeft().getX(), (int) (r.getTopLeft().getY() + r.getHeight()))) &&
-                    rectangle.contains(new Point((int) (r.getTopLeft().getX() + r.getWidth()), (int) (r.getTopLeft().getY() + r.getHeight())));
+                    rectangle.contains(new Point2D.Double((r.getTopLeft().getX() + r.getWidth()), r.getTopLeft().getY()) {
+                    }) &&
+                    rectangle.contains(new Point2D.Double(r.getTopLeft().getX(), (r.getTopLeft().getY() + r.getHeight())) {
+                    }) &&
+                    rectangle.contains(new Point2D.Double((r.getTopLeft().getX() + r.getWidth()), (r.getTopLeft().getY() + r.getHeight())) {
+                        @Override
+                        public double getX() {
+                            return 0;
+                        }
+
+                        @Override
+                        public double getY() {
+                            return 0;
+                        }
+
+                        @Override
+                        public void setLocation(double x, double y) {
+
+                        }
+                    });
         }
         throw new IllegalArgumentException("Non-rectangle shapes are not supported.");
     }

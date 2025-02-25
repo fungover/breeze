@@ -25,5 +25,5 @@ public interface BasicShapeGeometrics {
      *
      * @return the center point of the shape
      */
-    Point2D.Double getCenter();
+    Point2D getCenter();
 }

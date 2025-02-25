@@ -1,6 +1,5 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Locale;
 import java.util.Objects;
@@ -10,7 +9,7 @@ import java.util.Objects;
  */
 public class RectangleShape implements Shape {
 
-    private final Point topLeft;  // The top-left corner of the rectangle
+    private final Point2D topLeft;  // The top-left corner of the rectangle
     private final double width;
     private final double height;
     private final RectangleContainmentStrategy containmentStrategy;
@@ -23,16 +22,16 @@ public class RectangleShape implements Shape {
      * @param height the height of the rectangle
      * @throws IllegalArgumentException if width or height is negative
      */
-    public RectangleShape(Point topLeft, double width, double height) {
+    public RectangleShape(Point2D topLeft, double width, double height) {
         if (topLeft == null) {
             throw new IllegalArgumentException("Top-left point cannot be null.");
         }
 
-        if (width <= 0 || height <= 0) {
+        if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Width and height must be positive, non-zero values.");
         }
 
-        this.topLeft = new Point(topLeft); // Defensive copy
+        this.topLeft = new Point2D.Double(); // Defensive copy
         this.width = width;
         this.height = height;
         this.containmentStrategy = new RectangleContainmentStrategy(this);
@@ -43,8 +42,8 @@ public class RectangleShape implements Shape {
      *
      * @return the top-left corner of the rectangle
      */
-    public Point getTopLeft() {
-        return new Point(topLeft); // Defensive copy
+    public Point2D.Double getTopLeft() {
+        return new Point2D.Double(); // Defensive copy
     }
 
     /**
@@ -72,7 +71,7 @@ public class RectangleShape implements Shape {
      * @return true if the point is inside the rectangle; false otherwise
      */
     @Override
-    public boolean contains(Point p) {
+    public boolean contains(Point2D p) {
         // Check if the point is inside the rectangle
         return p.getX() >= topLeft.getX() &&
                 p.getX() <= topLeft.getX() + width &&
@@ -91,16 +90,29 @@ public class RectangleShape implements Shape {
         if (other instanceof RectangleShape) {
             RectangleShape r = (RectangleShape) other;
 
-            // Check for overlap between the two rectangles
-            boolean horizontalOverlap = this.topLeft.getX() < r.getTopLeft().getX() + r.getWidth() &&
-                    this.topLeft.getX() + this.width > r.getTopLeft().getX();
-            boolean verticalOverlap = this.topLeft.getY() < r.getTopLeft().getY() + r.getHeight() &&
-                    this.topLeft.getY() + this.height > r.getTopLeft().getY();
+            // Calculate the bottom-right corners of both rectangles
+            Point2D r1BottomRight = new Point2D.Double(this.topLeft.getX() + this.width, this.topLeft.getY() + this.height);
+            Point2D r2BottomRight = new Point2D.Double(r.getTopLeft().getX() + r.getWidth(), r.getTopLeft().getY() + r.getHeight());
 
-            return horizontalOverlap && verticalOverlap;
+            // Check for no horizontal overlap
+            boolean noHorizontalOverlap = this.topLeft.getX() >= r2BottomRight.getX() || r.getTopLeft().getX() >= r1BottomRight.getX();
+            System.out.println("No horizontal overlap: " + noHorizontalOverlap);
+
+            // Check for no vertical overlap
+            boolean noVerticalOverlap = this.topLeft.getY() >= r2BottomRight.getY() || r.getTopLeft().getY() >= r1BottomRight.getY();
+            System.out.println("No vertical overlap: " + noVerticalOverlap);
+
+            // If there is no horizontal or vertical overlap, they do not intersect
+            boolean result = !(noHorizontalOverlap || noVerticalOverlap);
+            System.out.println("Do the rectangles intersect? " + result);
+
+            return result;
         }
         return false; // Return false for non-RectangleShape types
     }
+
+
+
 
 
     /**
@@ -144,9 +156,9 @@ public class RectangleShape implements Shape {
         // Directly return a new BoundingBox object without invoking other methods that could cause recursion
         return new BoundingBox(
                 topLeft,
-                new Point((int) (topLeft.getX() + width), topLeft.y),
-                new Point(topLeft.x, (int) (topLeft.getY() + height)),
-                new Point((int) (topLeft.getX() + width), (int) (topLeft.getY() + height))
+                new Point2D.Double((double) (topLeft.getX() + width), topLeft.getY()),
+                new Point2D.Double(topLeft.getX(), (double) (topLeft.getY() + height)),
+                new Point2D.Double((double) (topLeft.getX() + width), (double) (topLeft.getY() + height))
         ).toRectangle();  // Ensure toRectangle() is not recursively calling intersects or other methods
     }
 
@@ -156,7 +168,7 @@ public class RectangleShape implements Shape {
      * @return the center point of the rectangle
      */
     @Override
-    public Point2D.Double getCenter() {
+    public Point2D getCenter() {
         double centerX = topLeft.getX() + width / 2.0;
         double centerY = topLeft.getY() + height / 2.0;
         return new Point2D.Double(centerX, centerY);
@@ -169,34 +181,36 @@ public class RectangleShape implements Shape {
      * @param center the center point to rotate around
      * @return a new rectangle representing the rotated shape
      */
+
     @Override
-    public Shape rotate(double angle, Point center) {
+    public Shape rotate(double angle, Point2D center) {
         double radianAngle = Math.toRadians(angle);
 
         // Rotate the four corners of the rectangle around the center point
-        Point topLeftRotated = rotatePoint(this.topLeft, angle, center);
-        Point topRightRotated = rotatePoint(new Point((int) (this.topLeft.getX() + width), this.topLeft.y), angle, center);
-        Point bottomLeftRotated = rotatePoint(new Point(this.topLeft.x, (int) (this.topLeft.getY() + height)), angle, center);
-        Point bottomRightRotated = rotatePoint(new Point((int) (this.topLeft.getX() + width), (int) (this.topLeft.getY() + height)), angle, center);
+        Point2D topLeftRotated = rotatePoint(this.topLeft, angle, center);
+        Point2D topRightRotated = rotatePoint(new Point2D.Double(this.topLeft.getX() + width, this.topLeft.getY()), angle, center);
+        Point2D bottomLeftRotated = rotatePoint(new Point2D.Double(this.topLeft.getX(), this.topLeft.getY() + height), angle, center);
+        Point2D bottomRightRotated = rotatePoint(new Point2D.Double(this.topLeft.getX() + width, this.topLeft.getY() + height), angle, center);
 
         // Use the BoundingBox class to compute the minimal enclosing rectangle
         BoundingBox newBoundingBox = new BoundingBox(topLeftRotated, topRightRotated, bottomLeftRotated, bottomRightRotated);
+
         return new RectangleShape(newBoundingBox.getTopLeft(), newBoundingBox.getWidth(), newBoundingBox.getHeight());
     }
 
     /**
      * Rotates a specific point by a given angle around a center point.
      *
-     * @param p the point to rotate
+     * @param point the point to rotate
      * @param angle the angle to rotate (in degrees)
      * @param center the center point to rotate around
      * @return the rotated point
      */
-    private Point rotatePoint(Point p, double angle, Point center) {
+    private Point2D rotatePoint(Point2D point, double angle, Point2D center) {
         double radians = Math.toRadians(angle);
-        int x = (int) (Math.cos(radians) * (p.getX() - center.getX()) - Math.sin(radians) * (p.getY() - center.getY()) + center.getX());
-        int y = (int) (Math.sin(radians) * (p.getX() - center.getX()) + Math.cos(radians) * (p.getY() - center.getY()) + center.getY());
-        return new Point(x, y);
+        double x = center.getX() + (point.getX() - center.getX()) * Math.cos(radians) - (point.getY() - center.getY()) * Math.sin(radians);
+        double y = center.getY() + (point.getX() - center.getX()) * Math.sin(radians) + (point.getY() - center.getY()) * Math.cos(radians);
+        return new Point2D.Double(x, y);
     }
 
     /**

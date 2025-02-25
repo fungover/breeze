@@ -1,6 +1,5 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Locale;
 import java.util.Objects;
@@ -51,7 +50,7 @@ public class Circle implements Shape {
      * @return true if the point is inside the circle; false otherwise
      */
     @Override
-    public boolean contains(Point p) {
+    public boolean contains(Point2D p) {
         // Check if the distance from the point to the center is less than the radius
         return center.distance(p) <= radius;
     }
@@ -129,7 +128,8 @@ public class Circle implements Shape {
         double height = 2 * radius;
 
         // Return a new Rectangle instance using the custom Rectangle class
-        return (Shape) new RectangleShape(new Point((int) x, (int) y), width, height);
+//        return (Shape) new RectangleShape(new Point2D.Double((int) x, (int) y), width, height)
+        return new RectangleShape(new Point2D.Double(x, y), width, height);
     }
 
     /**
@@ -140,13 +140,14 @@ public class Circle implements Shape {
      * @return a new rotated circle
      */
     @Override
-    public Shape rotate(double angle, Point center) {
+    public Shape rotate(double angle, Point2D center) {
         // Rotation does not change the shape of a circle, but if needed, adjust its center
         // by rotating the center point around the provided point
         double radianAngle = Math.toRadians(angle);
         double newX = center.getX() + (this.center.getX() - center.getX()) * Math.cos(radianAngle) - (this.center.getY() - center.getY()) * Math.sin(radianAngle);
         double newY = center.getY() + (this.center.getX() - center.getX()) * Math.sin(radianAngle) + (this.center.getY() - center.getY()) * Math.cos(radianAngle);
-        return (Shape) new Circle(new Point2D.Double(newX, newY), radius);
+//        return (Shape) new Circle(new Point2D.Double(newX, newY), radius);
+        return new Circle(new Point2D.Double(newX, newY), radius);
     }
 
     /**
@@ -158,7 +159,7 @@ public class Circle implements Shape {
     @Override
     public Shape scale(double factor) {
         // Scaling the circle simply multiplies the radius by the factor
-        return (Shape) new Circle(center, radius * factor);
+        return new Circle(center, radius * factor);
     }
 
     /**

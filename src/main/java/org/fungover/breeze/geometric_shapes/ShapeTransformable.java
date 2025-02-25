@@ -1,6 +1,7 @@
 package org.fungover.breeze.geometric_shapes;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * Interface for performing geometric transformations (e.g., rotation and scaling).
@@ -20,7 +21,7 @@ public interface ShapeTransformable {
      * @param center the center point to rotate around
      * @return a new shape that represents the rotated shape
      */
-    Shape rotate(double angle, Point center);
+    Shape rotate(double angle, Point2D center);
 
     /**
      * Scales the shape by a specified factor.

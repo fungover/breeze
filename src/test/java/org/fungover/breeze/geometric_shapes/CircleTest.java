@@ -10,21 +10,21 @@ class CircleTest {
 
     @Test
     void testContainsPoint() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // Test points inside the circle
-        Point insidePoint = new Point(3, 4); // distance from center = 5 (inside)
+        Point2D.Double insidePoint = new Point2D.Double(3, 4); // distance from center = 5 (inside)
         assertTrue(circle.contains(insidePoint));
 
         // Test points outside the circle
-        Point outsidePoint = new Point(6, 6); // distance from center > 5
+        Point2D.Double outsidePoint = new Point2D.Double(6, 6); // distance from center > 5
         assertFalse(circle.contains(outsidePoint));
     }
 
     @Test
     void testGetArea() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // Area = π * radius^2 = 3.14159 * 25 ≈ 78.5398
@@ -33,7 +33,7 @@ class CircleTest {
 
     @Test
     void testGetPerimeter() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // Perimeter = 2 * π * radius = 2 * 3.14159 * 5 ≈ 31.4159
@@ -42,18 +42,18 @@ class CircleTest {
 
     @Test
     void testGetBoundingBox() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // The bounding box should have width and height equal to the diameter of the circle
-        assertEquals(new RectangleShape(new Point(-5, -5), 10, 10), circle.getBoundingBox());
+        assertEquals(new RectangleShape(new Point2D.Double(-5, -5), 10, 10), circle.getBoundingBox());
     }
 
     @Test
     void testRotate() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
-        Point rotationPoint = new Point(0, 0);
+        Point2D.Double rotationPoint = new Point2D.Double(0, 0);
 
         // Rotating a circle around its center should not change its position
         Circle rotatedCircle = (Circle) circle.rotate(90, rotationPoint);
@@ -62,7 +62,7 @@ class CircleTest {
 
     @Test
     void testScale() {
-        Point2D center = new Point2D.Double(0, 0);
+        Point2D.Double center = new Point2D.Double(0, 0);
         Circle circle = new Circle(center, 5);
 
         // Scaling the circle by a factor of 2 should double its radius
@@ -73,8 +73,8 @@ class CircleTest {
     @Test
     void testCircleContains() {
         Circle circle = new Circle(new Point2D.Double(5, 5), 3);
-        Point insidePoint = new Point(5, 7); // Inside the circle
-        Point outsidePoint = new Point(10, 10); // Outside the circle
+        Point2D.Double insidePoint = new Point2D.Double(5, 7); // Inside the circle
+        Point2D.Double outsidePoint = new Point2D.Double(10, 10); // Outside the circle
 
         assertTrue(circle.contains(insidePoint)); // Should be inside
         assertFalse(circle.contains(outsidePoint)); // Should be outside

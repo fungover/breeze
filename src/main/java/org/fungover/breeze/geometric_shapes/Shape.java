@@ -1,6 +1,5 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 
 /**
@@ -10,7 +9,9 @@ import java.awt.geom.Point2D;
  */
 public interface Shape {
 
-    boolean contains(Point p);
+//    boolean contains(Point p);
+
+    boolean contains(Point2D p);
 
     boolean intersects(Shape other);
 
@@ -22,9 +23,9 @@ public interface Shape {
 
     Shape getBoundingBox();
 
-    Point2D.Double getCenter();
+    Point2D getCenter();
 
-    Shape rotate(double angle, Point center);
+    Shape rotate(double angle, Point2D center);
 
     Shape scale(double factor);
 }

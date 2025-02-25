@@ -1,6 +1,6 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.Point;
+import java.awt.geom.Point2D;
 
 /**
  * Interface for checking shape containment and intersection operations.
@@ -12,7 +12,7 @@ public interface ShapeOverlayable {
      * @param p the point to check
      * @return true if the point is inside the shape; false otherwise
      */
-    boolean contains(Point p);
+    boolean contains(Point2D p);
 
     /**
      * Checks if this shape contains another shape.
