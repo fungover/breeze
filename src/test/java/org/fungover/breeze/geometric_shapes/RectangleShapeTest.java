@@ -338,22 +338,6 @@ class RectangleShapeTest {
         assertEquals(center, rotated.getCenter(), "Center should remain unchanged after 0 degree rotation");
     }
 
-//    @Test
-//    void testRotateBy45Degrees() {
-//        // Rectangle with top-left at (0, 0) and size 10x5
-//        RectangleShape rectangle = new RectangleShape(new Point2D.Double(0.0, 0.0), 10.0, 5.0);
-//        Point2D.Double center = new Point2D.Double(5.0, 2.5); // Center around which to rotate (middle of the rectangle)
-//
-//        // Rotate 45 degrees
-//        RectangleShape rotated = (RectangleShape) rectangle.rotate(45, center);
-//
-//        // Verify that the center remains the same
-//        assertEquals(center, rotated.getCenter(), "Center should remain unchanged after rotation");
-//
-//        // The width and height should still be the same, but the coordinates of the corners should change
-//        assertNotEquals(rectangle.getTopLeft(), rotated.getTopLeft(), "Top-left corner should change after rotation");
-//    }
-
     @Test
     void testRotateAroundCenter() {
         // Rectangle with top-left at (0, 0) and size 10x5

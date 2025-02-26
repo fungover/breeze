@@ -76,7 +76,6 @@ public class RectangleContainmentStrategy {
 
                         @Override
                         public void setLocation(double x, double y) {
-
                         }
                     });
         }

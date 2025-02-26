@@ -3,7 +3,6 @@ package org.fungover.breeze.geometric_shapes;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 
 class CircleTest {

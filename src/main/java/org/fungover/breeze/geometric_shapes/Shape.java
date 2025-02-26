@@ -9,8 +9,6 @@ import java.awt.geom.Point2D;
  */
 public interface Shape {
 
-//    boolean contains(Point p);
-
     boolean contains(Point2D p);
 
     boolean intersects(Shape other);

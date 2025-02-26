@@ -1,7 +1,6 @@
 package org.fungover.breeze.geometric_shapes;
 
 import org.junit.jupiter.api.Test;
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 import static org.junit.jupiter.api.Assertions.*;

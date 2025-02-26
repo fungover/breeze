@@ -96,24 +96,17 @@ public class RectangleShape implements Shape {
 
             // Check for no horizontal overlap
             boolean noHorizontalOverlap = this.topLeft.getX() >= r2BottomRight.getX() || r.getTopLeft().getX() >= r1BottomRight.getX();
-            System.out.println("No horizontal overlap: " + noHorizontalOverlap);
 
             // Check for no vertical overlap
             boolean noVerticalOverlap = this.topLeft.getY() >= r2BottomRight.getY() || r.getTopLeft().getY() >= r1BottomRight.getY();
-            System.out.println("No vertical overlap: " + noVerticalOverlap);
 
             // If there is no horizontal or vertical overlap, they do not intersect
             boolean result = !(noHorizontalOverlap || noVerticalOverlap);
-            System.out.println("Do the rectangles intersect? " + result);
 
             return result;
         }
         return false; // Return false for non-RectangleShape types
     }
-
-
-
-
 
     /**
      * Determines whether this rectangle contains another shape.
@@ -156,9 +149,9 @@ public class RectangleShape implements Shape {
         // Directly return a new BoundingBox object without invoking other methods that could cause recursion
         return new BoundingBox(
                 topLeft,
-                new Point2D.Double((double) (topLeft.getX() + width), topLeft.getY()),
-                new Point2D.Double(topLeft.getX(), (double) (topLeft.getY() + height)),
-                new Point2D.Double((double) (topLeft.getX() + width), (double) (topLeft.getY() + height))
+                new Point2D.Double((topLeft.getX() + width), topLeft.getY()),
+                new Point2D.Double(topLeft.getX(), (topLeft.getY() + height)),
+                new Point2D.Double((double) (topLeft.getX() + width), (topLeft.getY() + height))
         ).toRectangle();  // Ensure toRectangle() is not recursively calling intersects or other methods
     }
 
@@ -184,7 +177,7 @@ public class RectangleShape implements Shape {
 
     @Override
     public Shape rotate(double angle, Point2D center) {
-        double radianAngle = Math.toRadians(angle);
+//        double radianAngle = Math.toRadians(angle);
 
         // Rotate the four corners of the rectangle around the center point
         Point2D topLeftRotated = rotatePoint(this.topLeft, angle, center);

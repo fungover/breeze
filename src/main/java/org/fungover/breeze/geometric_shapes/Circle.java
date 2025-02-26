@@ -30,9 +30,8 @@ public class Circle implements Shape {
      */
     @Override
     public Point2D.Double getCenter() {
-        return new Point2D.Double((int)center.getX(), (int)center.getY());
+        return new Point2D.Double(center.getX(), center.getY());
     }
-
 
     /**
      * Returns the radius of the circle.
@@ -128,7 +127,6 @@ public class Circle implements Shape {
         double height = 2 * radius;
 
         // Return a new Rectangle instance using the custom Rectangle class
-//        return (Shape) new RectangleShape(new Point2D.Double((int) x, (int) y), width, height)
         return new RectangleShape(new Point2D.Double(x, y), width, height);
     }
 
@@ -146,7 +144,6 @@ public class Circle implements Shape {
         double radianAngle = Math.toRadians(angle);
         double newX = center.getX() + (this.center.getX() - center.getX()) * Math.cos(radianAngle) - (this.center.getY() - center.getY()) * Math.sin(radianAngle);
         double newY = center.getY() + (this.center.getX() - center.getX()) * Math.sin(radianAngle) + (this.center.getY() - center.getY()) * Math.cos(radianAngle);
-//        return (Shape) new Circle(new Point2D.Double(newX, newY), radius);
         return new Circle(new Point2D.Double(newX, newY), radius);
     }
 

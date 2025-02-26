@@ -1,15 +1,13 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.Locale;
 
 /**
  * Represents a bounding box defined by its top-left corner, width, and height.
  * A bounding box is used to represent the minimal enclosing rectangle for a set of points.
  */
 public class BoundingBox {
-    private final Point2D topLeft;  // Use Point2D.Double instead of Point2D
+    private final Point2D topLeft;
     private final double width;
     private final double height;
 
@@ -39,7 +37,7 @@ public class BoundingBox {
             if (p.getX() > maxX) maxX = p.getX();
             if (p.getY() > maxY) maxY = p.getY();
         }
-        this.topLeft = new Point2D.Double(minX, minY);  // Use Point2D.Double here
+        this.topLeft = new Point2D.Double(minX, minY);
         this.width = Math.abs(maxX - minX);
         this.height = Math.abs(maxY - minY);
     }

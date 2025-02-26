@@ -1,6 +1,5 @@
 package org.fungover.breeze.geometric_shapes;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
