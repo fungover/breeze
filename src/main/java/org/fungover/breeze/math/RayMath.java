@@ -6,7 +6,7 @@ package org.fungover.breeze.math;
 
 public class RayMath {
 
-    private static final float EPSILON = 1e-6f;
+    public static final float EPSILON = 1e-6f;
 
     /**
      * Checks if a ray intersects with a sphere.
