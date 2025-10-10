@@ -1,3 +1,5 @@
+package com.fungover.breeze.util;
+
 public class StringUtil {
 
     public static String reverse(String input) {
@@ -14,5 +16,3 @@ public class StringUtil {
         return length * width;
     }
 }
-git add .
-git commit -m "Fixar #142: Implementerade funktionen calculateArea(length, width)"
