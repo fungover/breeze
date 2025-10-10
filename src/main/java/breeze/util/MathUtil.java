@@ -1,4 +1,4 @@
-package com.fungover.breeze.util;
+package breeze.util;
 
 public class MathUtil {
 
