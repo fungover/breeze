@@ -3,15 +3,14 @@ package com.fungover.breeze.util;
 public class MathUtil {
 
     /**
-     * Beräknar arean för en rektangel.
-     * @param length Rektangelns längd.
-     * @param width Rektangelns bredd.
-     * @return Arean, eller 0 om längd/bredd är noll eller negativ.
+     * Reverses the given input string.
+     * @param input The string to reverse.
+     * @return The reversed string, or null if input is null.
      */
-    public static double calculateArea(double length, double width) {
-        if (length <= 0 || width <= 0) {
-            return 0;
+    public static String reverse(String input) {
+        if (input == null) {
+            return null;
         }
-        return length * width;
+        return new StringBuilder(input).reverse().toString();
     }
 }
