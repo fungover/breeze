@@ -12,7 +12,7 @@ public class StandardFont implements AsciiFont {
     }
 
     private void loadFont() {
-        // Förenklad version, fler kan läggas till
+        // Simplified version, more characters can be added
         fontMap.put('A', new String[]{
                 "  A  ",
                 " A A ",
